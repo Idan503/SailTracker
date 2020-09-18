@@ -14,23 +14,39 @@
 
         <!-- Icons will be included in runtime -->
         <include
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:id="@+id/navigation_LAY_home"
             layout="@layout/navigation_icon_home"
+            android:layout_marginBottom="5dp"
             />
 
         <include
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:id="@+id/navigation_LAY_calender"
-            layout="@layout/navigation_icon_calender"
+            layout="@layout/navigation_icon_calendar"
+            android:layout_marginBottom="5dp"
             />
 
         <include
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:id="@+id/navigation_LAY_gallery"
             layout="@layout/navigation_icon_gallery"
+            android:layout_marginBottom="5dp"
             />
 
         <include
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:id="@+id/navigation_LAY_search"
             layout="@layout/navigation_icon_search"
+            android:layout_marginBottom="5dp"
             />
 
 

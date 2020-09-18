@@ -5,18 +5,18 @@
     android:orientation="vertical"
     android:id="@+id/navigation_layout_home"
     android:clickable="true"
-    >
+    android:layout_weight="1">
 
     <ImageView
         style="@style/NavigatorIcon"
-        android:src="@drawable/ic_baseline_search_24"
-        android:contentDescription="@string/search"
+        android:src="@drawable/ic_baseline_calendar_today_24"
+        android:contentDescription="@string/calendar"
         android:id="@+id/navigation_icon_IMG_image"
         />
 
     <androidx.appcompat.widget.AppCompatTextView
         style="@style/NavigatorText"
-        android:text="@string/search"
+        android:text="@string/calendar"
         android:id="@+id/navigation_icon_LBL_text"
         />
 
