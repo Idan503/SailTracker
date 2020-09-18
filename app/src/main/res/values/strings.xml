@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">SailTracker</string>
+
+
+    <string name="home">home</string>
+    <string name="calender">calender</string>
+    <string name="gallery">gallery</string>
+    <string name="search">search</string>
 </resources>

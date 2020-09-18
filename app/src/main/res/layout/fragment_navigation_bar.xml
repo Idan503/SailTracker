@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:weightSum="4"
+    android:background="@android:color/darker_gray"
+    android:orientation="horizontal"
+    >
+
+    <!-- Using an inner layout to be able to apply margin bottom
+    in order to show only the top part of this layout on screen when inflated -->
+
+
+        <!-- Icons will be included in runtime -->
+        <include
+            android:id="@+id/navigation_LAY_home"
+            layout="@layout/navigation_icon_home"
+            />
+
+        <include
+            android:id="@+id/navigation_LAY_calender"
+            layout="@layout/navigation_icon_calender"
+            />
+
+        <include
+            android:id="@+id/navigation_LAY_gallery"
+            layout="@layout/navigation_icon_gallery"
+            />
+
+        <include
+            android:id="@+id/navigation_LAY_search"
+            layout="@layout/navigation_icon_search"
+            />
+
+
+</LinearLayout>
