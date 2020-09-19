@@ -27,6 +27,7 @@ import java.util.Calendar;
 /**
  * Navigator Bar: This fragment will be re-used in the apps activities
  *  User will press an icon that is shown in this bar to switch between activities
+ *  This fragment is made for the 4 activities of this application
  *
  * A simple {@link Fragment} subclass.
  * Use the {@link NavigationBar#newInstance} factory method to
