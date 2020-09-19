@@ -1,14 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ProfileCard">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <!-- Source will be loaded on runtime using Gide -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
+        android:background="@android:color/transparent"
+        android:id="@+id/profile_card_IMG_picture"
+        />
+    
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.1"
+        android:lines="1"
+        android:autoSizeTextType="uniform"
+        android:padding="15dp"
+        android:id="@+id/profile_card_LBL_name"
+        app:layout_constraintStart_toEndOf="@id/profile_card_IMG_picture"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/app_name"
+        />
+
+
+    <!-- Points Logo -->
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toEndOf="@id/profile_card_IMG_picture"
+        app:layout_constraintTop_toBottomOf="@id/profile_card_LBL_name"
+        app:layout_constraintWidth_percent="0.2"
+        app:layout_constraintDimensionRatio="1:1"
+        android:id="@+id/profile_card_IMG_points"
+        android:contentDescription="@string/points"
+
+        />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:lines="1"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMaxTextSize="25sp"
+        android:padding="15dp"
+        android:id="@+id/profile_card_LBL_points"
+        app:layout_constraintStart_toEndOf="@id/profile_card_IMG_points"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/profile_card_IMG_points"
+        app:layout_constraintBottom_toBottomOf="@id/profile_card_IMG_points"
+        android:text="@string/hello_blank_fragment"
+        />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.2"
+        android:lines="1"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMaxTextSize="25sp"
+        android:padding="15dp"
+        android:id="@+id/profile_card_LBL_total_sails"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/profile_card_IMG_picture"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/hello_blank_fragment"
+        />
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
