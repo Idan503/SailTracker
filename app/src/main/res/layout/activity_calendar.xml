@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activities.CalendarActivity"
     android:orientation="vertical"
     android:weightSum="1">
@@ -12,6 +13,37 @@
         android:layout_height="0dp"
         android:layout_weight="0.9"
         >
+
+        <CalendarView
+            android:id="@+id/calendar_CALENDAR"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.4"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/darker_gray"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintTop_toBottomOf="@id/calendar_CALENDAR"
+            android:id="@+id/calendar_LBL_selected_day"
+            android:gravity="center_vertical"
+            android:text="@string/example_date"
+            android:padding="8dp"
+            android:autoSizeMaxTextSize="25sp"
+            android:autoSizeTextType="uniform"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintTop_toBottomOf="@id/calendar_LBL_selected_day"
+            />
+
 
 
 

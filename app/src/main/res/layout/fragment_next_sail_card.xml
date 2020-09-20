@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".NextSailCard"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.15"
+        android:padding="5dp"
+        android:text="@string/my_next_sailing"
+        android:autoSizeTextType="uniform"
+        android:id="@+id/next_sail_LBL_title"
+
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.85"
+        >
+
+
+        <!-- Image will be loaded using Glide -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="0dp"
+            android:background="@android:color/black"
+            android:alpha="0.45"
+            android:id="@+id/next_sail_IMG_background"
+            android:contentDescription="@string/my_next_sailing"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="1"
+            android:orientation="vertical"
+            android:padding="15dp"
+            >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.4"
+                android:text="@string/example_sail_name"
+                android:autoSizeTextType="uniform"
+                android:padding="5dp"
+                android:autoSizeMaxTextSize="25sp"
+                />
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.6"
+                android:orientation="vertical"
+                android:id="@+id/next_sail_LAY_more_info"
+                android:layout_gravity="bottom"
+                android:gravity="bottom"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/example_date"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMaxTextSize="25sp"
+                    android:textSize="16sp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/example_hour"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMaxTextSize="25sp"
+                    android:textSize="16sp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/example_place"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMaxTextSize="25sp"
+                    android:includeFontPadding="false"
+                    android:textSize="16sp"
+                    />
+
+
+
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

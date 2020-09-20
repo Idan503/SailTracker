@@ -17,7 +17,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.06"
+            app:layout_constraintHeight_percent="0.05"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +27,7 @@
         <ImageView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.225"
+            app:layout_constraintHeight_percent="0.15"
             app:layout_constraintDimensionRatio="2:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/home_INV_1"
@@ -41,7 +41,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.065"
+            app:layout_constraintHeight_percent="0.05"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/home_IMG_logo"
@@ -51,7 +51,7 @@
         <fragment
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintHeight_percent="0.2"
             app:layout_constraintTop_toBottomOf="@id/home_INV_2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,6 +59,8 @@
             android:id="@+id/home_FRAG_profile"
             android:name="com.idan_koren_israeli.sailtracker.ProfileCard"
             tools:layout="@layout/fragment_profile_card"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             />
 
         <View
@@ -71,13 +73,17 @@
             android:id="@+id/home_INV_3"
             />
 
-        <View
+        <fragment
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.3"
+            app:layout_constraintHeight_percent="0.35"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/home_INV_4"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:name="com.idan_koren_israeli.sailtracker.NextSailCard"
+            tools:layout="@layout/fragment_next_sail_card"
             android:id="@+id/home_FRAG_next_sailing"
             />
 
