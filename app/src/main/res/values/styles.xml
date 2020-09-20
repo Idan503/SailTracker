@@ -30,8 +30,8 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.App.CornerSize10Percent" parent="">
-        <item name="cornerSize">10%</item>
+    <style name="ShapeAppearanceOverlay.App.ProfilePictureCorners" parent="">
+        <item name="cornerSize">15%</item>
     </style>
 
 </resources>
