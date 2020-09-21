@@ -57,7 +57,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.1"
         android:id="@+id/home_FRAG_navigator_bar"
-        android:name="com.idan_koren_israeli.sailtracker.NavigationBar"
+        android:name="com.idan_koren_israeli.sailtracker.fragments.NavigationBar"
         tools:layout="@layout/fragment_navigation_bar" />
 
 </LinearLayout>

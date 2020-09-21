@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker;
+package com.idan_koren_israeli.sailtracker.fragments;
 
 
 import android.content.Context;
@@ -16,25 +16,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.activities.BaseActivity;
 import com.idan_koren_israeli.sailtracker.activities.CalendarActivity;
 import com.idan_koren_israeli.sailtracker.activities.GalleryActivity;
 import com.idan_koren_israeli.sailtracker.activities.HomeActivity;
 import com.idan_koren_israeli.sailtracker.activities.SearchActivity;
 
-import java.util.Calendar;
-
 /**
  * Navigator Bar: This fragment will be re-used in the apps activities
  *  User will press an icon that is shown in this bar to switch between activities
  *  This fragment is made for the 4 activities of this application
- *
- * A simple {@link Fragment} subclass.
- * Use the {@link NavigationBar#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class NavigationBar extends Fragment {
-
 
     private ViewGroup parent;
     private LinearLayout home, calendar, gallery, search; // Activities options

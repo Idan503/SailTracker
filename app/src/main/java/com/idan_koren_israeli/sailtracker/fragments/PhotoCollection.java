@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker;
+package com.idan_koren_israeli.sailtracker.fragments;
 
 import android.os.Bundle;
 
@@ -8,12 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.idan_koren_israeli.sailtracker.R;
+
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileCard#newInstance} factory method to
- * create an instance of this fragment.
+ *
+ * This fragment is used to be like Instagram feed
+ * Each user has an associated photos from sails
+ *
+ *
  */
-public class ProfileCard extends Fragment {
+public class PhotoCollection extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +28,7 @@ public class ProfileCard extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public ProfileCard() {
+    public PhotoCollection() {
         // Required empty public constructor
     }
 
@@ -34,11 +38,11 @@ public class ProfileCard extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileCard.
+     * @return A new instance of fragment PhotoCluster.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProfileCard newInstance(String param1, String param2) {
-        ProfileCard fragment = new ProfileCard();
+    public static PhotoCollection newInstance(String param1, String param2) {
+        PhotoCollection fragment = new PhotoCollection();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,6 +63,6 @@ public class ProfileCard extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile_card, container, false);
+        return inflater.inflate(R.layout.fragment_photo_collection, container, false);
     }
 }

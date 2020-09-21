@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "927300508643",
+    "firebase_url": "https://sailtracker-e7abf.firebaseio.com",
+    "project_id": "sailtracker-e7abf",
+    "storage_bucket": "sailtracker-e7abf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927300508643:android:20a4a64d67f0a255ed9ed6",
+        "android_client_info": {
+          "package_name": "com.idan_koren_israeli.sailtracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927300508643-q5h48hcqtrugnndmjfm08jisl8js5ojs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDq2wohyxKiO-i4wQ1qe146UB4gQO7cmD4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927300508643-q5h48hcqtrugnndmjfm08jisl8js5ojs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
