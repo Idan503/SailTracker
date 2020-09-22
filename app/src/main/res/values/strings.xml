@@ -1,27 +1,32 @@
 <resources>
     <string name="app_name">SailTracker</string>
 
-
+    <!-- ACTIVITIES NAMES -->
     <string name="home">Home</string>
     <string name="calendar">Calendar</string>
     <string name="gallery">Gallery</string>
     <string name="search">Search</string>
 
+    <!-- SINGLE WORDS -->
     <string name="points">points</string>
     <string name="sails">sails</string>
 
     <string name="my_next_sailing">My Next Sailing</string>
 
-    <string name="example_sail_name">Single Handed Guided Sail</string>
 
+    <!-- LAYOUT EXAMPLES -->
     <string name="example_date">19.09.2020</string>
     <string name="example_hour">15:00</string>
     <string name="example_place">Marina Shavit, Haifa</string>
     <string name="example_phone">050—1234567</string>
+    <string name="example_code">123456</string>
+    <string name="example_sail_name">Single Handed Guided Sail</string>
 
     <string name="next">Next</string>
 
 
-
-    <string name="log_in_message">Please insert your phone number to log-in</string>
+    <!-- LOGIN SCREEN -->
+    <string name="login_phone">Please insert your phone number to log-in</string>
+    <string name="login_code">We sent you an SMS with a code:</string>
+    <string name="login_name">Choose your display name:</string>
 </resources>

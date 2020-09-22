@@ -1,5 +1,6 @@
 package com.idan_koren_israeli.sailtracker.fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,18 +12,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.google.android.gms.common.internal.service.Common;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
+import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
 
 import java.net.Authenticator;
 import java.util.Objects;
@@ -30,15 +36,29 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 
+
+
+// Users can Login with phone number, authentication via SMS like WhatsApp
 public class LoginFragment extends Fragment {
+    private enum LoginState{ NOT_STARTED,IN_PROGRESS, CODE_SENT, CODE_APPROVED, COMPLETED, FAILED}
+    private interface KEYS {
+        String LOGIN_STATE = "LOGIN_STATE";
+        String LOGIN_PHONE = "LOGIN_PHONE";
+    }
 
-    boolean verificationInProgress = false;
-
-    private Button nextButton;
-    private EditText phoneEditText;
+    private LoginState currentState = LoginState.NOT_STARTED;
     private String currentPhone;
 
+    private Button nextButton;
+    private EditText phoneEditText, codeEditText, nameEditText;
+    private TextView messageText;
+
+
     private FirebaseAuth auth;
+    private String mVerificationId;
+    private PhoneAuthProvider.ForceResendingToken mResendToken;
+    private FirebaseUser loggedUser;
+
 
 
     public LoginFragment() {
@@ -58,15 +78,19 @@ public class LoginFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if(savedInstanceState!=null) {
-            verificationInProgress = savedInstanceState.getBoolean("boolVerificationInProgress");
-            currentPhone = savedInstanceState.getString("strCurrentPhone");
-            if (verificationInProgress)
+            currentState = (LoginState) savedInstanceState.getSerializable(KEYS.LOGIN_STATE);
+            currentPhone = savedInstanceState.getString(KEYS.LOGIN_PHONE);
+
+            if(currentState == LoginState.CODE_SENT)
+                showAuthCodeLayout();
+            else if (currentState == LoginState.IN_PROGRESS)
                 verifyPhoneNumber();
 
-            auth = FirebaseAuth.getInstance();
-            auth.useAppLanguage();
-
         }
+
+        auth = FirebaseAuth.getInstance();
+        auth.useAppLanguage();
+
     }
 
     @Override
@@ -84,27 +108,48 @@ public class LoginFragment extends Fragment {
     private void findViews(View root){
         nextButton = root.findViewById(R.id.login_BTN_next);
         phoneEditText = root.findViewById(R.id.login_EDT_phone_box);
+        messageText = root.findViewById(R.id.login_LBL_message);
+        codeEditText = root.findViewById(R.id.login_EDT_code_box);
+        nameEditText = root.findViewById(R.id.login_EDT_name_box);
+
     }
 
     private void setListeners(){
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                verifyPhoneNumber();
-            }
-        });
-
+        nextButton.setOnClickListener(nextButtonListener);
     }
+
+    private View.OnClickListener nextButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (currentState){
+                case CODE_SENT:
+                    // Code user entered the code, we will check if it is correct
+                    String code = codeEditText.getText().toString();
+                    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, code);
+                    signInWithPhoneAuthCredential(credential);
+                    break;
+                case CODE_APPROVED:
+                    // User type his profile name, setting it to the current logged profile
+                    if(loggedUser!=null && loggedUser.getDisplayName()==null){
+                        loggedUser.updateProfile(buildNewProfile());
+                        currentState = LoginState.COMPLETED;
+                        CommonUtils.getInstance().showToast("Logged in successfully");
+
+                        // Fragment can now be finished
+                    }
+                    break;
+
+                default:
+                    verifyPhoneNumber();
+                    break;
+            }
+        }
+    };
 
 
     private void verifyPhoneNumber(){
-        if(currentPhone==null)
-            currentPhone = "+972" + phoneEditText.getText().toString().substring(1);
-
-        if(!isValidNumber(currentPhone)){
-            CommonUtils.getInstance().showToast("Phone number " + currentPhone +" is not valid");
-            return;
-        }
+        if(phoneEditText.getText()!=null)
+            currentPhone = phoneEditText.getText().toString();
 
 
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
@@ -114,9 +159,7 @@ public class LoginFragment extends Fragment {
                 Objects.requireNonNull(getActivity()),               // Activity (for callback binding)
                 callbacks);        // OnVerificationStateChangedCallbacks
 
-
-
-        verificationInProgress = true;
+        currentState = LoginState.IN_PROGRESS;
 
     }
 
@@ -129,22 +172,34 @@ public class LoginFragment extends Fragment {
         @Override
         public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
             CommonUtils.getInstance().showToast("Complete!");
-            verificationInProgress = false;
             signInWithPhoneAuthCredential(phoneAuthCredential);
+
         }
 
         @Override
         public void onVerificationFailed(@NonNull FirebaseException e) {
             CommonUtils.getInstance().showToast("Failed!");
-            verificationInProgress = false;
+            currentState = LoginState.FAILED;
+
+            if(e instanceof FirebaseAuthInvalidCredentialsException){
+                CommonUtils.getInstance().showToast("Error - Invalid request");
+            } else if(e instanceof FirebaseTooManyRequestsException){
+                CommonUtils.getInstance().showToast("Too many requests");
+            }
         }
 
         @Override
         public void onCodeSent(@NonNull String verificationId,
                                @NonNull PhoneAuthProvider.ForceResendingToken token) {
-            CommonUtils.getInstance().showToast("Code Sent! " + currentPhone);
+            CommonUtils.getInstance().showToast("Code Sent!");
+            mVerificationId = verificationId;
+            mResendToken = token;
+            currentState = LoginState.CODE_SENT;
+
+            showAuthCodeLayout();
         }
     };
+
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         auth.signInWithCredential(credential)
@@ -153,14 +208,13 @@ public class LoginFragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-
-                            FirebaseUser user = Objects.requireNonNull(task.getResult()).getUser();
-                            if(user!=null && user.getPhoneNumber()!=null)
-                                Log.i("pttt", user.getPhoneNumber());
-                            // ...
+                            currentState = LoginState.CODE_APPROVED;
+                            loggedUser = Objects.requireNonNull(task.getResult()).getUser();
+                            showNewProfileLayout();
                         } else {
                             // Sign in failed, display a message and update the UI
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                CommonUtils.getInstance().showToast("Invalid code, please try again");
                                 // The verification code entered was invalid
                             }
                         }
@@ -168,10 +222,31 @@ public class LoginFragment extends Fragment {
                 });
     }
 
+    private UserProfileChangeRequest buildNewProfile(){
+        UserProfileChangeRequest.Builder profileBuilder = new UserProfileChangeRequest.Builder();
+        profileBuilder.setDisplayName(nameEditText.getText().toString());
+        profileBuilder.setPhotoUri(Uri.parse("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"));
+        return profileBuilder.build();
+    }
+
+    private void showNewProfileLayout(){
+        codeEditText.setVisibility(View.GONE);
+        phoneEditText.setVisibility(View.GONE);
+        nameEditText.setVisibility(View.VISIBLE);
+        messageText.setText(getResources().getString(R.string.login_name));
+    }
+
+    private void showAuthCodeLayout(){
+        codeEditText.setVisibility(View.VISIBLE);
+        phoneEditText.setVisibility(View.GONE);
+        nameEditText.setVisibility(View.GONE);
+        messageText.setText(getResources().getString(R.string.login_code));
+    }
+
     @Override
     public void onSaveInstanceState(Bundle instanceBundle) {
-        instanceBundle.putBoolean("boolVerificationInProgress", verificationInProgress);
-        instanceBundle.putString("strCurrentPhone", phoneEditText.getText().toString());
+        instanceBundle.putSerializable(KEYS.LOGIN_STATE, currentState);
+        instanceBundle.putString(KEYS.LOGIN_PHONE, phoneEditText.getText().toString());
         super.onSaveInstanceState(instanceBundle);
     }
 }
