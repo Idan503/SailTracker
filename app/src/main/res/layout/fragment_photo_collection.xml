@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.PhotoCollection">
+    tools:context=".fragments.PhotoCollectionFragment">
 
     <!-- items here are photos as cells, like Instagram feed-->
     <androidx.recyclerview.widget.RecyclerView

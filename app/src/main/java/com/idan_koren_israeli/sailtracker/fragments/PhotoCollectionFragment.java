@@ -11,10 +11,13 @@ import android.view.ViewGroup;
 import com.idan_koren_israeli.sailtracker.R;
 
 /**
- * This card present the next planned sail that the user purchased
+ *
+ * This fragment is used to be like Instagram feed
+ * Each user has an associated photos from sails
+ *
  *
  */
-public class NextSailCard extends Fragment {
+public class PhotoCollectionFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,7 +28,7 @@ public class NextSailCard extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public NextSailCard() {
+    public PhotoCollectionFragment() {
         // Required empty public constructor
     }
 
@@ -35,11 +38,11 @@ public class NextSailCard extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment NextSailCard.
+     * @return A new instance of fragment PhotoCluster.
      */
     // TODO: Rename and change types and number of parameters
-    public static NextSailCard newInstance(String param1, String param2) {
-        NextSailCard fragment = new NextSailCard();
+    public static PhotoCollectionFragment newInstance(String param1, String param2) {
+        PhotoCollectionFragment fragment = new PhotoCollectionFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -60,6 +63,6 @@ public class NextSailCard extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_next_sail_card, container, false);
+        return inflater.inflate(R.layout.fragment_photo_collection, container, false);
     }
 }

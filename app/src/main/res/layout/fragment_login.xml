@@ -74,7 +74,7 @@
         android:autoSizeTextType="uniform"
         android:id="@+id/login_EDT_name_box"
         android:inputType="textPersonName"
-        android:hint="@string/example_code"
+        android:hint="@string/example_name"
         android:layout_marginEnd="30dp"
         android:layout_marginStart="30dp"
         android:gravity="center"

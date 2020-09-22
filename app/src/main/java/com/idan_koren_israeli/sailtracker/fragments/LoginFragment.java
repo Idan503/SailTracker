@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.android.gms.common.internal.service.Common;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -26,13 +24,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.idan_koren_israeli.sailtracker.OnLoginCompleteListener;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
-import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
 
-import java.net.Authenticator;
 import java.util.Objects;
-import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 
@@ -53,6 +49,8 @@ public class LoginFragment extends Fragment {
     private EditText phoneEditText, codeEditText, nameEditText;
     private TextView messageText;
 
+    private OnLoginCompleteListener finishedListener;
+
 
     private FirebaseAuth auth;
     private String mVerificationId;
@@ -63,6 +61,11 @@ public class LoginFragment extends Fragment {
 
     public LoginFragment() {
         // Required empty public constructor
+    }
+
+
+    public void setOnCompleteListener(OnLoginCompleteListener listener){
+        finishedListener = listener;
     }
 
     // TODO: Rename and change types and number of parameters
@@ -136,6 +139,7 @@ public class LoginFragment extends Fragment {
                         CommonUtils.getInstance().showToast("Logged in successfully");
 
                         // Fragment can now be finished
+                        finishedListener.onLoginFinished();
                     }
                     break;
 

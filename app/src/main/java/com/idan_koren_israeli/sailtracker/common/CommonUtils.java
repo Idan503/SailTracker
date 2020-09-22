@@ -2,6 +2,7 @@ package com.idan_koren_israeli.sailtracker.common;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.net.Uri;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -12,8 +13,6 @@ import com.bumptech.glide.Glide;
 // For making glide usage more convenient
 public class CommonUtils {
     Context context;
-
-    private static final int REQUEST_LOCATION = 1;
 
     @SuppressLint("StaticFieldLeak")
     private static CommonUtils single_instance = null;
@@ -27,7 +26,7 @@ public class CommonUtils {
         return single_instance;
     }
 
-    public synchronized static CommonUtils
+    public static CommonUtils
     initHelper(Context context){
         if(single_instance == null)
             single_instance = new CommonUtils(context.getApplicationContext());
@@ -40,6 +39,13 @@ public class CommonUtils {
                 .load(resId)
                 .into(image);
     }
+
+    public void setImageResource(@NonNull ImageView image, Uri uri){
+        Glide.with(context)
+                .load(uri)
+                .into(image);
+    }
+
 
     public void showToast(String message){
         Toast.makeText(context,message, Toast.LENGTH_SHORT).show();

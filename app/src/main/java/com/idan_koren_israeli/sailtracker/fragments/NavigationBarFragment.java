@@ -28,7 +28,7 @@ import com.idan_koren_israeli.sailtracker.activities.SearchActivity;
  *  User will press an icon that is shown in this bar to switch between activities
  *  This fragment is made for the 4 activities of this application
  */
-public class NavigationBar extends Fragment {
+public class NavigationBarFragment extends Fragment {
 
     private ViewGroup parent;
     private LinearLayout home, calendar, gallery, search; // Activities options
@@ -36,12 +36,12 @@ public class NavigationBar extends Fragment {
 
 
 
-    public NavigationBar() {
+    public NavigationBarFragment() {
         // Required empty public constructor
     }
 
-    public static NavigationBar newInstance() {
-        return new NavigationBar();
+    public static NavigationBarFragment newInstance() {
+        return new NavigationBarFragment();
     }
 
     @Override
