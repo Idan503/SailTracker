@@ -7,19 +7,22 @@ import android.widget.LinearLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.idan_koren_israeli.sailtracker.ClubMember;
 import com.idan_koren_israeli.sailtracker.OnLoginCompleteListener;
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.common.FirestoreManager;
 import com.idan_koren_israeli.sailtracker.fragments.LoginFragment;
 import com.idan_koren_israeli.sailtracker.fragments.ProfileFragment;
 
 public class HomeActivity extends BaseActivity {
 
-    FirebaseUser user;
+    private ClubMember member; // the current specific user's member object
+    private LinearLayout loginLayout;
+    private ProfileFragment profileFragment;
+    private LoginFragment loginFragment;
 
-
-    LinearLayout loginLayout;
-    ProfileFragment profileFragment;
-    LoginFragment loginFragment;
+    private FirestoreManager dbManager;
+    private FirebaseAuth authManager;
 
 
     @Override
@@ -27,21 +30,24 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        dbManager = FirestoreManager.getInstance();
+        authManager = FirebaseAuth.getInstance();
+
         findViews();
         loginFragment.setOnCompleteListener(loginCompleteListener);
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
-
-
 
         if(isUserLoggedIn()){
-            Log.i("pttt","Logged in user: " + user.getDisplayName() + " | Phone: " + user.getPhoneNumber());
             hideLoginFragment(); // No need for login
-            updateInterfaceToUser(user);
+            if(authManager.getCurrentUser()!=null) {
+                member = dbManager.convertUserToClubMember(authManager.getCurrentUser());
+                updateInterfaceToUser(member);
+            }
+            else{
+                // problem detected - user is logged in but could got get object
+                Log.e("pttt", "Could not get logged in user data");
+            }
         }
-//        else{
-            // log in fragment is starting from xml
-
 
     }
 
@@ -57,19 +63,24 @@ public class HomeActivity extends BaseActivity {
     }
 
     private boolean isUserLoggedIn(){
-        return user!=null;
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        return firebaseUser!=null;
     }
 
     private OnLoginCompleteListener loginCompleteListener = new OnLoginCompleteListener() {
         @Override
-        public void onLoginFinished() {
+        public void onLoginFinished(FirebaseUser authenticatedUser) {
+            member = FirestoreManager.getInstance().convertUserToClubMember(authenticatedUser);
             hideLoginFragment();
-            profileFragment.updateDisplayData(user);
+            updateInterfaceToUser(member);
         }
     };
 
-    private void updateInterfaceToUser(FirebaseUser user){
-        profileFragment.updateDisplayData(user);
+    // Making the data appears on screen to the current user's data
+    private void updateInterfaceToUser(ClubMember member){
+        profileFragment.updateDisplayData(member);
     }
+
+
 
 }

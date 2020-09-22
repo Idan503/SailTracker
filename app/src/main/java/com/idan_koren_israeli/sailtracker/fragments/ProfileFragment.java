@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.idan_koren_israeli.sailtracker.ClubMember;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.FirestoreManager;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
+
+import java.util.Locale;
 
 /**
  * Profile card is a resizable fragment that is showing information about a user ( a club member)
@@ -61,10 +65,11 @@ public class ProfileFragment extends Fragment {
         numOfSailsText = parent.findViewById(R.id.profile_LBL_sails_count);
     }
 
-    public void updateDisplayData(FirebaseUser user){
-        nameText.setText(user.getDisplayName());
-        CommonUtils.getInstance().setImageResource(profileImage,user.getPhotoUrl());
-        FirestoreManager.getInstance().getPointsByUserID(user);
+    public void updateDisplayData(ClubMember member){
+        nameText.setText(member.getName());
+        CommonUtils.getInstance().setImageResource(profileImage,member.getProfilePicture());
+        numOfPointsText.setText(String.format(Locale.US,"%d", member.getPointsCount()));
+        numOfSailsText.setText(String.format(Locale.US,"%d", member.getSailsCount()));
     }
 
 

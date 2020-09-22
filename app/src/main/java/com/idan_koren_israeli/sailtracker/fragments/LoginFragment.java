@@ -24,15 +24,21 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.idan_koren_israeli.sailtracker.ClubMember;
 import com.idan_koren_israeli.sailtracker.OnLoginCompleteListener;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.common.FirestoreManager;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 
-
+/**
+ *  This class purpose is just to log in and authenticate the user via its phone number
+ *  an authenticated user FirebaseUser object will be generated and sent back via callback.
+ *
+ */
 
 // Users can Login with phone number, authentication via SMS like WhatsApp
 public class LoginFragment extends Fragment {
@@ -138,8 +144,9 @@ public class LoginFragment extends Fragment {
                         currentState = LoginState.COMPLETED;
                         CommonUtils.getInstance().showToast("Logged in successfully");
 
+
                         // Fragment can now be finished
-                        finishedListener.onLoginFinished();
+                        finishedListener.onLoginFinished(loggedUser);
                     }
                     break;
 
