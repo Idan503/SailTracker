@@ -26,6 +26,10 @@
     <string name="next">Next</string>
 
 
+
+    <!-- GALLERY SCREEN -->
+    <string name="take_photo">Take a Photo</string>
+
     <!-- LOGIN SCREEN -->
     <string name="login_phone">Please insert your phone number to log-in</string>
     <string name="login_code">We sent you an SMS with a code:</string>

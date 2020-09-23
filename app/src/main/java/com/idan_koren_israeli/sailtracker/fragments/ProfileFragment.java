@@ -5,17 +5,14 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseUser;
 import com.idan_koren_israeli.sailtracker.ClubMember;
 import com.idan_koren_israeli.sailtracker.R;
-import com.idan_koren_israeli.sailtracker.common.FirestoreManager;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 
 import java.util.Locale;
@@ -74,6 +71,10 @@ public class ProfileFragment extends Fragment {
             CommonUtils.getInstance().setImageResource(profileImage,R.drawable.ic_profile_default);
         numOfPointsText.setText(String.format(Locale.US,"%d", member.getPointsCount()));
         numOfSailsText.setText(String.format(Locale.US,"%d", member.getSailsCount()));
+    }
+
+    public ImageView getProfileImage(){
+        return profileImage;
     }
 
 

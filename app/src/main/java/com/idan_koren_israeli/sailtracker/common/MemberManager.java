@@ -2,11 +2,12 @@ package com.idan_koren_israeli.sailtracker.common;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
+import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -14,44 +15,45 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.ClubMember;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.io.ByteArrayOutputStream;
+import java.util.UUID;
 
 /**
- * This class is the bridge between 2 (Firestore and FirebaseUser) out of 3 users-databases that are being used in this app.
- * User information which is profile picture and displayed name are stored on the authenticated user
- * while addition custom club properties like number of points and total sails are stored in Cloud Firestore
+ * Using both Firestore and Storage Firabase components, to manager data of authenticated members.
+ *
  */
-public class FirestoreManager {
+public class MemberManager {
     Context context;
     FirebaseFirestore database;
 
     interface KEYS {
         String MEMBERS = "members";
+        String GALLERY_IMAGES = "gallery_images";
+        String PROFILE_IMAGES = "profile_images";
     }
 
     @SuppressLint("StaticFieldLeak")
-    private static FirestoreManager single_instance = null;
+    private static MemberManager single_instance = null;
     // This WILL NOT cause a memory leak - *using application context only*
 
-    private FirestoreManager(Context context) {
+    private MemberManager(Context context) {
         database = FirebaseFirestore.getInstance();
         this.context = context;
     }
 
-    public static FirestoreManager getInstance() {
+    public static MemberManager getInstance() {
         return single_instance;
     }
 
-    public static FirestoreManager
+    public static MemberManager
     initHelper(Context context) {
         if (single_instance == null)
-            single_instance = new FirestoreManager(context.getApplicationContext());
+            single_instance = new MemberManager(context.getApplicationContext());
         return single_instance;
     }
 
@@ -110,6 +112,31 @@ public class FirestoreManager {
         if(authUser!=null)
             return convertUserToClubMember(authUser);
         return null;
+    }
+
+
+    // Uploads an image into storage database, as a part of current user gallery
+    public void uploadGalleryImage(Bitmap photo) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+        byte[] b = stream.toByteArray();
+        String fileName = UUID.randomUUID().toString(); // Randomized unique ID
+        StorageReference filePath = FirebaseStorage.getInstance().getReference().child(KEYS.GALLERY_IMAGES)
+                .child(getCurrentMember().getUid()).child(fileName); // Each member has a unique sub-folder of images
+        filePath.putBytes(b).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                CommonUtils.getInstance().showToast("Image uploaded successfully!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                CommonUtils.getInstance().showToast("Problem Occurred.");
+
+
+            }
+        });
     }
 
 

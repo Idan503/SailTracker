@@ -10,7 +10,7 @@ public class MyApp extends Application {
     // Initiating Singletone with Application Context only.
     CommonUtils.initHelper(this);
     SharedPrefsManager.initHelper(this);
-    FirestoreManager.initHelper(this);
+    MemberManager.initHelper(this);
 
 
     }

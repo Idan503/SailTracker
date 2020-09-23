@@ -113,7 +113,7 @@ public class ClubMember {
 
 
     @NonNull
-    @Override
+    @Override      
     public String toString(){
         return "ID: " + uid
                 + "\nName: "+ name

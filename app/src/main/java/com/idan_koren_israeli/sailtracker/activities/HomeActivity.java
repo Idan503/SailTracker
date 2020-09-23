@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import com.idan_koren_israeli.sailtracker.ClubMember;
 import com.idan_koren_israeli.sailtracker.fragments.OnLoginCompleteListener;
 import com.idan_koren_israeli.sailtracker.R;
-import com.idan_koren_israeli.sailtracker.common.FirestoreManager;
+import com.idan_koren_israeli.sailtracker.common.MemberManager;
 import com.idan_koren_israeli.sailtracker.fragments.LoginFragment;
 import com.idan_koren_israeli.sailtracker.fragments.ProfileFragment;
 
@@ -19,14 +19,14 @@ public class HomeActivity extends BaseActivity {
     private ProfileFragment profileFragment;
     private LoginFragment loginFragment;
 
-    private FirestoreManager dbManager;
+    private MemberManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        dbManager = FirestoreManager.getInstance();
+        dbManager = MemberManager.getInstance();
 
         findViews();
         loginFragment.setOnCompleteListener(loginCompleteListener);
