@@ -5,10 +5,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.idan_koren_israeli.sailtracker.ClubMember;
-import com.idan_koren_israeli.sailtracker.OnLoginCompleteListener;
+import com.idan_koren_israeli.sailtracker.fragments.OnLoginCompleteListener;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.FirestoreManager;
 import com.idan_koren_israeli.sailtracker.fragments.LoginFragment;
@@ -22,8 +20,6 @@ public class HomeActivity extends BaseActivity {
     private LoginFragment loginFragment;
 
     private FirestoreManager dbManager;
-    private FirebaseAuth authManager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,18 +27,16 @@ public class HomeActivity extends BaseActivity {
         setContentView(R.layout.activity_home);
 
         dbManager = FirestoreManager.getInstance();
-        authManager = FirebaseAuth.getInstance();
 
         findViews();
         loginFragment.setOnCompleteListener(loginCompleteListener);
 
 
-        if(isUserLoggedIn()){
-            hideLoginFragment(); // No need for login
-            if(authManager.getCurrentUser()!=null) {
-                member = dbManager.convertUserToClubMember(authManager.getCurrentUser());
-                updateInterfaceToUser(member);
-            }
+        if(loginFragment.isLoggedIn()){
+            hideLoginFragment(); // User is already logged-in
+            member = dbManager.getCurrentMember();
+            if(member!=null)
+                updateInterface();
             else{
                 // problem detected - user is logged in but could got get object
                 Log.e("pttt", "Could not get logged in user data");
@@ -62,22 +56,20 @@ public class HomeActivity extends BaseActivity {
         loginLayout.setVisibility(View.GONE);
     }
 
-    private boolean isUserLoggedIn(){
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        return firebaseUser!=null;
-    }
+
 
     private OnLoginCompleteListener loginCompleteListener = new OnLoginCompleteListener() {
         @Override
-        public void onLoginFinished(FirebaseUser authenticatedUser) {
-            member = FirestoreManager.getInstance().convertUserToClubMember(authenticatedUser);
+        public void onLoginFinished(ClubMember authenticatedMember) {
+            member = authenticatedMember;
             hideLoginFragment();
-            updateInterfaceToUser(member);
+            updateInterface();
+            Log.i("pttt", "Finished Log-in B");
         }
     };
 
     // Making the data appears on screen to the current user's data
-    private void updateInterfaceToUser(ClubMember member){
+    private void updateInterface(){
         profileFragment.updateDisplayData(member);
     }
 

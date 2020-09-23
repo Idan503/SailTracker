@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -32,8 +33,6 @@ public class FirestoreManager {
 
     interface KEYS {
         String MEMBERS = "members";
-        String SAIL_COUNT = "SailCount";
-        String POINT_COUNT = "PointCount";
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -92,9 +91,9 @@ public class FirestoreManager {
     }
 
     // Converting the object that is the output of the log-in system to the object that is saved on the database
-    public ClubMember convertUserToClubMember(FirebaseUser user){
+    private ClubMember convertUserToClubMember(FirebaseUser user){
         ClubMember member;
-        // Saving the user in the database if its a new one, otherwise, loading the existing data.
+        // Saving the user in the database if its a new one, otherwise, returns existing object data.
         if(!isMemberSaved(user.getUid())) {
             member = new ClubMember(user);
             writeMember(member);
@@ -103,6 +102,14 @@ public class FirestoreManager {
             member = readMemberByUid(user.getUid());
         }
         return member;
+    }
+
+    // Returns the user's own member object
+    public ClubMember getCurrentMember(){
+        FirebaseUser authUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(authUser!=null)
+            return convertUserToClubMember(authUser);
+        return null;
     }
 
 

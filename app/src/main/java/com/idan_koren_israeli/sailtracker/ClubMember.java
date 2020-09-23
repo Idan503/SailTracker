@@ -1,8 +1,10 @@
 package com.idan_koren_israeli.sailtracker;
 
-import android.net.Uri;
+import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Objects;
 
 
 /**
@@ -16,8 +18,10 @@ import com.google.firebase.auth.FirebaseUser;
  *
  */
 public class ClubMember {
+
+
     private String uid;
-    private Uri profilePicture;
+    private String profilePictureUrl;
     private String name;
     private String phoneNumber;
     private int pointsCount;
@@ -28,9 +32,9 @@ public class ClubMember {
 
     }
 
-    public ClubMember(String uid, Uri pictureURI, String name, String phoneNumber, int pointsCount, int sailsCount) {
+    public ClubMember(String uid, String pictureURI, String name, String phoneNumber, int pointsCount, int sailsCount) {
         this.uid = uid;
-        this.profilePicture = pictureURI;
+        this.profilePictureUrl = pictureURI;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.pointsCount = pointsCount;
@@ -41,11 +45,22 @@ public class ClubMember {
     public ClubMember(FirebaseUser firebaseUser){
         this.name = firebaseUser.getDisplayName();
         this.uid = firebaseUser.getUid();
-        this.profilePicture = firebaseUser.getPhotoUrl();
         this.phoneNumber = firebaseUser.getPhoneNumber();
+        this.profilePictureUrl = null;
         this.pointsCount = 0;
         this.sailsCount = 0;
     }
+
+    // Generating a new club member based on its authenticated object only
+    public ClubMember(String uid, String displayName, String phoneNumber){
+        this.name = displayName;
+        this.uid = uid;
+        this.phoneNumber = phoneNumber;
+        this.profilePictureUrl = null;
+        this.pointsCount = 0;
+        this.sailsCount = 0;
+    }
+
 
 
     public String getUid() {
@@ -56,12 +71,12 @@ public class ClubMember {
         this.uid = uid;
     }
 
-    public Uri getProfilePicture() {
-        return profilePicture;
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
     }
 
-    public void setProfilePicture(Uri profilePicture) {
-        this.profilePicture = profilePicture;
+    public void setProfilePictureUrl(String url) {
+        this.profilePictureUrl = url;
     }
 
     public String getName() {
@@ -95,4 +110,17 @@ public class ClubMember {
     public void setSailsCount(int sailsCount) {
         this.sailsCount = sailsCount;
     }
+
+
+    @NonNull
+    @Override
+    public String toString(){
+        return "ID: " + uid
+                + "\nName: "+ name
+                + "\nPhone: " +phoneNumber
+                + "\nNumber of Sails: " + sailsCount
+                + "\nNumber of Points: " + pointsCount
+                + "\nHave a profile picture: " + (profilePictureUrl!=null);
+    }
+
 }

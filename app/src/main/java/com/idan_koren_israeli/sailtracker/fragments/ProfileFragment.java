@@ -1,5 +1,6 @@
 package com.idan_koren_israeli.sailtracker.fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -67,7 +68,10 @@ public class ProfileFragment extends Fragment {
 
     public void updateDisplayData(ClubMember member){
         nameText.setText(member.getName());
-        CommonUtils.getInstance().setImageResource(profileImage,member.getProfilePicture());
+        if(member.getProfilePictureUrl()!=null)
+            CommonUtils.getInstance().setImageResource(profileImage, Uri.parse(member.getProfilePictureUrl()));
+        else
+            CommonUtils.getInstance().setImageResource(profileImage,R.drawable.ic_profile_default);
         numOfPointsText.setText(String.format(Locale.US,"%d", member.getPointsCount()));
         numOfSailsText.setText(String.format(Locale.US,"%d", member.getSailsCount()));
     }

@@ -1,11 +1,11 @@
 package com.idan_koren_israeli.sailtracker.fragments;
 
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +23,9 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.idan_koren_israeli.sailtracker.ClubMember;
-import com.idan_koren_israeli.sailtracker.OnLoginCompleteListener;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
-import com.idan_koren_israeli.sailtracker.common.FirestoreManager;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -130,6 +127,7 @@ public class LoginFragment extends Fragment {
     private View.OnClickListener nextButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Log.i("pttt", "Finished Log-in - " + currentState.name());
             switch (currentState){
                 case CODE_SENT:
                     // Code user entered the code, we will check if it is correct
@@ -139,14 +137,14 @@ public class LoginFragment extends Fragment {
                     break;
                 case CODE_APPROVED:
                     // User type his profile name, setting it to the current logged profile
-                    if(loggedUser!=null && loggedUser.getDisplayName()==null){
-                        loggedUser.updateProfile(buildNewProfile());
+                    if(loggedUser!=null){
+                        // Creating the new member based on information from inside the fragment
+                        ClubMember loggedMember = new ClubMember(loggedUser.getUid(),nameEditText.getText().toString(),currentPhone);
                         currentState = LoginState.COMPLETED;
                         CommonUtils.getInstance().showToast("Logged in successfully");
 
-
                         // Fragment can now be finished
-                        finishedListener.onLoginFinished(loggedUser);
+                        finishedListener.onLoginFinished(loggedMember);
                     }
                     break;
 
@@ -221,7 +219,7 @@ public class LoginFragment extends Fragment {
                             // Sign in success, update UI with the signed-in user's information
                             currentState = LoginState.CODE_APPROVED;
                             loggedUser = Objects.requireNonNull(task.getResult()).getUser();
-                            showNewProfileLayout();
+                            showNameLayout();
                         } else {
                             // Sign in failed, display a message and update the UI
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
@@ -233,14 +231,8 @@ public class LoginFragment extends Fragment {
                 });
     }
 
-    private UserProfileChangeRequest buildNewProfile(){
-        UserProfileChangeRequest.Builder profileBuilder = new UserProfileChangeRequest.Builder();
-        profileBuilder.setDisplayName(nameEditText.getText().toString());
-        profileBuilder.setPhotoUri(Uri.parse("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"));
-        return profileBuilder.build();
-    }
 
-    private void showNewProfileLayout(){
+    private void showNameLayout(){
         codeEditText.setVisibility(View.GONE);
         phoneEditText.setVisibility(View.GONE);
         nameEditText.setVisibility(View.VISIBLE);
@@ -259,5 +251,13 @@ public class LoginFragment extends Fragment {
         instanceBundle.putSerializable(KEYS.LOGIN_STATE, currentState);
         instanceBundle.putString(KEYS.LOGIN_PHONE, phoneEditText.getText().toString());
         super.onSaveInstanceState(instanceBundle);
+    }
+
+    public boolean isLoggedIn(){
+        if(currentState == LoginState.COMPLETED)
+            return true;
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        return firebaseUser!=null && firebaseUser.getDisplayName() != null && firebaseUser.getDisplayName().length() > 0;
+        // a connected user which has a name is a one that is already signed in to the app
     }
 }

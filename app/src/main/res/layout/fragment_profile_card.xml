@@ -26,11 +26,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/profile_IMG_picture"
-            android:background="@android:color/holo_red_dark"
+            android:background="@android:color/darker_gray"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.ProfilePictureCorners"
-            android:padding="10dp"
+            android:padding="15dp"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
