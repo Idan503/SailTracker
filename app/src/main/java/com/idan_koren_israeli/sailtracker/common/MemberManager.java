@@ -122,6 +122,7 @@ public class MemberManager {
 
 
     // Uploads an image into storage database, as a part of current user gallery
+    // Therefore, each authenticated user can only upload gallery to his own unique folder
     public void uploadGalleryImage(Bitmap photo) {
         ClubMember member = getCurrentMember();
         if(member==null)
@@ -136,17 +137,42 @@ public class MemberManager {
         filePath.putBytes(b).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                common.showToast("Image uploaded successfully!");
+                common.showToast("New gallery image saved!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                common.showToast("Problem Occurred, image could not be saved.");
+            }
+        });
+    }
+
+    // Each user can upload a profile image to his own unique folder
+    public void uploadProfileImage(Bitmap photo) {
+        ClubMember member = getCurrentMember();
+        if(member==null)
+            return;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+
+        byte[] b = stream.toByteArray();
+        String fileName = UUID.randomUUID().toString(); // Randomized unique ID
+        StorageReference filePath = dbStorage.getReference().child(KEYS.PROFILE_IMAGES)
+                .child(getCurrentMember().getUid()).child(fileName); // Each member has a unique sub-folder of images
+        filePath.putBytes(b).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                common.showToast("Profile picture updated!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 common.showToast("Problem Occurred.");
-
-
             }
         });
     }
+
+
 
 
 }

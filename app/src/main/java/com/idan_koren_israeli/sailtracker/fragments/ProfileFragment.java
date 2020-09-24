@@ -13,9 +13,11 @@ import android.widget.TextView;
 
 import com.idan_koren_israeli.sailtracker.ClubMember;
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.activities.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Profile card is a resizable fragment that is showing information about a user ( a club member)
@@ -26,6 +28,7 @@ public class ProfileFragment extends Fragment {
 
     ImageView profileImage, pointsImage;
     TextView nameText, numOfPointsText, numOfSailsText;
+    ClubMember member;
 
 
 
@@ -63,7 +66,12 @@ public class ProfileFragment extends Fragment {
         numOfSailsText = parent.findViewById(R.id.profile_LBL_sails_count);
     }
 
-    public void updateDisplayData(ClubMember member){
+    public void setMember(ClubMember member){
+        this.member = member;
+        updateDisplayData(member);
+    }
+
+    private void updateDisplayData(ClubMember member){
         nameText.setText(member.getName());
         if(member.getProfilePictureUrl()!=null)
             CommonUtils.getInstance().setImageResource(profileImage, Uri.parse(member.getProfilePictureUrl()));
@@ -73,9 +81,18 @@ public class ProfileFragment extends Fragment {
         numOfSailsText.setText(String.format(Locale.US,"%d", member.getSailsCount()));
     }
 
-    public ImageView getProfileImage(){
-        return profileImage;
+    /*
+    private void updatePicture(){
+        if(getActivity()==null)
+            return; // onAttach is not called yet.
+        CommonUtils.getInstance().dispatchChoosePictureIntent(((BaseActivity) Objects.requireNonNull(getActivity()));
+
+
+
     }
+
+     */
+
 
 
 

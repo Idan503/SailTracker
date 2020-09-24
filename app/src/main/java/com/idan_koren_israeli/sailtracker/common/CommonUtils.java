@@ -23,6 +23,7 @@ public class CommonUtils {
     // This WILL NOT cause a memory leak - *using application context only*
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_CHOOSE = 1;
 
     private CommonUtils(Context context){
         this.context = context;
@@ -59,12 +60,24 @@ public class CommonUtils {
 
 
 
-
+    // Opens the camera and returns result of image's bitmap
     public void dispatchTakePictureIntent(BaseActivity callerActivity) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(context.getPackageManager()) != null) {
             callerActivity.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
+    }
+
+    // Let user choose between having the photo from camera or from device's file system
+    public void dispatchChoosePictureIntent(BaseActivity callerActivity){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent storagePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        storagePictureIntent.setType("image/*");
+
+        Intent chooserIntent = Intent.createChooser(takePictureIntent, "Upload or take a picture...");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{storagePictureIntent});
+        callerActivity.startActivityForResult(chooserIntent, REQUEST_IMAGE_CHOOSE );
+
     }
 
 }
