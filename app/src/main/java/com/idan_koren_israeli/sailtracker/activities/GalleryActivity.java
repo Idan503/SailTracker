@@ -13,7 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
-import com.idan_koren_israeli.sailtracker.common.MemberManager;
+import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
 import com.idan_koren_israeli.sailtracker.fragments.ProfileFragment;
 
 public class GalleryActivity extends BaseActivity {
@@ -55,7 +55,7 @@ public class GalleryActivity extends BaseActivity {
             if(extras!=null) {
                 Bitmap photoBitmap = (Bitmap) extras.get("data");
                 if(photoBitmap!=null)
-                    MemberManager.getInstance().uploadGalleryPhoto(photoBitmap, photoUploadSuccess, photoUploadFailure);
+                    DatabaseManager.getInstance().uploadGalleryPhoto(photoBitmap, photoUploadSuccess, photoUploadFailure);
             }
         }
     }

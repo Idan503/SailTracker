@@ -3,7 +3,6 @@ package com.idan_koren_israeli.sailtracker.activities;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -16,7 +15,7 @@ import com.idan_koren_israeli.sailtracker.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.fragments.OnLoginCompleteListener;
 import com.idan_koren_israeli.sailtracker.R;
-import com.idan_koren_israeli.sailtracker.common.MemberManager;
+import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
 import com.idan_koren_israeli.sailtracker.fragments.LoginFragment;
 import com.idan_koren_israeli.sailtracker.fragments.ProfileFragment;
 
@@ -27,14 +26,14 @@ public class HomeActivity extends BaseActivity {
     private ProfileFragment profileFragment;
     private LoginFragment loginFragment;
 
-    private MemberManager dbManager;
+    private DatabaseManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        dbManager = MemberManager.getInstance();
+        dbManager = DatabaseManager.getInstance();
 
         findViews();
         setListeners();
@@ -103,7 +102,7 @@ public class HomeActivity extends BaseActivity {
             if(extras!=null) {
                 Bitmap photoBitmap = (Bitmap) extras.get("data");
                 if(photoBitmap!=null)
-                    MemberManager.getInstance().uploadProfileImage(photoBitmap, photoUploadSuccess, photoUploadFailure);
+                    DatabaseManager.getInstance().uploadProfileImage(photoBitmap, photoUploadSuccess, photoUploadFailure);
             }
         }
 

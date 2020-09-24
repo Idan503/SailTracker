@@ -3,6 +3,7 @@ package com.idan_koren_israeli.sailtracker.fragments;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -11,10 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.idan_koren_israeli.sailtracker.ClubMember;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.activities.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
+import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -30,6 +34,8 @@ public class ProfileFragment extends Fragment {
     private TextView nameText, numOfPointsText, numOfSailsText;
     private ClubMember member;
 
+    private CommonUtils common;
+
 
 
     public ProfileFragment() {
@@ -37,7 +43,7 @@ public class ProfileFragment extends Fragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
+    public static ProfileFragment newInstance() {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -47,6 +53,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        common = CommonUtils.getInstance();
     }
 
     @Override
@@ -75,13 +82,24 @@ public class ProfileFragment extends Fragment {
         if(member==null)
             return; // No member associated
         nameText.setText(member.getName());
-        if(member.getProfilePictureUrl()!=null)
-            CommonUtils.getInstance().setImageResource(profileImage, Uri.parse(member.getProfilePictureUrl()));
-        else
-            CommonUtils.getInstance().setImageResource(profileImage,R.drawable.ic_profile_default);
+        DatabaseManager.getInstance().getProfilePhoto(onProfileUriSuccess, onProfileUriFailure);
         numOfPointsText.setText(String.format(Locale.US,"%d", member.getPointsCount()));
         numOfSailsText.setText(String.format(Locale.US,"%d", member.getSailsCount()));
     }
+
+    private OnSuccessListener<Uri> onProfileUriSuccess = new OnSuccessListener<Uri>(){
+        @Override
+        public void onSuccess(Uri uri) {
+            common.setImageResource(profileImage, uri);
+        }
+    };
+
+    private OnFailureListener onProfileUriFailure = new OnFailureListener() {
+        @Override
+        public void onFailure(@NonNull Exception e) {
+            common.setImageResource(profileImage, R.drawable.ic_profile_default);
+        }
+    };
 
     public ImageView getProfileImage() {
         return profileImage;

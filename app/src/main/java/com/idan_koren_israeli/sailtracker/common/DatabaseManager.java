@@ -3,6 +3,7 @@ package com.idan_koren_israeli.sailtracker.common;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
@@ -24,10 +25,10 @@ import java.io.ByteArrayOutputStream;
 import java.util.UUID;
 
 /**
- * Using both Firestore and Storage Firabase components, to manager data of authenticated members.
+ * Using both Firestore and Storage Firabase components, to manage data of authenticated members.
  *
  */
-public class MemberManager {
+public class DatabaseManager {
     private Context context;
     private FirebaseFirestore dbFirestore; // used for storing members information (as objects)
     private FirebaseStorage dbStorage; // used for storing photos information
@@ -37,29 +38,29 @@ public class MemberManager {
 
     interface KEYS {
         String MEMBERS = "members";
-        String GALLERY_IMAGES = "gallery_images";
-        String PROFILE_IMAGES = "profile_images";
+        String GALLERY_PHOTOS = "gallery_photos";
+        String PROFILE_PHOTOS = "profile_photos";
     }
 
     @SuppressLint("StaticFieldLeak")
-    private static MemberManager single_instance = null;
+    private static DatabaseManager single_instance = null;
     // This WILL NOT cause a memory leak - *using application context only*
 
-    private MemberManager(Context context) {
+    private DatabaseManager(Context context) {
         dbFirestore = FirebaseFirestore.getInstance();
         dbStorage = FirebaseStorage.getInstance();
         common = CommonUtils.getInstance();
         this.context = context;
     }
 
-    public static MemberManager getInstance() {
+    public static DatabaseManager getInstance() {
         return single_instance;
     }
 
-    public static MemberManager
+    public static DatabaseManager
     initHelper(Context context) {
         if (single_instance == null)
-            single_instance = new MemberManager(context.getApplicationContext());
+            single_instance = new DatabaseManager(context.getApplicationContext());
         return single_instance;
     }
 
@@ -123,6 +124,21 @@ public class MemberManager {
     }
 
 
+    // Getting current user member's profile photo link from storage, will be inserted into ui by Glide
+    public void getProfilePhoto(OnSuccessListener<Uri> onSuccess,
+                                  OnFailureListener onFailure){
+        ClubMember member = getCurrentMember();
+        if(member==null)
+            return;
+
+        StorageReference allProfilePhotos = dbStorage.getReference().child(KEYS.PROFILE_PHOTOS);
+        StorageReference filePath = allProfilePhotos.child(getCurrentMember().getUid());
+
+        filePath.getDownloadUrl().addOnSuccessListener(onSuccess).addOnFailureListener(onFailure);
+
+    }
+
+
     // Uploads an image into storage database, as a part of current user gallery
     // Therefore, each authenticated user can only upload gallery to his own unique folder
     public void uploadGalleryPhoto(Bitmap photo,
@@ -134,8 +150,9 @@ public class MemberManager {
 
         byte[] bytes = convertBitmapToBytes(photo);
         String fileName = UUID.randomUUID().toString(); // Randomized unique ID
-        StorageReference filePath = dbStorage.getReference().child(KEYS.GALLERY_IMAGES)
-                .child(getCurrentMember().getUid()).child(fileName); // Each member has a unique sub-folder of images
+        StorageReference allGalleryPhotos = dbStorage.getReference().child(KEYS.GALLERY_PHOTOS);
+        StorageReference filePath = allGalleryPhotos.child(getCurrentMember().getUid()).child(fileName);
+        // Each member has a unique sub-folder of photos
         filePath.putBytes(bytes).addOnSuccessListener(onSuccess).addOnFailureListener(onFailure);
     }
 
@@ -148,9 +165,9 @@ public class MemberManager {
             return;
 
         byte[] bytes = convertBitmapToBytes(photo);
-        String fileName = UUID.randomUUID().toString(); // Randomized unique ID
-        StorageReference filePath = dbStorage.getReference().child(KEYS.PROFILE_IMAGES)
-                .child(getCurrentMember().getUid()).child(fileName); // Each member has a unique sub-folder of images
+        StorageReference allProfilePhotos = dbStorage.getReference().child(KEYS.PROFILE_PHOTOS);
+        StorageReference filePath = allProfilePhotos.child(getCurrentMember().getUid());
+        // Each member has a unique photo named on its uid
         filePath.putBytes(bytes).addOnSuccessListener(onSuccess).addOnFailureListener(onFailure);
     }
 
@@ -160,6 +177,7 @@ public class MemberManager {
 
         return stream.toByteArray();
     }
+
 
 
 
