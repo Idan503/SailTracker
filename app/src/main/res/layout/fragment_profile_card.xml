@@ -30,6 +30,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.ProfilePictureCorners"
+            android:scaleType="centerCrop"
             android:padding="15dp"
             />
 

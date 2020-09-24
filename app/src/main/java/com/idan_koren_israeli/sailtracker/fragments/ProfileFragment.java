@@ -16,12 +16,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.idan_koren_israeli.sailtracker.ClubMember;
 import com.idan_koren_israeli.sailtracker.R;
-import com.idan_koren_israeli.sailtracker.activities.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
-import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
+import com.idan_koren_israeli.sailtracker.common.UserDataManager;
 
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * Profile card is a resizable fragment that is showing information about a user ( a club member)
@@ -82,10 +80,11 @@ public class ProfileFragment extends Fragment {
         if(member==null)
             return; // No member associated
         nameText.setText(member.getName());
-        DatabaseManager.getInstance().getProfilePhoto(onProfileUriSuccess, onProfileUriFailure);
+        UserDataManager.getInstance().getProfilePhoto(onProfileUriSuccess, onProfileUriFailure);
         numOfPointsText.setText(String.format(Locale.US,"%d", member.getPointsCount()));
         numOfSailsText.setText(String.format(Locale.US,"%d", member.getSailsCount()));
     }
+
 
     private OnSuccessListener<Uri> onProfileUriSuccess = new OnSuccessListener<Uri>(){
         @Override

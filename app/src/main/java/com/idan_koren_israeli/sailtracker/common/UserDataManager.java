@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -28,7 +29,7 @@ import java.util.UUID;
  * Using both Firestore and Storage Firabase components, to manage data of authenticated members.
  *
  */
-public class DatabaseManager {
+public class UserDataManager {
     private Context context;
     private FirebaseFirestore dbFirestore; // used for storing members information (as objects)
     private FirebaseStorage dbStorage; // used for storing photos information
@@ -43,24 +44,24 @@ public class DatabaseManager {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private static DatabaseManager single_instance = null;
+    private static UserDataManager single_instance = null;
     // This WILL NOT cause a memory leak - *using application context only*
 
-    private DatabaseManager(Context context) {
+    private UserDataManager(Context context) {
         dbFirestore = FirebaseFirestore.getInstance();
         dbStorage = FirebaseStorage.getInstance();
         common = CommonUtils.getInstance();
         this.context = context;
     }
 
-    public static DatabaseManager getInstance() {
+    public static UserDataManager getInstance() {
         return single_instance;
     }
 
-    public static DatabaseManager
+    public static UserDataManager
     initHelper(Context context) {
         if (single_instance == null)
-            single_instance = new DatabaseManager(context.getApplicationContext());
+            single_instance = new UserDataManager(context.getApplicationContext());
         return single_instance;
     }
 
@@ -164,6 +165,7 @@ public class DatabaseManager {
         if(member==null)
             return;
 
+        Log.i("pttt", "test4");
         byte[] bytes = convertBitmapToBytes(photo);
         StorageReference allProfilePhotos = dbStorage.getReference().child(KEYS.PROFILE_PHOTOS);
         StorageReference filePath = allProfilePhotos.child(getCurrentMember().getUid());
