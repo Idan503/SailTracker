@@ -26,9 +26,9 @@ import java.util.Objects;
  */
 public class ProfileFragment extends Fragment {
 
-    ImageView profileImage, pointsImage;
-    TextView nameText, numOfPointsText, numOfSailsText;
-    ClubMember member;
+    private ImageView profileImage, pointsImage;
+    private TextView nameText, numOfPointsText, numOfSailsText;
+    private ClubMember member;
 
 
 
@@ -68,10 +68,12 @@ public class ProfileFragment extends Fragment {
 
     public void setMember(ClubMember member){
         this.member = member;
-        updateDisplayData(member);
+        updateUI();
     }
 
-    private void updateDisplayData(ClubMember member){
+    public void updateUI(){
+        if(member==null)
+            return; // No member associated
         nameText.setText(member.getName());
         if(member.getProfilePictureUrl()!=null)
             CommonUtils.getInstance().setImageResource(profileImage, Uri.parse(member.getProfilePictureUrl()));
@@ -81,19 +83,47 @@ public class ProfileFragment extends Fragment {
         numOfSailsText.setText(String.format(Locale.US,"%d", member.getSailsCount()));
     }
 
-    /*
-    private void updatePicture(){
-        if(getActivity()==null)
-            return; // onAttach is not called yet.
-        CommonUtils.getInstance().dispatchChoosePictureIntent(((BaseActivity) Objects.requireNonNull(getActivity()));
-
-
-
+    public ImageView getProfileImage() {
+        return profileImage;
     }
 
-     */
+    public void setProfileImage(ImageView profileImage) {
+        this.profileImage = profileImage;
+    }
 
+    public ImageView getPointsImage() {
+        return pointsImage;
+    }
 
+    public void setPointsImage(ImageView pointsImage) {
+        this.pointsImage = pointsImage;
+    }
 
+    public TextView getNameText() {
+        return nameText;
+    }
 
+    public void setNameText(TextView nameText) {
+        this.nameText = nameText;
+    }
+
+    public TextView getNumOfPointsText() {
+        return numOfPointsText;
+    }
+
+    public void setNumOfPointsText(TextView numOfPointsText) {
+        this.numOfPointsText = numOfPointsText;
+    }
+
+    public TextView getNumOfSailsText() {
+        return numOfSailsText;
+    }
+
+    public void setNumOfSailsText(TextView numOfSailsText) {
+        this.numOfSailsText = numOfSailsText;
+    }
+
+    public ClubMember getMember() {
+        return member;
+    }
 }

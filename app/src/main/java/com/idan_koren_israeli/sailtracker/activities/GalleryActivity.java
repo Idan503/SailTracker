@@ -5,7 +5,12 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.common.MemberManager;
@@ -37,7 +42,7 @@ public class GalleryActivity extends BaseActivity {
         addPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CommonUtils.getInstance().dispatchTakePictureIntent((BaseActivity) view.getContext());
+                CommonUtils.getInstance().dispatchTakePictureIntent(GalleryActivity.this);
             }
         });
     }
@@ -48,10 +53,24 @@ public class GalleryActivity extends BaseActivity {
         if (requestCode == 1 && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             if(extras!=null) {
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                if(imageBitmap!=null)
-                    MemberManager.getInstance().uploadGalleryImage(imageBitmap);
+                Bitmap photoBitmap = (Bitmap) extras.get("data");
+                if(photoBitmap!=null)
+                    MemberManager.getInstance().uploadGalleryPhoto(photoBitmap, photoUploadSuccess, photoUploadFailure);
             }
         }
     }
+
+    private OnSuccessListener<UploadTask.TaskSnapshot> photoUploadSuccess = new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        @Override
+        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+            CommonUtils.getInstance().showToast("Gallery image saved!");
+        }
+    };
+
+    private OnFailureListener photoUploadFailure = new OnFailureListener() {
+        @Override
+        public void onFailure(@NonNull Exception e) {
+            CommonUtils.getInstance().showToast("Problem occurred.");
+        }
+    };
 }
