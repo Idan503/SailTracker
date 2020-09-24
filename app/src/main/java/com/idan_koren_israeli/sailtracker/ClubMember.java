@@ -3,7 +3,10 @@ package com.idan_koren_israeli.sailtracker;
 import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.idan_koren_israeli.sailtracker.gallery.GalleryPhoto;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Objects;
 
 
@@ -26,7 +29,7 @@ public class ClubMember {
     private String phoneNumber;
     private int pointsCount;
     private int sailsCount;
-    // ArrayList<Pictures>
+    private ArrayList<GalleryPhoto> gallery;
 
     public ClubMember(){
 
@@ -39,6 +42,7 @@ public class ClubMember {
         this.phoneNumber = phoneNumber;
         this.pointsCount = pointsCount;
         this.sailsCount = sailsCount;
+        this.gallery = new ArrayList<>();
     }
 
     // Generating a new club member based on its authenticated object only
@@ -49,6 +53,7 @@ public class ClubMember {
         this.profilePictureUrl = null;
         this.pointsCount = 0;
         this.sailsCount = 0;
+        this.gallery = new ArrayList<>();
     }
 
     // Generating a new club member based on its authenticated object only
@@ -59,6 +64,7 @@ public class ClubMember {
         this.profilePictureUrl = null;
         this.pointsCount = 0;
         this.sailsCount = 0;
+        this.gallery = new ArrayList<>();
     }
 
 
@@ -109,6 +115,10 @@ public class ClubMember {
 
     public void setSailsCount(int sailsCount) {
         this.sailsCount = sailsCount;
+    }
+
+    public void addGalleryPhoto(GalleryPhoto photo){
+        gallery.add(photo);
     }
 
 

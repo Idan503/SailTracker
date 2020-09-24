@@ -12,24 +12,26 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.ClubMember;
+import com.idan_koren_israeli.sailtracker.gallery.GalleryPhoto;
 
 import java.io.ByteArrayOutputStream;
-import java.util.UUID;
 
 /**
  * Using both Firestore and Storage Firabase components, to manage data of authenticated members.
  *
  */
-public class UserDataManager {
+public class DatabaseManager {
     private Context context;
     private FirebaseFirestore dbFirestore; // used for storing members information (as objects)
     private FirebaseStorage dbStorage; // used for storing photos information
@@ -44,24 +46,24 @@ public class UserDataManager {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private static UserDataManager single_instance = null;
+    private static DatabaseManager single_instance = null;
     // This WILL NOT cause a memory leak - *using application context only*
 
-    private UserDataManager(Context context) {
+    private DatabaseManager(Context context) {
         dbFirestore = FirebaseFirestore.getInstance();
         dbStorage = FirebaseStorage.getInstance();
         common = CommonUtils.getInstance();
         this.context = context;
     }
 
-    public static UserDataManager getInstance() {
+    public static DatabaseManager getInstance() {
         return single_instance;
     }
 
-    public static UserDataManager
+    public static DatabaseManager
     initHelper(Context context) {
         if (single_instance == null)
-            single_instance = new UserDataManager(context.getApplicationContext());
+            single_instance = new DatabaseManager(context.getApplicationContext());
         return single_instance;
     }
 
@@ -126,18 +128,58 @@ public class UserDataManager {
 
 
     // Getting current user member's profile photo link from storage, will be inserted into ui by Glide
-    public void getProfilePhoto(OnSuccessListener<Uri> onSuccess,
-                                  OnFailureListener onFailure){
+    public void readProfilePhoto(OnSuccessListener<Uri> onSuccess,
+                                 OnFailureListener onFailure){
         ClubMember member = getCurrentMember();
         if(member==null)
             return;
 
-        StorageReference allProfilePhotos = dbStorage.getReference().child(KEYS.PROFILE_PHOTOS);
-        StorageReference filePath = allProfilePhotos.child(getCurrentMember().getUid());
+        StorageReference profilePhotosHub = dbStorage.getReference().child(KEYS.PROFILE_PHOTOS);
+        StorageReference filePath = profilePhotosHub.child(getCurrentMember().getUid());
 
         filePath.getDownloadUrl().addOnSuccessListener(onSuccess).addOnFailureListener(onFailure);
 
     }
+
+    // Getting current user member's profile photo link from storage, will be inserted into ui by Glide
+    public void readMemberGallery(){
+        ClubMember member = DatabaseManager.getInstance().getCurrentMember();
+        if(member==null)
+            return;
+
+
+        StorageReference galleryPhotosHub = dbStorage.getReference().child(DatabaseManager.KEYS.GALLERY_PHOTOS);
+        StorageReference memberGalleryPath = galleryPhotosHub.child(getCurrentMember().getUid());
+
+        // Getting the parent folder of current user gallery
+        memberGalleryPath.listAll().addOnSuccessListener(galleryFolderSuccess);
+    }
+
+
+    // Calls when we have managed to get into the folder contains photos of user gallery
+    private OnSuccessListener<ListResult> galleryFolderSuccess = new OnSuccessListener<ListResult>() {
+        @Override
+        public void onSuccess(ListResult gallery) {
+            for(final StorageReference photo : gallery.getItems()) {
+                final long time = Long.parseLong(photo.getName());
+                // All photos names are the times that they where taken in
+                // This prevents double-listeners concurrently, sync for uri AND metadata of each file
+                // This might be changed later.
+                photo.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        GalleryPhoto photo = new GalleryPhoto(uri, time);
+                        getCurrentMember().addGalleryPhoto(photo);
+                    }
+                });
+            }
+        }
+    };
+
+
+
+
+
 
 
     // Uploads an image into storage database, as a part of current user gallery
@@ -150,7 +192,10 @@ public class UserDataManager {
             return;
 
         byte[] bytes = convertBitmapToBytes(photo);
-        String fileName = UUID.randomUUID().toString(); // Randomized unique ID
+        String fileName = Long.toString(Timestamp.now().getSeconds());
+        // Name of picture is its time, user will not take 2 pictures in the same second
+        // This will be helpful to sort pictures by time without the need of 2 concurrent callbacks (uri & time - metadata)
+        // This might be changed later on.
         StorageReference allGalleryPhotos = dbStorage.getReference().child(KEYS.GALLERY_PHOTOS);
         StorageReference filePath = allGalleryPhotos.child(getCurrentMember().getUid()).child(fileName);
         // Each member has a unique sub-folder of photos
@@ -165,7 +210,6 @@ public class UserDataManager {
         if(member==null)
             return;
 
-        Log.i("pttt", "test4");
         byte[] bytes = convertBitmapToBytes(photo);
         StorageReference allProfilePhotos = dbStorage.getReference().child(KEYS.PROFILE_PHOTOS);
         StorageReference filePath = allProfilePhotos.child(getCurrentMember().getUid());

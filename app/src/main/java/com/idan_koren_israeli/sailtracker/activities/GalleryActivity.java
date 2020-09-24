@@ -13,7 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
-import com.idan_koren_israeli.sailtracker.common.UserDataManager;
+import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
 import com.idan_koren_israeli.sailtracker.fragments.ProfileFragment;
 
 public class GalleryActivity extends BaseActivity {
@@ -21,14 +21,21 @@ public class GalleryActivity extends BaseActivity {
     FloatingActionButton addPhotoButton;
     ProfileFragment profileFrag;
 
+    private DatabaseManager dbManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
 
+        dbManager = DatabaseManager.getInstance();
+
         findViews();
         setListeners();
+
+        dbManager.readMemberGallery();
+        profileFrag.setMember(dbManager.getCurrentMember());
     }
 
 
@@ -55,7 +62,7 @@ public class GalleryActivity extends BaseActivity {
             if(extras!=null) {
                 Bitmap photoBitmap = (Bitmap) extras.get("data");
                 if(photoBitmap!=null)
-                    UserDataManager.getInstance().uploadGalleryPhoto(photoBitmap, photoUploadSuccess, photoUploadFailure);
+                    DatabaseManager.getInstance().uploadGalleryPhoto(photoBitmap, photoUploadSuccess, photoUploadFailure);
             }
         }
     }

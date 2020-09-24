@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.idan_koren_israeli.sailtracker.ClubMember;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
-import com.idan_koren_israeli.sailtracker.common.UserDataManager;
+import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
 
 import java.util.Locale;
 
@@ -80,7 +81,7 @@ public class ProfileFragment extends Fragment {
         if(member==null)
             return; // No member associated
         nameText.setText(member.getName());
-        UserDataManager.getInstance().getProfilePhoto(onProfileUriSuccess, onProfileUriFailure);
+        DatabaseManager.getInstance().readProfilePhoto(onProfileUriSuccess, onProfileUriFailure);
         numOfPointsText.setText(String.format(Locale.US,"%d", member.getPointsCount()));
         numOfSailsText.setText(String.format(Locale.US,"%d", member.getSailsCount()));
     }
@@ -97,6 +98,7 @@ public class ProfileFragment extends Fragment {
         @Override
         public void onFailure(@NonNull Exception e) {
             common.setImageResource(profileImage, R.drawable.ic_profile_default);
+            Log.i("pttt", "404e");
         }
     };
 
