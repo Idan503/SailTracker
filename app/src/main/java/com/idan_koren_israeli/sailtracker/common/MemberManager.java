@@ -29,7 +29,9 @@ import java.util.UUID;
  */
 public class MemberManager {
     Context context;
-    FirebaseFirestore database;
+    FirebaseFirestore dbFirestore; // used for storing members information (as objects)
+    FirebaseStorage dbStorage; // used for storing photos information
+    CommonUtils common;
 
     interface KEYS {
         String MEMBERS = "members";
@@ -42,7 +44,9 @@ public class MemberManager {
     // This WILL NOT cause a memory leak - *using application context only*
 
     private MemberManager(Context context) {
-        database = FirebaseFirestore.getInstance();
+        dbFirestore = FirebaseFirestore.getInstance();
+        dbStorage = FirebaseStorage.getInstance();
+        common = CommonUtils.getInstance();
         this.context = context;
     }
 
@@ -57,8 +61,9 @@ public class MemberManager {
         return single_instance;
     }
 
+    // Uid is the primary key of the firestore database
     public ClubMember readMemberByUid(String uid){
-        DocumentReference doc = database.collection(KEYS.MEMBERS).document(uid);
+        DocumentReference doc = dbFirestore.collection(KEYS.MEMBERS).document(uid);
         final ClubMember[] result = {null};
         doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -69,15 +74,16 @@ public class MemberManager {
         return result[0];
     }
 
+    // Writing a member as an object into firestore
     public void writeMember(ClubMember member){
-        database.collection(KEYS.MEMBERS)
+        dbFirestore.collection(KEYS.MEMBERS)
                 .document(member.getUid())
                 .set(member);
     }
 
-
+    // checking if a club member is already exists in the database
     public boolean isMemberSaved(String uid){
-        DocumentReference docRef = database.collection(KEYS.MEMBERS).document(uid);
+        DocumentReference docRef = dbFirestore.collection(KEYS.MEMBERS).document(uid);
         final boolean[] isExists = {false};
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -117,22 +123,25 @@ public class MemberManager {
 
     // Uploads an image into storage database, as a part of current user gallery
     public void uploadGalleryImage(Bitmap photo) {
+        ClubMember member = getCurrentMember();
+        if(member==null)
+            return;
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
         byte[] b = stream.toByteArray();
         String fileName = UUID.randomUUID().toString(); // Randomized unique ID
-        StorageReference filePath = FirebaseStorage.getInstance().getReference().child(KEYS.GALLERY_IMAGES)
+        StorageReference filePath = dbStorage.getReference().child(KEYS.GALLERY_IMAGES)
                 .child(getCurrentMember().getUid()).child(fileName); // Each member has a unique sub-folder of images
         filePath.putBytes(b).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                CommonUtils.getInstance().showToast("Image uploaded successfully!");
+                common.showToast("Image uploaded successfully!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                CommonUtils.getInstance().showToast("Problem Occurred.");
+                common.showToast("Problem Occurred.");
 
 
             }

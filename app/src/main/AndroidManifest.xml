@@ -16,13 +16,25 @@
 
         android:name=".common.MyApp"
         android:theme="@style/AppTheme">
+
         <activity android:name=".activities.SearchActivity"
             android:screenOrientation="portrait"
             />
+
+
         <activity android:name=".activities.GalleryActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.CHOOSER" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+
+        </activity>
+
         <activity android:name=".activities.CalendarActivity"
             android:screenOrientation="portrait"/>
+
         <activity android:name=".activities.HomeActivity"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -30,6 +42,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
+
+
 
 </manifest>

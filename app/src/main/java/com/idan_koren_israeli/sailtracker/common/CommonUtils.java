@@ -59,12 +59,12 @@ public class CommonUtils {
 
 
 
+
     public void dispatchTakePictureIntent(BaseActivity callerActivity) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(context.getPackageManager()) != null) {
             callerActivity.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
-
 
 }
