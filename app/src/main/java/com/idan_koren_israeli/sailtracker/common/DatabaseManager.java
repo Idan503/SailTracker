@@ -56,7 +56,7 @@ public class DatabaseManager {
         dbStorage = FirebaseStorage.getInstance();
         common = CommonUtils.getInstance();
         if(firebaseAuth.getCurrentUser()!=null)
-            this.currentUser = convertUserToClubMember(firebaseAuth.getCurrentUser());
+            this.currentUser = convertAuthUserToClubMember(firebaseAuth.getCurrentUser());
     }
 
     public static DatabaseManager getInstance() {
@@ -95,7 +95,7 @@ public class DatabaseManager {
                 .set(member);
     }
 
-    // checking if a club member is already exists in the database
+    // checking if a member is already exists in the database
     public boolean isMemberStored(String uid){
         DocumentReference docRef = dbFirestore.collection(KEYS.MEMBERS).document(uid);
         final boolean[] isExists = {false};
@@ -114,7 +114,7 @@ public class DatabaseManager {
 
 
     // Converting the object that is the output of the log-in system to the object that is saved on the database
-    private ClubMember convertUserToClubMember(FirebaseUser user){
+    private ClubMember convertAuthUserToClubMember(FirebaseUser user){
         ClubMember member;
         // Saving the user in the database if its a new one, otherwise, returns existing object data.
         if(!isMemberStored(user.getUid())) {

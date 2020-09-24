@@ -44,6 +44,8 @@ public class CommonUtils {
     }
 
 
+    //region Glide Image Load
+
     public void setImageResource(@NonNull ImageView image, int resId){
         Glide.with(context)
                 .load(resId)
@@ -56,12 +58,15 @@ public class CommonUtils {
                 .into(image);
     }
 
+    //endregion
+
 
     public void showToast(String message){
         Toast.makeText(context,message, Toast.LENGTH_SHORT).show();
     }
 
 
+    //region Photos & Camera
 
     // Opens the camera and returns result of image's bitmap
     public void dispatchTakePictureIntent(BaseActivity callerActivity) {
@@ -88,5 +93,7 @@ public class CommonUtils {
 
         return stream.toByteArray();
     }
+
+    //endregion
 
 }

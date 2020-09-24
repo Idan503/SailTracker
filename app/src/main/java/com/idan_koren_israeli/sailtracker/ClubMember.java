@@ -69,6 +69,7 @@ public class ClubMember {
 
 
 
+    //region Getters & Setters
     public String getUid() {
         return uid;
     }
@@ -116,6 +117,8 @@ public class ClubMember {
     public void setSailsCount(int sailsCount) {
         this.sailsCount = sailsCount;
     }
+
+    //endregion
 
     public void addGalleryPhoto(GalleryPhoto photo){
         gallery.add(photo);

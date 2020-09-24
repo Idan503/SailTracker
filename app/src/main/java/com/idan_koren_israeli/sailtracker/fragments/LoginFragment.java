@@ -128,7 +128,6 @@ public class LoginFragment extends Fragment {
     private View.OnClickListener nextButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Log.i("pttt", "Finished Log-in - " + currentState.name());
             switch (currentState){
                 case CODE_SENT:
                     // Code user entered the code, we will check if it is correct

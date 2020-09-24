@@ -53,6 +53,8 @@ public class HomeActivity extends BaseActivity {
 
     }
 
+    //region Init Functions
+
     private void findViews(){
         loginLayout = findViewById(R.id.home_LAY_login);
         profileFragment =(ProfileFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_profile);
@@ -61,26 +63,14 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void setListeners(){
-        profileFragment.getProfileImage().setOnLongClickListener(updateProfilePhoto);
+        profileFragment.getProfileImage().setOnLongClickListener(changeProfilePhoto);
     }
-
-
 
     private void hideLoginFragment(){
         loginLayout.setVisibility(View.GONE);
     }
 
-
-    private View.OnLongClickListener updateProfilePhoto = new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View view) {
-            if(user !=null) {
-                CommonUtils.getInstance().dispatchChoosePictureIntent(HomeActivity.this);
-                return true;
-            }
-            return false;
-        }
-    };
+    //endregion
 
     private OnLoginCompleteListener loginCompleteListener = new OnLoginCompleteListener() {
         @Override
@@ -92,16 +82,29 @@ public class HomeActivity extends BaseActivity {
         }
     };
 
-    // Making the data appears on screen to the current user's data
+
     private void updateInterface(){
         profileFragment.setMember(user);
     }
 
 
+    //region Profile Photo Change
+
+    private View.OnLongClickListener changeProfilePhoto = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+            if(user !=null) {
+                CommonUtils.getInstance().dispatchChoosePictureIntent(HomeActivity.this);
+                return true;
+            }
+            return false;
+        }
+    };
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // Updating the profile photo of the member
+        // Code gets to here after camera intent is finished, data is the users chosen photo
         if (requestCode == 1 && resultCode == RESULT_OK) {
             Bitmap photoBitmap = null;
             if(data.getData()!=null) {
@@ -142,5 +145,6 @@ public class HomeActivity extends BaseActivity {
         }
     };
 
+    //endregion
 
 }
