@@ -7,10 +7,10 @@ public class MyApp extends Application {
     public void onCreate(){
     super.onCreate();
 
-    // Initiating Singletone with Application Context only.
+    // Initiating Singleton using Application Context only.
     CommonUtils.initHelper(this);
     SharedPrefsManager.initHelper(this);
-    DatabaseManager.initHelper(this);
+    DatabaseManager.initHelper();
 
 
     }

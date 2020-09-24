@@ -25,7 +25,7 @@ import java.io.IOException;
 
 public class HomeActivity extends BaseActivity {
 
-    private ClubMember member; // the current specific user's member object
+    private ClubMember user; // the current specific user's member object
     private LinearLayout loginLayout;
     private ProfileFragment profileFragment;
     private LoginFragment loginFragment;
@@ -46,8 +46,8 @@ public class HomeActivity extends BaseActivity {
 
         if(loginFragment.isLoggedIn()){
             hideLoginFragment(); // User is already logged-in
-            member = dbManager.getCurrentMember();
-            if(member!=null)
+            user = dbManager.getCurrentUser();
+            if(user !=null)
                 updateInterface();
         }
 
@@ -74,7 +74,7 @@ public class HomeActivity extends BaseActivity {
     private View.OnLongClickListener updateProfilePhoto = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View view) {
-            if(member!=null) {
+            if(user !=null) {
                 CommonUtils.getInstance().dispatchChoosePictureIntent(HomeActivity.this);
                 return true;
             }
@@ -85,7 +85,8 @@ public class HomeActivity extends BaseActivity {
     private OnLoginCompleteListener loginCompleteListener = new OnLoginCompleteListener() {
         @Override
         public void onLoginFinished(ClubMember authenticatedMember) {
-            member = authenticatedMember;
+            user = authenticatedMember;
+            DatabaseManager.getInstance().setCurrentUser(user);
             hideLoginFragment();
             updateInterface();
         }
@@ -93,7 +94,7 @@ public class HomeActivity extends BaseActivity {
 
     // Making the data appears on screen to the current user's data
     private void updateInterface(){
-        profileFragment.setMember(member);
+        profileFragment.setMember(user);
     }
 
 
@@ -120,7 +121,7 @@ public class HomeActivity extends BaseActivity {
                 }
             }
             if (photoBitmap != null) {
-                DatabaseManager.getInstance().uploadProfileImage(photoBitmap, photoUploadSuccess, photoUploadFailure);
+                DatabaseManager.getInstance().storeProfilePhoto(photoBitmap, photoUploadSuccess, photoUploadFailure);
             }
         }
 

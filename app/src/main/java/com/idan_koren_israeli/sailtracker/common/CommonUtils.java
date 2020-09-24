@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.widget.ImageView;
@@ -13,6 +14,8 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.idan_koren_israeli.sailtracker.activities.BaseActivity;
+
+import java.io.ByteArrayOutputStream;
 
 // For making glide usage more convenient
 public class CommonUtils {
@@ -77,7 +80,13 @@ public class CommonUtils {
         Intent chooserIntent = Intent.createChooser(takePictureIntent, "Upload or take a picture...");
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{storagePictureIntent});
         callerActivity.startActivityForResult(chooserIntent, REQUEST_IMAGE_CHOOSE );
+    }
 
+    public byte[] convertBitmapToBytes(Bitmap photo, int quality){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        photo.compress(Bitmap.CompressFormat.PNG, quality, stream);
+
+        return stream.toByteArray();
     }
 
 }

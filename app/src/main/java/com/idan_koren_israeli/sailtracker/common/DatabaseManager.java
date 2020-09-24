@@ -1,10 +1,8 @@
 package com.idan_koren_israeli.sailtracker.common;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -25,17 +23,20 @@ import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.ClubMember;
 import com.idan_koren_israeli.sailtracker.gallery.GalleryPhoto;
 
-import java.io.ByteArrayOutputStream;
+import java.util.Objects;
 
 /**
  * Using both Firestore and Storage Firabase components, to manage data of authenticated members.
  *
  */
 public class DatabaseManager {
-    private Context context;
+    private FirebaseAuth firebaseAuth;
     private FirebaseFirestore dbFirestore; // used for storing members information (as objects)
-    private FirebaseStorage dbStorage; // used for storing photos information
+    private FirebaseStorage dbStorage; // used for storing photos information (gallery and profile)
     private CommonUtils common;
+
+    private ClubMember currentUser; // A lot of calls will use the current user, so it is stored as a property.
+    // This prevents redundant calls to the database (Over and over for the same current user's clubmember).
 
     private static final int PHOTOS_QUALITY = 100;
 
@@ -49,11 +50,13 @@ public class DatabaseManager {
     private static DatabaseManager single_instance = null;
     // This WILL NOT cause a memory leak - *using application context only*
 
-    private DatabaseManager(Context context) {
+    private DatabaseManager() {
+        firebaseAuth = FirebaseAuth.getInstance();
         dbFirestore = FirebaseFirestore.getInstance();
         dbStorage = FirebaseStorage.getInstance();
         common = CommonUtils.getInstance();
-        this.context = context;
+        if(firebaseAuth.getCurrentUser()!=null)
+            this.currentUser = convertUserToClubMember(firebaseAuth.getCurrentUser());
     }
 
     public static DatabaseManager getInstance() {
@@ -61,14 +64,19 @@ public class DatabaseManager {
     }
 
     public static DatabaseManager
-    initHelper(Context context) {
-        if (single_instance == null)
-            single_instance = new DatabaseManager(context.getApplicationContext());
+    initHelper() {
+        if (single_instance == null) {
+            single_instance = new DatabaseManager();
+        }
         return single_instance;
     }
 
+    //region Members Functions
+
     // Uid is the primary key of the firestore database
-    public ClubMember readMemberByUid(String uid){
+    public ClubMember loadMember(String uid){
+        if(uid.equals(currentUser.getUid()))
+            return currentUser;
         DocumentReference doc = dbFirestore.collection(KEYS.MEMBERS).document(uid);
         final ClubMember[] result = {null};
         doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -81,14 +89,14 @@ public class DatabaseManager {
     }
 
     // Writing a member as an object into firestore
-    public void writeMember(ClubMember member){
+    public void storeMember(ClubMember member){
         dbFirestore.collection(KEYS.MEMBERS)
                 .document(member.getUid())
                 .set(member);
     }
 
     // checking if a club member is already exists in the database
-    public boolean isMemberSaved(String uid){
+    public boolean isMemberStored(String uid){
         DocumentReference docRef = dbFirestore.collection(KEYS.MEMBERS).document(uid);
         final boolean[] isExists = {false};
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -104,52 +112,64 @@ public class DatabaseManager {
         return isExists[0];
     }
 
+
     // Converting the object that is the output of the log-in system to the object that is saved on the database
     private ClubMember convertUserToClubMember(FirebaseUser user){
         ClubMember member;
         // Saving the user in the database if its a new one, otherwise, returns existing object data.
-        if(!isMemberSaved(user.getUid())) {
+        if(!isMemberStored(user.getUid())) {
             member = new ClubMember(user);
-            writeMember(member);
+            storeMember(member);
         }
         else{
-            member = readMemberByUid(user.getUid());
+            member = loadMember(user.getUid());
         }
         return member;
     }
 
-    // Returns the user's own member object
-    public ClubMember getCurrentMember(){
-        FirebaseUser authUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(authUser!=null)
-            return convertUserToClubMember(authUser);
-        return null;
+    public ClubMember getCurrentUser(){
+        return currentUser;
     }
 
+    public void setCurrentUser(ClubMember currentUserMember){
+        currentUser = currentUserMember;
+        if(!isMemberStored(currentUserMember.getUid()))
+            storeMember(currentUserMember);
+    }
+    //endregion
+
+    //region Profile Photo Functions
 
     // Getting current user member's profile photo link from storage, will be inserted into ui by Glide
-    public void readProfilePhoto(OnSuccessListener<Uri> onSuccess,
+    public void loadProfilePhoto(String uid, OnSuccessListener<Uri> onSuccess,
                                  OnFailureListener onFailure){
-        ClubMember member = getCurrentMember();
-        if(member==null)
-            return;
 
         StorageReference profilePhotosHub = dbStorage.getReference().child(KEYS.PROFILE_PHOTOS);
-        StorageReference filePath = profilePhotosHub.child(getCurrentMember().getUid());
+        StorageReference filePath = profilePhotosHub.child(uid);
 
         filePath.getDownloadUrl().addOnSuccessListener(onSuccess).addOnFailureListener(onFailure);
-
     }
 
+    // Each user can upload a profile image to his own unique folder
+    public void storeProfilePhoto(String uid, Bitmap photo,
+                                  OnSuccessListener<UploadTask.TaskSnapshot> onSuccess,
+                                  OnFailureListener onFailure) {
+
+        byte[] bytes = common.convertBitmapToBytes(photo, PHOTOS_QUALITY);
+        StorageReference allProfilePhotos = dbStorage.getReference().child(KEYS.PROFILE_PHOTOS);
+        StorageReference filePath = allProfilePhotos.child(uid);
+        // Each member has a unique photo named on its uid
+        filePath.putBytes(bytes).addOnSuccessListener(onSuccess).addOnFailureListener(onFailure);
+    }
+
+    //endregion
+
+    //region Gallery Functions
+
     // Getting current user member's profile photo link from storage, will be inserted into ui by Glide
-    public void readMemberGallery(){
-        ClubMember member = DatabaseManager.getInstance().getCurrentMember();
-        if(member==null)
-            return;
-
-
+    public void loadGallery(String uid){
         StorageReference galleryPhotosHub = dbStorage.getReference().child(DatabaseManager.KEYS.GALLERY_PHOTOS);
-        StorageReference memberGalleryPath = galleryPhotosHub.child(getCurrentMember().getUid());
+        StorageReference memberGalleryPath = galleryPhotosHub.child(uid);
 
         // Getting the parent folder of current user gallery
         memberGalleryPath.listAll().addOnSuccessListener(galleryFolderSuccess);
@@ -161,6 +181,7 @@ public class DatabaseManager {
         @Override
         public void onSuccess(ListResult gallery) {
             for(final StorageReference photo : gallery.getItems()) {
+                final String uid = Objects.requireNonNull(photo.getParent()).getName();
                 final long time = Long.parseLong(photo.getName());
                 // All photos names are the times that they where taken in
                 // This prevents double-listeners concurrently, sync for uri AND metadata of each file
@@ -169,7 +190,7 @@ public class DatabaseManager {
                     @Override
                     public void onSuccess(Uri uri) {
                         GalleryPhoto photo = new GalleryPhoto(uri, time);
-                        getCurrentMember().addGalleryPhoto(photo);
+                        loadMember(uid).addGalleryPhoto(photo);
                     }
                 });
             }
@@ -177,52 +198,54 @@ public class DatabaseManager {
     };
 
 
-
-
-
-
-
     // Uploads an image into storage database, as a part of current user gallery
     // Therefore, each authenticated user can only upload gallery to his own unique folder
-    public void uploadGalleryPhoto(Bitmap photo,
-                                   OnSuccessListener<UploadTask.TaskSnapshot> onSuccess,
-                                   OnFailureListener onFailure) {
-        ClubMember member = getCurrentMember();
-        if(member==null)
-            return;
+    public void storeGalleryPhoto(String uid,
+                                  Bitmap photo,
+                                  OnSuccessListener<UploadTask.TaskSnapshot> onSuccess,
+                                  OnFailureListener onFailure) {
 
-        byte[] bytes = convertBitmapToBytes(photo);
+        byte[] bytes = common.convertBitmapToBytes(photo, PHOTOS_QUALITY);
         String fileName = Long.toString(Timestamp.now().getSeconds());
         // Name of picture is its time, user will not take 2 pictures in the same second
         // This will be helpful to sort pictures by time without the need of 2 concurrent callbacks (uri & time - metadata)
         // This might be changed later on.
         StorageReference allGalleryPhotos = dbStorage.getReference().child(KEYS.GALLERY_PHOTOS);
-        StorageReference filePath = allGalleryPhotos.child(getCurrentMember().getUid()).child(fileName);
+        StorageReference filePath = allGalleryPhotos.child(uid).child(fileName);
         // Each member has a unique sub-folder of photos
         filePath.putBytes(bytes).addOnSuccessListener(onSuccess).addOnFailureListener(onFailure);
     }
 
-    // Each user can upload a profile image to his own unique folder
-    public void uploadProfileImage(Bitmap photo,
-                                   OnSuccessListener<UploadTask.TaskSnapshot> onSuccess,
-                                   OnFailureListener onFailure) {
-        ClubMember member = getCurrentMember();
-        if(member==null)
-            return;
+    //endregion
 
-        byte[] bytes = convertBitmapToBytes(photo);
-        StorageReference allProfilePhotos = dbStorage.getReference().child(KEYS.PROFILE_PHOTOS);
-        StorageReference filePath = allProfilePhotos.child(getCurrentMember().getUid());
-        // Each member has a unique photo named on its uid
-        filePath.putBytes(bytes).addOnSuccessListener(onSuccess).addOnFailureListener(onFailure);
+
+    //region Method Overloading: no uid parameter -> apply to currentUser
+    public void loadProfilePhoto(OnSuccessListener<Uri> onSuccess,
+                                 OnFailureListener onFailure){
+        loadProfilePhoto(currentUser.getUid(), onSuccess, onFailure);
     }
 
-    private byte[] convertBitmapToBytes(Bitmap photo){
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.PNG, PHOTOS_QUALITY, stream);
-
-        return stream.toByteArray();
+    public void storeProfilePhoto(Bitmap photo,
+                                  OnSuccessListener<UploadTask.TaskSnapshot> onSuccess,
+                                  OnFailureListener onFailure){
+        storeProfilePhoto(currentUser.getUid(), photo, onSuccess, onFailure);
     }
+
+    public void loadGallery(){
+        loadGallery(currentUser.getUid());
+    }
+
+    public void storeGalleryPhoto(Bitmap photo,
+                                  OnSuccessListener<UploadTask.TaskSnapshot> onSuccess,
+                                  OnFailureListener onFailure){
+        storeGalleryPhoto(currentUser.getUid(), photo, onSuccess, onFailure);
+    }
+
+
+
+    //endregion
+
+
 
 
 

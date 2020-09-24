@@ -34,8 +34,8 @@ public class GalleryActivity extends BaseActivity {
         findViews();
         setListeners();
 
-        dbManager.readMemberGallery();
-        profileFrag.setMember(dbManager.getCurrentMember());
+        dbManager.loadGallery();
+        profileFrag.setMember(dbManager.getCurrentUser());
     }
 
 
@@ -54,15 +54,18 @@ public class GalleryActivity extends BaseActivity {
         });
     }
 
+    //region Picture Taken Handling
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // Code gets to here after user comes back from camera intent, and took a picture
         if (requestCode == 1 && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             if(extras!=null) {
                 Bitmap photoBitmap = (Bitmap) extras.get("data");
                 if(photoBitmap!=null)
-                    DatabaseManager.getInstance().uploadGalleryPhoto(photoBitmap, photoUploadSuccess, photoUploadFailure);
+                    dbManager.storeGalleryPhoto(photoBitmap, photoUploadSuccess, photoUploadFailure);
             }
         }
     }
@@ -80,4 +83,6 @@ public class GalleryActivity extends BaseActivity {
             CommonUtils.getInstance().showToast("Problem occurred.");
         }
     };
+
+    //endregion
 }

@@ -81,7 +81,7 @@ public class ProfileFragment extends Fragment {
         if(member==null)
             return; // No member associated
         nameText.setText(member.getName());
-        DatabaseManager.getInstance().readProfilePhoto(onProfileUriSuccess, onProfileUriFailure);
+        DatabaseManager.getInstance().loadProfilePhoto(onProfileUriSuccess, onProfileUriFailure);
         numOfPointsText.setText(String.format(Locale.US,"%d", member.getPointsCount()));
         numOfSailsText.setText(String.format(Locale.US,"%d", member.getSailsCount()));
     }

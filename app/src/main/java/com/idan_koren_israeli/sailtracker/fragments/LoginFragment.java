@@ -26,6 +26,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.idan_koren_israeli.sailtracker.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -257,7 +258,7 @@ public class LoginFragment extends Fragment {
         if(currentState == LoginState.COMPLETED)
             return true;
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        return firebaseUser!=null && firebaseUser.getDisplayName() != null && firebaseUser.getDisplayName().length() > 0;
-        // a connected user which has a name is a one that is already signed in to the app
+        return firebaseUser!=null && DatabaseManager.getInstance().getCurrentUser()!=null;
+        // checking if there is a connected user which is saved in the database
     }
 }
