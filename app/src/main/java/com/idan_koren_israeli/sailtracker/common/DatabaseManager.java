@@ -178,6 +178,8 @@ public class DatabaseManager {
                     // This prevents double-listeners concurrently, sync for uri AND metadata of each file
                     // This might be changed later.
 
+                    photo.getDownloadUrl().addOnSuccessListener(onSinglePhotoLoaded);
+                    /*
                     if (!member.getGalleryPhotos().contains(new GalleryPhoto(null, time))) {
                         // Calling the server if and only if the image is not loaded yet to this member
                         photo.getDownloadUrl().addOnSuccessListener(onSinglePhotoLoaded);
@@ -186,10 +188,11 @@ public class DatabaseManager {
                             public void onSuccess(Uri uri) {
                                 // Assigning a new photo to the user based on its name and time
                                 GalleryPhoto photo = new GalleryPhoto(uri, time);
-                                member.addGalleryPhoto(photo);
+
                             }
                         });
                     }
+                     */
                 }
             }
         };

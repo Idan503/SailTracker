@@ -19,6 +19,7 @@ public class PhotoCollectionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private GalleryPhoto[] photos;
     private LayoutInflater mInflater;
     private View.OnClickListener photoClickListener;
+    private static final int NUM_OF_COLUMNS = 3;
 
     PhotoCollectionAdapter(Context context, GalleryPhoto[] photos){
         this.mInflater = LayoutInflater.from(context);
@@ -34,8 +35,10 @@ public class PhotoCollectionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflates the cell layout from xml
-        View view = mInflater.inflate(R.layout.photo_collection_item, parent, false);
-        PhotoViewHolder photoHolder = new PhotoViewHolder(view);
+        View itemView = mInflater.inflate(R.layout.photo_collection_item, parent, false);
+        int height = parent.getMeasuredHeight() / NUM_OF_COLUMNS;
+        itemView.setMinimumHeight(height);
+        PhotoViewHolder photoHolder = new PhotoViewHolder(itemView);
         photoHolder.setOnClickListener(photoClickListener);
         return photoHolder;
     }

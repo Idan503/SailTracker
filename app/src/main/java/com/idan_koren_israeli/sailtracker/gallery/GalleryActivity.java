@@ -19,6 +19,8 @@ import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
 import com.idan_koren_israeli.sailtracker.home.ProfileFragment;
 
+import java.util.UUID;
+
 public class GalleryActivity extends BaseActivity {
 
     FloatingActionButton addPhotoButton;
@@ -46,8 +48,8 @@ public class GalleryActivity extends BaseActivity {
     private OnSuccessListener<Uri> onPhotoLoadedListener = new OnSuccessListener<Uri>() {
         @Override
         public void onSuccess(Uri uri) {
+            dbManager.getCurrentUser().addGalleryPhoto(new GalleryPhoto(uri, dbManager.getCurrentUser().getGalleryPhotos().size()));
             photosFrag.setMember(dbManager.getCurrentUser());
-            Log.i("pttt", "Photo loaded");
             // Each time photo is loaded, we will re-assign the member to the recycleview
         }
     };
