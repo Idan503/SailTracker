@@ -1,6 +1,7 @@
-package com.idan_koren_israeli.sailtracker.activities;
+package com.idan_koren_israeli.sailtracker.search;
 
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 
 import android.os.Bundle;
 

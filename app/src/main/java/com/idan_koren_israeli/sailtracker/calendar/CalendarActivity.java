@@ -1,8 +1,9 @@
-package com.idan_koren_israeli.sailtracker.activities;
+package com.idan_koren_israeli.sailtracker.calendar;
 
 import android.os.Bundle;
 
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 
 public class CalendarActivity extends BaseActivity {
 

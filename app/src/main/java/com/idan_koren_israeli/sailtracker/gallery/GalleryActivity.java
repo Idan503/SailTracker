@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker.activities;
+package com.idan_koren_israeli.sailtracker.gallery;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,9 +12,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
-import com.idan_koren_israeli.sailtracker.fragments.ProfileFragment;
+import com.idan_koren_israeli.sailtracker.home.ProfileFragment;
 
 public class GalleryActivity extends BaseActivity {
 

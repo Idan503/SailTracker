@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker.fragments;
+package com.idan_koren_israeli.sailtracker.home;
 
 import android.os.Bundle;
 

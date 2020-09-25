@@ -1,13 +1,11 @@
-package com.idan_koren_israeli.sailtracker;
+package com.idan_koren_israeli.sailtracker.common;
 
 import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.idan_koren_israeli.sailtracker.gallery.GalleryPhoto;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Objects;
 
 
 /**

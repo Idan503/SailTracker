@@ -1,11 +1,10 @@
-package com.idan_koren_israeli.sailtracker.fragments;
+package com.idan_koren_israeli.sailtracker.home;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.idan_koren_israeli.sailtracker.ClubMember;
+import com.idan_koren_israeli.sailtracker.common.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.DatabaseManager;

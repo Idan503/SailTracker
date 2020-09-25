@@ -20,7 +20,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.idan_koren_israeli.sailtracker.ClubMember;
 import com.idan_koren_israeli.sailtracker.gallery.GalleryPhoto;
 
 import java.util.Objects;

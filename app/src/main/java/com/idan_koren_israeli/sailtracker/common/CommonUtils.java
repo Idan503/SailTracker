@@ -1,7 +1,6 @@
 package com.idan_koren_israeli.sailtracker.common;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
-import com.idan_koren_israeli.sailtracker.activities.BaseActivity;
 
 import java.io.ByteArrayOutputStream;
 

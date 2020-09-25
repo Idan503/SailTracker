@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker.fragments;
+package com.idan_koren_israeli.sailtracker.common;
 
 
 import android.content.Context;
@@ -17,11 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.idan_koren_israeli.sailtracker.R;
-import com.idan_koren_israeli.sailtracker.activities.BaseActivity;
-import com.idan_koren_israeli.sailtracker.activities.CalendarActivity;
-import com.idan_koren_israeli.sailtracker.activities.GalleryActivity;
-import com.idan_koren_israeli.sailtracker.activities.HomeActivity;
-import com.idan_koren_israeli.sailtracker.activities.SearchActivity;
+import com.idan_koren_israeli.sailtracker.calendar.CalendarActivity;
+import com.idan_koren_israeli.sailtracker.gallery.GalleryActivity;
+import com.idan_koren_israeli.sailtracker.home.HomeActivity;
+import com.idan_koren_israeli.sailtracker.search.SearchActivity;
 
 /**
  * Navigator Bar: This fragment will be re-used in the apps activities

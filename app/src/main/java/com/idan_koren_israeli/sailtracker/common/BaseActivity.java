@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker.activities;
+package com.idan_koren_israeli.sailtracker.common;
 
 import androidx.appcompat.app.AppCompatActivity;
 

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".activities.SearchActivity"
+    tools:context=".search.SearchActivity"
     android:orientation="vertical"
     android:weightSum="1">
 
@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.2"
-            android:name="com.idan_koren_israeli.sailtracker.fragments.ProfileFragment"
+            android:name="com.idan_koren_israeli.sailtracker.home.ProfileFragment"
             app:layout_constraintTop_toBottomOf="@id/search_SEARCH"
             tools:layout="@layout/fragment_profile_card"
             android:id="@+id/search_FRAG_profile"
@@ -49,7 +49,7 @@
             app:layout_constraintTop_toBottomOf="@id/search_INV_1"
             app:layout_constraintHeight_percent="0.6"
             android:id="@+id/search_FRAG_collection"
-            android:name="com.idan_koren_israeli.sailtracker.fragments.PhotoCollectionFragment"
+            android:name="com.idan_koren_israeli.sailtracker.gallery.PhotoCollectionFragment"
             tools:layout="@layout/fragment_photo_collection"
             />
 
@@ -65,7 +65,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.1"
         android:id="@+id/home_FRAG_navigator_bar"
-        android:name="com.idan_koren_israeli.sailtracker.fragments.NavigationBarFragment"
+        android:name="com.idan_koren_israeli.sailtracker.common.NavigationBarFragment"
         tools:layout="@layout/fragment_navigation_bar" />
 
 </LinearLayout>

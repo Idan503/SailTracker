@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker.activities;
+package com.idan_koren_israeli.sailtracker.home;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,13 +13,11 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.UploadTask;
-import com.idan_koren_israeli.sailtracker.ClubMember;
+import com.idan_koren_israeli.sailtracker.common.ClubMember;
+import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
-import com.idan_koren_israeli.sailtracker.fragments.OnLoginCompleteListener;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
-import com.idan_koren_israeli.sailtracker.fragments.LoginFragment;
-import com.idan_koren_israeli.sailtracker.fragments.ProfileFragment;
 
 import java.io.IOException;
 

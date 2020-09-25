@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".activities.CalendarActivity"
+    tools:context=".calendar.CalendarActivity"
     android:orientation="vertical"
     android:weightSum="1">
 
@@ -57,7 +57,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.1"
         android:id="@+id/home_FRAG_navigator_bar"
-        android:name="com.idan_koren_israeli.sailtracker.fragments.NavigationBarFragment"
+        android:name="com.idan_koren_israeli.sailtracker.common.NavigationBarFragment"
         tools:layout="@layout/fragment_navigation_bar" />
 
 </LinearLayout>

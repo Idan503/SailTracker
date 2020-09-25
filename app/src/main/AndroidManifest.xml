@@ -17,12 +17,12 @@
         android:name=".common.MyApp"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activities.SearchActivity"
+        <activity android:name=".search.SearchActivity"
             android:screenOrientation="portrait"
             />
 
 
-        <activity android:name=".activities.GalleryActivity"
+        <activity android:name=".gallery.GalleryActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.CHOOSER" />
@@ -32,10 +32,10 @@
 
         </activity>
 
-        <activity android:name=".activities.CalendarActivity"
+        <activity android:name=".calendar.CalendarActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".activities.HomeActivity"
+        <activity android:name=".home.HomeActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

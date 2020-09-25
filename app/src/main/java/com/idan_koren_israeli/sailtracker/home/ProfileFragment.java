@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker.fragments;
+package com.idan_koren_israeli.sailtracker.home;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.idan_koren_israeli.sailtracker.ClubMember;
+import com.idan_koren_israeli.sailtracker.common.ClubMember;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
@@ -81,7 +81,7 @@ public class ProfileFragment extends Fragment {
         if(member==null)
             return; // No member associated
         nameText.setText(member.getName());
-        DatabaseManager.getInstance().loadProfilePhoto(onProfileUriSuccess, onProfileUriFailure);
+        DatabaseManager.getInstance().loadProfilePhoto(member.getUid(), onProfileUriSuccess, onProfileUriFailure);
         numOfPointsText.setText(String.format(Locale.US,"%d", member.getPointsCount()));
         numOfSailsText.setText(String.format(Locale.US,"%d", member.getSailsCount()));
     }
