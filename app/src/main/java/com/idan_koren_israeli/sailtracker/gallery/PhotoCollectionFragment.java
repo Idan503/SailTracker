@@ -65,17 +65,15 @@ public class PhotoCollectionFragment extends Fragment {
 
 
     private void updateUI(){
-        Log.i("pttt","Updating ui");
         adapter = new PhotoCollectionAdapter(getContext(),getMemberPhotos());
+        Log.i("pttt", "Length: " + getMemberPhotos().length);
         adapter.setPhotoClickListener(onPhotoClicked);
         recyclerView.setAdapter(adapter);
-
     }
 
     private View.OnClickListener onPhotoClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Log.i("pttt", " photo " + view.getId() + " clicked!");
         }
     };
 

@@ -165,7 +165,7 @@ public class DatabaseManager {
 
     // Getting current user member's profile photo link from storage, will be inserted into ui by Glide
     public void loadGallery(String uid, final OnSuccessListener<Uri> onSinglePhotoLoaded) {
-
+        final ClubMember member = this.loadMember(uid);
 
         // Folder success
         OnSuccessListener<ListResult> galleryFolderSuccess = new OnSuccessListener<ListResult>() {
@@ -177,15 +177,19 @@ public class DatabaseManager {
                     // All photos names are the times that they where taken in
                     // This prevents double-listeners concurrently, sync for uri AND metadata of each file
                     // This might be changed later.
-                    photo.getDownloadUrl().addOnSuccessListener(onSinglePhotoLoaded);
-                    photo.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            // Assigning a new photo to the user based on its name and time
-                            GalleryPhoto photo = new GalleryPhoto(uri, time);
-                            loadMember(uid).addGalleryPhoto(photo);
-                        }
-                    });
+
+                    if (!member.getGalleryPhotos().contains(new GalleryPhoto(null, time))) {
+                        // Calling the server if and only if the image is not loaded yet to this member
+                        photo.getDownloadUrl().addOnSuccessListener(onSinglePhotoLoaded);
+                        photo.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                // Assigning a new photo to the user based on its name and time
+                                GalleryPhoto photo = new GalleryPhoto(uri, time);
+                                member.addGalleryPhoto(photo);
+                            }
+                        });
+                    }
                 }
             }
         };

@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * After getting the photos' uris from Firebase Storage, we can save them as a gallery photo
@@ -43,5 +44,18 @@ public class GalleryPhoto implements Serializable {
     @Override
     public String toString(){
         return timeCreated + ": " + uri;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        GalleryPhoto other = (GalleryPhoto) obj;
+        return this.timeCreated == other.timeCreated;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uri, timeCreated);
     }
 }
