@@ -15,19 +15,19 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
+import com.idan_koren_israeli.sailtracker.common.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
 import com.idan_koren_israeli.sailtracker.home.ProfileFragment;
 
-import java.util.UUID;
-
 public class GalleryActivity extends BaseActivity {
 
-    FloatingActionButton addPhotoButton;
-    ProfileFragment profileFrag;
-    PhotoCollectionFragment photosFrag;
-
+    private FloatingActionButton addPhotoButton;
+    private ProfileFragment profileFrag;
+    private PhotoCollectionFragment photosFrag;
+    private ClubMember user;
     private DatabaseManager dbManager;
+
 
 
     @Override
@@ -36,6 +36,7 @@ public class GalleryActivity extends BaseActivity {
         setContentView(R.layout.activity_gallery);
 
         dbManager = DatabaseManager.getInstance();
+        user = dbManager.getCurrentUser();
 
         findViews();
         setListeners();
@@ -48,8 +49,11 @@ public class GalleryActivity extends BaseActivity {
     private OnSuccessListener<Uri> onPhotoLoadedListener = new OnSuccessListener<Uri>() {
         @Override
         public void onSuccess(Uri uri) {
-            dbManager.getCurrentUser().addGalleryPhoto(new GalleryPhoto(uri, dbManager.getCurrentUser().getGalleryPhotos().size()));
-            photosFrag.setMember(dbManager.getCurrentUser());
+            GalleryPhoto newPhoto = new GalleryPhoto(uri, user.getGalleryPhotos().size());
+            if(!user.getGalleryPhotos().contains(newPhoto))
+                user.addGalleryPhoto(newPhoto);
+            Log.i("pttt", "Loaded " + uri);
+            photosFrag.setMember(user);
             // Each time photo is loaded, we will re-assign the member to the recycleview
         }
     };
