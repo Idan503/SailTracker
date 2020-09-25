@@ -26,7 +26,6 @@ import java.util.Objects;
 
 /**
  * Using both Firestore and Storage Firabase components, to manage data of authenticated members.
- *
  */
 public class DatabaseManager {
     private FirebaseAuth firebaseAuth;
@@ -54,7 +53,7 @@ public class DatabaseManager {
         dbFirestore = FirebaseFirestore.getInstance();
         dbStorage = FirebaseStorage.getInstance();
         common = CommonUtils.getInstance();
-        if(firebaseAuth.getCurrentUser()!=null)
+        if (firebaseAuth.getCurrentUser() != null)
             this.currentUser = convertAuthUserToClubMember(firebaseAuth.getCurrentUser());
     }
 
@@ -73,8 +72,8 @@ public class DatabaseManager {
     //region Members Functions
 
     // Uid is the primary key of the firestore database
-    public ClubMember loadMember(String uid){
-        if(uid.equals(currentUser.getUid()))
+    public ClubMember loadMember(String uid) {
+        if (uid.equals(currentUser.getUid()))
             return currentUser;
         DocumentReference doc = dbFirestore.collection(KEYS.MEMBERS).document(uid);
         final ClubMember[] result = {null};
@@ -88,14 +87,14 @@ public class DatabaseManager {
     }
 
     // Writing a member as an object into firestore
-    public void storeMember(ClubMember member){
+    public void storeMember(ClubMember member) {
         dbFirestore.collection(KEYS.MEMBERS)
                 .document(member.getUid())
                 .set(member);
     }
 
     // checking if a member is already exists in the database
-    public boolean isMemberStored(String uid){
+    public boolean isMemberStored(String uid) {
         DocumentReference docRef = dbFirestore.collection(KEYS.MEMBERS).document(uid);
         final boolean[] isExists = {false};
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -103,7 +102,7 @@ public class DatabaseManager {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if (document!=null && document.exists())
+                    if (document != null && document.exists())
                         isExists[0] = true;
                 }
             }
@@ -113,26 +112,25 @@ public class DatabaseManager {
 
 
     // Converting the object that is the output of the log-in system to the object that is saved on the database
-    private ClubMember convertAuthUserToClubMember(FirebaseUser user){
+    private ClubMember convertAuthUserToClubMember(FirebaseUser user) {
         ClubMember member;
         // Saving the user in the database if its a new one, otherwise, returns existing object data.
-        if(!isMemberStored(user.getUid())) {
+        if (!isMemberStored(user.getUid())) {
             member = new ClubMember(user);
             storeMember(member);
-        }
-        else{
+        } else {
             member = loadMember(user.getUid());
         }
         return member;
     }
 
-    public ClubMember getCurrentUser(){
+    public ClubMember getCurrentUser() {
         return currentUser;
     }
 
-    public void setCurrentUser(ClubMember currentUserMember){
+    public void setCurrentUser(ClubMember currentUserMember) {
         currentUser = currentUserMember;
-        if(!isMemberStored(currentUserMember.getUid()))
+        if (!isMemberStored(currentUserMember.getUid()))
             storeMember(currentUserMember);
     }
     //endregion
@@ -141,7 +139,7 @@ public class DatabaseManager {
 
     // Getting current user member's profile photo link from storage, will be inserted into ui by Glide
     public void loadProfilePhoto(String uid, OnSuccessListener<Uri> onSuccess,
-                                 OnFailureListener onFailure){
+                                 OnFailureListener onFailure) {
 
         StorageReference profilePhotosHub = dbStorage.getReference().child(KEYS.PROFILE_PHOTOS);
         StorageReference filePath = profilePhotosHub.child(uid);
@@ -166,35 +164,38 @@ public class DatabaseManager {
     //region Gallery Functions
 
     // Getting current user member's profile photo link from storage, will be inserted into ui by Glide
-    public void loadGallery(String uid){
+    public void loadGallery(String uid, final OnSuccessListener<Uri> onSinglePhotoLoaded) {
+
+
+        // Folder success
+        OnSuccessListener<ListResult> galleryFolderSuccess = new OnSuccessListener<ListResult>() {
+            @Override
+            public void onSuccess(ListResult gallery) {
+                for (final StorageReference photo : gallery.getItems()) {
+                    final String uid = Objects.requireNonNull(photo.getParent()).getName();
+                    final long time = Long.parseLong(photo.getName());
+                    // All photos names are the times that they where taken in
+                    // This prevents double-listeners concurrently, sync for uri AND metadata of each file
+                    // This might be changed later.
+                    photo.getDownloadUrl().addOnSuccessListener(onSinglePhotoLoaded);
+                    photo.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            // Assigning a new photo to the user based on its name and time
+                            GalleryPhoto photo = new GalleryPhoto(uri, time);
+                            loadMember(uid).addGalleryPhoto(photo);
+                        }
+                    });
+                }
+            }
+        };
+
         StorageReference galleryPhotosHub = dbStorage.getReference().child(DatabaseManager.KEYS.GALLERY_PHOTOS);
         StorageReference memberGalleryPath = galleryPhotosHub.child(uid);
 
         // Getting the parent folder of current user gallery
         memberGalleryPath.listAll().addOnSuccessListener(galleryFolderSuccess);
     }
-
-
-    // Calls when we have managed to get into the folder contains photos of user gallery
-    private OnSuccessListener<ListResult> galleryFolderSuccess = new OnSuccessListener<ListResult>() {
-        @Override
-        public void onSuccess(ListResult gallery) {
-            for(final StorageReference photo : gallery.getItems()) {
-                final String uid = Objects.requireNonNull(photo.getParent()).getName();
-                final long time = Long.parseLong(photo.getName());
-                // All photos names are the times that they where taken in
-                // This prevents double-listeners concurrently, sync for uri AND metadata of each file
-                // This might be changed later.
-                photo.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        GalleryPhoto photo = new GalleryPhoto(uri, time);
-                        loadMember(uid).addGalleryPhoto(photo);
-                    }
-                });
-            }
-        }
-    };
 
 
     // Uploads an image into storage database, as a part of current user gallery
@@ -220,34 +221,28 @@ public class DatabaseManager {
 
     //region Method Overloading: no uid parameter -> apply to currentUser
     public void loadProfilePhoto(OnSuccessListener<Uri> onSuccess,
-                                 OnFailureListener onFailure){
+                                 OnFailureListener onFailure) {
         loadProfilePhoto(currentUser.getUid(), onSuccess, onFailure);
     }
 
     public void storeProfilePhoto(Bitmap photo,
                                   OnSuccessListener<UploadTask.TaskSnapshot> onSuccess,
-                                  OnFailureListener onFailure){
+                                  OnFailureListener onFailure) {
         storeProfilePhoto(currentUser.getUid(), photo, onSuccess, onFailure);
     }
 
-    public void loadGallery(){
-        loadGallery(currentUser.getUid());
+    public void loadGallery(final OnSuccessListener<Uri> onSinglePhotoLoaded) {
+        loadGallery(currentUser.getUid(),onSinglePhotoLoaded);
     }
 
     public void storeGalleryPhoto(Bitmap photo,
                                   OnSuccessListener<UploadTask.TaskSnapshot> onSuccess,
-                                  OnFailureListener onFailure){
+                                  OnFailureListener onFailure) {
         storeGalleryPhoto(currentUser.getUid(), photo, onSuccess, onFailure);
     }
 
 
-
     //endregion
-
-
-
-
-
 
 
 }

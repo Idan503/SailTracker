@@ -2,7 +2,9 @@ package com.idan_koren_israeli.sailtracker.gallery;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,7 @@ public class GalleryActivity extends BaseActivity {
 
     FloatingActionButton addPhotoButton;
     ProfileFragment profileFrag;
+    PhotoCollectionFragment photosFrag;
 
     private DatabaseManager dbManager;
 
@@ -35,14 +38,25 @@ public class GalleryActivity extends BaseActivity {
         findViews();
         setListeners();
 
-        dbManager.loadGallery();
+        dbManager.loadGallery(onPhotoLoadedListener);
         profileFrag.setMember(dbManager.getCurrentUser());
+        photosFrag.setMember(dbManager.getCurrentUser());
     }
+
+    private OnSuccessListener<Uri> onPhotoLoadedListener = new OnSuccessListener<Uri>() {
+        @Override
+        public void onSuccess(Uri uri) {
+            photosFrag.setMember(dbManager.getCurrentUser());
+            Log.i("pttt", "Photo loaded");
+            // Each time photo is loaded, we will re-assign the member to the recycleview
+        }
+    };
 
 
     private void findViews(){
         addPhotoButton = findViewById(R.id.gallery_FAB_add_photo);
         profileFrag = (ProfileFragment) getSupportFragmentManager().findFragmentById(R.id.gallery_FRAG_profile);
+        photosFrag = (PhotoCollectionFragment) getSupportFragmentManager().findFragmentById(R.id.gallery_FRAG_photo_collection);
 
     }
 

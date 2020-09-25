@@ -27,7 +27,7 @@ public class ClubMember {
     private String phoneNumber;
     private int pointsCount;
     private int sailsCount;
-    private ArrayList<GalleryPhoto> gallery;
+    private ArrayList<GalleryPhoto> galleryPhotos;
 
     public ClubMember(){
 
@@ -40,7 +40,7 @@ public class ClubMember {
         this.phoneNumber = phoneNumber;
         this.pointsCount = pointsCount;
         this.sailsCount = sailsCount;
-        this.gallery = new ArrayList<>();
+        this.galleryPhotos = new ArrayList<>();
     }
 
     // Generating a new club member based on its authenticated object only
@@ -51,7 +51,7 @@ public class ClubMember {
         this.profilePictureUrl = null;
         this.pointsCount = 0;
         this.sailsCount = 0;
-        this.gallery = new ArrayList<>();
+        this.galleryPhotos = new ArrayList<>();
     }
 
     // Generating a new club member based on its authenticated object only
@@ -62,7 +62,7 @@ public class ClubMember {
         this.profilePictureUrl = null;
         this.pointsCount = 0;
         this.sailsCount = 0;
-        this.gallery = new ArrayList<>();
+        this.galleryPhotos = new ArrayList<>();
     }
 
 
@@ -116,10 +116,14 @@ public class ClubMember {
         this.sailsCount = sailsCount;
     }
 
+    public ArrayList<GalleryPhoto> getGalleryPhotos(){
+        return this.galleryPhotos;
+    }
+
     //endregion
 
     public void addGalleryPhoto(GalleryPhoto photo){
-        gallery.add(photo);
+        galleryPhotos.add(photo);
     }
 
 

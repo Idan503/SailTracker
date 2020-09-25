@@ -2,6 +2,7 @@ package com.idan_koren_israeli.sailtracker.gallery;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,17 @@ import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 
 public class PhotoCollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Uri[] photosRefs;
+    private GalleryPhoto[] photos;
     private LayoutInflater mInflater;
+    private View.OnClickListener photoClickListener;
 
-    PhotoCollectionAdapter(Context context, Uri[] data){
+    PhotoCollectionAdapter(Context context, GalleryPhoto[] photos){
         this.mInflater = LayoutInflater.from(context);
-        this.photosRefs = data;
+        this.photos = photos;
+    }
+
+    public void setPhotoClickListener(View.OnClickListener listener){
+        this.photoClickListener = listener;
     }
 
 
@@ -29,25 +35,28 @@ public class PhotoCollectionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflates the cell layout from xml
         View view = mInflater.inflate(R.layout.photo_collection_item, parent, false);
-        return new PhotoViewHolder(view);
+        PhotoViewHolder photoHolder = new PhotoViewHolder(view);
+        photoHolder.setOnClickListener(photoClickListener);
+        return photoHolder;
     }
 
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        // Binds data (ImagePhoto) into the view
+        // Binds data (ImagePhoto) into the view using the given uri
         ImageView innerImage = holder.itemView.findViewById(R.id.photo_item_IMG_inner_image);
-        CommonUtils.getInstance().setImageResource(innerImage, photosRefs[position]);
+        CommonUtils.getInstance().setImageResource(innerImage, photos[position].getUri());
 
     }
 
     @Override
     public int getItemCount() {
-        return photosRefs.length;
+        return photos.length;
     }
 
-    Uri getItem(int id) {
-        return photosRefs[id];
+    GalleryPhoto getItem(int id) {
+        return photos[id];
     }
+
 
 }

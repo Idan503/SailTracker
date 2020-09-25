@@ -9,13 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 public class PhotoViewHolder extends RecyclerView.ViewHolder {
     public PhotoViewHolder(@NonNull View itemView) {
         super(itemView);
-        itemView.setOnClickListener(onClickPhoto);
     }
 
-    private View.OnClickListener onClickPhoto = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Log.i("pttt", "Photo " + view.getId() + " clicked");
-        }
-    };
+    public void setOnClickListener(View.OnClickListener listener){
+        this.itemView.setOnClickListener(listener);
+    }
+
+
 }

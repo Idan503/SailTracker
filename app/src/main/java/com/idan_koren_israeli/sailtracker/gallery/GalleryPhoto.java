@@ -21,8 +21,6 @@ public class GalleryPhoto implements Serializable {
     public GalleryPhoto(Uri uri, long createdTime) {
         this.uri = uri;
         this.timeCreated = createdTime;
-
-        Log.i("pttt" , this.toString());
     }
 
     public Uri getUri() {

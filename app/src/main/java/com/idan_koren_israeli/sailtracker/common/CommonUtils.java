@@ -42,6 +42,7 @@ public class CommonUtils {
     }
 
 
+
     //region Glide Image Load
 
     public void setImageResource(@NonNull ImageView image, int resId){
