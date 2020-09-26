@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -14,6 +13,8 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.UploadTask;
+import com.idan_koren_israeli.sailtracker.firebase.LoginFragment;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnLoginFinishedListener;
 import com.idan_koren_israeli.sailtracker.common.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
@@ -22,7 +23,7 @@ import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
 
 import java.io.IOException;
 
-public class HomeActivity extends BaseActivity implements OnLoginCompleteListener {
+public class HomeActivity extends BaseActivity implements OnLoginFinishedListener {
 
     private ClubMember user; // the current specific user's member object
     private LinearLayout loginLayout;

@@ -1,8 +1,11 @@
-package com.idan_koren_israeli.sailtracker.home;
+package com.idan_koren_israeli.sailtracker.firebase.callbacks;
 
 import com.idan_koren_israeli.sailtracker.common.ClubMember;
 
-public interface OnLoginCompleteListener {
+
+public interface OnLoginFinishedListener {
     // Returns the member object associated with the authenticated user
     void onLoginFinished(ClubMember authenticatedMember);
 }
+
+

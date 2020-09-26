@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker.home;
+package com.idan_koren_israeli.sailtracker.firebase;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +27,7 @@ import com.idan_koren_israeli.sailtracker.common.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnLoginFinishedListener;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -54,7 +54,7 @@ public class LoginFragment extends Fragment {
     private EditText phoneEditText, codeEditText, nameEditText;
     private TextView messageText;
 
-    private OnLoginCompleteListener finishedListener;
+    private OnLoginFinishedListener finishedListener;
 
 
     private FirebaseAuth auth;
@@ -69,7 +69,7 @@ public class LoginFragment extends Fragment {
     }
 
 
-    public void setOnCompleteListener(OnLoginCompleteListener listener){
+    public void setOnCompleteListener(OnLoginFinishedListener listener){
         finishedListener = listener;
     }
 
@@ -87,7 +87,7 @@ public class LoginFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         auth.useAppLanguage();
 
-        setOnCompleteListener((OnLoginCompleteListener) context);
+        setOnCompleteListener((OnLoginFinishedListener) context);
         loggedUser = auth.getCurrentUser();
         if(loggedUser!=null){
             ClubMember loggedMember = DatabaseManager.getInstance().loadMember(loggedUser.getUid());

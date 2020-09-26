@@ -1,6 +1,10 @@
-package com.idan_koren_israeli.sailtracker.common;
+package com.idan_koren_israeli.sailtracker.firebase;
 
 import android.app.Application;
+
+import com.idan_koren_israeli.sailtracker.common.CommonUtils;
+import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
+import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
 
 public class MyApp extends Application {
     @Override
