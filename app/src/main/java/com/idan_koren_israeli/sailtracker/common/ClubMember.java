@@ -43,16 +43,6 @@ public class ClubMember {
         this.galleryPhotos = new ArrayList<>();
     }
 
-    // Generating a new club member based on its authenticated object only
-    public ClubMember(FirebaseUser firebaseUser){
-        this.name = firebaseUser.getDisplayName();
-        this.uid = firebaseUser.getUid();
-        this.phoneNumber = firebaseUser.getPhoneNumber();
-        this.profilePictureUrl = null;
-        this.pointsCount = 0;
-        this.sailsCount = 0;
-        this.galleryPhotos = new ArrayList<>();
-    }
 
     // Generating a new club member based on its authenticated object only
     public ClubMember(String uid, String displayName, String phoneNumber){

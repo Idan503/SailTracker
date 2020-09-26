@@ -54,7 +54,7 @@ public class DatabaseManager {
         dbStorage = FirebaseStorage.getInstance();
         common = CommonUtils.getInstance();
         if (firebaseAuth.getCurrentUser() != null)
-            this.currentUser = convertAuthUserToClubMember(firebaseAuth.getCurrentUser());
+            this.currentUser = loadMember(firebaseAuth.getCurrentUser().getUid());
     }
 
     public static DatabaseManager getInstance() {
@@ -73,7 +73,7 @@ public class DatabaseManager {
 
     // Uid is the primary key of the firestore database
     public ClubMember loadMember(String uid) {
-        if (uid.equals(currentUser.getUid()))
+        if (currentUser!=null && uid.equals(currentUser.getUid()))
             return currentUser;
         DocumentReference doc = dbFirestore.collection(KEYS.MEMBERS).document(uid);
         final ClubMember[] result = {null};
@@ -110,19 +110,6 @@ public class DatabaseManager {
         return isExists[0];
     }
 
-
-    // Converting the object that is the output of the log-in system to the object that is saved on the database
-    private ClubMember convertAuthUserToClubMember(FirebaseUser user) {
-        ClubMember member;
-        // Saving the user in the database if its a new one, otherwise, returns existing object data.
-        if (!isMemberStored(user.getUid())) {
-            member = new ClubMember(user);
-            storeMember(member);
-        } else {
-            member = loadMember(user.getUid());
-        }
-        return member;
-    }
 
     public ClubMember getCurrentUser() {
         return currentUser;
@@ -165,7 +152,6 @@ public class DatabaseManager {
 
     // Getting current user member's profile photo link from storage, will be inserted into ui by Glide
     public void loadGallery(String uid, final OnSuccessListener<Uri> onSinglePhotoLoaded) {
-        final ClubMember member = this.loadMember(uid);
 
         // Folder success
         OnSuccessListener<ListResult> galleryFolderSuccess = new OnSuccessListener<ListResult>() {
@@ -177,6 +163,7 @@ public class DatabaseManager {
                     // All photos names are the times that they where taken in
                     // This prevents double-listeners concurrently, sync for uri AND metadata of each file
                     // This might be changed later.
+
 
                     photo.getDownloadUrl().addOnSuccessListener(onSinglePhotoLoaded);
                     /*
