@@ -21,6 +21,7 @@ import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.gallery.GalleryPhoto;
+import com.idan_koren_israeli.sailtracker.home.OnMemberLoadedListener;
 
 import java.util.Objects;
 
@@ -72,18 +73,16 @@ public class DatabaseManager {
     //region Members Functions
 
     // Uid is the primary key of the firestore database
-    public ClubMember loadMember(String uid) {
+    public void loadMember(String uid, final OnMemberLoadedListener onMemberLoaded) {
         if (currentUser!=null && uid.equals(currentUser.getUid()))
-            return currentUser;
+            return; // currentuser is already loaded
         DocumentReference doc = dbFirestore.collection(KEYS.MEMBERS).document(uid);
-        final ClubMember[] result = {null};
         doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                result[0] = documentSnapshot.toObject(ClubMember.class);
+                onMemberLoaded.onMemberLoaded(documentSnapshot.toObject(ClubMember.class));
             }
         });
-        return result[0];
     }
 
     // Writing a member as an object into firestore

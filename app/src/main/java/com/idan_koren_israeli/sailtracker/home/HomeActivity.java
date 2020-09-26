@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -21,7 +22,7 @@ import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
 
 import java.io.IOException;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements OnLoginCompleteListener {
 
     private ClubMember user; // the current specific user's member object
     private LinearLayout loginLayout;
@@ -39,15 +40,7 @@ public class HomeActivity extends BaseActivity {
 
         findViews();
         setListeners();
-        loginFragment.setOnCompleteListener(loginCompleteListener);
-
-
-        if(loginFragment.isLoggedIn()){
-            hideLoginFragment(); // User is already logged-in
-            user = dbManager.getCurrentUser();
-            if(user !=null)
-                updateInterface();
-        }
+        loginFragment.setOnCompleteListener(this);
 
     }
 
@@ -64,21 +57,13 @@ public class HomeActivity extends BaseActivity {
         profileFragment.getProfileImage().setOnLongClickListener(changeProfilePhoto);
     }
 
-    private void hideLoginFragment(){
+    private void hideLoginFragment()
+    {
         loginLayout.setVisibility(View.GONE);
+        getSupportFragmentManager().beginTransaction().remove(loginFragment);
     }
 
     //endregion
-
-    private OnLoginCompleteListener loginCompleteListener = new OnLoginCompleteListener() {
-        @Override
-        public void onLoginFinished(ClubMember authenticatedMember) {
-            user = authenticatedMember;
-            DatabaseManager.getInstance().setCurrentUser(user);
-            hideLoginFragment();
-            updateInterface();
-        }
-    };
 
 
     private void updateInterface(){
@@ -143,6 +128,15 @@ public class HomeActivity extends BaseActivity {
         }
     };
 
+
     //endregion
+
+    @Override
+    public void onLoginFinished(ClubMember authenticatedMember) {
+        user = authenticatedMember;
+        DatabaseManager.getInstance().setCurrentUser(user);
+        hideLoginFragment();
+        updateInterface();
+    }
 
 }

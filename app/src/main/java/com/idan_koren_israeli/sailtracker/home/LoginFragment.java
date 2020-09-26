@@ -1,10 +1,12 @@
 package com.idan_koren_israeli.sailtracker.home;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,9 +82,23 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        auth = FirebaseAuth.getInstance();
+        auth.useAppLanguage();
+
+        setOnCompleteListener((OnLoginCompleteListener) context);
+        loggedUser = auth.getCurrentUser();
+        if(loggedUser!=null){
+            ClubMember loggedMember = DatabaseManager.getInstance().loadMember(loggedUser.getUid());
+            finishedListener.onLoginFinished(loggedMember);
+            // user is already logged in, finishes here
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if(savedInstanceState!=null) {
             currentState = (LoginState) savedInstanceState.getSerializable(KEYS.LOGIN_STATE);
             currentPhone = savedInstanceState.getString(KEYS.LOGIN_PHONE);
@@ -93,9 +109,6 @@ public class LoginFragment extends Fragment {
                 verifyPhoneNumber();
 
         }
-
-        auth = FirebaseAuth.getInstance();
-        auth.useAppLanguage();
 
     }
 
@@ -250,13 +263,5 @@ public class LoginFragment extends Fragment {
         instanceBundle.putSerializable(KEYS.LOGIN_STATE, currentState);
         instanceBundle.putString(KEYS.LOGIN_PHONE, phoneEditText.getText().toString());
         super.onSaveInstanceState(instanceBundle);
-    }
-
-    public boolean isLoggedIn(){
-        if(currentState == LoginState.COMPLETED)
-            return true;
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        return firebaseUser!=null && DatabaseManager.getInstance().getCurrentUser()!=null;
-        // checking if there is a connected user which is saved in the database
     }
 }
