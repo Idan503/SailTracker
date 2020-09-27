@@ -2,7 +2,6 @@ package com.idan_koren_israeli.sailtracker.gallery;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +25,7 @@ public class GalleryActivity extends BaseActivity {
     private FloatingActionButton addPhotoButton;
     private ProfileFragment profileFrag;
     private PhotoCollectionFragment photosFrag;
-    private ClubMember user;
+    private ClubMember member;
     private DatabaseManager dbManager;
 
 
@@ -37,7 +36,7 @@ public class GalleryActivity extends BaseActivity {
         setContentView(R.layout.activity_gallery);
 
         dbManager = DatabaseManager.getInstance();
-        user = dbManager.getCurrentUser();
+        member = dbManager.getCurrentUser();
 
         findViews();
         setListeners();
@@ -51,7 +50,9 @@ public class GalleryActivity extends BaseActivity {
         @Override
         public void onPhotoLoaded(GalleryPhoto photo) {
             Log.i("pttt", " Photo loaded : " + photo.getUri().toString());
-
+            member.addGalleryPhoto(photo);
+            photosFrag.setMember(member);
+            // a new photo is loaded, re-rendering ui
         }
     };
 
