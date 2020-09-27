@@ -79,6 +79,7 @@ public class PhotoCollectionFragment extends Fragment {
     };
 
     private GalleryPhoto[] getMemberPhotos(){
+        member.getGalleryPhotos().sort(new SortByCreationTime());
         ArrayList<GalleryPhoto> photosList = member.getGalleryPhotos();
         GalleryPhoto[] photosArray = new GalleryPhoto[photosList.size()];
         return photosList.toArray(photosArray);

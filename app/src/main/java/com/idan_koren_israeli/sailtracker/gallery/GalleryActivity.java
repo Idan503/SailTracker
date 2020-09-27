@@ -2,6 +2,7 @@ package com.idan_koren_israeli.sailtracker.gallery;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
@@ -93,6 +95,16 @@ public class GalleryActivity extends BaseActivity {
         @Override
         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
             CommonUtils.getInstance().showToast("Gallery image saved!");
+
+            StorageMetadata data = taskSnapshot.getMetadata();
+            if(data.getReference()!=null) {
+                Uri uploadedPhotoUri = Uri.parse(data.getReference().getDownloadUrl().toString());
+                long timeStamp = data.getCreationTimeMillis();
+                GalleryPhoto uploadedPhoto = new GalleryPhoto(uploadedPhotoUri, timeStamp);
+                Log.i("pttt", "uploaded " + uploadedPhotoUri + " | " + timeStamp);
+                member.addGalleryPhoto(uploadedPhoto);
+                photosFrag.setMember(member);
+            }
         }
     };
 
