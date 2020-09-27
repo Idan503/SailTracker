@@ -113,7 +113,8 @@ public class ClubMember {
     //endregion
 
     public void addGalleryPhoto(GalleryPhoto photo){
-        galleryPhotos.add(photo);
+        if(!galleryPhotos.contains(photo))
+            galleryPhotos.add(photo);
     }
 
 

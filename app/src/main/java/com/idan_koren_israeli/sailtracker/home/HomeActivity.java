@@ -42,6 +42,9 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
 
         findViews();
         setListeners();
+
+        // Loading menu will be implemented in login fragment itself
+
         loginFragment.setOnCompleteListener(this);
     }
 
@@ -139,6 +142,7 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
         DatabaseManager.getInstance().setCurrentUser(user);
         hideLoginFragment();
         updateInterface();
+
     }
 
 }
