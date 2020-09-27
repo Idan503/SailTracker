@@ -18,6 +18,7 @@ import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnGalleryPhotoLoadListener;
 import com.idan_koren_israeli.sailtracker.home.ProfileFragment;
 
 public class GalleryActivity extends BaseActivity {
@@ -41,20 +42,16 @@ public class GalleryActivity extends BaseActivity {
         findViews();
         setListeners();
 
-        dbManager.loadGallery(onPhotoLoadedListener);
+        dbManager.loadGallery(dbManager.getCurrentUser().getUid(),photoLoaded);
         profileFrag.setMember(dbManager.getCurrentUser());
         photosFrag.setMember(dbManager.getCurrentUser());
     }
 
-    private OnSuccessListener<Uri> onPhotoLoadedListener = new OnSuccessListener<Uri>() {
+    private OnGalleryPhotoLoadListener photoLoaded = new OnGalleryPhotoLoadListener() {
         @Override
-        public void onSuccess(Uri uri) {
-            GalleryPhoto newPhoto = new GalleryPhoto(uri, user.getGalleryPhotos().size());
-            if(!user.getGalleryPhotos().contains(newPhoto))
-                user.addGalleryPhoto(newPhoto);
-            Log.i("pttt", "Loaded " + uri);
-            photosFrag.setMember(user);
-            // Each time photo is loaded, we will re-assign the member to the recycleview
+        public void onPhotoLoaded(GalleryPhoto photo) {
+            Log.i("pttt", " Photo loaded : " + photo.getUri().toString());
+
         }
     };
 

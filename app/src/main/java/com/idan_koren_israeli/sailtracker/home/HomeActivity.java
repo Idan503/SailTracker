@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -42,7 +43,6 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
         findViews();
         setListeners();
         loginFragment.setOnCompleteListener(this);
-
     }
 
     //region Init Functions
@@ -134,6 +134,7 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
 
     @Override
     public void onLoginFinished(ClubMember authenticatedMember) {
+        Log.i("pttt", "Listener clubmbember ! " + authenticatedMember.getName());
         user = authenticatedMember;
         DatabaseManager.getInstance().setCurrentUser(user);
         hideLoginFragment();

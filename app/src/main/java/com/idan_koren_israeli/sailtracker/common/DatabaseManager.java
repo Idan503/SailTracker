@@ -3,6 +3,7 @@ package com.idan_koren_israeli.sailtracker.common;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 

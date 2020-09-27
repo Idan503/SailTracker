@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnLoginFinishedListener;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnMemberLoadListener;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -90,11 +92,19 @@ public class LoginFragment extends Fragment {
         setOnCompleteListener((OnLoginFinishedListener) context);
         loggedUser = auth.getCurrentUser();
         if(loggedUser!=null){
-            ClubMember loggedMember = DatabaseManager.getInstance().loadMember(loggedUser.getUid());
-            finishedListener.onLoginFinished(loggedMember);
-            // user is already logged in, finishes here
+            Log.i("pttt", "Logged user isn't null!");
+            DatabaseManager.getInstance().loadMember(loggedUser.getUid(), memberLoadFinished);
         }
     }
+
+    private OnMemberLoadListener memberLoadFinished = new OnMemberLoadListener() {
+        @Override
+        public void onMemberLoad(ClubMember memberLoaded) {
+            if(memberLoaded!=null){
+                finishedListener.onLoginFinished(memberLoaded); // already saved in db
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
