@@ -8,6 +8,8 @@ import java.util.ArrayList;
 // In a sail there is a max number of participants
 public class Sail extends PricedEvent {
 
+    private final String EVENT_FULL_MESSAGE =  "Member could not be added, "+ getName()+" event is full";
+
     private ArrayList<String> participantsUid;
     private int maxParticipants; // 0 for inf.
 
@@ -26,4 +28,12 @@ public class Sail extends PricedEvent {
         this.participantsUid = participantsUid;
         this.maxParticipants = maxParticipants;
     }
+
+    public void addParticipant(ClubMember member) throws EventFullException{
+        if(participantsUid.size() == maxParticipants)
+            throw new EventFullException(EVENT_FULL_MESSAGE);
+        participantsUid.add(member.getUid());
+        member.removePoints(getNormalPrice());
+    }
+
 }

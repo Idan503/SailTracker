@@ -114,6 +114,10 @@ public class ClubMember {
             galleryPhotos.add(photo);
     }
 
+    public void removePoints(int count){
+        this.pointsCount-=count;
+    }
+
 
     @NonNull
     @Override      

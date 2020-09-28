@@ -1,6 +1,7 @@
 package com.idan_koren_israeli.sailtracker.club;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
 import org.joda.time.Minutes;
 
 public class PricedEvent extends Event{
@@ -24,6 +25,8 @@ public class PricedEvent extends Event{
         this.weekendPrice = weekendPrice;
     }
 
+    //region Getters & Setters
+
     public int getNormalPrice() {
         return normalPrice;
     }
@@ -40,4 +43,13 @@ public class PricedEvent extends Event{
         this.weekendPrice = weekendPrice;
     }
 
+    //endregion
+
+    public int getPrice(){
+        int dayOfWeek = getStartTime().getDayOfWeek();
+        if(dayOfWeek == DateTimeConstants.FRIDAY || dayOfWeek==DateTimeConstants.SATURDAY){
+            return weekendPrice;
+        }
+        return normalPrice;
+    }
 }

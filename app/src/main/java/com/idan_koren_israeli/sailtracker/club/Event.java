@@ -1,9 +1,6 @@
 package com.idan_koren_israeli.sailtracker.club;
 
-import net.danlew.android.joda.JodaTimeAndroid;
-
 import org.joda.time.DateTime;
-import org.joda.time.Hours;
 import org.joda.time.Minutes;
 
 /**
@@ -15,7 +12,7 @@ public class Event {
     private String name;
     private String description;
 
-    private DateTime start;
+    private DateTime startTime;
     private Minutes length; //Calculation of end time will be on runtime
 
     public Event(){
@@ -24,10 +21,11 @@ public class Event {
     public Event(String name, String description, DateTime start, Minutes length) {
         this.name = name;
         this.description = description;
-        this.start = start;
+        this.startTime = start;
         this.length = length;
     }
 
+    //region Getters & Setters
     public String getName() {
         return name;
     }
@@ -44,12 +42,12 @@ public class Event {
         this.description = description;
     }
 
-    public DateTime getStart() {
-        return start;
+    public DateTime getStartTime() {
+        return startTime;
     }
 
-    public void setStart(DateTime start) {
-        this.start = start;
+    public void setStartTime(DateTime startTime) {
+        this.startTime = startTime;
     }
 
     public Minutes getLength() {
@@ -59,4 +57,13 @@ public class Event {
     public void setLength(Minutes length) {
         this.length = length;
     }
+
+    //endregion
+
+    public DateTime getEndTime(){
+        return startTime.plusMillis(length.getMinutes());
+    }
+
+
+
 }
