@@ -43,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 
 // Users can Login with phone number, authentication via SMS like WhatsApp
 public class LoginFragment extends Fragment {
-    private enum LoginState{ NOT_STARTED,IN_PROGRESS, CODE_SENT, CODE_APPROVED, COMPLETED, FAILED}
+    private enum LoginState { NOT_STARTED,IN_PROGRESS, CODE_SENT, CODE_APPROVED, COMPLETED, FAILED}
     private interface KEYS {
         String LOGIN_STATE = "LOGIN_STATE";
         String LOGIN_PHONE = "LOGIN_PHONE";
@@ -89,18 +89,16 @@ public class LoginFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         auth.useAppLanguage();
 
-        setOnCompleteListener((OnLoginFinishedListener) context);
         loggedUser = auth.getCurrentUser();
-        if(loggedUser!=null){
-            Log.i("pttt", "Logged user isn't null!");
-            DatabaseManager.getInstance().loadMember(loggedUser.getUid(), memberLoadFinished);
-        }
+
+        setOnCompleteListener((OnLoginFinishedListener) context);
     }
 
     private OnMemberLoadListener memberLoadFinished = new OnMemberLoadListener() {
         @Override
         public void onMemberLoad(ClubMember memberLoaded) {
             if(memberLoaded!=null){
+                Log.i("pttt","Member log finished calls");
                 finishedListener.onLoginFinished(memberLoaded); // already saved in db
             }
         }
@@ -123,10 +121,20 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if(loggedUser!=null){
+            DatabaseManager.getInstance().loadMember(loggedUser.getUid(), memberLoadFinished);
+            // User is already signed in
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View parent =inflater.inflate(R.layout.fragment_login, container, false);
+
 
         findViews(parent);
         setListeners();

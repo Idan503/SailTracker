@@ -40,6 +40,8 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
 
         dbManager = DatabaseManager.getInstance();
 
+
+        Log.i("pttt", " Hello OnCreate Home");
         findViews();
         setListeners();
 
@@ -47,6 +49,7 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
 
         loginFragment.setOnCompleteListener(this);
     }
+
 
     //region Init Functions
 
@@ -63,15 +66,20 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
 
     private void hideLoginFragment()
     {
-        loginLayout.setVisibility(View.GONE);
-        getSupportFragmentManager().beginTransaction().remove(loginFragment);
+        if(loginLayout!=null) {
+            loginLayout.setVisibility(View.GONE);
+            getSupportFragmentManager().beginTransaction().remove(loginFragment);
+        }
     }
 
     //endregion
 
 
     private void updateInterface(){
-        profileFragment.setMember(user);
+        if(profileFragment==null)
+            Log.i("pttt", " Profile Fragment is null");
+        else
+            profileFragment.setMember(user);
     }
 
 

@@ -74,8 +74,11 @@ public class DatabaseManager {
 
     // Uid is the primary key of the firestore database
     public void loadMember(String uid, final OnMemberLoadListener onMemberLoaded) {
-        if (currentUser!=null && uid.equals(currentUser.getUid()))
+        if (currentUser!=null && uid.equals(currentUser.getUid())){
+            onMemberLoaded.onMemberLoad(currentUser);
             return; // currentuser is already loaded
+        }
+
         DocumentReference doc = dbFirestore.collection(KEYS.MEMBERS).document(uid);
         doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
