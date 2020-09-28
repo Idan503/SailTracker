@@ -1,5 +1,6 @@
 package com.idan_koren_israeli.sailtracker.gallery;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -95,16 +96,7 @@ public class GalleryActivity extends BaseActivity {
         @Override
         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
             CommonUtils.getInstance().showToast("Gallery image saved!");
-
-            StorageMetadata data = taskSnapshot.getMetadata();
-            if(data.getReference()!=null) {
-                Uri uploadedPhotoUri = Uri.parse(data.getReference().getDownloadUrl().toString());
-                long timeStamp = data.getCreationTimeMillis();
-                GalleryPhoto uploadedPhoto = new GalleryPhoto(uploadedPhotoUri, timeStamp);
-                Log.i("pttt", "uploaded " + uploadedPhotoUri + " | " + timeStamp);
-                member.addGalleryPhoto(uploadedPhoto);
-                photosFrag.setMember(member);
-            }
+            recreate(); // restart activity to load new photo
         }
     };
 
