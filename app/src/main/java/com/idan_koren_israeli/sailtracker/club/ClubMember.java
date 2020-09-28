@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker.common;
+package com.idan_koren_israeli.sailtracker.club;
 
 import androidx.annotation.NonNull;
 

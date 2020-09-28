@@ -1,6 +1,6 @@
 package com.idan_koren_israeli.sailtracker.firebase.callbacks;
 
-import com.idan_koren_israeli.sailtracker.common.ClubMember;
+import com.idan_koren_israeli.sailtracker.club.ClubMember;
 
 /**
  * Those callbacks are created in order to control firebase tasks

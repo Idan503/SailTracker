@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -16,7 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.firebase.LoginFragment;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnLoginFinishedListener;
-import com.idan_koren_israeli.sailtracker.common.ClubMember;
+import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
@@ -40,8 +39,6 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
 
         dbManager = DatabaseManager.getInstance();
 
-
-        Log.i("pttt", " Hello OnCreate Home");
         findViews();
         setListeners();
 
@@ -76,10 +73,9 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
 
 
     private void updateInterface(){
-        if(profileFragment==null)
-            Log.i("pttt", " Profile Fragment is null");
-        else
-            profileFragment.setMember(user);
+        if(profileFragment!=null)
+            profileFragment.updateUI();
+        // next sail should be added
     }
 
 
@@ -145,7 +141,6 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
 
     @Override
     public void onLoginFinished(ClubMember authenticatedMember) {
-        Log.i("pttt", "Listener clubmbember ! " + authenticatedMember.getName());
         user = authenticatedMember;
         DatabaseManager.getInstance().setCurrentUser(user);
         hideLoginFragment();
