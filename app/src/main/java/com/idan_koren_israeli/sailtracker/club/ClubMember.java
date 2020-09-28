@@ -12,10 +12,7 @@ import java.util.ArrayList;
  * This class provides a member which is a single end-user of the app.
  * Picture, uid and name and phone number are the same as the authenticated user.
  *
- * Unfortunately, there is no option to save firebase's authenticated user object on the database,
- * so relevant properties of firebase's user and club member are merged into this class.
- *
- * uid is the key that is shared between ClubMember and Firebase authentication
+ * uid is the primary key that shared between ClubMember and Firebase authentication
  *
  */
 public class ClubMember {

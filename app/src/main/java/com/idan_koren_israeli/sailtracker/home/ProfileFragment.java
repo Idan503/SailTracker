@@ -98,10 +98,11 @@ public class ProfileFragment extends Fragment {
         @Override
         public void onFailure(@NonNull Exception e) {
             common.setImageResource(profileImage, R.drawable.ic_profile_default);
-            Log.i("pttt", "404e");
         }
     };
 
+
+    //region Getters and Setters
     public ImageView getProfileImage() {
         return profileImage;
     }
@@ -145,4 +146,6 @@ public class ProfileFragment extends Fragment {
     public ClubMember getMember() {
         return member;
     }
+
+    //endregion
 }
