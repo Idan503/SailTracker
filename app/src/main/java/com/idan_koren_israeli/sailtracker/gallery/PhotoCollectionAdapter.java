@@ -1,8 +1,6 @@
 package com.idan_koren_israeli.sailtracker.gallery;
 
 import android.content.Context;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +33,7 @@ public class PhotoCollectionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflates the cell layout from xml
-        View itemView = mInflater.inflate(R.layout.photo_collection_item, parent, false);
+        View itemView = mInflater.inflate(R.layout.recycler_gallery_item, parent, false);
         int height = parent.getMeasuredHeight() / NUM_OF_COLUMNS;
         itemView.setMinimumHeight(height);
         PhotoViewHolder photoHolder = new PhotoViewHolder(itemView);

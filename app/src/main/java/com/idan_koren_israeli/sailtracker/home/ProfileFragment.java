@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
-import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
+import com.idan_koren_israeli.sailtracker.firebase.MembersDataManager;
 
 import java.util.Locale;
 
@@ -81,7 +80,7 @@ public class ProfileFragment extends Fragment {
         if(member==null)
             return; // No member associated
         nameText.setText(member.getName());
-        DatabaseManager.getInstance().loadProfilePhoto(member.getUid(), onProfileUriSuccess, onProfileUriFailure);
+        MembersDataManager.getInstance().loadProfilePhoto(member.getUid(), onProfileUriSuccess, onProfileUriFailure);
         numOfPointsText.setText(String.format(Locale.US,"%d", member.getPointsCount()));
         numOfSailsText.setText(String.format(Locale.US,"%d", member.getSailsCount()));
     }

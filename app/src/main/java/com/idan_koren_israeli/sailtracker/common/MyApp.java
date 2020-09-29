@@ -2,9 +2,7 @@ package com.idan_koren_israeli.sailtracker.common;
 
 import android.app.Application;
 
-import com.idan_koren_israeli.sailtracker.common.CommonUtils;
-import com.idan_koren_israeli.sailtracker.common.DatabaseManager;
-import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
+import com.idan_koren_israeli.sailtracker.firebase.MembersDataManager;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -16,7 +14,7 @@ public class MyApp extends Application {
     // Initiating Singleton using Application Context only.
     CommonUtils.initHelper(this);
     SharedPrefsManager.initHelper(this);
-    DatabaseManager.initHelper();
+    MembersDataManager.initHelper();
     JodaTimeAndroid.init(this);
 
 

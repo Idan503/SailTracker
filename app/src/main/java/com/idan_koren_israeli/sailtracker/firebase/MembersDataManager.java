@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker.common;
+package com.idan_koren_israeli.sailtracker.firebase;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
@@ -20,6 +20,7 @@ import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
+import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnFileSearchFinishListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnMemberLoadListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnGalleryPhotoLoadListener;
@@ -28,7 +29,7 @@ import com.idan_koren_israeli.sailtracker.gallery.GalleryPhoto;
 /**
  * Using both Firestore and Storage Firabase components, to manage data of authenticated members.
  */
-public class DatabaseManager {
+public class MembersDataManager {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore dbFirestore; // used for storing members information (as objects)
     private FirebaseStorage dbStorage; // used for storing photos information (gallery and profile)
@@ -46,10 +47,10 @@ public class DatabaseManager {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private static DatabaseManager single_instance = null;
+    private static MembersDataManager single_instance = null;
     // This WILL NOT cause a memory leak - *using application context only*
 
-    private DatabaseManager() {
+    private MembersDataManager() {
         firebaseAuth = FirebaseAuth.getInstance();
         dbFirestore = FirebaseFirestore.getInstance();
         dbStorage = FirebaseStorage.getInstance();
@@ -58,14 +59,14 @@ public class DatabaseManager {
             loadMember(firebaseAuth.getCurrentUser().getUid(), null);
     }
 
-    public static DatabaseManager getInstance() {
+    public static MembersDataManager getInstance() {
         return single_instance;
     }
 
-    public static DatabaseManager
+    public static MembersDataManager
     initHelper() {
         if (single_instance == null) {
-            single_instance = new DatabaseManager();
+            single_instance = new MembersDataManager();
         }
         return single_instance;
     }
@@ -189,7 +190,7 @@ public class DatabaseManager {
             }
         };
 
-        StorageReference galleryPhotosHub = dbStorage.getReference().child(DatabaseManager.KEYS.GALLERY_PHOTOS);
+        StorageReference galleryPhotosHub = dbStorage.getReference().child(MembersDataManager.KEYS.GALLERY_PHOTOS);
         StorageReference memberGalleryPath = galleryPhotosHub.child(uid);
 
         // Getting the parent folder of current user gallery

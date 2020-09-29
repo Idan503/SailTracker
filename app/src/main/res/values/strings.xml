@@ -17,11 +17,13 @@
     <!-- LAYOUT EXAMPLES -->
     <string name="example_date">19.09.2020</string>
     <string name="example_hour">15:00</string>
+    <string name="example_hour_range">15:00–19:00</string>
     <string name="example_place">Marina Shavit, Haifa</string>
     <string name="example_phone">050—1234567</string>
     <string name="example_code">123456</string>
     <string name="example_name">Israel Israeli</string>
     <string name="example_sail_name">Single Handed Guided Sail</string>
+    <string name="example_sail_description">Learn how to sail by using one hand only</string>
 
     <string name="next">Next</string>
 
