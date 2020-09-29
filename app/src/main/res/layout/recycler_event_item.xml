@@ -8,7 +8,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:0.35"
+        app:layout_constraintDimensionRatio="1:0.375"
         app:layout_constraintTop_toTopOf="parent"
         >
 
@@ -94,7 +94,13 @@
                     android:id="@+id/event_item_IMG_image"
                     />
 
-                <include
+                <com.google.android.material.button.MaterialButton
+                    app:layout_constraintTop_toBottomOf="@id/event_item_IMG_image"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:icon="@drawable/ic_baseline_photo_camera_24"
+                    app:iconTint="@android:color/black"
                     />
 
 
