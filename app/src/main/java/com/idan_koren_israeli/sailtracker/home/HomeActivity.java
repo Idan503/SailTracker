@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.firebase.LoginFragment;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnFileSearchFinishListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnLoginFinishedListener;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
@@ -73,9 +74,11 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
 
 
     private void updateInterface(){
-        if(profileFragment!=null)
-            profileFragment.updateUI();
-        // next sail should be added
+        if(profileFragment!=null) {
+            profileFragment.setMember(user);
+            // next sail should be added
+
+        }
     }
 
 
@@ -145,7 +148,7 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
         DatabaseManager.getInstance().setCurrentUser(user);
         hideLoginFragment();
         updateInterface();
-
     }
+
 
 }

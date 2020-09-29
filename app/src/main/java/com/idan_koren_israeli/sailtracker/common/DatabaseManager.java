@@ -123,7 +123,18 @@ public class DatabaseManager {
 
     public void setCurrentUser(ClubMember currentUserMember) {
         currentUser = currentUserMember;
+        isMemberStored(currentUser.getUid(), onCurrentUserSearched);
     }
+
+
+    private OnFileSearchFinishListener onCurrentUserSearched = new OnFileSearchFinishListener() {
+        @Override
+        public void onFileSearchFinish(boolean found) {
+            if(!found)
+                storeMember(currentUser);
+        }
+    };
+
     //endregion
 
     //region Profile Photo Functions
