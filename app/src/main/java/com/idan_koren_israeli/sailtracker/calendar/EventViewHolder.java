@@ -42,4 +42,6 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         time = itemView.findViewById(R.id.event_item_LBL_time);
         image = itemView.findViewById(R.id.event_item_IMG_image);
     }
+
+
 }

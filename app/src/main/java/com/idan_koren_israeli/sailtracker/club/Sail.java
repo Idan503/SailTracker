@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * All Sails will be allotted as priced events
  *
  */
-public class PricedEvent extends Event {
+public class Sail extends Event {
 
     private int price; // Price (in points) for a single participant register
 
@@ -19,11 +19,11 @@ public class PricedEvent extends Event {
     private ArrayList<String> participantsUid;
     private int maxParticipants; // 0 for inf.
 
-    public PricedEvent(){
+    public Sail(){
         super();
     }
 
-    public PricedEvent(String name, String description, DateTime start, Minutes length, int price, ArrayList<String> participantsUid, int maxParticipants) {
+    public Sail(String name, String description, DateTime start, Minutes length, int price, ArrayList<String> participantsUid, int maxParticipants) {
         super(name, description, start, length);
         this.price = price;
         this.participantsUid = participantsUid;

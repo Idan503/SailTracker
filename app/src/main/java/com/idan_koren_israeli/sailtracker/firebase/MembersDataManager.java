@@ -36,7 +36,7 @@ public class MembersDataManager {
     private CommonUtils common;
 
     private ClubMember currentUser; // A lot of calls will use the current user, so it is stored as a property.
-    private Boolean currentUserIsManager = null; // prevents multiple db calls for same question
+    private Boolean currentUserIsManager = null; // prevents multiple db calls for same question, null when unknown
     // This prevents redundant calls to the database (Over and over for the same current user's clubmember).
 
     private static final int PHOTOS_QUALITY = 100;
@@ -289,8 +289,8 @@ public class MembersDataManager {
     }
 
     public void isManagerMember(final onCheckFinished onFinish){
-        if(currentUserIsManager) // answer is already known
-            onFinish.onCheckFinished(true); // prevent multiple db calls
+        if(currentUserIsManager != null) // answer is already known
+            onFinish.onCheckFinished(currentUserIsManager); // prevent multiple db calls
         isManagerMember(currentUser,onFinish);
     }
 

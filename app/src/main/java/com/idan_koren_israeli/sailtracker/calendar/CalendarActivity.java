@@ -29,10 +29,15 @@ public class CalendarActivity extends BaseActivity {
         findViews();
         //inflate: getSupportFragmentManager().beginTransaction().replace(R.id.calendar_LAY_add_event_placeholder, new AddEventFragment()).commit();
 
-        initEventsList();
+        MembersDataManager.getInstance().isManagerMember(new onCheckFinished() {
+            @Override
+            public void onCheckFinished(boolean result) {
+                initEventsList(result);
+            }
+        });
     }
 
-    private void initEventsList(){
+    private void initEventsList(boolean managerViewMode){
 
         // Getting the data (Should be by a date, from firebase)
         ArrayList<Event> events = new ArrayList<Event>();
@@ -41,7 +46,7 @@ public class CalendarActivity extends BaseActivity {
         events.add(new Event("Event 3","This is an event 3", DateTime.now(), Minutes.minutes(120)));
 
         todayEvents.setLayoutManager(new LinearLayoutManager(this));
-        eventsAdapter = new EventsRecyclerAdapter(this, events);
+        eventsAdapter = new EventsRecyclerAdapter(this, events, managerViewMode);
         // adapter.setClickListener
         todayEvents.setAdapter(eventsAdapter);
     }
