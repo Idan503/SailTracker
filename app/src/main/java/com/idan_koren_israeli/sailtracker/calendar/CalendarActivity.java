@@ -9,12 +9,11 @@ import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.firebase.MembersDataManager;
-import com.idan_koren_israeli.sailtracker.firebase.callbacks.onCheckFinished;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinished;
 
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class CalendarActivity extends BaseActivity {
@@ -29,13 +28,17 @@ public class CalendarActivity extends BaseActivity {
         findViews();
         //inflate: getSupportFragmentManager().beginTransaction().replace(R.id.calendar_LAY_add_event_placeholder, new AddEventFragment()).commit();
 
-        MembersDataManager.getInstance().isManagerMember(new onCheckFinished() {
-            @Override
-            public void onCheckFinished(boolean result) {
-                initEventsList(result);
-            }
-        });
+        MembersDataManager.getInstance().isManagerMember(onCheckedManager);
     }
+
+    private OnCheckFinished onCheckedManager = new OnCheckFinished() {
+        @Override
+        public void onCheckFinished(boolean result) {
+            // Code gets to here after we checked with the db if the current user is a manager or not
+            // Therefore, we will know if our recycler view should inflate another last view of "Add Event Button"
+            initEventsList(result);
+        }
+    };
 
     private void initEventsList(boolean managerViewMode){
 
@@ -51,7 +54,7 @@ public class CalendarActivity extends BaseActivity {
         todayEvents.setAdapter(eventsAdapter);
     }
 
-    onCheckFinished isMember = new onCheckFinished() {
+    OnCheckFinished isMember = new OnCheckFinished() {
         @Override
         public void onCheckFinished(boolean result) {
             System.out.println(result);

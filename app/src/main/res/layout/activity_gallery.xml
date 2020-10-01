@@ -19,7 +19,7 @@
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/gallery_INV_1"
-            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintHeight_percent="0.03"
             />
 
         <fragment
