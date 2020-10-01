@@ -5,6 +5,8 @@ import android.widget.RelativeLayout;
 
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
+import com.idan_koren_israeli.sailtracker.firebase.MembersDataManager;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnFileCheckFinishListener;
 
 public class CalendarActivity extends BaseActivity {
 
@@ -18,7 +20,17 @@ public class CalendarActivity extends BaseActivity {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.calendar_LAY_add_event_placeholder, new AddEventFragment()).commit();
 
+        MembersDataManager.getInstance().isManagerMember(isMember);
+
+
     }
+
+    OnFileCheckFinishListener isMember = new OnFileCheckFinishListener() {
+        @Override
+        public void onCheckFinished(boolean result) {
+            System.out.println(result);
+        }
+    };
 
 
     private void findViews(){

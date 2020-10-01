@@ -3,6 +3,7 @@ package com.idan_koren_israeli.sailtracker.firebase;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -21,7 +22,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
-import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnFileSearchFinishListener;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnFileCheckFinishListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnMemberLoadListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnGalleryPhotoLoadListener;
 import com.idan_koren_israeli.sailtracker.gallery.GalleryPhoto;
@@ -42,6 +43,10 @@ public class MembersDataManager {
 
     interface KEYS {
         String MEMBERS = "members";
+        String LISTS = "lists";
+        String MANAGERS = "managers";
+        String ALL_MANAGERS = "all_managers";
+        String ALL_MANAGERS_REGEX = ";";
         String GALLERY_PHOTOS = "gallery_photos";
         String PROFILE_PHOTOS = "profile_photos";
     }
@@ -98,7 +103,7 @@ public class MembersDataManager {
     }
 
     // checking if a member is already exists in the database
-    public void isMemberStored(String uid, final OnFileSearchFinishListener onFinish) {
+    public void isMemberStored(String uid, final OnFileCheckFinishListener onFinish) {
         DocumentReference docRef = dbFirestore.collection(KEYS.MEMBERS).document(uid);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -107,9 +112,9 @@ public class MembersDataManager {
                     DocumentSnapshot document = task.getResult();
                     if (onFinish != null) {
                         if (document != null && document.exists())
-                            onFinish.onFileSearchFinish(true);
+                            onFinish.onCheckFinished(true);
                         else
-                            onFinish.onFileSearchFinish(false);
+                            onFinish.onCheckFinished(false);
                     }
                 }
 
@@ -128,13 +133,48 @@ public class MembersDataManager {
     }
 
 
-    private OnFileSearchFinishListener onCurrentUserSearched = new OnFileSearchFinishListener() {
+    private OnFileCheckFinishListener onCurrentUserSearched = new OnFileCheckFinishListener() {
         @Override
-        public void onFileSearchFinish(boolean found) {
+        public void onCheckFinished(boolean found) {
             if(!found)
                 storeMember(currentUser);
         }
     };
+
+
+    // Checks if a certain member is saved as a club manager in the db
+    private void isManagerMember(final ClubMember member, final OnFileCheckFinishListener onFinish) {
+        DocumentReference docRef = dbFirestore.collection(KEYS.LISTS).document(KEYS.MANAGERS);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (onFinish != null) {
+                        if (document != null && document.exists()) {
+                            // All managers are stored by uid in a single string called "all_managers"
+                            String allManagersUidString = (String) document.get(KEYS.ALL_MANAGERS);
+                            if(allManagersUidString!=null){
+                                String[] allManagersUid = allManagersUidString.split(KEYS.ALL_MANAGERS_REGEX);
+                                for(String uid : allManagersUid){
+                                    if(member.getUid().equals(uid)){
+                                        onFinish.onCheckFinished(true); // member uid found in list of managers
+                                        return;
+                                    }
+                                }
+                                onFinish.onCheckFinished(false); // not found in the list
+                            }
+                        }
+                        else
+                            onFinish.onCheckFinished(false);
+                    }
+                }
+
+            }
+        });
+    }
+
+
 
     //endregion
 
@@ -220,6 +260,7 @@ public class MembersDataManager {
     //endregion
 
 
+
     //region Method Overloading: no uid parameter -> apply to currentUser
     public void loadProfilePhoto(OnSuccessListener<Uri> onSuccess,
                                  OnFailureListener onFailure) {
@@ -240,6 +281,10 @@ public class MembersDataManager {
                                   OnSuccessListener<UploadTask.TaskSnapshot> onSuccess,
                                   OnFailureListener onFailure) {
         storeGalleryPhoto(currentUser.getUid(), photo, onSuccess, onFailure);
+    }
+
+    public void isManagerMember(final OnFileCheckFinishListener onFinish){
+        isManagerMember(currentUser,onFinish);
     }
 
 
