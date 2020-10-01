@@ -38,7 +38,7 @@
                     android:paddingStart="5dp"
                     android:paddingEnd="2dp"
                     android:includeFontPadding="false"
-                    android:gravity="start||center"
+                    android:gravity="start|center"
                     android:id="@+id/event_item_LBL_name"
                     />
 
@@ -71,7 +71,7 @@
                     android:autoSizeTextType="uniform"
                     android:padding="4dp"
                     android:layout_marginStart="15dp"
-                    android:gravity="start||bottom"
+                    android:gravity="start|bottom"
                     android:layout_alignParentBottom="true"
                     android:id="@+id/event_item_LBL_description"
                     />
