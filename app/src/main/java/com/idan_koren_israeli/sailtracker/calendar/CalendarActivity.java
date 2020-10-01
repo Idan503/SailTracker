@@ -1,12 +1,11 @@
 package com.idan_koren_israeli.sailtracker.calendar;
 
 import android.os.Bundle;
-import android.widget.RelativeLayout;
 
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.firebase.MembersDataManager;
-import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnFileCheckFinishListener;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.onCheckFinished;
 
 public class CalendarActivity extends BaseActivity {
 
@@ -25,7 +24,7 @@ public class CalendarActivity extends BaseActivity {
 
     }
 
-    OnFileCheckFinishListener isMember = new OnFileCheckFinishListener() {
+    onCheckFinished isMember = new onCheckFinished() {
         @Override
         public void onCheckFinished(boolean result) {
             System.out.println(result);

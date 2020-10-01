@@ -5,6 +5,6 @@ package com.idan_koren_israeli.sailtracker.firebase.callbacks;
  */
 
 // Checking a certain file for a boolean answer
-public interface OnFileCheckFinishListener {
+public interface onCheckFinished {
     void onCheckFinished(boolean result);
 }
