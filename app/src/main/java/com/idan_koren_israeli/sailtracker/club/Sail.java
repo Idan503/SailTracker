@@ -6,7 +6,9 @@ import org.joda.time.Minutes;
 import java.util.ArrayList;
 
 // In a sail there is a max number of participants
-public class Sail extends PricedEvent {
+public class Sail extends Event {
+
+    private int price; // Price (in points) for a single participant register
 
     private final String EVENT_FULL_MESSAGE =  "Member could not be added, "+ getName()+" event is full";
 
@@ -18,22 +20,44 @@ public class Sail extends PricedEvent {
     }
 
     public Sail(String name, String description, DateTime start, Minutes length, int price, ArrayList<String> participantsUid, int maxParticipants) {
-        super(name, description, start, length, price);
+        super(name, description, start, length);
+        this.price = price;
         this.participantsUid = participantsUid;
         this.maxParticipants = maxParticipants;
     }
 
-    public Sail(String name, String description, DateTime start, Minutes length, int normalPrice, int weekendPrice, ArrayList<String> participantsUid, int maxParticipants) {
-        super(name, description, start, length, normalPrice, weekendPrice);
+    //region Getters & Setters
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public ArrayList<String> getParticipantsUid() {
+        return participantsUid;
+    }
+
+    public void setParticipantsUid(ArrayList<String> participantsUid) {
         this.participantsUid = participantsUid;
+    }
+
+    public int getMaxParticipants() {
+        return maxParticipants;
+    }
+
+    public void setMaxParticipants(int maxParticipants) {
         this.maxParticipants = maxParticipants;
     }
+
+    //endregion
 
     public void addParticipant(ClubMember member) throws EventFullException{
         if(participantsUid.size() == maxParticipants)
             throw new EventFullException(EVENT_FULL_MESSAGE);
         participantsUid.add(member.getUid());
-        member.removePoints(getNormalPrice());
+        member.removePoints(getPrice());
     }
 
 }

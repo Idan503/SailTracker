@@ -37,4 +37,10 @@
     <string name="login_phone">Please insert your phone number to log-in</string>
     <string name="login_code">We sent you an SMS with a code:</string>
     <string name="login_name">Choose your display name:</string>
+
+    <!-- ADDING EVENT TITLES -->
+    <string name="add_event_name">Insert Event Name</string>
+    <string name="add_event_start">Select Start Time</string>
+    <string name="add_event_end">Select End Time</string>
+    <string name="add_event_description">Insert Event Description</string>
 </resources>
