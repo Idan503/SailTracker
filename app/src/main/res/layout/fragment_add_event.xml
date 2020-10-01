@@ -286,6 +286,9 @@
             android:autoSizeTextType="uniform"
             android:padding="20dp"
             android:text="@string/back"
+            android:id="@+id/add_event_BTN_back"
+            android:theme="@style/FormButton"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
             />
 
         <com.google.android.material.button.MaterialButton
@@ -295,6 +298,9 @@
             android:autoSizeTextType="uniform"
             android:padding="20dp"
             android:text="@string/next"
+            android:id="@+id/add_event_BTN_next"
+            android:theme="@style/FormButton"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
             />
 
 

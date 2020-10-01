@@ -34,4 +34,10 @@
         <item name="cornerSize">15%</item>
     </style>
 
+    <style name="FormButton" parent="Theme.MaterialComponents">
+        <item name="colorOnPrimary">@android:color/white</item>
+        <item name="colorPrimary">@android:color/holo_green_light</item>
+        <item name="colorOnSurface">@android:color/holo_green_dark</item>
+    </style>
+
 </resources>

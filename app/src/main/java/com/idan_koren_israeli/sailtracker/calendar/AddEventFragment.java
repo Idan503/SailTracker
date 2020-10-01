@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.ViewFlipper;
 
+import com.google.android.material.button.MaterialButton;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 
@@ -22,7 +24,8 @@ public class AddEventFragment extends Fragment {
 
     RadioGroup eventTypeRadio;
     EditText nameEdit, descriptionEdit, maxParticipants, price;
-    Button finishButton;
+    ViewFlipper viewFlipper;
+    MaterialButton nextButton, backButton;
 
     OnEventAdded eventAdded;
 
@@ -48,27 +51,41 @@ public class AddEventFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View parent =  inflater.inflate(R.layout.fragment_add_event, container, false);
+        View parent = inflater.inflate(R.layout.fragment_add_event, container, false);
         findViews(parent);
+
         setListeners();
         return parent;
     }
 
 
     private void findViews(View parent){
-        this.nameEdit = parent.findViewById(R.id.add_event_EDT_name);
-        this.descriptionEdit = parent.findViewById(R.id.event_item_LBL_description);
-        this.eventTypeRadio = parent.findViewById(R.id.add_event_RAT_select_type);
-        this.finishButton = parent.findViewById(R.id.login_BTN_next);
-        this.maxParticipants = parent.findViewById(R.id.add_event_EDT_max_participants);
-        this.price = parent.findViewById(R.id.add_event_EDT_price);
+        nameEdit = parent.findViewById(R.id.add_event_EDT_name);
+        descriptionEdit = parent.findViewById(R.id.event_item_LBL_description);
+        eventTypeRadio = parent.findViewById(R.id.add_event_RAT_select_type);
+        maxParticipants = parent.findViewById(R.id.add_event_EDT_max_participants);
+        price = parent.findViewById(R.id.add_event_EDT_price);
+        backButton = parent.findViewById(R.id.add_event_BTN_back);
+        nextButton = parent.findViewById(R.id.add_event_BTN_next);
+        viewFlipper = parent.findViewById(R.id.add_event_LAY_flipper);
     }
 
     private void setListeners(){
-        finishButton.setOnClickListener(new View.OnClickListener() {
+        nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                eventAdded.onEventAdded(generateEvent());
+                viewFlipper.setInAnimation(view.getContext(), android.R.anim.slide_in_left);
+                viewFlipper.setOutAnimation(view.getContext(), android.R.anim.slide_out_right);
+                viewFlipper.showNext();
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewFlipper.setInAnimation(view.getContext(), R.anim.slide_in_right);
+                viewFlipper.setOutAnimation(view.getContext(), R.anim.slide_out_left);
+                viewFlipper.showPrevious();
             }
         });
     }
