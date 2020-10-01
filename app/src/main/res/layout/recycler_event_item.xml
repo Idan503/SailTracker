@@ -23,7 +23,7 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.75"
+                android:layout_weight="0.7"
                 >
 
                 <TextView
@@ -83,7 +83,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.25"
+                android:layout_weight="0.3"
                 >
                 
                 <ImageView
@@ -92,6 +92,7 @@
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintTop_toTopOf="parent"
                     android:id="@+id/event_item_IMG_image"
+                    android:layout_margin="25dp"
                     />
 
                 <com.google.android.material.button.MaterialButton

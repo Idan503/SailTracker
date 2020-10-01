@@ -94,7 +94,7 @@ public class AddEventFragment extends Fragment {
         String name = nameEdit.getText().toString();
         String description = descriptionEdit.getText().toString();
         DateTime start = DateTime.now();
-        Minutes length =  Minutes.minutes(90);
+        Minutes length = Minutes.minutes(90);
         return new Event(name, description, start, length,null);
     }
 

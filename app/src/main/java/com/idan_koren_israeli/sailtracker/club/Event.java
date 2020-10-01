@@ -82,7 +82,7 @@ public class Event {
     //endregion
 
     public DateTime getEndTime(){
-        return startTime.plusMillis(length.getMinutes());
+        return startTime.plusMinutes(length.getMinutes());
     }
 
 

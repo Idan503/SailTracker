@@ -20,21 +20,21 @@
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.4"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="20dp"
             android:background="@android:color/darker_gray"
             />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintHeight_percent="0.075"
             app:layout_constraintTop_toBottomOf="@id/calendar_CALENDAR"
             android:id="@+id/calendar_LBL_selected_day"
             android:gravity="center_vertical"
             android:text="@string/example_date"
-            android:padding="8dp"
+            android:padding="4dp"
             android:autoSizeMaxTextSize="25sp"
             android:autoSizeTextType="uniform"
+            android:layout_marginStart="10dp"
             />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -43,6 +43,7 @@
             app:layout_constraintHeight_percent="0.5"
             app:layout_constraintTop_toBottomOf="@id/calendar_LBL_selected_day"
             android:id="@+id/calendar_RCY_daily_events"
+            android:layout_margin="10dp"
             />
 
 
