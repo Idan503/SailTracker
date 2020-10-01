@@ -101,6 +101,8 @@
                     android:layout_height="0dp"
                     app:icon="@drawable/ic_baseline_photo_camera_24"
                     app:iconTint="@android:color/black"
+                    android:theme="@style/FormButton"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
                     />
 
 

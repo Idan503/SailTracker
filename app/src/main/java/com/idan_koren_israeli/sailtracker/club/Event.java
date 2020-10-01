@@ -71,7 +71,7 @@ public class Event {
         this.length = length;
     }
 
-    public Uri getPicture() {
+    public Uri getPictureUri() {
         return picture;
     }
 
