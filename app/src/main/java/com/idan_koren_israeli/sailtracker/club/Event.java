@@ -1,5 +1,7 @@
 package com.idan_koren_israeli.sailtracker.club;
 
+import android.net.Uri;
+
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 
@@ -15,6 +17,8 @@ public class Event {
     private DateTime startTime;
     private Minutes length; //Calculation of end time will be on runtime
 
+    private Uri picture;
+
     public Event(){
     }
 
@@ -23,6 +27,15 @@ public class Event {
         this.description = description;
         this.startTime = start;
         this.length = length;
+        this.picture = null;
+    }
+
+    public Event(String name, String description, DateTime startTime, Minutes length, Uri picture) {
+        this.name = name;
+        this.description = description;
+        this.startTime = startTime;
+        this.length = length;
+        this.picture = picture;
     }
 
     //region Getters & Setters
@@ -56,6 +69,14 @@ public class Event {
 
     public void setLength(Minutes length) {
         this.length = length;
+    }
+
+    public Uri getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Uri picture) {
+        this.picture = picture;
     }
 
     //endregion

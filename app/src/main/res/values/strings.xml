@@ -8,11 +8,19 @@
     <string name="search">Search</string>
 
     <!-- SINGLE WORDS -->
-    <string name="points">points</string>
-    <string name="sails">sails</string>
-    <string name="purchase">purchase</string>
+    <string name="points">Points</string>
+    <string name="sails">Sails</string>
+    <string name="purchase">Purchase</string>
+    <string name="price">Price</string>
+    <string name="finish">Finish</string>
+    <string name="add">Add</string>
+    <string name="dash">-</string>
 
     <string name="my_next_sailing">My Next Sailing</string>
+
+    <string name="free_event">Free Event</string>
+    <string name="guided_sail">Guided Sail</string>
+    <string name="members_sail">Members Sail</string>
 
 
     <!-- LAYOUT EXAMPLES -->
@@ -39,7 +47,10 @@
     <string name="login_name">Choose your display name:</string>
 
     <!-- ADDING EVENT TITLES -->
-    <string name="add_event_name">Insert Event Name</string>
+    <string name="add_event_title">New Event</string>
+    <string name="add_event_name_label">Event Name:</string>
+    <string name="add_event_name_hint">Insert Event Name</string>
+    <string name="add_event_max_participants">Max Participants</string>
     <string name="add_event_start">Select Start Time</string>
     <string name="add_event_end">Select End Time</string>
     <string name="add_event_description">Insert Event Description</string>

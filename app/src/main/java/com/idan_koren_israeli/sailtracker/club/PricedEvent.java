@@ -5,8 +5,12 @@ import org.joda.time.Minutes;
 
 import java.util.ArrayList;
 
-// In a sail there is a max number of participants
-public class Sail extends Event {
+/**
+ * Prices event are events that cost points, and there is a track on how many participants are registered
+ * All Sails will be allotted as priced events
+ *
+ */
+public class PricedEvent extends Event {
 
     private int price; // Price (in points) for a single participant register
 
@@ -15,11 +19,11 @@ public class Sail extends Event {
     private ArrayList<String> participantsUid;
     private int maxParticipants; // 0 for inf.
 
-    public Sail(){
+    public PricedEvent(){
         super();
     }
 
-    public Sail(String name, String description, DateTime start, Minutes length, int price, ArrayList<String> participantsUid, int maxParticipants) {
+    public PricedEvent(String name, String description, DateTime start, Minutes length, int price, ArrayList<String> participantsUid, int maxParticipants) {
         super(name, description, start, length);
         this.price = price;
         this.participantsUid = participantsUid;
