@@ -1,6 +1,7 @@
 package com.idan_koren_israeli.sailtracker.calendar;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,27 +41,44 @@ public class CalendarActivity extends BaseActivity {
         }
     };
 
-    private void initEventsList(boolean managerViewMode){
+    private void initEventsList(boolean isCurrentUserManager){
 
         // Getting the data (Should be by a date, from firebase)
-        ArrayList<Event> events = new ArrayList<Event>();
+        ArrayList<Event> events = new ArrayList<>();
         events.add(new Event("Event 1","This is an event", DateTime.now(), Minutes.minutes(50)));
         events.add(new Event("Event 2","This is an event 2", DateTime.now(), Minutes.minutes(80)));
         events.add(new Event("Event 3","This is an event 3", DateTime.now(), Minutes.minutes(120)));
 
         todayEvents.setLayoutManager(new LinearLayoutManager(this));
-        eventsAdapter = new EventsRecyclerAdapter(this, events, managerViewMode);
-        // adapter.setClickListener
+
+        if(isCurrentUserManager){
+            // manager layout - with "add" button as last view
+            eventsAdapter = new ManagerEventRecyclerAdapter(this, events);
+            ((ManagerEventRecyclerAdapter) eventsAdapter).setAddClickedListener(onClickedAdd);
+        }
+        else{
+            // a regular recycler view of all of today's events
+            eventsAdapter = new EventsRecyclerAdapter(this, events);
+        }
+
+        eventsAdapter.setOnPurchasePressed(onClickedPurchase);
         todayEvents.setAdapter(eventsAdapter);
     }
 
-    OnCheckFinished isMember = new OnCheckFinished() {
+
+    private View.OnClickListener onClickedPurchase = new View.OnClickListener() {
         @Override
-        public void onCheckFinished(boolean result) {
-            System.out.println(result);
+        public void onClick(View view) {
+            //purchase system...
         }
     };
 
+    private View.OnClickListener onClickedAdd = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            // load add fragment....
+        }
+    };
 
     private void findViews(){
         todayEvents = findViewById(R.id.calendar_RCY_daily_events);

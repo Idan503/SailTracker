@@ -81,10 +81,20 @@ public class Event {
 
     //endregion
 
+
+
     public DateTime getEndTime(){
         return startTime.plusMinutes(length.getMinutes());
     }
 
-
-
+    @Override
+    public String toString() {
+        return "Event{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", startTime=" + startTime +
+                ", length=" + length +
+                ", picture=" + picture +
+                '}';
+    }
 }

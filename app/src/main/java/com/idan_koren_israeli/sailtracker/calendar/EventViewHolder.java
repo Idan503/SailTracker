@@ -7,6 +7,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
@@ -14,17 +15,22 @@ import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 public class EventViewHolder extends RecyclerView.ViewHolder {
     private TextView name, description, time;
     private ImageView image;
+    private MaterialButton purchase;
 
     public EventViewHolder(@NonNull View itemView) {
         super(itemView);
         findViews();
     }
 
-    public void setContent(Event event){
+    public void setEventContent(Event event){
         name.setText(event.getName());
         description.setText(event.getDescription());
         time.setText(generateTimeString(event));
         CommonUtils.getInstance().setImageResource(image, event.getPictureUri());
+    }
+
+    public void setOnClickListener(View.OnClickListener listener){
+        purchase.setOnClickListener(listener);
     }
 
     private String generateTimeString(Event event){
@@ -41,6 +47,7 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         description = itemView.findViewById(R.id.event_item_LBL_description);
         time = itemView.findViewById(R.id.event_item_LBL_time);
         image = itemView.findViewById(R.id.event_item_IMG_image);
+        purchase = itemView.findViewById(R.id.event_item_BTN_purchase);
     }
 
 

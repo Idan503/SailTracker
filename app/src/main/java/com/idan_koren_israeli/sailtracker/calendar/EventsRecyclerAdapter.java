@@ -15,17 +15,22 @@ import com.idan_koren_israeli.sailtracker.club.Sail;
 import java.util.List;
 
 
+/**
+ * This adapter controls the events items that will be shown to users every day on the calendar
+ *
+ */
 public class EventsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    //region Inner views types IDs
-    private static final int EVENT = 0;
-    private static final int SAIL = 1;
-    private static final int ADD_BUTTON = 2;
+    //region Inner ViewsTypes IDs
+    protected static final int EVENT = 0;
+    protected static final int SAIL = 1;
+    protected static final int ADD_BUTTON = 2;
     //endregion
 
-    private List<Event> data;
-    private LayoutInflater inflater;
-    private boolean managerViewMode; // when true - last view will be "add event" button
+    protected List<Event> data;
+    protected LayoutInflater inflater;
+
+    private View.OnClickListener onPurchasePressed;
 
     // Should add purchase click listener here
 
@@ -33,49 +38,34 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     EventsRecyclerAdapter(Context context,List<Event> events){
         this.inflater = LayoutInflater.from(context);
         this.data = events;
-        this.managerViewMode = false;
     }
 
-    EventsRecyclerAdapter(Context context,List<Event> events, boolean managerView){
-        this.inflater = LayoutInflater.from(context);
-        this.data = events;
-        this.managerViewMode = managerView;
+    public void setOnPurchasePressed(View.OnClickListener purchasePressed){
+        this.onPurchasePressed = purchasePressed;
     }
+
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder viewHolder = null;
         View view;
-        switch (viewType){
-            case EVENT:
-            case SAIL:
-                view = inflater.inflate(R.layout.recycler_event_item,parent,false);
-                break;
-            default:
-                view = inflater.inflate(R.layout.recycler_add_event_item,parent,false);
-                Log.i("pttt", " Creating last button");
-                break;
-        }
-
+        view = inflater.inflate(R.layout.recycler_event_item,parent,false);
         return new EventViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if(position==data.size()){
-            // Setting click listener
-        }
-        else {
-            EventViewHolder eventHolder = (EventViewHolder) holder;
-            eventHolder.setContent(data.get(position));
-        }
+        EventViewHolder eventHolder = new EventViewHolder(holder.itemView);
+        Log.i("pttt" , data.get(position).toString());
+        if(position < data.size())
+            eventHolder.setEventContent(data.get(position));
+
     }
 
 
     @Override
     public int getItemCount() {
-        return managerViewMode ? data.size()+1 : data.size(); // manager view has 1 more item
+        return data.size();
     }
 
     public Event getItem(int position){
@@ -84,9 +74,6 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemViewType(int position) {
-        if(managerViewMode)
-            if(position == data.size())
-                return ADD_BUTTON;
         if(data.get(position).getClass() == Event.class)
             return EVENT;
         if(data.get(position).getClass() == Sail.class)

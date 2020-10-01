@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="80dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="5dp"
     android:layout_marginStart="40dp"
@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:text="@string/add"
         android:theme="@style/FormButton"
+        android:id="@+id/event_add_item_BTN_button"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
         />
 

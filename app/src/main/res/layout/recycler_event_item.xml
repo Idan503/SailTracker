@@ -103,6 +103,7 @@
                     app:icon="@drawable/ic_baseline_photo_camera_24"
                     app:iconTint="@android:color/black"
                     android:theme="@style/FormButton"
+                    android:id="@+id/event_item_BTN_purchase"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
                     />
 
