@@ -73,8 +73,8 @@ public class AddEventActivity extends AppCompatActivity {
                             finish();
                         }
                         else {
-                            viewFlipper.setInAnimation(view.getContext(), android.R.anim.slide_in_left);
-                            viewFlipper.setOutAnimation(view.getContext(), android.R.anim.slide_out_right);
+                            viewFlipper.setInAnimation(view.getContext(), R.anim.slide_in_right);
+                            viewFlipper.setOutAnimation(view.getContext(), R.anim.slide_out_left);
                             viewFlipper.showNext();
                         }
                     }
@@ -83,8 +83,8 @@ public class AddEventActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewFlipper.setInAnimation(view.getContext(), R.anim.slide_in_right);
-                viewFlipper.setOutAnimation(view.getContext(), R.anim.slide_out_left);
+                viewFlipper.setInAnimation(view.getContext(), android.R.anim.slide_in_left);
+                viewFlipper.setOutAnimation(view.getContext(), android.R.anim.slide_out_right);
                 viewFlipper.showPrevious();
             }
         });

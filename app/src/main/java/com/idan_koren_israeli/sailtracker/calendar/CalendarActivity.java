@@ -2,6 +2,7 @@ package com.idan_koren_israeli.sailtracker.calendar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.TextView;
@@ -36,8 +37,9 @@ public class CalendarActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
-        initAddedEvent();
         findViews();
+        initAddedEvent();
+
 
         calendar.setOnDateChangeListener(onDateChangeListener);
         reloadData();
@@ -54,8 +56,12 @@ public class CalendarActivity extends BaseActivity {
             addedEvent = (Sail) intent.getSerializableExtra(AddEventActivity.KEYS.ADDED_SAIL);
         }
 
-        if(addedEvent!=null)
+        if(addedEvent!=null) {
             EventDataManager.getInstance().storeEvent(addedEvent);
+            selectedDate = addedEvent.getStartDateTime().toLocalDate();
+            calendar.setDate(selectedDate.toDateTimeAtStartOfDay().getMillis());
+            // Adding the new event to db and setting the calendar date to show it
+        }
 
     }
 

@@ -16,7 +16,7 @@
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         android:autoSizeTextType="uniform"
-        android:padding="15dp"
+        android:padding="25dp"
         android:id="@+id/add_event_LBL_title"
         />
 
@@ -28,9 +28,9 @@
         android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/add_event_LBL_title"
         app:layout_constraintBottom_toTopOf="@id/add_event_LAY_buttons"
-        android:layout_margin="10dp"
-
+        android:layout_marginBottom="50dp"
         >
+
 
 
 
@@ -68,7 +68,7 @@
                 android:gravity="center"
                 android:autofillHints="@string/add_event_name_label"
                 android:layout_margin="15dp"
-                android:inputType="text"
+                android:inputType="textPersonName"
                 android:ems="12"
                 android:autoSizeTextType="uniform"
                 />
@@ -84,6 +84,8 @@
                 android:id="@+id/add_event_RAT_select_type"
                 app:layout_constraintDimensionRatio="h,3:1"
                 android:weightSum="3"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:padding="5dp"
                 >
 
@@ -93,7 +95,6 @@
                     android:layout_height="match_parent"
                     android:id="@+id/add_event_RBTN_free_event"
                     android:background="@android:color/holo_green_light"
-                    android:padding="5dp"
                     android:layout_margin="5dp"
                     android:text="@string/free_event"
                     android:autoSizeTextType="uniform"
@@ -107,9 +108,9 @@
                     android:id="@+id/add_event_RBTN_members_sail"
                     android:background="@android:color/holo_green_light"
                     android:text="@string/members_sail"
-                    android:lines="1"
+                    android:maxLines="1"
+                    android:autoSizeMinTextSize="12sp"
                     android:autoSizeTextType="uniform"
-                    android:padding="5dp"
                     android:layout_margin="5dp"
 
                     />
@@ -124,7 +125,6 @@
                     android:text="@string/guided_sail"
                     android:lines="1"
                     android:autoSizeTextType="uniform"
-                    android:padding="5dp"
                     />
 
             </RadioGroup>
@@ -133,12 +133,13 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         <!-- Step 2: time -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/add_event_LAY_step_2"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
             >
 
             <TextView
@@ -177,7 +178,8 @@
                 android:autoSizeTextType="uniform"
                 android:lines="1"
                 android:padding="20dp"
-                android:text="@string/add_event_time_start_label"
+                android:layout_marginTop="30dp"
+                android:text="@string/add_event_time_end_label"
                 android:id="@+id/add_event_LBL_end_time"
                 />
 
@@ -221,7 +223,8 @@
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:ems="4"
+                    android:ems="6"
+                    android:inputType="number"
                     android:hint="@string/add_event_max_participants"
                     android:id="@+id/add_event_EDT_max_participants"
                     />
@@ -235,7 +238,8 @@
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:ems="4"
+                    android:ems="6"
+                    android:inputType="number"
                     android:id="@+id/add_event_EDT_price"
                     android:hint="@string/price"
                     />
@@ -246,12 +250,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_margin="40dp"
+                android:padding="20dp"
                 android:ems="4"
                 android:enabled="true"
+                android:inputType="text"
                 android:hint="@string/add_event_description"
-                app:layout_constraintTop_toBottomOf="@id/add_event_LAY_price_participants"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:id="@+id/add_event_EDT_description"
+                app:layout_constraintTop_toBottomOf="@id/add_event_LAY_price_participants" android:id="@+id/add_event_EDT_description"
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -284,7 +288,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:autoSizeTextType="uniform"
-            android:padding="20dp"
+            android:padding="15dp"
+            android:layout_margin="20dp"
             android:text="@string/back"
             android:id="@+id/add_event_BTN_back"
             android:theme="@style/FormButton"
@@ -295,8 +300,10 @@
             android:layout_width="0dp"
             android:layout_weight="0.4"
             android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
             android:autoSizeTextType="uniform"
-            android:padding="20dp"
+            android:padding="15dp"
+            android:layout_margin="20dp"
             android:text="@string/next"
             android:id="@+id/add_event_BTN_next"
             android:theme="@style/FormButton"

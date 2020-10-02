@@ -20,6 +20,7 @@
 
     <string name="my_next_sailing">My Next Sailing</string>
 
+    <!-- Event/Sail Types -->
     <string name="free_event">Free Event</string>
     <string name="guided_sail">Guided Sail</string>
     <string name="members_sail">Members Sail</string>
@@ -46,9 +47,9 @@
     <string name="login_name">Choose your display name:</string>
 
     <!-- ADDING EVENT TITLES -->
-    <string name="add_event_title">Add Event</string>
-    <string name="add_event_name_label">Event Name:</string>
-    <string name="add_event_name_hint">Insert Event Name</string>
+    <string name="add_event_title">Add Event/Sail</string>
+    <string name="add_event_name_label">Choose Name:</string>
+    <string name="add_event_name_hint">Insert Event/Sail Name</string>
     <string name="add_event_max_participants">Max Participants</string>
     <string name="add_event_start">Select Start Time</string>
     <string name="add_event_end">Select End Time</string>
