@@ -11,6 +11,7 @@ import org.joda.time.Minutes;
  */
 
 public class Event {
+    private String eid; // Unique ID
     private String name;
     private String description;
 
@@ -22,7 +23,17 @@ public class Event {
     public Event(){
     }
 
-    public Event(String name, String description, DateTime start, Minutes length) {
+    public Event(Event other){
+        this.eid = other.eid;
+        this.name = other.name;
+        this.description = other.description;
+        this.length = other.length;
+        this.picture = other.picture;
+        this.startTime = other.startTime;
+    }
+
+    public Event(String eid, String name, String description, DateTime start, Minutes length) {
+        this.eid = eid;
         this.name = name;
         this.description = description;
         this.startTime = start;
@@ -30,7 +41,8 @@ public class Event {
         this.picture = null;
     }
 
-    public Event(String name, String description, DateTime startTime, Minutes length, Uri picture) {
+    public Event(String eid, String name, String description, DateTime startTime, Minutes length, Uri picture) {
+        this.eid = eid;
         this.name = name;
         this.description = description;
         this.startTime = startTime;
@@ -75,8 +87,16 @@ public class Event {
         return picture;
     }
 
-    public void setPicture(Uri picture) {
+    public void setPictureUri(Uri picture) {
         this.picture = picture;
+    }
+
+    public String getEid() {
+        return eid;
+    }
+
+    public void setEid(String eid) {
+        this.eid = eid;
     }
 
     //endregion
@@ -89,8 +109,8 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event{" +
-                "name='" + name + '\'' +
+        return "Event{" + eid +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", startTime=" + startTime +
                 ", length=" + length +

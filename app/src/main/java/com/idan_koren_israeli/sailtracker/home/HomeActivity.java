@@ -13,13 +13,12 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.UploadTask;
-import com.idan_koren_israeli.sailtracker.firebase.LoginFragment;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnLoginFinishedListener;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
-import com.idan_koren_israeli.sailtracker.firebase.MembersDataManager;
+import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 
 import java.io.IOException;
 
@@ -30,14 +29,14 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
     private ProfileFragment profileFragment;
     private LoginFragment loginFragment;
 
-    private MembersDataManager dbManager;
+    private MemberDataManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        dbManager = MembersDataManager.getInstance();
+        dbManager = MemberDataManager.getInstance();
 
         findViews();
         setListeners();
@@ -117,7 +116,7 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
                 }
             }
             if (photoBitmap != null) {
-                MembersDataManager.getInstance().storeProfilePhoto(photoBitmap, photoUploadSuccess, photoUploadFailure);
+                MemberDataManager.getInstance().storeProfilePhoto(photoBitmap, photoUploadSuccess, photoUploadFailure);
             }
         }
 
@@ -144,7 +143,7 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
     @Override
     public void onLoginFinished(ClubMember authenticatedMember) {
         user = authenticatedMember;
-        MembersDataManager.getInstance().setCurrentUser(user);
+        MemberDataManager.getInstance().setCurrentUser(user);
         hideLoginFragment();
         updateInterface();
     }

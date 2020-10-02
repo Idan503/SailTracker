@@ -29,7 +29,7 @@ import com.idan_koren_israeli.sailtracker.gallery.GalleryPhoto;
 /**
  * Using both Firestore and Storage Firabase components, to manage data of authenticated members.
  */
-public class MembersDataManager {
+public class MemberDataManager {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore dbFirestore; // used for storing members information (as objects)
     private FirebaseStorage dbStorage; // used for storing photos information (gallery and profile)
@@ -52,10 +52,10 @@ public class MembersDataManager {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private static MembersDataManager single_instance = null;
+    private static MemberDataManager single_instance = null;
     // This WILL NOT cause a memory leak - *using application context only*
 
-    private MembersDataManager() {
+    private MemberDataManager() {
         firebaseAuth = FirebaseAuth.getInstance();
         dbFirestore = FirebaseFirestore.getInstance();
         dbStorage = FirebaseStorage.getInstance();
@@ -64,14 +64,14 @@ public class MembersDataManager {
             loadMember(firebaseAuth.getCurrentUser().getUid(), null);
     }
 
-    public static MembersDataManager getInstance() {
+    public static MemberDataManager getInstance() {
         return single_instance;
     }
 
-    public static MembersDataManager
+    public static MemberDataManager
     initHelper() {
         if (single_instance == null) {
-            single_instance = new MembersDataManager();
+            single_instance = new MemberDataManager();
         }
         return single_instance;
     }
@@ -235,7 +235,7 @@ public class MembersDataManager {
             }
         };
 
-        StorageReference galleryPhotosHub = dbStorage.getReference().child(MembersDataManager.KEYS.GALLERY_PHOTOS);
+        StorageReference galleryPhotosHub = dbStorage.getReference().child(MemberDataManager.KEYS.GALLERY_PHOTOS);
         StorageReference memberGalleryPath = galleryPhotosHub.child(uid);
 
         // Getting the parent folder of current user gallery

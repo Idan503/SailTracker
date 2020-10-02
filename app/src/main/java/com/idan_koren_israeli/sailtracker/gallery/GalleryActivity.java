@@ -16,7 +16,7 @@ import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
-import com.idan_koren_israeli.sailtracker.firebase.MembersDataManager;
+import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnGalleryPhotoLoadListener;
 import com.idan_koren_israeli.sailtracker.home.ProfileFragment;
 
@@ -26,7 +26,7 @@ public class GalleryActivity extends BaseActivity {
     private ProfileFragment profileFrag;
     private PhotoCollectionFragment photosFrag;
     private ClubMember member;
-    private MembersDataManager dbManager;
+    private MemberDataManager dbManager;
 
 
 
@@ -35,7 +35,7 @@ public class GalleryActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
 
-        dbManager = MembersDataManager.getInstance();
+        dbManager = MemberDataManager.getInstance();
         member = dbManager.getCurrentUser();
 
         findViews();

@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker.firebase;
+package com.idan_koren_israeli.sailtracker.home;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -27,6 +27,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnLoginFinishedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnMemberLoadListener;
 
@@ -122,7 +123,7 @@ public class LoginFragment extends Fragment {
     public void onStart() {
         super.onStart();
         if(loggedUser!=null){
-            MembersDataManager.getInstance().loadMember(loggedUser.getUid(), memberLoadFinished);
+            MemberDataManager.getInstance().loadMember(loggedUser.getUid(), memberLoadFinished);
             // User is already signed in
         }
     }

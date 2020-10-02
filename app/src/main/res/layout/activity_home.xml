@@ -141,7 +141,7 @@
             android:layout_weight="0.65"
             android:layout_margin="40dp"
             android:id="@+id/home_FRAG_login"
-            android:name="com.idan_koren_israeli.sailtracker.firebase.LoginFragment"
+            android:name="com.idan_koren_israeli.sailtracker.home.LoginFragment"
             tools:layout="@layout/fragment_login"
             />
 

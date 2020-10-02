@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
-import com.idan_koren_israeli.sailtracker.firebase.MembersDataManager;
+import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinished;
 
 import org.joda.time.DateTime;
@@ -31,7 +31,7 @@ public class CalendarActivity extends BaseActivity {
         findViews();
 
 
-        MembersDataManager.getInstance().isManagerMember(onCheckedManager);
+        MemberDataManager.getInstance().isManagerMember(onCheckedManager);
     }
 
     private OnCheckFinished onCheckedManager = new OnCheckFinished() {

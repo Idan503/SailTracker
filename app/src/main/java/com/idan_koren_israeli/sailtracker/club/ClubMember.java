@@ -16,8 +16,6 @@ import java.util.ArrayList;
  *
  */
 public class ClubMember {
-
-
     private String uid;
     private String profilePictureUrl;
     private String name;

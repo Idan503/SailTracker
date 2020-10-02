@@ -15,6 +15,7 @@ import android.widget.ViewFlipper;
 import com.google.android.material.button.MaterialButton;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
+import com.idan_koren_israeli.sailtracker.club.Sail;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
@@ -108,5 +109,13 @@ public class AddEventFragment extends Fragment {
         Minutes length = Minutes.minutes(90);
         return new Event(name, description, start, length,null);
     }
+
+    public Sail generateSail(){
+        return new Sail(generateEvent(),
+                Integer.parseInt(price.getText().toString()),
+                Integer.parseInt(maxParticipants.getText().toString()));
+    }
+
+
 
 }
