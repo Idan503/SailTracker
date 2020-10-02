@@ -41,6 +41,10 @@ public class AddEventFragment extends Fragment {
         return fragment;
     }
 
+    public void setOnEventAddedListener(OnEventAdded addedListener){
+        this.eventAdded = addedListener;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +65,7 @@ public class AddEventFragment extends Fragment {
 
     private void findViews(View parent){
         nameEdit = parent.findViewById(R.id.add_event_EDT_name);
-        descriptionEdit = parent.findViewById(R.id.event_item_LBL_description);
+        descriptionEdit = parent.findViewById(R.id.add_event_EDT_description);
         eventTypeRadio = parent.findViewById(R.id.add_event_RAT_select_type);
         maxParticipants = parent.findViewById(R.id.add_event_EDT_max_participants);
         price = parent.findViewById(R.id.add_event_EDT_price);
@@ -71,12 +75,19 @@ public class AddEventFragment extends Fragment {
     }
 
     private void setListeners(){
-        nextButton.setOnClickListener(new View.OnClickListener() {
+        nextButton.setOnClickListener(
+                new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewFlipper.setInAnimation(view.getContext(), android.R.anim.slide_in_left);
-                viewFlipper.setOutAnimation(view.getContext(), android.R.anim.slide_out_right);
-                viewFlipper.showNext();
+                if(viewFlipper.getDisplayedChild()==2){
+                    // user is in the last screen, event can be generated
+                    eventAdded.onEventAdded(generateEvent());
+                }
+                else {
+                    viewFlipper.setInAnimation(view.getContext(), android.R.anim.slide_in_left);
+                    viewFlipper.setOutAnimation(view.getContext(), android.R.anim.slide_out_right);
+                    viewFlipper.showNext();
+                }
             }
         });
 

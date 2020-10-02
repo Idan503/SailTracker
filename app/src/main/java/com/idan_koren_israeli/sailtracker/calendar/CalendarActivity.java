@@ -1,6 +1,7 @@
 package com.idan_koren_israeli.sailtracker.calendar;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 public class CalendarActivity extends BaseActivity {
 
     RecyclerView todayEvents;
+    AddEventFragment addEventFragment;
     EventsRecyclerAdapter eventsAdapter;
 
     @Override
@@ -27,7 +29,7 @@ public class CalendarActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
         findViews();
-        //inflate: getSupportFragmentManager().beginTransaction().replace(R.id.calendar_LAY_add_event_placeholder, new AddEventFragment()).commit();
+
 
         MembersDataManager.getInstance().isManagerMember(onCheckedManager);
     }
@@ -77,6 +79,18 @@ public class CalendarActivity extends BaseActivity {
         @Override
         public void onClick(View view) {
             // load add fragment....
+            addEventFragment = new AddEventFragment();
+            addEventFragment.setOnEventAddedListener(eventAdded);
+            getSupportFragmentManager().beginTransaction().replace(R.id.calendar_LAY_add_event_placeholder, addEventFragment).commit();
+
+        }
+    };
+
+    private OnEventAdded eventAdded = new OnEventAdded() {
+        @Override
+        public void onEventAdded(Event event) {
+            Log.i("pttt", event.toString());
+            getSupportFragmentManager().beginTransaction().hide(addEventFragment).commit();
         }
     };
 

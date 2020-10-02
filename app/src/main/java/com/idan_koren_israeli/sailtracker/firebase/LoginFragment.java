@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -187,7 +188,7 @@ public class LoginFragment extends Fragment {
         if(phoneEditText.getText()!=null)
             currentPhone = phoneEditText.getText().toString();
 
-
+        Log.i("pttt", "Verifying " + currentPhone);
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 currentPhone,        // Phone number to verify
                 60,                 // Timeout duration
@@ -214,13 +215,16 @@ public class LoginFragment extends Fragment {
 
         @Override
         public void onVerificationFailed(@NonNull FirebaseException e) {
-            CommonUtils.getInstance().showToast("Failed!");
+            //CommonUtils.getInstance().showToast("Failed!");
             currentState = LoginState.FAILED;
 
             if(e instanceof FirebaseAuthInvalidCredentialsException){
                 CommonUtils.getInstance().showToast("Error - Invalid request");
             } else if(e instanceof FirebaseTooManyRequestsException){
                 CommonUtils.getInstance().showToast("Too many requests");
+            }
+            else{
+                CommonUtils.getInstance().showToast("Failed - Unknown Cause");
             }
         }
 
