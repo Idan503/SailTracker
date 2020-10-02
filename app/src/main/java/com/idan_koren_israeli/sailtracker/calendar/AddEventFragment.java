@@ -19,18 +19,21 @@ import com.idan_koren_israeli.sailtracker.club.Sail;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalDate;
 import org.joda.time.Minutes;
 
 import java.util.UUID;
 
 public class AddEventFragment extends Fragment {
 
-    RadioGroup eventTypeRadio;
-    EditText nameEdit, descriptionEdit, maxParticipants, price;
-    ViewFlipper viewFlipper;
-    MaterialButton nextButton, backButton;
+    private RadioGroup eventTypeRadio;
+    private EditText nameEdit, descriptionEdit, maxParticipants, price;
+    private ViewFlipper viewFlipper;
+    private MaterialButton nextButton, backButton;
 
-    OnEventAdded eventAdded;
+    private OnEventAdded eventAdded;
+
+    private LocalDate date;
 
 
     public AddEventFragment() {
@@ -52,6 +55,10 @@ public class AddEventFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
+
+    public void setDate(LocalDate date){
+        this.date = date;
     }
 
     @Override
@@ -107,8 +114,8 @@ public class AddEventFragment extends Fragment {
     public Event generateEvent(){
         String name = nameEdit.getText().toString();
         String description = descriptionEdit.getText().toString();
-        long start = DateTime.now().getMillis();
-        return new Event(UUID.randomUUID().toString(),name, description, start, 90,null);
+        DateTime start = date.toDateTimeAtStartOfDay().plusHours(12).plusMinutes(15);
+        return new Event(UUID.randomUUID().toString(),name, description, start.getMillis(), 90,null);
     }
 
     public Sail generateSail(){

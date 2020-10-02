@@ -1,9 +1,10 @@
 package com.idan_koren_israeli.sailtracker.calendar;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.CalendarView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,17 +17,18 @@ import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinished;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventsLoaded;
 
 import org.joda.time.DateTime;
-import org.joda.time.Minutes;
+import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class CalendarActivity extends BaseActivity {
 
-    RecyclerView todayEvents;
-    AddEventFragment addEventFragment;
-    EventsRecyclerAdapter eventsAdapter;
-    ArrayList<Event> eventsToShow = new ArrayList<>();
+    private CalendarView calendar;
+    private RecyclerView events;
+    private LocalDate currentDate = LocalDate.now();
+    private AddEventFragment addEventFragment;
+    private EventsRecyclerAdapter eventsAdapter;
+    private ArrayList<Event> eventsToShow = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,19 +36,20 @@ public class CalendarActivity extends BaseActivity {
         setContentView(R.layout.activity_calendar);
         findViews();
 
-        EventDataManager.getInstance().loadEvents(DateTime.now(), onEventsLoaded);
 
+        calendar.setOnDateChangeListener(onDateChangeListener);
+        reloadData();
     }
 
 
     private void initEventsList(boolean isCurrentUserManager){
 
-        todayEvents.setLayoutManager(new LinearLayoutManager(this));
+        events.setLayoutManager(new LinearLayoutManager(this));
 
         if(isCurrentUserManager){
             // manager layout - with "add" button as last view
             eventsAdapter = new ManagerEventRecyclerAdapter(this, eventsToShow);
-            ((ManagerEventRecyclerAdapter) eventsAdapter).setAddClickedListener(onClickedAdd);
+            ((ManagerEventRecyclerAdapter) eventsAdapter).setAddClickedListener(onClickedAddButton);
         }
         else{
             // a regular recycler view of all of today's events
@@ -54,15 +57,22 @@ public class CalendarActivity extends BaseActivity {
         }
 
         eventsAdapter.setOnPurchasePressed(onClickedPurchase);
-        todayEvents.setAdapter(eventsAdapter);
+        events.setAdapter(eventsAdapter);
     }
 
     private void findViews(){
-        todayEvents = findViewById(R.id.calendar_RCY_daily_events);
+        events = findViewById(R.id.calendar_RCY_daily_events);
+        calendar = findViewById(R.id.calendar_CALENDAR);
 
     }
 
-    //region Callbacks
+    // Loading data from database based on current day that is selected in calendar view
+    private void reloadData(){
+        onDateChangeListener.onSelectedDayChange(calendar,
+                currentDate.getYear(), currentDate.getMonthOfYear()-1, currentDate.getDayOfMonth());
+    }
+
+    //region UI Direct Callbacks
     private View.OnClickListener onClickedPurchase = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -70,23 +80,31 @@ public class CalendarActivity extends BaseActivity {
         }
     };
 
-    private View.OnClickListener onClickedAdd = new View.OnClickListener() {
+
+    private View.OnClickListener onClickedAddButton = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             // load add fragment....
             addEventFragment = new AddEventFragment();
-            addEventFragment.setOnEventAddedListener(eventAdded);
+            addEventFragment.setDate(currentDate);
+            addEventFragment.setOnEventAddedListener(onEventAdded);
             getSupportFragmentManager().beginTransaction().replace(R.id.calendar_LAY_add_event_placeholder, addEventFragment).commit();
 
         }
     };
 
-    private OnEventAdded eventAdded = new OnEventAdded() {
+    //endregion
+
+    //region Realtime Database callbacks
+
+    private OnEventAdded onEventAdded = new OnEventAdded() {
         @Override
         public void onEventAdded(Event event) {
-            Log.i("pttt", event.toString());
             EventDataManager.getInstance().storeEvent(event);
             getSupportFragmentManager().beginTransaction().hide(addEventFragment).commit();
+            // reload current
+            calendar.setDate(DateTime.now().getMillis());
+            reloadData();
         }
     };
 
@@ -104,11 +122,24 @@ public class CalendarActivity extends BaseActivity {
         public void onCheckFinished(boolean result) {
             // Code gets to here after we checked with the db if the current user is a manager or not
             // Therefore, we will know if our recycler view should inflate another last view of "Add Event Button"
-
             initEventsList(result);
         }
     };
 
+
+
+    //endregion
+
+    //region Calendar Callbacks
+
+    CalendarView.OnDateChangeListener onDateChangeListener = new CalendarView.OnDateChangeListener() {
+        @Override
+        public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
+            LocalDate dateClicked = new LocalDate(i,i1+1,i2);
+            currentDate = dateClicked;
+            EventDataManager.getInstance().loadEvents(dateClicked, onEventsLoaded);
+        }
+    };
 
 
     //endregion

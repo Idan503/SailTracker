@@ -16,6 +16,7 @@ import com.idan_koren_israeli.sailtracker.club.Sail;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventsLoaded;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 
@@ -48,7 +49,7 @@ public class EventDataManager {
 
     // Adds an event to the db
     public void storeEvent(Event event){
-        database.child(KEYS.EVENTS).child(generateDateStamp(event.getStartDateTime())).child(event.getEid()).setValue(event);
+        database.child(KEYS.EVENTS).child(generateDateStamp(event.getStartDateTime().toLocalDate())).child(event.getEid()).setValue(event);
 
     }
 
@@ -57,7 +58,7 @@ public class EventDataManager {
         sail.registerMember(member);
 
         // Updating the stored sail object
-        database.child(KEYS.EVENTS).child(generateDateStamp(sail.getStartDateTime())).child(sail.getEid())
+        database.child(KEYS.EVENTS).child(generateDateStamp(sail.getStartDateTime().toLocalDate())).child(sail.getEid())
                 .child(KEYS.SAIL_MEMBERS_LIST).setValue(sail.getRegisteredMembers());
     }
 
@@ -66,14 +67,14 @@ public class EventDataManager {
         sail.unregisterMember(member);
 
         // Updating the stored sail object
-        database.child(KEYS.EVENTS).child(generateDateStamp(sail.getStartDateTime())).child(sail.getEid())
+        database.child(KEYS.EVENTS).child(generateDateStamp(sail.getStartDateTime().toLocalDate())).child(sail.getEid())
                 .child(KEYS.SAIL_MEMBERS_LIST).setValue(sail.getRegisteredMembers());
 
 
     }
 
     // Loads all events from a single day
-    public void loadEvents(DateTime day, final OnEventsLoaded onLoaded){
+    public void loadEvents(LocalDate day, final OnEventsLoaded onLoaded){
         database.child(KEYS.EVENTS).child(generateDateStamp(day)).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
@@ -95,7 +96,8 @@ public class EventDataManager {
     }
 
 
-    private String generateDateStamp(DateTime time){
+    private String generateDateStamp(LocalDate time){
+        Log.i("pttt" , " Stamp generated : " + time.toString("dd_MM_YYYY"));
         return time.toString("dd_MM_YYYY");
     }
 
