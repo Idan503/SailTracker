@@ -2,6 +2,7 @@ package com.idan_koren_israeli.sailtracker.calendar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -30,6 +31,7 @@ public class AddEventActivity extends AppCompatActivity {
     public interface KEYS{
         String ADDED_EVENT = "addedEvent";
         String ADDED_SAIL = "addedSail";
+        String EVENT_DATE = "eventDate";
     };
 
 
@@ -37,6 +39,8 @@ public class AddEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
+
+        date = (LocalDate) getIntent().getSerializableExtra(KEYS.EVENT_DATE);
 
         findViews();
         setListeners();
@@ -63,6 +67,10 @@ public class AddEventActivity extends AppCompatActivity {
                         if(viewFlipper.getDisplayedChild()==2) {
                             // user is in the last screen, event can be generated
                             // this should be finished
+                            Intent intent = new Intent(AddEventActivity.this, CalendarActivity.class);
+                            intent.putExtra(KEYS.ADDED_EVENT, generateEvent());
+                            startActivity(intent);
+                            finish();
                         }
                         else {
                             viewFlipper.setInAnimation(view.getContext(), android.R.anim.slide_in_left);

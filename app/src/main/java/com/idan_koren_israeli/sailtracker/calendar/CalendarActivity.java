@@ -106,7 +106,9 @@ public class CalendarActivity extends BaseActivity {
         public void onClick(View view) {
             // load add menu fragment....
             Intent intent = new Intent(CalendarActivity.this, AddEventActivity.class);
-            intent.putExtra(selectedDate,AddEventActivity.KEYS)
+            intent.putExtra(AddEventActivity.KEYS.EVENT_DATE, selectedDate);
+            startActivity(intent);
+            finish();
         }
     };
 
