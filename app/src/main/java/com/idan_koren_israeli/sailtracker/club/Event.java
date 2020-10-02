@@ -15,8 +15,8 @@ public class Event {
     private String name;
     private String description;
 
-    private DateTime startTime;
-    private Minutes length; //Calculation of end time will be on runtime
+    private long startTime;
+    private int minutes; //Calculation of end time will be on runtime
 
     private Uri picture;
 
@@ -27,26 +27,26 @@ public class Event {
         this.eid = other.eid;
         this.name = other.name;
         this.description = other.description;
-        this.length = other.length;
+        this.minutes = other.minutes;
         this.picture = other.picture;
         this.startTime = other.startTime;
     }
 
-    public Event(String eid, String name, String description, DateTime start, Minutes length) {
+    public Event(String eid, String name, String description, long start, int minutes) {
         this.eid = eid;
         this.name = name;
         this.description = description;
         this.startTime = start;
-        this.length = length;
+        this.minutes = minutes;
         this.picture = null;
     }
 
-    public Event(String eid, String name, String description, DateTime startTime, Minutes length, Uri picture) {
+    public Event(String eid, String name, String description, long startTime, int minutes, Uri picture) {
         this.eid = eid;
         this.name = name;
         this.description = description;
         this.startTime = startTime;
-        this.length = length;
+        this.minutes = minutes;
         this.picture = picture;
     }
 
@@ -68,20 +68,20 @@ public class Event {
         this.description = description;
     }
 
-    public DateTime getStartTime() {
+    public long getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(DateTime startTime) {
+    public void setStartTime(long startTime) {
         this.startTime = startTime;
     }
 
-    public Minutes getLength() {
-        return length;
+    public int getMinutes() {
+        return minutes;
     }
 
-    public void setLength(Minutes length) {
-        this.length = length;
+    public void setMinutes(int minutes) {
+        this.minutes = minutes;
     }
 
     public Uri getPictureUri() {
@@ -103,9 +103,12 @@ public class Event {
     //endregion
 
 
+    public DateTime getStartDateTime(){
+        return new DateTime(startTime);
+    }
 
-    public DateTime getEndTime(){
-        return startTime.plusMinutes(length.getMinutes());
+    public DateTime getEndDateTime(){
+        return getStartDateTime().plusMinutes(minutes);
     }
 
 
@@ -115,7 +118,7 @@ public class Event {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", startTime=" + startTime +
-                ", length=" + length +
+                ", length=" + minutes +
                 ", picture=" + picture +
                 '}';
     }

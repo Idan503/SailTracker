@@ -48,7 +48,7 @@ public class EventDataManager {
 
     // Adds an event to the db
     public void storeEvent(Event event){
-        database.child(KEYS.EVENTS).child(generateDateStamp(event.getStartTime())).child(event.getEid()).setValue(event);
+        database.child(KEYS.EVENTS).child(generateDateStamp(event.getStartDateTime())).child(event.getEid()).setValue(event);
 
     }
 
@@ -57,7 +57,7 @@ public class EventDataManager {
         sail.registerMember(member);
 
         // Updating the stored sail object
-        database.child(KEYS.EVENTS).child(generateDateStamp(sail.getStartTime())).child(sail.getEid())
+        database.child(KEYS.EVENTS).child(generateDateStamp(sail.getStartDateTime())).child(sail.getEid())
                 .child(KEYS.SAIL_MEMBERS_LIST).setValue(sail.getRegisteredMembers());
     }
 
@@ -66,7 +66,7 @@ public class EventDataManager {
         sail.unregisterMember(member);
 
         // Updating the stored sail object
-        database.child(KEYS.EVENTS).child(generateDateStamp(sail.getStartTime())).child(sail.getEid())
+        database.child(KEYS.EVENTS).child(generateDateStamp(sail.getStartDateTime())).child(sail.getEid())
                 .child(KEYS.SAIL_MEMBERS_LIST).setValue(sail.getRegisteredMembers());
 
 

@@ -27,8 +27,8 @@ public class Sail extends Event {
         super(event);
     }
 
-    public Sail(String id, String name, String description, DateTime start, Minutes length, int price, ArrayList<String> participantsUid, int maxParticipants) {
-        super(id, name, description, start, length);
+    public Sail(String id, String name, String description, long start, int minutes, int price, ArrayList<String> participantsUid, int maxParticipants) {
+        super(id, name, description, start, minutes);
         this.price = price;
         this.registeredMembers = participantsUid;
         this.maxMembersCount = maxParticipants;

@@ -107,9 +107,8 @@ public class AddEventFragment extends Fragment {
     public Event generateEvent(){
         String name = nameEdit.getText().toString();
         String description = descriptionEdit.getText().toString();
-        DateTime start = DateTime.now();
-        Minutes length = Minutes.minutes(90);
-        return new Event(UUID.randomUUID().toString(),name, description, start, length,null);
+        long start = DateTime.now().getMillis();
+        return new Event(UUID.randomUUID().toString(),name, description, start, 90,null);
     }
 
     public Sail generateSail(){

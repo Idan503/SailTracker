@@ -35,9 +35,9 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
 
     private String generateTimeString(Event event){
         String result =
-                event.getStartTime().toString("HH:mm") +
+                event.getStartDateTime().toString("HH:mm") +
                 "-" +
-                event.getEndTime().toString("HH:mm");
+                event.getEndDateTime().toString("HH:mm");
         return result;
 
     }

@@ -13,6 +13,7 @@ import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinished;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventsLoaded;
 
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
@@ -25,6 +26,7 @@ public class CalendarActivity extends BaseActivity {
     RecyclerView todayEvents;
     AddEventFragment addEventFragment;
     EventsRecyclerAdapter eventsAdapter;
+    ArrayList<Event> eventsToShow = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,44 +34,35 @@ public class CalendarActivity extends BaseActivity {
         setContentView(R.layout.activity_calendar);
         findViews();
 
+        EventDataManager.getInstance().loadEvents(DateTime.now(), onEventsLoaded);
 
-        MemberDataManager.getInstance().isManagerMember(onCheckedManager);
     }
 
-    private OnCheckFinished onCheckedManager = new OnCheckFinished() {
-        @Override
-        public void onCheckFinished(boolean result) {
-            // Code gets to here after we checked with the db if the current user is a manager or not
-            // Therefore, we will know if our recycler view should inflate another last view of "Add Event Button"
-            initEventsList(result);
-        }
-    };
 
     private void initEventsList(boolean isCurrentUserManager){
-
-        // Getting the data (Should be by a date, from firebase)
-        ArrayList<Event> events = new ArrayList<>();
-        events.add(new Event(UUID.randomUUID().toString(),"Event 1","This is an event", DateTime.now(), Minutes.minutes(50)));
-        events.add(new Event(UUID.randomUUID().toString(),"Event 2","This is an event 2", DateTime.now(), Minutes.minutes(80)));
-        events.add(new Event(UUID.randomUUID().toString(), "Event 3","This is an event 3", DateTime.now(), Minutes.minutes(120)));
 
         todayEvents.setLayoutManager(new LinearLayoutManager(this));
 
         if(isCurrentUserManager){
             // manager layout - with "add" button as last view
-            eventsAdapter = new ManagerEventRecyclerAdapter(this, events);
+            eventsAdapter = new ManagerEventRecyclerAdapter(this, eventsToShow);
             ((ManagerEventRecyclerAdapter) eventsAdapter).setAddClickedListener(onClickedAdd);
         }
         else{
             // a regular recycler view of all of today's events
-            eventsAdapter = new EventsRecyclerAdapter(this, events);
+            eventsAdapter = new EventsRecyclerAdapter(this, eventsToShow);
         }
 
         eventsAdapter.setOnPurchasePressed(onClickedPurchase);
         todayEvents.setAdapter(eventsAdapter);
     }
 
+    private void findViews(){
+        todayEvents = findViewById(R.id.calendar_RCY_daily_events);
 
+    }
+
+    //region Callbacks
     private View.OnClickListener onClickedPurchase = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -97,9 +90,26 @@ public class CalendarActivity extends BaseActivity {
         }
     };
 
-    private void findViews(){
-        todayEvents = findViewById(R.id.calendar_RCY_daily_events);
+    private OnEventsLoaded onEventsLoaded = new OnEventsLoaded() {
+        @Override
+        public void onEventsListener(ArrayList<Event> eventsLoaded) {
+            eventsToShow.clear();
+            eventsToShow.addAll(eventsLoaded);
+            MemberDataManager.getInstance().isManagerMember(onCheckedManager);
+        }
+    };
+
+    private OnCheckFinished onCheckedManager = new OnCheckFinished() {
+        @Override
+        public void onCheckFinished(boolean result) {
+            // Code gets to here after we checked with the db if the current user is a manager or not
+            // Therefore, we will know if our recycler view should inflate another last view of "Add Event Button"
+
+            initEventsList(result);
+        }
+    };
 
 
-    }
+
+    //endregion
 }
