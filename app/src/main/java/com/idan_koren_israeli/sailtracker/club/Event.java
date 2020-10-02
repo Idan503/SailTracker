@@ -5,12 +5,14 @@ import android.net.Uri;
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 
+import java.io.Serializable;
+
 /**
  * A Club event can be either a social event/meeting/announcement event/etc...
  *
  */
 
-public class Event {
+public class Event implements Serializable {
     private String eid; // Unique ID
     private String name;
     private String description;

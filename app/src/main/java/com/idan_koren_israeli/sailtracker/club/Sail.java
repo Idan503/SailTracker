@@ -3,6 +3,7 @@ package com.idan_koren_israeli.sailtracker.club;
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  * All Sails will be allotted as priced events
  *
  */
-public class Sail extends Event {
+public class Sail extends Event implements Serializable {
 
     private int price; // Price (in points) for a single participant register
 

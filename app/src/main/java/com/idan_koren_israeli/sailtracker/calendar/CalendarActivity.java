@@ -1,5 +1,6 @@
 package com.idan_koren_israeli.sailtracker.calendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CalendarView;
@@ -11,13 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
+import com.idan_koren_israeli.sailtracker.club.Sail;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinished;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventsLoaded;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
@@ -27,24 +28,40 @@ public class CalendarActivity extends BaseActivity {
     private CalendarView calendar;
     private RecyclerView events;
     private TextView dateTitle;
-    private LocalDate currentDate = LocalDate.now();
-    private AddEventFragment addEventFragment;
+    private LocalDate selectedDate = LocalDate.now();
     private ArrayList<Event> eventsToShow = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
-        findViews();
 
+        initAddedEvent();
+        findViews();
 
         calendar.setOnDateChangeListener(onDateChangeListener);
         reloadData();
     }
 
+    // This method will find the added event if manager-user gets back from @AddEventActivity
+    private void initAddedEvent() {
+        Event addedEvent = null;
+        Intent intent = getIntent();
+        if(intent.hasExtra(AddEventActivity.KEYS.ADDED_EVENT)){
+            addedEvent = (Event) intent.getSerializableExtra(AddEventActivity.KEYS.ADDED_EVENT);
+        }
+        else if(intent.hasExtra(AddEventActivity.KEYS.ADDED_SAIL)){
+            addedEvent = (Sail) intent.getSerializableExtra(AddEventActivity.KEYS.ADDED_SAIL);
+        }
 
+        if(addedEvent!=null)
+            EventDataManager.getInstance().storeEvent(addedEvent);
+
+    }
+
+
+    // Loading the events into ui, parameter for manager/normal user view mode
     private void initEventsList(boolean isCurrentUserManager){
-
         events.setLayoutManager(new LinearLayoutManager(this));
 
         EventsRecyclerAdapter eventsAdapter;
@@ -72,7 +89,7 @@ public class CalendarActivity extends BaseActivity {
     // Loading data from database based on current day that is selected in calendar view
     private void reloadData(){
         onDateChangeListener.onSelectedDayChange(calendar,
-                currentDate.getYear(), currentDate.getMonthOfYear()-1, currentDate.getDayOfMonth());
+                selectedDate.getYear(), selectedDate.getMonthOfYear()-1, selectedDate.getDayOfMonth());
     }
 
     //region UI Direct Callbacks
@@ -87,12 +104,9 @@ public class CalendarActivity extends BaseActivity {
     private View.OnClickListener onClickedAddButton = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            // load add fragment....
-            addEventFragment = new AddEventFragment();
-            addEventFragment.setDate(currentDate);
-            addEventFragment.setOnEventAddedListener(onEventAdded);
-            getSupportFragmentManager().beginTransaction().replace(R.id.calendar_LAY_add_event_placeholder, addEventFragment).commit();
-
+            // load add menu fragment....
+            Intent intent = new Intent(CalendarActivity.this, AddEventActivity.class);
+            intent.putExtra(selectedDate,AddEventActivity.KEYS)
         }
     };
 
@@ -100,16 +114,6 @@ public class CalendarActivity extends BaseActivity {
 
     //region Realtime Database callbacks
 
-    private OnEventAdded onEventAdded = new OnEventAdded() {
-        @Override
-        public void onEventAdded(Event event) {
-            EventDataManager.getInstance().storeEvent(event);
-            getSupportFragmentManager().beginTransaction().hide(addEventFragment).commit();
-            // reload current
-            calendar.setDate(DateTime.now().getMillis());
-            reloadData();
-        }
-    };
 
     private OnEventsLoaded onEventsLoaded = new OnEventsLoaded() {
         @Override
@@ -117,6 +121,7 @@ public class CalendarActivity extends BaseActivity {
             eventsToShow.clear();
             eventsToShow.addAll(eventsLoaded);
             MemberDataManager.getInstance().isManagerMember(onCheckedManager);
+            // Should Hide loading menu here
         }
     };
 
@@ -140,8 +145,9 @@ public class CalendarActivity extends BaseActivity {
         public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
             LocalDate dateSelected = new LocalDate(i,i1+1,i2);
             dateTitle.setText(dateSelected.toString());
-            currentDate = dateSelected;
+            selectedDate = dateSelected;
             EventDataManager.getInstance().loadEvents(dateSelected, onEventsLoaded);
+            // Should show loading screen
         }
     };
 
