@@ -3,6 +3,7 @@ package com.idan_koren_israeli.sailtracker.calendar;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CalendarView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,9 +26,9 @@ public class CalendarActivity extends BaseActivity {
 
     private CalendarView calendar;
     private RecyclerView events;
+    private TextView dateTitle;
     private LocalDate currentDate = LocalDate.now();
     private AddEventFragment addEventFragment;
-    private EventsRecyclerAdapter eventsAdapter;
     private ArrayList<Event> eventsToShow = new ArrayList<>();
 
     @Override
@@ -46,6 +47,7 @@ public class CalendarActivity extends BaseActivity {
 
         events.setLayoutManager(new LinearLayoutManager(this));
 
+        EventsRecyclerAdapter eventsAdapter;
         if(isCurrentUserManager){
             // manager layout - with "add" button as last view
             eventsAdapter = new ManagerEventRecyclerAdapter(this, eventsToShow);
@@ -63,6 +65,7 @@ public class CalendarActivity extends BaseActivity {
     private void findViews(){
         events = findViewById(R.id.calendar_RCY_daily_events);
         calendar = findViewById(R.id.calendar_CALENDAR);
+        dateTitle = findViewById(R.id.calendar_LBL_selected_day);
 
     }
 
@@ -135,9 +138,10 @@ public class CalendarActivity extends BaseActivity {
     CalendarView.OnDateChangeListener onDateChangeListener = new CalendarView.OnDateChangeListener() {
         @Override
         public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
-            LocalDate dateClicked = new LocalDate(i,i1+1,i2);
-            currentDate = dateClicked;
-            EventDataManager.getInstance().loadEvents(dateClicked, onEventsLoaded);
+            LocalDate dateSelected = new LocalDate(i,i1+1,i2);
+            dateTitle.setText(dateSelected.toString());
+            currentDate = dateSelected;
+            EventDataManager.getInstance().loadEvents(dateSelected, onEventsLoaded);
         }
     };
 
