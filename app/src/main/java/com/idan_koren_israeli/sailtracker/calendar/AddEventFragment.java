@@ -21,6 +21,8 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.Minutes;
 
+import java.util.UUID;
+
 public class AddEventFragment extends Fragment {
 
     RadioGroup eventTypeRadio;
@@ -107,7 +109,7 @@ public class AddEventFragment extends Fragment {
         String description = descriptionEdit.getText().toString();
         DateTime start = DateTime.now();
         Minutes length = Minutes.minutes(90);
-        return new Event(name, description, start, length,null);
+        return new Event(UUID.randomUUID().toString(),name, description, start, length,null);
     }
 
     public Sail generateSail(){

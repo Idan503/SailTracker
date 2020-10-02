@@ -116,6 +116,10 @@ public class ClubMember {
         this.pointsCount-=count;
     }
 
+    public void addPoints(int count){
+        this.pointsCount+=count;
+    }
+
 
     @NonNull
     @Override      

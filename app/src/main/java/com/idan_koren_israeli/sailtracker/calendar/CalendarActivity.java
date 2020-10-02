@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
+import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinished;
 
@@ -17,6 +18,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class CalendarActivity extends BaseActivity {
 
@@ -47,9 +49,9 @@ public class CalendarActivity extends BaseActivity {
 
         // Getting the data (Should be by a date, from firebase)
         ArrayList<Event> events = new ArrayList<>();
-        events.add(new Event("Event 1","This is an event", DateTime.now(), Minutes.minutes(50)));
-        events.add(new Event("Event 2","This is an event 2", DateTime.now(), Minutes.minutes(80)));
-        events.add(new Event("Event 3","This is an event 3", DateTime.now(), Minutes.minutes(120)));
+        events.add(new Event(UUID.randomUUID().toString(),"Event 1","This is an event", DateTime.now(), Minutes.minutes(50)));
+        events.add(new Event(UUID.randomUUID().toString(),"Event 2","This is an event 2", DateTime.now(), Minutes.minutes(80)));
+        events.add(new Event(UUID.randomUUID().toString(), "Event 3","This is an event 3", DateTime.now(), Minutes.minutes(120)));
 
         todayEvents.setLayoutManager(new LinearLayoutManager(this));
 
@@ -90,6 +92,7 @@ public class CalendarActivity extends BaseActivity {
         @Override
         public void onEventAdded(Event event) {
             Log.i("pttt", event.toString());
+            EventDataManager.getInstance().storeEvent(event);
             getSupportFragmentManager().beginTransaction().hide(addEventFragment).commit();
         }
     };

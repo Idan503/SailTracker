@@ -16,8 +16,8 @@ public class Sail extends Event {
 
     private final String EVENT_FULL_MESSAGE =  "Member could not be added, "+ getName()+" event is full";
 
-    private ArrayList<String> participantsUid;
-    private int maxParticipants; // 0 for inf.
+    private ArrayList<String> registeredMembers;
+    private int maxMembersCount; // 0 for inf.
 
     public Sail(){
         super();
@@ -27,11 +27,11 @@ public class Sail extends Event {
         super(event);
     }
 
-    public Sail(String name, String description, DateTime start, Minutes length, int price, ArrayList<String> participantsUid, int maxParticipants) {
-        super(name, description, start, length);
+    public Sail(String id, String name, String description, DateTime start, Minutes length, int price, ArrayList<String> participantsUid, int maxParticipants) {
+        super(id, name, description, start, length);
         this.price = price;
-        this.participantsUid = participantsUid;
-        this.maxParticipants = maxParticipants;
+        this.registeredMembers = participantsUid;
+        this.maxMembersCount = maxParticipants;
     }
 
     //region Getters & Setters
@@ -43,29 +43,38 @@ public class Sail extends Event {
         this.price = price;
     }
 
-    public ArrayList<String> getParticipantsUid() {
-        return participantsUid;
+    public ArrayList<String> getRegisteredMembers() {
+        return registeredMembers;
     }
 
-    public void setParticipantsUid(ArrayList<String> participantsUid) {
-        this.participantsUid = participantsUid;
+    public void setRegisteredMembers(ArrayList<String> registeredMembers) {
+        this.registeredMembers = registeredMembers;
     }
 
-    public int getMaxParticipants() {
-        return maxParticipants;
+    public int getMaxMembersCount() {
+        return maxMembersCount;
     }
 
-    public void setMaxParticipants(int maxParticipants) {
-        this.maxParticipants = maxParticipants;
+    public void setMaxMembersCount(int maxMembersCount) {
+        this.maxMembersCount = maxMembersCount;
     }
 
     //endregion
 
-    public void addParticipant(ClubMember member) throws EventFullException{
-        if(participantsUid.size() == maxParticipants)
+    public void registerMember(ClubMember member) throws EventFullException{
+        if(registeredMembers.size() == maxMembersCount)
             throw new EventFullException(EVENT_FULL_MESSAGE);
-        participantsUid.add(member.getUid());
+        registeredMembers.add(member.getUid());
         member.removePoints(getPrice());
+        // need to save member
+    }
+
+    public void unregisterMember(ClubMember member) {
+        if(registeredMembers.contains(member.getUid())){
+            registeredMembers.remove(member.getUid());
+            member.addPoints(getPrice());
+            // need to save member
+        }
     }
 
 }

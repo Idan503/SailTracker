@@ -50,6 +50,7 @@ public class Event {
         this.picture = picture;
     }
 
+
     //region Getters & Setters
     public String getName() {
         return name;
@@ -106,6 +107,7 @@ public class Event {
     public DateTime getEndTime(){
         return startTime.plusMinutes(length.getMinutes());
     }
+
 
     @Override
     public String toString() {
