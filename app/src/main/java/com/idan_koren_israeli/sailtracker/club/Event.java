@@ -2,10 +2,17 @@ package com.idan_koren_israeli.sailtracker.club;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+
+import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
+import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
+
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * A Club event can be either a social event/meeting/announcement event/etc...
@@ -16,42 +23,50 @@ public class Event implements Serializable {
     private String eid; // Unique ID
     private String name;
     private String description;
+    private EventType type;
 
-    private long startTime;
-    private int minutes; //Calculation of end time will be on runtime
+    private long startTime; // In millis from 1970
+    private int minutes; // Length of event
 
-    private Uri picture;
+    private final String EVENT_FULL_MESSAGE =  "Member could not be added, "+ getName()+" event is full";
+
+    private int price; // Price (in points) for a single participant register
+    private ArrayList<String> registeredMembers;
+    private int maxMembersCount; // 0 for inf.
+
 
     public Event(){
     }
 
-    public Event(Event other){
-        this.eid = other.eid;
-        this.name = other.name;
-        this.description = other.description;
-        this.minutes = other.minutes;
-        this.picture = other.picture;
-        this.startTime = other.startTime;
-    }
 
-    public Event(String eid, String name, String description, long start, int minutes) {
-        this.eid = eid;
+    public Event(String name, String description,
+                 EventType type, long startTime, int minutes,
+                 int price, ArrayList<String> registeredMembers, int maxMembersCount) {
+        this.eid = UUID.randomUUID().toString();
         this.name = name;
         this.description = description;
-        this.startTime = start;
-        this.minutes = minutes;
-        this.picture = null;
-    }
-
-    public Event(String eid, String name, String description, long startTime, int minutes, Uri picture) {
-        this.eid = eid;
-        this.name = name;
-        this.description = description;
+        this.type = type;
         this.startTime = startTime;
         this.minutes = minutes;
-        this.picture = picture;
+        this.price = price;
+        this.registeredMembers = registeredMembers;
+        this.maxMembersCount = maxMembersCount;
     }
 
+
+    public Event(String name, String description,
+                 EventType type, long startTime, int minutes,
+                 int price, int maxMembersCount) {
+        this.eid = UUID.randomUUID().toString();
+        this.name = name;
+        this.description = description;
+        this.type = type;
+        this.startTime = startTime;
+        this.minutes = minutes;
+        this.price = price;
+        this.registeredMembers = new ArrayList<>();
+        this.maxMembersCount = maxMembersCount;
+    }
 
     //region Getters & Setters
     public String getName() {
@@ -86,12 +101,36 @@ public class Event implements Serializable {
         this.minutes = minutes;
     }
 
-    public Uri getPictureUri() {
-        return picture;
+    public EventType getType() {
+        return type;
     }
 
-    public void setPictureUri(Uri picture) {
-        this.picture = picture;
+    public void setType(EventType type) {
+        this.type = type;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public ArrayList<String> getRegisteredMembers() {
+        return registeredMembers;
+    }
+
+    public void setRegisteredMembers(ArrayList<String> registeredMembers) {
+        this.registeredMembers = registeredMembers;
+    }
+
+    public int getMaxMembersCount() {
+        return maxMembersCount;
+    }
+
+    public void setMaxMembersCount(int maxMembersCount) {
+        this.maxMembersCount = maxMembersCount;
     }
 
     public String getEid() {
@@ -101,6 +140,8 @@ public class Event implements Serializable {
     public void setEid(String eid) {
         this.eid = eid;
     }
+
+
 
     //endregion
 
@@ -114,14 +155,38 @@ public class Event implements Serializable {
     }
 
 
+    @NonNull
     @Override
     public String toString() {
-        return "Event{" + eid +
+        return "Event{" +
+                "eid='" + eid + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", type=" + type +
                 ", startTime=" + startTime +
-                ", length=" + minutes +
-                ", picture=" + picture +
+                ", minutes=" + minutes +
+                ", price=" + price +
+                ", registeredMembers=" + registeredMembers +
+                ", maxMembersCount=" + maxMembersCount +
                 '}';
     }
+
+    public void registerMember(ClubMember member) throws EventFullException{
+        if(maxMembersCount!= 0 && registeredMembers.size() == maxMembersCount)
+            throw new EventFullException(EVENT_FULL_MESSAGE);
+        registeredMembers.add(member.getUid());
+        member.removePoints(getPrice());
+        MemberDataManager.getInstance().storeMember(member);
+        EventDataManager.getInstance().storeEvent(this);
+    }
+
+    public void unregisterMember(ClubMember member) {
+        if(registeredMembers.contains(member.getUid())){
+            registeredMembers.remove(member.getUid());
+            member.addPoints(getPrice());
+            MemberDataManager.getInstance().storeMember(member);
+            EventDataManager.getInstance().storeEvent(this);
+        }
+    }
+
 }

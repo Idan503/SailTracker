@@ -12,10 +12,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.EventFullException;
-import com.idan_koren_israeli.sailtracker.club.Sail;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventsLoaded;
+import com.idan_koren_israeli.sailtracker.club.Event;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
@@ -54,21 +53,21 @@ public class EventDataManager {
     }
 
     // Adds a member to its event by uid
-    public void registerMember(ClubMember member, Sail sail) throws EventFullException {
-        sail.registerMember(member);
+    public void registerMember(ClubMember member, Event event) throws EventFullException {
+        event.registerMember(member);
 
-        // Updating the stored sail object
-        database.child(KEYS.EVENTS).child(generateDateStamp(sail.getStartDateTime().toLocalDate())).child(sail.getEid())
-                .child(KEYS.SAIL_MEMBERS_LIST).setValue(sail.getRegisteredMembers());
+        // Updating the stored event object
+        database.child(KEYS.EVENTS).child(generateDateStamp(event.getStartDateTime().toLocalDate())).child(event.getEid())
+                .child(KEYS.SAIL_MEMBERS_LIST).setValue(event.getRegisteredMembers());
     }
 
     // Removes a member from an event that he was registered to
-    public void unregisterMember(ClubMember member, Sail sail){
-        sail.unregisterMember(member);
+    public void unregisterMember(ClubMember member, Event event){
+        event.unregisterMember(member);
 
-        // Updating the stored sail object
-        database.child(KEYS.EVENTS).child(generateDateStamp(sail.getStartDateTime().toLocalDate())).child(sail.getEid())
-                .child(KEYS.SAIL_MEMBERS_LIST).setValue(sail.getRegisteredMembers());
+        // Updating the stored event object
+        database.child(KEYS.EVENTS).child(generateDateStamp(event.getStartDateTime().toLocalDate())).child(event.getEid())
+                .child(KEYS.SAIL_MEMBERS_LIST).setValue(event.getRegisteredMembers());
 
 
     }

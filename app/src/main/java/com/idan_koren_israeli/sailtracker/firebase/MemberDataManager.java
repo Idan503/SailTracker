@@ -102,6 +102,7 @@ public class MemberDataManager {
                 .set(member);
     }
 
+
     // checking if a member is already exists in the database
     public void isMemberStored(String uid, final OnCheckFinished onFinish) {
         DocumentReference docRef = dbFirestore.collection(KEYS.MEMBERS).document(uid);

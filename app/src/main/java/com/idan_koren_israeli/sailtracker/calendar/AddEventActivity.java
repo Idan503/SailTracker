@@ -7,24 +7,28 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.TimePicker;
 import android.widget.ViewFlipper;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.type.TimeOfDay;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
-import com.idan_koren_israeli.sailtracker.club.Sail;
+import com.idan_koren_israeli.sailtracker.club.EventType;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import java.util.InputMismatchException;
 import java.util.UUID;
 
 public class AddEventActivity extends AppCompatActivity {
 
     private RadioGroup eventTypeRadio;
-    private EditText nameEdit, descriptionEdit, maxParticipants, price;
+    private EditText nameEdit, descriptionEdit, maxParticipantsEdit, priceEdit;
     private ViewFlipper viewFlipper;
     private MaterialButton nextButton, backButton;
+    private TimePicker startPick, endPick;
 
     private LocalDate date;
 
@@ -52,10 +56,12 @@ public class AddEventActivity extends AppCompatActivity {
         nameEdit = findViewById(R.id.add_event_EDT_name);
         descriptionEdit = findViewById(R.id.add_event_EDT_description);
         eventTypeRadio = findViewById(R.id.add_event_RAT_select_type);
-        maxParticipants = findViewById(R.id.add_event_EDT_max_participants);
-        price = findViewById(R.id.add_event_EDT_price);
+        maxParticipantsEdit = findViewById(R.id.add_event_EDT_max_participants);
+        priceEdit = findViewById(R.id.add_event_EDT_price);
         backButton = findViewById(R.id.add_event_BTN_back);
         nextButton = findViewById(R.id.add_event_BTN_next);
+        startPick = findViewById(R.id.add_event_BTN_start_time);
+        endPick = findViewById(R.id.add_event_BTN_end_time);
         viewFlipper = findViewById(R.id.add_event_LAY_flipper);
     }
 
@@ -90,16 +96,48 @@ public class AddEventActivity extends AppCompatActivity {
         });
     }
 
-    public Event generateEvent(){
+    //Creating the event based on the user input
+    public Event generateEvent() throws InputMismatchException {
         String name = nameEdit.getText().toString();
         String description = descriptionEdit.getText().toString();
-        DateTime start = date.toDateTimeAtStartOfDay().plusHours(12).plusMinutes(15);
-        return new Event(UUID.randomUUID().toString(),name, description, start.getMillis(), 90,null);
+
+
+        TimeOfDay startTimeOfDay = TimeOfDay.newBuilder()
+                .setHours(startPick.getHour())
+                .setMinutes(startPick.getMinute())
+                .build();
+
+        TimeOfDay endTimeOfDay = TimeOfDay.newBuilder()
+                .setHours(endPick.getHour())
+                .setMinutes(endPick.getMinute())
+                .build();
+
+        DateTime startTime = date.toDateTimeAtStartOfDay().plusHours(startPick.getHour()).plusMinutes(startPick.getMinute());
+        int lengthMinutes = calculateMinutesBetween(startTimeOfDay, endTimeOfDay);
+
+        int price = Integer.parseInt(priceEdit.getText().toString());
+        int maxMemberCount = Integer.parseInt(maxParticipantsEdit.getText().toString());
+
+        EventType type = EventType.FREE_EVENT;
+        switch (eventTypeRadio.getCheckedRadioButtonId()){
+            case R.id.add_event_RBTN_free_event:
+                type = EventType.FREE_EVENT;
+                break;
+            case R.id.add_event_RBTN_members_sail:
+                type = EventType.MEMBERS_SAIL;
+                break;
+            case R.id.add_event_event_RBTN_guided_sail:
+                type = EventType.GUIDED_SAIL;
+                break;
+
+        }
+
+        return new Event(name, description, type,startTime.getMillis(), lengthMinutes, price, maxMemberCount);
     }
 
-    public Sail generateSail(){
-        return new Sail(generateEvent(),
-                Integer.parseInt(price.getText().toString()),
-                Integer.parseInt(maxParticipants.getText().toString()));
+    // For calculating length of event based on start and end day times
+    private int calculateMinutesBetween(TimeOfDay a, TimeOfDay b){
+        return ((b.getHours() - a.getHours()) * 60) + (b.getMinutes() - a.getMinutes());
     }
+
 }
