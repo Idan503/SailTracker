@@ -2,10 +2,11 @@ package com.idan_koren_israeli.sailtracker.calendar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TimePicker;
@@ -20,8 +21,9 @@ import com.idan_koren_israeli.sailtracker.club.EventType;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import java.text.SimpleDateFormat;
 import java.util.InputMismatchException;
-import java.util.UUID;
+import java.util.Locale;
 
 /**
  *
@@ -37,7 +39,11 @@ public class AddEventActivity extends AppCompatActivity {
     private EditText nameEdit, descriptionEdit, maxParticipantsEdit, priceEdit;
     private ViewFlipper viewFlipper;
     private MaterialButton nextButton, backButton;
-    private MaterialButton startPick, endPick;
+    private MaterialButton startTimeButton, endTimeButton;
+
+    private TimeOfDay startTime, endTime;
+
+    private Context mContext = this;
 
     private LocalDate date;
 
@@ -68,8 +74,8 @@ public class AddEventActivity extends AppCompatActivity {
         priceEdit = findViewById(R.id.add_event_EDT_price);
         backButton = findViewById(R.id.add_event_BTN_back);
         nextButton = findViewById(R.id.add_event_BTN_next);
-        startPick = findViewById(R.id.add_event_BTN_start_time);
-        endPick = findViewById(R.id.add_event_BTN_end_time);
+        startTimeButton = findViewById(R.id.add_event_BTN_start_time);
+        endTimeButton = findViewById(R.id.add_event_BTN_end_time);
         viewFlipper = findViewById(R.id.add_event_LAY_flipper);
     }
 
@@ -105,7 +111,30 @@ public class AddEventActivity extends AppCompatActivity {
                 viewFlipper.showPrevious();
             }
         });
+
+        startTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TimePickerDialog picker =
+                        new TimePickerDialog(mContext,onStartTimePicked,12,30,true);
+
+                picker.show();
+            }
+        });
+
+        endTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TimePickerDialog picker =
+                        new TimePickerDialog(mContext,onEndTimePicked,16,30,true);
+
+                picker.show();
+            }
+        });
+
     }
+
+
 
     //Creating the event based on the user input
     public Event generateEvent() throws InputMismatchException {
@@ -113,23 +142,9 @@ public class AddEventActivity extends AppCompatActivity {
         String description = descriptionEdit.getText().toString();
 
 
+        DateTime startDateTime = date.toDateTimeAtStartOfDay().plusHours(startTime.getHours()).plusMinutes(startTime.getMinutes());
+        int lengthMinutes = calculateMinutesBetween(startTime, endTime);
 
-        // Getting the information from timebuttons texts
-/*        TimeOfDay startTimeOfDay = TimeOfDay.newBuilder()
-                .setHours(startPick.getHour())
-                .setMinutes(startPick.getMinute())
-                .build();
-
-        TimeOfDay endTimeOfDay = TimeOfDay.newBuilder()
-                .setHours(endPick.getHour())
-                .setMinutes(endPick.getMinute())
-                .build();
-
-        DateTime startTime = date.toDateTimeAtStartOfDay().plusHours(startPick.getHour()).plusMinutes(startPick.getMinute());
-
-        int lengthMinutes = calculateMinutesBetween(startTimeOfDay, endTimeOfDay);
-
- */
 
         int price = Integer.parseInt(priceEdit.getText().toString());
         int maxMemberCount = Integer.parseInt(maxParticipantsEdit.getText().toString());
@@ -148,8 +163,7 @@ public class AddEventActivity extends AppCompatActivity {
 
         }
 
-        //return new Event(name, description, type,startTime.getMillis(), lengthMinutes, price, maxMemberCount);
-        return null;
+        return new Event(name, description, type,startDateTime.getMillis(), lengthMinutes, price, maxMemberCount);
     }
 
     // For calculating length of event based on start and end day times
@@ -157,4 +171,23 @@ public class AddEventActivity extends AppCompatActivity {
         return ((b.getHours() - a.getHours()) * 60) + (b.getMinutes() - a.getMinutes());
     }
 
+
+    //region Time Selection Callbacks
+    private TimePickerDialog.OnTimeSetListener onStartTimePicked = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int i, int i1) {
+            startTime = TimeOfDay.newBuilder().setHours(i).setMinutes(i1).build();
+            startTimeButton.setText(getResources().getString(R.string.hour_time_format,i,i1));
+        }
+    };
+
+    private TimePickerDialog.OnTimeSetListener onEndTimePicked = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int i, int i1) {
+            endTime = TimeOfDay.newBuilder().setHours(i).setMinutes(i1).build();
+            endTimeButton.setText(getResources().getString(R.string.hour_time_format,i,i1));
+        }
+    };
+
+    //endregion
 }

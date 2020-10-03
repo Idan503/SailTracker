@@ -15,8 +15,9 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * A Club event can be either a social event/meeting/announcement event/etc...
- *
+ * A Club event can be a sail/social event/meeting/announcement event/etc...
+ * The Sailing club has many events that can be changed from one month to another
+ * Managers are able to add new events to the calendar in @CalendarActivity
  */
 
 public class Event implements Serializable {

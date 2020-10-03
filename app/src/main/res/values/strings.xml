@@ -57,4 +57,9 @@
     <string name="add_event_time_start_label">Starts at</string>
     <string name="add_event_time_end_label">Ends at</string>
 
+
+    <!-- OTHER -->
+    <string name="hour_time_format">%02d:%02d</string>
+
+
 </resources>
