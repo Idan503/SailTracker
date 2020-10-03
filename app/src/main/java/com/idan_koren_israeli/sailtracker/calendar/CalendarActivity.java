@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CalendarView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,7 @@ public class CalendarActivity extends BaseActivity {
     private LocalDate selectedDate = LocalDate.now();
     private ArrayList<Event> eventsToShow = new ArrayList<>();
 
+    private RelativeLayout loadingLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +45,7 @@ public class CalendarActivity extends BaseActivity {
         reloadData();
     }
 
-    // This method will find the added event if manager-user gets back from @AddEventActivity
+    // Finds the added event if manager-user gets back from @AddEventActivity
     private void initAddedEvent() {
         Event addedEvent = null;
         Intent intent = getIntent();
@@ -84,6 +86,7 @@ public class CalendarActivity extends BaseActivity {
         events = findViewById(R.id.calendar_RCY_daily_events);
         calendar = findViewById(R.id.calendar_CALENDAR);
         dateTitle = findViewById(R.id.calendar_LBL_selected_day);
+        loadingLayout = findViewById(R.id.calendar_LAY_loading);
 
     }
 
@@ -124,7 +127,7 @@ public class CalendarActivity extends BaseActivity {
             eventsToShow.clear();
             eventsToShow.addAll(eventsLoaded);
             MemberDataManager.getInstance().isManagerMember(onCheckedManager);
-            // Should Hide loading menu here
+            loadingLayout.setVisibility(View.GONE);
         }
     };
 
@@ -150,7 +153,7 @@ public class CalendarActivity extends BaseActivity {
             dateTitle.setText(dateSelected.toString());
             selectedDate = dateSelected;
             EventDataManager.getInstance().loadEvents(dateSelected, onEventsLoaded);
-            // Should show loading screen
+            loadingLayout.setVisibility(View.VISIBLE);
         }
     };
 

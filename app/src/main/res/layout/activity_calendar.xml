@@ -18,9 +18,21 @@
             android:id="@+id/calendar_CALENDAR"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.4"
+            app:layout_constraintHeight_percent="0.45"
             app:layout_constraintTop_toTopOf="parent"
             android:background="@android:color/darker_gray"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@android:color/black"
+            android:alpha="0.6"
+            android:id="@+id/calendar_LAY_loading"
+            app:layout_constraintTop_toBottomOf="@id/calendar_CALENDAR"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone"
+            android:elevation="2dp"
             />
 
         <TextView
