@@ -21,7 +21,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
-import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinished;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinishedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnMemberLoadListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnGalleryPhotoLoadListener;
 import com.idan_koren_israeli.sailtracker.gallery.GalleryPhoto;
@@ -104,7 +104,7 @@ public class MemberDataManager {
 
 
     // checking if a member is already exists in the database
-    public void isMemberStored(String uid, final OnCheckFinished onFinish) {
+    public void isMemberStored(String uid, final OnCheckFinishedListener onFinish) {
         DocumentReference docRef = dbFirestore.collection(KEYS.MEMBERS).document(uid);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -135,7 +135,7 @@ public class MemberDataManager {
     }
 
 
-    private OnCheckFinished onCurrentUserSearched = new OnCheckFinished() {
+    private OnCheckFinishedListener onCurrentUserSearched = new OnCheckFinishedListener() {
         @Override
         public void onCheckFinished(boolean found) {
             if(!found)
@@ -145,7 +145,7 @@ public class MemberDataManager {
 
 
     // Checks if a certain member is saved as a club manager in the db
-    private void isManagerMember(final ClubMember member, final OnCheckFinished onFinish) {
+    private void isManagerMember(final ClubMember member, final OnCheckFinishedListener onFinish) {
         DocumentReference docRef = dbFirestore.collection(KEYS.LISTS).document(KEYS.MANAGERS);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -289,7 +289,7 @@ public class MemberDataManager {
         storeGalleryPhoto(currentUser.getUid(), photo, onSuccess, onFailure);
     }
 
-    public void isManagerMember(final OnCheckFinished onFinish){
+    public void isManagerMember(final OnCheckFinishedListener onFinish){
         if(currentUserIsManager != null) // answer is already known
             onFinish.onCheckFinished(currentUserIsManager); // prevent multiple db calls
         isManagerMember(currentUser,onFinish);

@@ -12,11 +12,18 @@ import com.google.firebase.database.ValueEventListener;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.EventFullException;
-import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventsLoaded;
+import com.idan_koren_israeli.sailtracker.club.NotEnoughPointsException;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventsLoadedListener;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 
+/**
+ *
+ * Using Firebase Realtime Database to manage club's events.
+ *
+ *
+ */
 public class EventDataManager {
     private static EventDataManager single_instance = null;
 
@@ -51,7 +58,7 @@ public class EventDataManager {
     }
 
     // Adds a member to its event by uid
-    public void registerMember(ClubMember member, Event event) throws EventFullException {
+    public void registerMember(ClubMember member, Event event) throws EventFullException, NotEnoughPointsException {
         event.registerMember(member);
 
         // Updating the stored event object
@@ -71,7 +78,7 @@ public class EventDataManager {
     }
 
     // Loads all events from a single day
-    public void loadEvents(LocalDate day, final OnEventsLoaded onLoaded){
+    public void loadEvents(LocalDate day, final OnEventsLoadedListener onLoaded){
         database.child(KEYS.EVENTS).child(generateDateStamp(day)).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override

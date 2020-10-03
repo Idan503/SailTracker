@@ -1,6 +1,5 @@
 package com.idan_koren_israeli.sailtracker.calendar;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,7 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     protected List<Event> data;
     protected LayoutInflater inflater;
 
-    private View.OnClickListener onPurchasePressed;
+    private OnPurchaseClickedListener onPurchasePressed;
 
     // Should add purchase click listener here
 
@@ -38,7 +37,7 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.data = events;
     }
 
-    public void setOnPurchasePressed(View.OnClickListener purchasePressed){
+    public void setOnPurchasePressed(OnPurchaseClickedListener purchasePressed){
         this.onPurchasePressed = purchasePressed;
     }
 
@@ -54,9 +53,10 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         EventViewHolder eventHolder = new EventViewHolder(holder.itemView);
-        Log.i("pttt" , data.get(position).toString());
-        if(position < data.size())
+        if(position < data.size()) {
             eventHolder.setEventContent(data.get(position));
+            eventHolder.setOnPurchaseClickedListener(onPurchasePressed);
+        }
 
     }
 

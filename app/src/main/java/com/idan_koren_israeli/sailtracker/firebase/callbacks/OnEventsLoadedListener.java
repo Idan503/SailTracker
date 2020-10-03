@@ -4,6 +4,6 @@ import com.idan_koren_israeli.sailtracker.club.Event;
 
 import java.util.ArrayList;
 
-public interface OnEventsLoaded {
+public interface OnEventsLoadedListener {
     void onEventsListener(ArrayList<Event> eventsLoaded);
 }

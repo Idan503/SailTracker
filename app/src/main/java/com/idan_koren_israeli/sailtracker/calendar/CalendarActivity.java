@@ -2,22 +2,28 @@ package com.idan_koren_israeli.sailtracker.calendar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
+import com.idan_koren_israeli.sailtracker.club.EventFullException;
+import com.idan_koren_israeli.sailtracker.club.NotEnoughPointsException;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
+import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
-import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinished;
-import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventsLoaded;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinishedListener;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventsLoadedListener;
 
 import org.joda.time.LocalDate;
 
@@ -97,10 +103,22 @@ public class CalendarActivity extends BaseActivity {
     }
 
     //region UI Direct Callbacks
-    private View.OnClickListener onClickedPurchase = new View.OnClickListener() {
+    private OnPurchaseClickedListener onClickedPurchase = new OnPurchaseClickedListener() {
         @Override
-        public void onClick(View view) {
-            //purchase system...
+        public void onPurchaseClicked(Event eventPurchased) {
+            //purchse system....
+            ClubMember currentUser = MemberDataManager.getInstance().getCurrentUser();
+            try {
+                EventDataManager.getInstance().registerMember(currentUser, eventPurchased);
+            }
+            catch (EventFullException eventFull){
+                Log.e("CalendarActivity", eventFull.toString());
+                CommonUtils.getInstance().showToast("Register Failed - Event is full.");
+            }
+            catch (NotEnoughPointsException notEnoughPoints){
+                Log.e("CalendarActivity", notEnoughPoints.toString());
+                CommonUtils.getInstance().showToast("Register Failed - Not enough points.");
+            }
         }
     };
 
@@ -121,7 +139,7 @@ public class CalendarActivity extends BaseActivity {
     //region Realtime Database callbacks
 
 
-    private OnEventsLoaded onEventsLoaded = new OnEventsLoaded() {
+    private OnEventsLoadedListener onEventsLoaded = new OnEventsLoadedListener() {
         @Override
         public void onEventsListener(ArrayList<Event> eventsLoaded) {
             eventsToShow.clear();
@@ -131,7 +149,7 @@ public class CalendarActivity extends BaseActivity {
         }
     };
 
-    private OnCheckFinished onCheckedManager = new OnCheckFinished() {
+    private OnCheckFinishedListener onCheckedManager = new OnCheckFinishedListener() {
         @Override
         public void onCheckFinished(boolean result) {
             // Code gets to here after we checked with the db if the current user is a manager or not

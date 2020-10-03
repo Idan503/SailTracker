@@ -1,9 +1,11 @@
 package com.idan_koren_israeli.sailtracker.club;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.database.Exclude;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 
@@ -147,10 +149,12 @@ public class Event implements Serializable {
     //endregion
 
 
+    @Exclude
     public DateTime getStartDateTime(){
         return new DateTime(startTime);
     }
 
+    @Exclude
     public DateTime getEndDateTime(){
         return getStartDateTime().plusMinutes(minutes);
     }
@@ -172,7 +176,14 @@ public class Event implements Serializable {
                 '}';
     }
 
-    public void registerMember(ClubMember member) throws EventFullException{
+    public void registerMember(ClubMember member) throws EventFullException, NotEnoughPointsException{
+        if(registeredMembers==null)
+            initRegisteredList();
+
+        if(registeredMembers.contains(member.getUid())){
+            return; // Member is already registered
+        }
+
         if(maxMembersCount!= 0 && registeredMembers.size() == maxMembersCount)
             throw new EventFullException(EVENT_FULL_MESSAGE);
         registeredMembers.add(member.getUid());
@@ -182,12 +193,19 @@ public class Event implements Serializable {
     }
 
     public void unregisterMember(ClubMember member) {
+        if(registeredMembers==null)
+            initRegisteredList();
+
         if(registeredMembers.contains(member.getUid())){
             registeredMembers.remove(member.getUid());
             member.addPoints(getPrice());
             MemberDataManager.getInstance().storeMember(member);
             EventDataManager.getInstance().storeEvent(this);
         }
+    }
+
+    private void initRegisteredList(){
+        registeredMembers = new ArrayList<>();
     }
 
 }

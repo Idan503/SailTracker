@@ -1,5 +1,6 @@
 package com.idan_koren_israeli.sailtracker.calendar;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 
 public class EventViewHolder extends RecyclerView.ViewHolder {
+    private Event event;
     private TextView name, description, time;
     private ImageView image;
     private MaterialButton purchase;
@@ -23,6 +25,8 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setEventContent(Event event){
+        Log.i("pttt" , event.getName());
+        this.event = event;
         name.setText(event.getName());
         description.setText(event.getDescription());
         time.setText(generateTimeString(event));
@@ -34,8 +38,13 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         //CommonUtils.getInstance().setImageResource(image, event.getPictureUri());
     }
 
-    public void setOnClickListener(View.OnClickListener listener){
-        purchase.setOnClickListener(listener);
+    public void setOnPurchaseClickedListener(final OnPurchaseClickedListener listener){
+        purchase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onPurchaseClicked(event);
+            }
+        });
     }
 
     private String generateTimeString(Event event){
