@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TimePicker;
@@ -22,19 +23,26 @@ import org.joda.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.UUID;
 
+/**
+ *
+ * This activity will be shown only to managers of the clubs
+ * Which are pressing on "Add Event" button in the calendar activity.
+ *
+ * This menu is in whole different activity to improve UX
+ *
+ */
 public class AddEventActivity extends AppCompatActivity {
 
     private RadioGroup eventTypeRadio;
     private EditText nameEdit, descriptionEdit, maxParticipantsEdit, priceEdit;
     private ViewFlipper viewFlipper;
     private MaterialButton nextButton, backButton;
-    private TimePicker startPick, endPick;
+    private MaterialButton startPick, endPick;
 
     private LocalDate date;
 
     public interface KEYS{
         String ADDED_EVENT = "addedEvent";
-        String ADDED_SAIL = "addedSail";
         String EVENT_DATE = "eventDate";
     };
 
@@ -66,6 +74,9 @@ public class AddEventActivity extends AppCompatActivity {
     }
 
     private void setListeners(){
+
+        // Setting dialog time
+
         nextButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -102,7 +113,9 @@ public class AddEventActivity extends AppCompatActivity {
         String description = descriptionEdit.getText().toString();
 
 
-        TimeOfDay startTimeOfDay = TimeOfDay.newBuilder()
+
+        // Getting the information from timebuttons texts
+/*        TimeOfDay startTimeOfDay = TimeOfDay.newBuilder()
                 .setHours(startPick.getHour())
                 .setMinutes(startPick.getMinute())
                 .build();
@@ -113,7 +126,10 @@ public class AddEventActivity extends AppCompatActivity {
                 .build();
 
         DateTime startTime = date.toDateTimeAtStartOfDay().plusHours(startPick.getHour()).plusMinutes(startPick.getMinute());
+
         int lengthMinutes = calculateMinutesBetween(startTimeOfDay, endTimeOfDay);
+
+ */
 
         int price = Integer.parseInt(priceEdit.getText().toString());
         int maxMemberCount = Integer.parseInt(maxParticipantsEdit.getText().toString());
@@ -132,7 +148,8 @@ public class AddEventActivity extends AppCompatActivity {
 
         }
 
-        return new Event(name, description, type,startTime.getMillis(), lengthMinutes, price, maxMemberCount);
+        //return new Event(name, description, type,startTime.getMillis(), lengthMinutes, price, maxMemberCount);
+        return null;
     }
 
     // For calculating length of event based on start and end day times

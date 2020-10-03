@@ -22,8 +22,7 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     //region Inner ViewsTypes IDs
     protected static final int EVENT = 0;
-    protected static final int SAIL = 1;
-    protected static final int ADD_BUTTON = 2;
+    protected static final int ADD_BUTTON = 1;
     //endregion
 
     protected List<Event> data;
@@ -75,8 +74,6 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public int getItemViewType(int position) {
         if(data.get(position).getClass() == Event.class)
             return EVENT;
-        if(data.get(position).getClass() == Sail.class)
-            return SAIL;
         return EVENT;
     }
 }

@@ -13,8 +13,6 @@ import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.EventFullException;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventsLoaded;
-import com.idan_koren_israeli.sailtracker.club.Event;
-
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;

@@ -26,7 +26,12 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         name.setText(event.getName());
         description.setText(event.getDescription());
         time.setText(generateTimeString(event));
-        CommonUtils.getInstance().setImageResource(image, event.getPictureUri());
+        setEventPicture();
+    }
+
+    private void setEventPicture(){
+        // setting the image differently for each type
+        //CommonUtils.getInstance().setImageResource(image, event.getPictureUri());
     }
 
     public void setOnClickListener(View.OnClickListener listener){

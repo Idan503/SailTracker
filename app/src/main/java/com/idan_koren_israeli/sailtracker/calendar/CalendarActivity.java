@@ -50,9 +50,6 @@ public class CalendarActivity extends BaseActivity {
         if(intent.hasExtra(AddEventActivity.KEYS.ADDED_EVENT)){
             addedEvent = (Event) intent.getSerializableExtra(AddEventActivity.KEYS.ADDED_EVENT);
         }
-        else if(intent.hasExtra(AddEventActivity.KEYS.ADDED_SAIL)){
-            addedEvent = (Sail) intent.getSerializableExtra(AddEventActivity.KEYS.ADDED_SAIL);
-        }
 
         if(addedEvent!=null) {
             EventDataManager.getInstance().storeEvent(addedEvent);
