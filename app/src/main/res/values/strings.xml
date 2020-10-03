@@ -57,6 +57,7 @@
     <string name="add_event_description">Insert Event Description</string>
     <string name="add_event_time_start_label">Starts at</string>
     <string name="add_event_time_end_label">Ends at</string>
+    <string name="add_event_hour_empty">--:--</string>
 
 
     <!-- OTHER -->

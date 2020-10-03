@@ -116,7 +116,7 @@ public class AddEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 TimePickerDialog picker =
-                        new TimePickerDialog(mContext,onStartTimePicked,12,30,true);
+                        new TimePickerDialog(mContext,onStartTimePicked,12,0,true);
 
                 picker.show();
             }
@@ -126,7 +126,7 @@ public class AddEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 TimePickerDialog picker =
-                        new TimePickerDialog(mContext,onEndTimePicked,16,30,true);
+                        new TimePickerDialog(mContext,onEndTimePicked,16,0,true);
 
                 picker.show();
             }
