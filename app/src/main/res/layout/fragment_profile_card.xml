@@ -76,17 +76,32 @@
             />
 
             <TextView
-            android:layout_width="0dp"
+            android:layout_width="50dp"
             android:layout_height="0dp"
+            android:lines="1"
             android:id="@+id/profile_LBL_points_count"
             android:autoSizeMaxTextSize="22sp"
+            android:autoSizeMinTextSize="18dp"
             android:autoSizeTextType="uniform"
+            android:gravity="start|center"
             android:text="@string/points"
             android:padding="5dp"
             app:layout_constraintStart_toEndOf="@id/profile_IMG_points"
             app:layout_constraintTop_toTopOf="@id/profile_IMG_points"
             app:layout_constraintBottom_toBottomOf="@id/profile_IMG_points"
-            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@id/profile_LBL_points_count"
+            app:layout_constraintTop_toBottomOf="@id/profile_LBL_name"
+            app:layout_constraintBottom_toTopOf="@id/profile_LBL_sails_count"
+            android:text="@string/plus_sign"
+            android:padding="3dp"
+            android:id="@+id/profile_BTN_add_points"
             />
 
 

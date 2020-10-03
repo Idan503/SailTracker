@@ -3,6 +3,7 @@ package com.idan_koren_israeli.sailtracker.firebase;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -229,7 +230,7 @@ public class MemberDataManager {
                         @Override
                         public void onSuccess(Uri uri) {
                             if(onPhotoLoaded!=null)
-                                onPhotoLoaded.onPhotoLoaded(new GalleryPhoto(uri, time));
+                                onPhotoLoaded.onPhotoLoaded(new GalleryPhoto(uri.toString(), time));
                         }
                     });
                 }

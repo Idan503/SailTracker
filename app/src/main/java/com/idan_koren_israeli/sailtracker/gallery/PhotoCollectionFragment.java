@@ -66,7 +66,6 @@ public class PhotoCollectionFragment extends Fragment {
 
     private void updateUI(){
         adapter = new PhotoCollectionAdapter(getContext(),getMemberPhotos());
-        Log.i("pttt", "Length: " + getMemberPhotos().length);
         adapter.setPhotoClickListener(onPhotoClicked);
         recyclerView.setAdapter(adapter);
     }

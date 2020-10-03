@@ -101,7 +101,6 @@ public class EventDataManager {
 
 
     private String generateDateStamp(LocalDate time){
-        Log.i("pttt" , " Stamp generated : " + time.toString("dd_MM_YYYY"));
         return time.toString("dd_MM_YYYY");
     }
 

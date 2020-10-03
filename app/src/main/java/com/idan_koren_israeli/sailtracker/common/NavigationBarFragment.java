@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -167,7 +168,7 @@ public class NavigationBarFragment extends Fragment {
     private View.OnClickListener searchListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if(!isCurrentActivity(CalendarActivity.class)){
+            if(!isCurrentActivity(SearchActivity.class)){
                 Intent intent = new Intent(currentActivity, SearchActivity.class);
                 startActivity(intent);
                 currentActivity.finish();

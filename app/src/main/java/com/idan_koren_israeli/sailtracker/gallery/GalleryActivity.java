@@ -49,7 +49,6 @@ public class GalleryActivity extends BaseActivity {
     private OnGalleryPhotoLoadListener photoLoaded = new OnGalleryPhotoLoadListener() {
         @Override
         public void onPhotoLoaded(GalleryPhoto photo) {
-            Log.i("pttt", " Photo loaded : " + photo.getUri().toString());
             member.addGalleryPhoto(photo);
             photosFrag.setMember(member);
             // a new photo is loaded, re-rendering ui

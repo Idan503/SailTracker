@@ -149,6 +149,8 @@ public class Event implements Serializable {
     //endregion
 
 
+    //region Extended Date & Time information (Excluded from Firebase)
+
     @Exclude
     public DateTime getStartDateTime(){
         return new DateTime(startTime);
@@ -159,6 +161,7 @@ public class Event implements Serializable {
         return getStartDateTime().plusMinutes(minutes);
     }
 
+    //endregion
 
     @NonNull
     @Override

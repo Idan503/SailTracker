@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 
+import java.lang.reflect.Member;
 import java.util.Locale;
 
 /**
@@ -31,6 +33,7 @@ public class ProfileFragment extends Fragment {
     private ImageView profileImage, pointsImage;
     private TextView nameText, numOfPointsText, numOfSailsText;
     private ClubMember member;
+    private Button addPoints;
 
     private CommonUtils common;
 
@@ -60,6 +63,7 @@ public class ProfileFragment extends Fragment {
         View parent = inflater.inflate(R.layout.fragment_profile_card, container, false);
         // Inflate the layout for this fragment
         findViews(parent);
+        setListeners();
         return parent;
     }
 
@@ -69,6 +73,20 @@ public class ProfileFragment extends Fragment {
         nameText = parent.findViewById(R.id.profile_LBL_name);
         numOfPointsText = parent.findViewById(R.id.profile_LBL_points_count);
         numOfSailsText = parent.findViewById(R.id.profile_LBL_sails_count);
+        addPoints = parent.findViewById(R.id.profile_BTN_add_points);
+    }
+
+    private void setListeners(){
+        addPoints.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(member!=null){
+                    member.addPoints(10);
+                    MemberDataManager.getInstance().storeMember(member);
+                    updateUI();
+                }
+            }
+        });
     }
 
     public void setMember(ClubMember member){

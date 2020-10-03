@@ -1,6 +1,7 @@
 package com.idan_koren_israeli.sailtracker.gallery;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,7 @@ public class PhotoCollectionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         // Binds data (ImagePhoto) into the view using the given uri
         ImageView innerImage = holder.itemView.findViewById(R.id.photo_item_IMG_inner_image);
-        CommonUtils.getInstance().setImageResource(innerImage, photos[position].getUri());
+        CommonUtils.getInstance().setImageResource(innerImage, Uri.parse(photos[position].getUrl()));
 
     }
 

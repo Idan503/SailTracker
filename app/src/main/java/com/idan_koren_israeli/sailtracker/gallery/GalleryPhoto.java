@@ -1,8 +1,5 @@
 package com.idan_koren_israeli.sailtracker.gallery;
 
-import android.net.Uri;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
@@ -13,23 +10,23 @@ import java.util.Objects;
  * This will reduce the number of calls to the cloud database significantly.
  */
 public class GalleryPhoto implements Serializable {
-    private Uri uri;
+    private String url;
     private long timeCreated;
 
     public GalleryPhoto() {
     }
 
-    public GalleryPhoto(Uri uri, long createdTime) {
-        this.uri = uri;
+    public GalleryPhoto(String url, long createdTime) {
+        this.url = url;
         this.timeCreated = createdTime;
     }
 
-    public Uri getUri() {
-        return uri;
+    public String getUrl() {
+        return url;
     }
 
-    public void setUri(Uri uri) {
-        this.uri = uri;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public long getTimeCreated() {
@@ -43,7 +40,7 @@ public class GalleryPhoto implements Serializable {
     @NonNull
     @Override
     public String toString(){
-        return timeCreated + ": " + uri;
+        return timeCreated + ": " + url;
     }
 
     @Override
@@ -56,6 +53,6 @@ public class GalleryPhoto implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(uri, timeCreated);
+        return Objects.hash(url, timeCreated);
     }
 }
