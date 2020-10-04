@@ -17,7 +17,9 @@ import com.idan_koren_israeli.sailtracker.club.NotEnoughPointsException;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventsLoadedListener;
 import org.joda.time.LocalDate;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -32,6 +34,7 @@ public class EventDataManager {
 
     interface KEYS {
         String EVENTS = "events";
+        String MEMBER_TO_EVENTS = "member_to_events";
         String SAIL_MEMBERS_LIST = "registeredMembers";
     }
 
@@ -59,22 +62,68 @@ public class EventDataManager {
     }
 
     // Adds a member to its event by uid
-    public void registerMember(ClubMember member, Event event) throws EventFullException, NotEnoughPointsException, AlreadyRegisteredException {
+    public void registerMember(final ClubMember member, final Event event) throws EventFullException, NotEnoughPointsException, AlreadyRegisteredException {
         event.registerMember(member);
 
         // Updating the stored event object
         database.child(KEYS.EVENTS).child(generateDateStamp(event.getStartDateTime().toLocalDate())).child(event.getEid())
                 .child(KEYS.SAIL_MEMBERS_LIST).setValue(event.getRegisteredMembers());
+
+
+        ValueEventListener onMembersEventsListLoaded = new ValueEventListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> registeredEvents;
+                if(snapshot.getValue()!=null)
+                    registeredEvents = (ArrayList<String>) snapshot.getValue();
+                else
+                    registeredEvents = new ArrayList<>();
+                registeredEvents.add(event.getEid());
+                database.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).setValue(registeredEvents);
+                // Adding the new event to the list and re-saving it
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        database.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onMembersEventsListLoaded);
+
     }
 
     // Removes a member from an event that he was registered to
-    public void unregisterMember(ClubMember member, Event event){
+    public void unregisterMember(final ClubMember member, final Event event){
         event.unregisterMember(member);
 
         // Updating the stored event object
         database.child(KEYS.EVENTS).child(generateDateStamp(event.getStartDateTime().toLocalDate())).child(event.getEid())
                 .child(KEYS.SAIL_MEMBERS_LIST).setValue(event.getRegisteredMembers());
 
+
+        ValueEventListener onMembersEventsListLoaded = new ValueEventListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> registeredEvents;
+                if(snapshot.getValue()!=null)
+                    registeredEvents = (ArrayList<String>) snapshot.getValue();
+                else
+                    return; // Member isn't signed to anything yet
+                registeredEvents.remove(event.getEid());
+                database.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).setValue(registeredEvents);
+                // Adding the new event to the list and re-saving it
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        database.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onMembersEventsListLoaded);
 
     }
 
