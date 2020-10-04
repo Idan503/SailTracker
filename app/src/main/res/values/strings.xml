@@ -37,6 +37,7 @@
     <string name="example_name">Israel Israeli</string>
     <string name="example_sail_name">Single Handed Guided Sail</string>
     <string name="example_sail_description">Learn how to sail by using one hand only</string>
+    <string name="number_00">00</string>
 
 
     <!-- GALLERY SCREEN -->
@@ -62,6 +63,8 @@
 
     <!-- OTHER -->
     <string name="hour_time_format">%02d:%02d</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

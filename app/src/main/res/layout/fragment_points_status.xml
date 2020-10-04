@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    tools:context=".common.PointsStatusFragment">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintDimensionRatio="1:1"
+        android:id="@+id/points_status_IMG_points_logo"
+        android:contentDescription="@string/points"
+        />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintWidth_percent="0.3"
+        android:layout_marginStart="3dp"
+        app:layout_constraintStart_toEndOf="@id/points_status_IMG_points_logo"
+        android:gravity="center|start"
+        android:autoSizeMaxTextSize="40sp"
+        android:autoSizeMinTextSize="20sp"
+        android:padding="3dp"
+        android:text="@string/number_00"
+        android:autoSizeTextType="uniform"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/points_status_LBL_points_count"
+        />
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toEndOf="@id/points_status_LBL_points_count"
+        app:layout_constraintTop_toTopOf="@id/points_status_IMG_points_logo"
+        app:layout_constraintBottom_toBottomOf="@id/points_status_IMG_points_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/plus_sign"
+        android:autoSizeTextType="uniform"
+        android:layout_marginStart="5dp"
+        android:id="@+id/points_status_BTN_add"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -36,18 +36,39 @@
             />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.075"
+            app:layout_constraintWidth_percent="0.4"
             app:layout_constraintTop_toBottomOf="@id/calendar_CALENDAR"
+            app:layout_constraintStart_toStartOf="parent"
+            android:lines="1"
             android:id="@+id/calendar_LBL_selected_day"
             android:gravity="center_vertical"
             android:text="@string/example_date"
+            android:layout_margin="5dp"
             android:padding="4dp"
-            android:autoSizeMaxTextSize="25sp"
+            app:layout_constraintBottom_toTopOf="@id/calendar_RCY_daily_events"
+            android:autoSizeMaxTextSize="40sp"
+            android:autoSizeMinTextSize="30sp"
             android:autoSizeTextType="uniform"
             android:layout_marginStart="10dp"
             />
+
+
+        <fragment
+            android:name="com.idan_koren_israeli.sailtracker.common.PointsStatusFragment"
+            tools:layout="@layout/fragment_points_status"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/calendar_LBL_selected_day"
+            app:layout_constraintTop_toTopOf="@id/calendar_LBL_selected_day"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintWidth_percent="0.3"
+            android:id="@+id/calendar_FRAG_points_status"
+            />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

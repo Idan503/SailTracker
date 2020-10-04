@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/darker_gray"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/darker_gray">
 
 
     <!-- setting image inside constraint layout in order to be able to force it to be squared -->
@@ -63,46 +62,16 @@
             app:layout_constraintStart_toStartOf="parent"
             />
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="h,1:1"
-            app:layout_constraintHeight_percent="0.3"
-            app:layout_constraintTop_toBottomOf="@id/profile_LBL_name"
-            android:id="@+id/profile_IMG_points"
-            android:background="@android:color/holo_blue_light"
-            app:layout_constraintStart_toStartOf="parent"
-            android:contentDescription="@string/points"
-            />
-
-            <TextView
-            android:layout_width="50dp"
-            android:layout_height="0dp"
-            android:lines="1"
-            android:id="@+id/profile_LBL_points_count"
-            android:autoSizeMaxTextSize="22sp"
-            android:autoSizeMinTextSize="18dp"
-            android:autoSizeTextType="uniform"
-            android:gravity="start|center"
-            android:text="@string/points"
-            android:padding="5dp"
-            app:layout_constraintStart_toEndOf="@id/profile_IMG_points"
-            app:layout_constraintTop_toTopOf="@id/profile_IMG_points"
-            app:layout_constraintBottom_toBottomOf="@id/profile_IMG_points"
-            />
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="1:1"
-            android:layout_marginStart="10dp"
-            app:layout_constraintStart_toEndOf="@id/profile_LBL_points_count"
-            app:layout_constraintTop_toBottomOf="@id/profile_LBL_name"
-            app:layout_constraintBottom_toTopOf="@id/profile_LBL_sails_count"
-            android:text="@string/plus_sign"
-            android:padding="3dp"
-            android:id="@+id/profile_BTN_add_points"
-            />
+       <fragment
+           android:layout_width="wrap_content"
+           android:layout_height="0dp"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@id/profile_LBL_name"
+           app:layout_constraintBottom_toTopOf="@id/profile_LBL_sails_count"
+           android:name="com.idan_koren_israeli.sailtracker.common.PointsStatusFragment"
+           tools:layout="@layout/fragment_points_status"
+           android:id="@+id/profile_FRAG_points_status"
+           />
 
 
         <TextView
