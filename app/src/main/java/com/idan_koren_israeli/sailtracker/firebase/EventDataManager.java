@@ -9,6 +9,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.idan_koren_israeli.sailtracker.club.AlreadyRegisteredException;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.EventFullException;
@@ -58,7 +59,7 @@ public class EventDataManager {
     }
 
     // Adds a member to its event by uid
-    public void registerMember(ClubMember member, Event event) throws EventFullException, NotEnoughPointsException {
+    public void registerMember(ClubMember member, Event event) throws EventFullException, NotEnoughPointsException, AlreadyRegisteredException {
         event.registerMember(member);
 
         // Updating the stored event object

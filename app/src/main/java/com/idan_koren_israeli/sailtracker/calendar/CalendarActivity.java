@@ -14,12 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.club.AlreadyRegisteredException;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.EventFullException;
 import com.idan_koren_israeli.sailtracker.club.NotEnoughPointsException;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
+import com.idan_koren_israeli.sailtracker.common.PointsStatusFragment;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinishedListener;
@@ -36,6 +38,7 @@ public class CalendarActivity extends BaseActivity {
     private TextView dateTitle;
     private LocalDate selectedDate = LocalDate.now();
     private ArrayList<Event> eventsToShow = new ArrayList<>();
+    private PointsStatusFragment pointsStatus;
 
     private RelativeLayout loadingLayout;
     @Override
@@ -93,6 +96,7 @@ public class CalendarActivity extends BaseActivity {
         calendar = findViewById(R.id.calendar_CALENDAR);
         dateTitle = findViewById(R.id.calendar_LBL_selected_day);
         loadingLayout = findViewById(R.id.calendar_LAY_loading);
+        pointsStatus = (PointsStatusFragment) getSupportFragmentManager().findFragmentById(R.id.calendar_FRAG_points_status);
 
     }
 
@@ -110,6 +114,8 @@ public class CalendarActivity extends BaseActivity {
             ClubMember currentUser = MemberDataManager.getInstance().getCurrentUser();
             try {
                 EventDataManager.getInstance().registerMember(currentUser, eventPurchased);
+                CommonUtils.getInstance().showToast("Registered successfully!");
+                pointsStatus.updateCount(currentUser.getPointsCount());
             }
             catch (EventFullException eventFull){
                 Log.e("CalendarActivity", eventFull.toString());
@@ -119,6 +125,11 @@ public class CalendarActivity extends BaseActivity {
                 Log.e("CalendarActivity", notEnoughPoints.toString());
                 CommonUtils.getInstance().showToast("Register Failed - Not enough points.");
             }
+            catch (AlreadyRegisteredException alreadyRegistered){
+                Log.e("CalendarActivity", alreadyRegistered.toString());
+                CommonUtils.getInstance().showToast("Member is already registered.");
+            }
+
         }
     };
 

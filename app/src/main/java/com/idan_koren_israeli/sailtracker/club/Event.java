@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.Exclude;
+import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 
@@ -32,6 +33,7 @@ public class Event implements Serializable {
     private int minutes; // Length of event
 
     private final String EVENT_FULL_MESSAGE =  "Member could not be added, "+ getName()+" event is full";
+    private final String ALREADY_REGISTERED = "Member is already registered to "  + getName();
 
     private int price; // Price (in points) for a single participant register
     private ArrayList<String> registeredMembers;
@@ -179,18 +181,20 @@ public class Event implements Serializable {
                 '}';
     }
 
-    public void registerMember(ClubMember member) throws EventFullException, NotEnoughPointsException{
+    public void registerMember(ClubMember member) throws EventFullException, NotEnoughPointsException, AlreadyRegisteredException{
         if(registeredMembers==null)
             initRegisteredList();
 
         if(registeredMembers.contains(member.getUid())){
-            return; // Member is already registered
+            throw new AlreadyRegisteredException(ALREADY_REGISTERED);
         }
 
         if(maxMembersCount!= 0 && registeredMembers.size() == maxMembersCount)
             throw new EventFullException(EVENT_FULL_MESSAGE);
         registeredMembers.add(member.getUid());
         member.removePoints(getPrice());
+
+        // updating the database
         MemberDataManager.getInstance().storeMember(member);
         EventDataManager.getInstance().storeEvent(this);
     }
