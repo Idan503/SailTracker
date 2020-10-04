@@ -26,9 +26,11 @@ import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinishedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventsLoadedListener;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
 
 import org.joda.time.LocalDate;
 
+import java.lang.reflect.Member;
 import java.util.ArrayList;
 
 public class CalendarActivity extends BaseActivity {
@@ -40,6 +42,7 @@ public class CalendarActivity extends BaseActivity {
     private ArrayList<Event> eventsToShow = new ArrayList<>();
     private PointsStatusFragment pointsStatus;
 
+    private boolean managerView = false;
     private RelativeLayout loadingLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,18 +76,18 @@ public class CalendarActivity extends BaseActivity {
 
 
     // Loading the events into ui, parameter for manager/normal user view mode
-    private void initEventsList(boolean isCurrentUserManager){
+    private void initEventsList(boolean isCurrentUserManager, ArrayList<String> currentUserRegisteredEvents){
         events.setLayoutManager(new LinearLayoutManager(this));
 
         EventsRecyclerAdapter eventsAdapter;
         if(isCurrentUserManager){
             // manager layout - with "add" button as last view
-            eventsAdapter = new ManagerEventRecyclerAdapter(this, eventsToShow);
+            eventsAdapter = new ManagerEventRecyclerAdapter(this, eventsToShow, currentUserRegisteredEvents);
             ((ManagerEventRecyclerAdapter) eventsAdapter).setAddClickedListener(onClickedAddButton);
         }
         else{
             // a regular recycler view of all of today's events
-            eventsAdapter = new EventsRecyclerAdapter(this, eventsToShow);
+            eventsAdapter = new EventsRecyclerAdapter(this, eventsToShow, currentUserRegisteredEvents);
         }
 
         eventsAdapter.setOnPurchasePressed(onClickedPurchase);
@@ -116,6 +119,7 @@ public class CalendarActivity extends BaseActivity {
                 EventDataManager.getInstance().registerMember(currentUser, eventPurchased);
                 CommonUtils.getInstance().showToast("Registered successfully!");
                 pointsStatus.updateCount(currentUser.getPointsCount());
+                reloadData();
             }
             catch (EventFullException eventFull){
                 Log.e("CalendarActivity", eventFull.toString());
@@ -137,7 +141,6 @@ public class CalendarActivity extends BaseActivity {
     private View.OnClickListener onClickedAddButton = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            // load add menu fragment....
             Intent intent = new Intent(CalendarActivity.this, AddEventActivity.class);
             intent.putExtra(AddEventActivity.KEYS.EVENT_DATE, selectedDate);
             startActivity(intent);
@@ -165,7 +168,17 @@ public class CalendarActivity extends BaseActivity {
         public void onCheckFinished(boolean result) {
             // Code gets to here after we checked with the db if the current user is a manager or not
             // Therefore, we will know if our recycler view should inflate another last view of "Add Event Button"
-            initEventsList(result);
+            managerView = result;
+            EventDataManager.getInstance().loadRegisteredEvents(onListLoadedListener);
+        }
+    };
+
+    private OnListLoadedListener<String> onListLoadedListener = new OnListLoadedListener<String>() {
+        @Override
+        public void onListLoaded(ArrayList<String> list) {
+            // Code gets to here after we already know if the current user is a manager or not.
+            // And also the list of the current user's member already registered events is loaded.
+            initEventsList(managerView, list);
         }
     };
 

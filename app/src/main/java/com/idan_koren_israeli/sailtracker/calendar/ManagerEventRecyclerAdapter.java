@@ -9,8 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,8 +29,8 @@ public class ManagerEventRecyclerAdapter extends EventsRecyclerAdapter {
 
     View.OnClickListener onAddButtonPressed;
 
-    ManagerEventRecyclerAdapter(Context context, List<Event> events) {
-        super(context, events);
+    ManagerEventRecyclerAdapter(Context context, List<Event> events, ArrayList<String> alreadyRegistered) {
+        super(context, events, alreadyRegistered);
     }
 
     public void setAddClickedListener(View.OnClickListener listener){

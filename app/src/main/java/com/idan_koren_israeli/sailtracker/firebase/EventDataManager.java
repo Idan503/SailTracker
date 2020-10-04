@@ -15,6 +15,8 @@ import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.EventFullException;
 import com.idan_koren_israeli.sailtracker.club.NotEnoughPointsException;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventsLoadedListener;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
+
 import org.joda.time.LocalDate;
 
 import java.lang.reflect.Array;
@@ -94,6 +96,27 @@ public class EventDataManager {
 
     }
 
+    // Loads all events ids that a single member is registered to
+    public void loadRegisteredEvents(final ClubMember member, final OnListLoadedListener<String> listener){
+        ValueEventListener onDataLoaded = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> eventsIds = new ArrayList<>();
+                for(DataSnapshot child : snapshot.getChildren()){
+                    eventsIds.add(child.getValue(String.class));
+                }
+                listener.onListLoaded(eventsIds);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        database.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onDataLoaded);
+    }
+
     // Removes a member from an event that he was registered to
     public void unregisterMember(final ClubMember member, final Event event){
         event.unregisterMember(member);
@@ -152,6 +175,12 @@ public class EventDataManager {
 
     private String generateDateStamp(LocalDate time){
         return time.toString("dd_MM_YYYY");
+    }
+
+
+    // Overloading - no member parameter applies to the current user's ClubMember
+    public void loadRegisteredEvents(final OnListLoadedListener<String> listener){
+        loadRegisteredEvents(MemberDataManager.getInstance().getCurrentUser(), listener);
     }
 
 

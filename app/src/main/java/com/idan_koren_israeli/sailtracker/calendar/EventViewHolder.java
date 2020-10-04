@@ -46,6 +46,10 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
+    public void setButtonToAlreadyPurchased(){
+        purchase.setEnabled(false);
+    }
+
     private String generateTimeString(Event event){
         String result =
                 event.getStartDateTime().toString("HH:mm") +

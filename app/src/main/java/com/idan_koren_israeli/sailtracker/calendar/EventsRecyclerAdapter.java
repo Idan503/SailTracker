@@ -1,5 +1,6 @@
 package com.idan_koren_israeli.sailtracker.calendar;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
+import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,15 +31,17 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     protected List<Event> data;
     protected LayoutInflater inflater;
+    protected ArrayList<String> registeredEventsIds; // Events that user viewing is already registered to
 
     private OnPurchaseClickedListener onPurchasePressed;
 
     // Should add purchase click listener here
 
 
-    EventsRecyclerAdapter(Context context,List<Event> events){
+    EventsRecyclerAdapter(Context context,List<Event> events, ArrayList<String> registered){
         this.inflater = LayoutInflater.from(context);
         this.data = events;
+        this.registeredEventsIds = registered;
     }
 
     public void setOnPurchasePressed(OnPurchaseClickedListener purchasePressed){
@@ -54,8 +61,14 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         EventViewHolder eventHolder = new EventViewHolder(holder.itemView);
         if(position < data.size()) {
+            Event event = data.get(position);
             eventHolder.setEventContent(data.get(position));
             eventHolder.setOnPurchaseClickedListener(onPurchasePressed);
+
+            if(registeredEventsIds.contains(event.getEid())){
+                // member is already registered
+                eventHolder.setButtonToAlreadyPurchased();
+            }
         }
 
     }
