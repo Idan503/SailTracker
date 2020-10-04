@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.CalendarView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,6 +40,7 @@ public class CalendarActivity extends BaseActivity {
     private LocalDate selectedDate = LocalDate.now();
     private ArrayList<Event> eventsToShow = new ArrayList<>();
     private PointsStatusFragment pointsStatus;
+    private ClubMember currentUser;
 
     private boolean managerView = false;
     private RelativeLayout loadingLayout;
@@ -49,6 +49,7 @@ public class CalendarActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
+        currentUser = MemberDataManager.getInstance().getCurrentUser();
         findViews();
         initAddedEvent();
 
@@ -90,7 +91,7 @@ public class CalendarActivity extends BaseActivity {
             eventsAdapter = new EventsRecyclerAdapter(this, eventsToShow, currentUserRegisteredEvents);
         }
 
-        eventsAdapter.setOnPurchasePressed(onClickedPurchase);
+        eventsAdapter.setButtonsListeners(onRegisterClicked, onUnregisterClicked);
         events.setAdapter(eventsAdapter);
     }
 
@@ -105,20 +106,18 @@ public class CalendarActivity extends BaseActivity {
 
     // Loading data from database based on current day that is selected in calendar view
     private void reloadData(){
+        pointsStatus.updateCount(currentUser.getPointsCount());
         onDateChangeListener.onSelectedDayChange(calendar,
                 selectedDate.getYear(), selectedDate.getMonthOfYear()-1, selectedDate.getDayOfMonth());
     }
 
     //region UI Direct Callbacks
-    private OnPurchaseClickedListener onClickedPurchase = new OnPurchaseClickedListener() {
+    private OnEventClickedListener onRegisterClicked = new OnEventClickedListener() {
         @Override
-        public void onPurchaseClicked(Event eventPurchased) {
-            //purchse system....
-            ClubMember currentUser = MemberDataManager.getInstance().getCurrentUser();
+        public void onButtonClicked(Event eventClicked) {
             try {
-                EventDataManager.getInstance().registerMember(currentUser, eventPurchased);
+                EventDataManager.getInstance().registerMember(currentUser, eventClicked);
                 CommonUtils.getInstance().showToast("Registered successfully!");
-                pointsStatus.updateCount(currentUser.getPointsCount());
                 reloadData();
             }
             catch (EventFullException eventFull){
@@ -137,6 +136,13 @@ public class CalendarActivity extends BaseActivity {
         }
     };
 
+    private OnEventClickedListener onUnregisterClicked = new OnEventClickedListener(){
+        @Override
+        public void onButtonClicked(Event eventClicked) {
+            EventDataManager.getInstance().unregisterMember(currentUser, eventClicked);
+            reloadData();
+        }
+    };
 
     private View.OnClickListener onClickedAddButton = new View.OnClickListener() {
         @Override

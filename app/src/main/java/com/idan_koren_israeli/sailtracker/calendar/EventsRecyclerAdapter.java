@@ -1,6 +1,5 @@
 package com.idan_koren_israeli.sailtracker.calendar;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.idan_koren_israeli.sailtracker.R;
-import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
-import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
-import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +29,8 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     protected LayoutInflater inflater;
     protected ArrayList<String> registeredEventsIds; // Events that user viewing is already registered to
 
-    private OnPurchaseClickedListener onPurchasePressed;
+    private OnEventClickedListener onRegisterPress;
+    private OnEventClickedListener onUnregisterPress;
 
     // Should add purchase click listener here
 
@@ -44,8 +41,9 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.registeredEventsIds = registered;
     }
 
-    public void setOnPurchasePressed(OnPurchaseClickedListener purchasePressed){
-        this.onPurchasePressed = purchasePressed;
+    public void setButtonsListeners(OnEventClickedListener register, OnEventClickedListener unregister){
+        this.onRegisterPress = register;
+        this.onUnregisterPress = unregister;
     }
 
 
@@ -63,11 +61,11 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if(position < data.size()) {
             Event event = data.get(position);
             eventHolder.setEventContent(data.get(position));
-            eventHolder.setOnPurchaseClickedListener(onPurchasePressed);
+            eventHolder.setButtonListener(onRegisterPress, onUnregisterPress);
 
             if(registeredEventsIds.contains(event.getEid())){
                 // member is already registered
-                eventHolder.setButtonToAlreadyPurchased();
+                eventHolder.setIsRegistered(true);
             }
         }
 
