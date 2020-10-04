@@ -1,17 +1,15 @@
 package com.idan_koren_israeli.sailtracker.club;
 
-import android.net.Uri;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.Exclude;
-import com.idan_koren_israeli.sailtracker.common.CommonUtils;
+import com.idan_koren_israeli.sailtracker.club.exceptions.AlreadyRegisteredException;
+import com.idan_koren_israeli.sailtracker.club.exceptions.EventFullException;
+import com.idan_koren_israeli.sailtracker.club.exceptions.NotEnoughPointsException;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 
 import org.joda.time.DateTime;
-import org.joda.time.Minutes;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -123,6 +121,8 @@ public class Event implements Serializable {
     }
 
     public ArrayList<String> getRegisteredMembers() {
+        if(registeredMembers==null)
+            initRegisteredList();
         return registeredMembers;
     }
 
@@ -181,7 +181,7 @@ public class Event implements Serializable {
                 '}';
     }
 
-    public void registerMember(ClubMember member) throws EventFullException, NotEnoughPointsException, AlreadyRegisteredException{
+    public void registerMember(ClubMember member) throws EventFullException, NotEnoughPointsException, AlreadyRegisteredException {
         if(registeredMembers==null)
             initRegisteredList();
 

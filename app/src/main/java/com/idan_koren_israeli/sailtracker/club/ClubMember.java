@@ -2,7 +2,7 @@ package com.idan_koren_israeli.sailtracker.club;
 
 import androidx.annotation.NonNull;
 
-import com.google.firebase.auth.FirebaseUser;
+import com.idan_koren_israeli.sailtracker.club.exceptions.NotEnoughPointsException;
 import com.idan_koren_israeli.sailtracker.gallery.GalleryPhoto;
 
 import java.util.ArrayList;
@@ -112,7 +112,7 @@ public class ClubMember {
             galleryPhotos.add(photo);
     }
 
-    public void removePoints(int count) throws NotEnoughPointsException{
+    public void removePoints(int count) throws NotEnoughPointsException {
         if(pointsCount - count < 0)
             throw new NotEnoughPointsException("Member " + name + " has less than " + count + " points");
         this.pointsCount-=count;

@@ -64,7 +64,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/home_INV_3"
             android:id="@+id/home_FRAG_profile"
-            android:name="com.idan_koren_israeli.sailtracker.home.ProfileFragment"
+            android:name="com.idan_koren_israeli.sailtracker.user_info.ProfileFragment"
             tools:layout="@layout/fragment_profile_card"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"

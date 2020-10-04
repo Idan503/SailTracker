@@ -18,7 +18,7 @@
             android:id="@+id/calendar_CALENDAR"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.45"
+            app:layout_constraintHeight_percent="0.4"
             app:layout_constraintTop_toTopOf="parent"
             android:background="@android:color/darker_gray"
             />
@@ -38,7 +38,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.075"
+            app:layout_constraintHeight_percent="0.055"
             app:layout_constraintWidth_percent="0.4"
             app:layout_constraintTop_toBottomOf="@id/calendar_CALENDAR"
             app:layout_constraintStart_toStartOf="parent"
@@ -49,15 +49,15 @@
             android:layout_margin="5dp"
             android:padding="4dp"
             app:layout_constraintBottom_toTopOf="@id/calendar_RCY_daily_events"
-            android:autoSizeMaxTextSize="40sp"
-            android:autoSizeMinTextSize="30sp"
+            android:autoSizeMaxTextSize="35sp"
+            android:autoSizeMinTextSize="12sp"
             android:autoSizeTextType="uniform"
             android:layout_marginStart="10dp"
             />
 
 
         <fragment
-            android:name="com.idan_koren_israeli.sailtracker.common.PointsStatusFragment"
+            android:name="com.idan_koren_israeli.sailtracker.user_info.PointsStatusFragment"
             tools:layout="@layout/fragment_points_status"
             android:layout_width="0dp"
             android:layout_height="0dp"

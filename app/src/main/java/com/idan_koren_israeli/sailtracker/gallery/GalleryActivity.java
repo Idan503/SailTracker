@@ -3,7 +3,6 @@ package com.idan_koren_israeli.sailtracker.gallery;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -18,7 +17,7 @@ import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnGalleryPhotoLoadListener;
-import com.idan_koren_israeli.sailtracker.home.ProfileFragment;
+import com.idan_koren_israeli.sailtracker.user_info.ProfileFragment;
 
 public class GalleryActivity extends BaseActivity {
 

@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".calendar.AddEventActivity"></activity>
+        <activity android:name=".user_info.MySailsActivity"></activity>
+        <activity android:name=".calendar.AddEventActivity" />
         <activity
             android:name=".search.SearchActivity"
             android:screenOrientation="portrait" />

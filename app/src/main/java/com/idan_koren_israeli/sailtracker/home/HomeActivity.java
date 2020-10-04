@@ -19,6 +19,7 @@ import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
+import com.idan_koren_israeli.sailtracker.user_info.ProfileFragment;
 
 import java.io.IOException;
 
@@ -28,6 +29,7 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
     private LinearLayout loginLayout;
     private ProfileFragment profileFragment;
     private LoginFragment loginFragment;
+    private NextSailFragment nextSailFragment;
 
     private MemberDataManager dbManager;
 
@@ -53,6 +55,7 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
         loginLayout = findViewById(R.id.home_LAY_login);
         profileFragment =(ProfileFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_profile);
         loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_login);
+        nextSailFragment = (NextSailFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_next_sailing);
 
     }
 
@@ -146,6 +149,8 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
         MemberDataManager.getInstance().setCurrentUser(user);
         hideLoginFragment();
         updateInterface();
+        nextSailFragment.updateUI();
+
     }
 
 

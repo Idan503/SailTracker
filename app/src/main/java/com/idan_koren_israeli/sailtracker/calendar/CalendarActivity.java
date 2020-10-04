@@ -13,14 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.idan_koren_israeli.sailtracker.R;
-import com.idan_koren_israeli.sailtracker.club.AlreadyRegisteredException;
+import com.idan_koren_israeli.sailtracker.club.exceptions.AlreadyRegisteredException;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
-import com.idan_koren_israeli.sailtracker.club.EventFullException;
-import com.idan_koren_israeli.sailtracker.club.NotEnoughPointsException;
+import com.idan_koren_israeli.sailtracker.club.exceptions.EventFullException;
+import com.idan_koren_israeli.sailtracker.club.exceptions.NotEnoughPointsException;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
-import com.idan_koren_israeli.sailtracker.common.PointsStatusFragment;
+import com.idan_koren_israeli.sailtracker.user_info.PointsStatusFragment;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinishedListener;
@@ -29,7 +29,6 @@ import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListene
 
 import org.joda.time.LocalDate;
 
-import java.lang.reflect.Member;
 import java.util.ArrayList;
 
 public class CalendarActivity extends BaseActivity {

@@ -9,19 +9,20 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.idan_koren_israeli.sailtracker.club.AlreadyRegisteredException;
+import com.idan_koren_israeli.sailtracker.club.EventType;
+import com.idan_koren_israeli.sailtracker.club.exceptions.AlreadyRegisteredException;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
-import com.idan_koren_israeli.sailtracker.club.EventFullException;
-import com.idan_koren_israeli.sailtracker.club.NotEnoughPointsException;
+import com.idan_koren_israeli.sailtracker.club.exceptions.EventFullException;
+import com.idan_koren_israeli.sailtracker.club.exceptions.NotEnoughPointsException;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventsLoadedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnNextSailLoadedListener;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  *
@@ -37,6 +38,7 @@ public class EventDataManager {
     interface KEYS {
         String EVENTS = "events";
         String MEMBER_TO_EVENTS = "member_to_events";
+        String MEMBER_TO_NEXT_SAIL = "member_to_next_sail";
         String SAIL_MEMBERS_LIST = "registeredMembers";
     }
 
@@ -72,6 +74,7 @@ public class EventDataManager {
                 .child(KEYS.SAIL_MEMBERS_LIST).setValue(event.getRegisteredMembers());
 
 
+        //region Add Event to Member's List
         ValueEventListener onMembersEventsListLoaded = new ValueEventListener() {
             @SuppressWarnings("unchecked")
             @Override
@@ -82,7 +85,7 @@ public class EventDataManager {
                 else
                     registeredEvents = new ArrayList<>();
                 registeredEvents.add(event.getEid());
-                database.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).setValue(registeredEvents);
+                storeMemberRegisteredEventsList(member, registeredEvents);
                 // Adding the new event to the list and re-saving it
             }
 
@@ -93,7 +96,41 @@ public class EventDataManager {
         };
 
         database.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onMembersEventsListLoaded);
+        //endregion
 
+        if(event.getType()== EventType.FREE_EVENT)
+            return; // not a sail, so we should not update "next sail" value
+
+        //Update Next Sail of Member
+
+        OnNextSailLoadedListener onNextSailLoaded = new OnNextSailLoadedListener() {
+            @Override
+            public void onNextSailLoaded(Event sailLoaded) {
+                Log.i("pttt", "event sail is loaded what is saved");
+                if(sailLoaded==null || sailLoaded.getStartDateTime().getMillis() > event.getStartDateTime().getMillis()
+                    || sailLoaded.getStartDateTime().getMillis() < DateTime.now().getMillis()){
+                    // a new next sail was detected (Closer to now)
+                    storeNextSail(member, event);
+                }
+                else{
+                    Log.i("pttt", "didn't update new next sail");
+                }
+            }
+        };
+
+        loadNextSail(member, onNextSailLoaded);
+
+        //endregion
+
+    }
+
+
+    private void storeNextSail(ClubMember member, Event newNextSail){
+        database.child(KEYS.MEMBER_TO_NEXT_SAIL).child(member.getUid()).setValue(newNextSail);
+    }
+
+    private void storeMemberRegisteredEventsList(ClubMember member, ArrayList<String> list){
+        database.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).setValue(list);
     }
 
     // Loads all events ids that a single member is registered to
@@ -172,11 +209,27 @@ public class EventDataManager {
         );
     }
 
+    public void loadNextSail(final ClubMember member, final OnNextSailLoadedListener onLoaded){
+
+        ValueEventListener onValueLoaded = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Event loadedSail = snapshot.getValue(Event.class);
+                onLoaded.onNextSailLoaded(loadedSail);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        database.child(KEYS.MEMBER_TO_NEXT_SAIL).child(member.getUid()).addListenerForSingleValueEvent(onValueLoaded);
+    }
 
     private String generateDateStamp(LocalDate time){
         return time.toString("dd_MM_YYYY");
     }
-
 
     // Overloading - no member parameter applies to the current user's ClubMember
     public void loadRegisteredEvents(final OnListLoadedListener<String> listener){

@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker.common;
+package com.idan_koren_israeli.sailtracker.user_info;
 
 import android.os.Bundle;
 

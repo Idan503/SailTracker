@@ -1,5 +1,6 @@
-package com.idan_koren_israeli.sailtracker.home;
+package com.idan_koren_israeli.sailtracker.user_info;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -14,13 +15,11 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.button.MaterialButton;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
-import com.idan_koren_israeli.sailtracker.common.PointsStatusFragment;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
-
-import java.util.Locale;
 
 /**
  * Profile card is a resizable fragment that is showing information about a user ( a club member)
@@ -30,7 +29,8 @@ import java.util.Locale;
 public class ProfileFragment extends Fragment {
 
     private ImageView profileImage;
-    private TextView nameText, numOfSailsText;
+    private TextView nameText;
+    private MaterialButton mySails;
     private ClubMember member;
     private PointsStatusFragment pointsStatus;
 
@@ -63,15 +63,27 @@ public class ProfileFragment extends Fragment {
         View parent = inflater.inflate(R.layout.fragment_profile_card, container, false);
         // Inflate the layout for this fragment
         findViews(parent);
+        setListeners();
         return parent;
     }
 
     private void findViews(View parent){
         profileImage = parent.findViewById(R.id.profile_IMG_picture);
         nameText = parent.findViewById(R.id.profile_LBL_name);
-        numOfSailsText = parent.findViewById(R.id.profile_LBL_sails_count);
+        mySails = parent.findViewById(R.id.profile_BTN_my_sails);
         pointsStatus= (PointsStatusFragment) getChildFragmentManager().findFragmentById(R.id.profile_FRAG_points_status);
+    }
 
+    private void setListeners(){
+        mySails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), MySailsActivity.class);
+                startActivity(intent);
+                // Caller activity is purposefully not finished.
+                // "My sails" activity would be finished and user will get back to the caller activity
+                }
+        });
     }
 
 
@@ -85,7 +97,6 @@ public class ProfileFragment extends Fragment {
             return; // No member associated
         nameText.setText(member.getName());
         MemberDataManager.getInstance().loadProfilePhoto(member.getUid(), onProfileUriSuccess, onProfileUriFailure);
-        numOfSailsText.setText(String.format(Locale.US,"%d", member.getSailsCount()));
         pointsStatus.setMember(member);
     }
 
@@ -120,14 +131,6 @@ public class ProfileFragment extends Fragment {
 
     public void setNameText(TextView nameText) {
         this.nameText = nameText;
-    }
-
-    public TextView getNumOfSailsText() {
-        return numOfSailsText;
-    }
-
-    public void setNumOfSailsText(TextView numOfSailsText) {
-        this.numOfSailsText = numOfSailsText;
     }
 
     public ClubMember getMember() {

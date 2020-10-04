@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.15"
         android:padding="5dp"
-        android:text="@string/my_next_sailing"
+        android:text="@string/my_next_sail"
         android:autoSizeTextType="uniform"
         android:id="@+id/next_sail_LBL_title"
 
@@ -33,7 +33,7 @@
             android:background="@android:color/black"
             android:alpha="0.45"
             android:id="@+id/next_sail_IMG_background"
-            android:contentDescription="@string/my_next_sailing"
+            android:contentDescription="@string/my_next_sail"
             />
 
         <LinearLayout
@@ -51,6 +51,7 @@
                 android:layout_weight="0.4"
                 android:text="@string/example_sail_name"
                 android:autoSizeTextType="uniform"
+                android:id="@+id/next_sail_LBL_sail_name"
                 android:padding="5dp"
                 android:autoSizeMaxTextSize="25sp"
                 />
@@ -74,6 +75,7 @@
                     android:autoSizeTextType="uniform"
                     android:autoSizeMaxTextSize="25sp"
                     android:textSize="16sp"
+                    android:id="@+id/next_sail_LBL_date"
                     />
 
                 <TextView
@@ -81,19 +83,11 @@
                     android:layout_height="wrap_content"
                     android:text="@string/example_hour"
                     android:autoSizeTextType="uniform"
+                    android:id="@+id/next_sail_LBL_start_time"
                     android:autoSizeMaxTextSize="25sp"
                     android:textSize="16sp"
                     />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/example_place"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMaxTextSize="25sp"
-                    android:includeFontPadding="false"
-                    android:textSize="16sp"
-                    />
 
 
 

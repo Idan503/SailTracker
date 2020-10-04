@@ -63,6 +63,19 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/event_item_LBL_time"
+                    android:autoSizeMinTextSize="14sp"
+                    android:autoSizeMaxTextSize="24sp"
+                    android:gravity="start"
+                    android:text="@string/example_registration_status"
+                    android:layout_marginStart="15dp"
+                    android:padding="4dp"
+                    android:id="@+id/event_item_LBL_register_status"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:textSize="14sp"
                     android:text="@string/example_sail_description"
                     android:lines="1"
@@ -92,6 +105,8 @@
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintTop_toTopOf="parent"
                     android:id="@+id/event_item_IMG_image"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_baseline_add_24"
                     android:layout_margin="25dp"
                     />
 
