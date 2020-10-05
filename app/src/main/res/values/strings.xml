@@ -19,6 +19,7 @@
     <string name="back">Back</string>
     <string name="plus_sign">+</string>
     <string name="loading">loading</string>
+    <string name="photo">photo</string>
 
     <string name="my_next_sail">My Next Sail</string>
 
@@ -68,7 +69,6 @@
 
     <!-- SPECIAL FORMATS -->
     <string name="hour_time_format">%02d:%02d</string>
-
 
 
 </resources>

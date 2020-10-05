@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".gallery.PhotoInspectActivity">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/photo_inspect_IMG_photo"
+        android:contentDescription="@string/photo"
+        />
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.idan_koren_israeli.sailtracker.common.LoadingFragment"
+        tools:layout="@layout/fragment_loading"
+        android:id="@+id/photo_inspect_FRAG_loading"
+        />
+
+
+</RelativeLayout>

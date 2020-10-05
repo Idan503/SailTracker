@@ -17,7 +17,7 @@ public class PhotoCollectionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     private GalleryPhoto[] photos;
     private LayoutInflater mInflater;
-    private View.OnClickListener photoClickListener;
+    private OnPhotoClickedListener photoClickListener;
     private static final int NUM_OF_COLUMNS = 3;
 
     PhotoCollectionAdapter(Context context, GalleryPhoto[] photos){
@@ -25,7 +25,7 @@ public class PhotoCollectionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         this.photos = photos;
     }
 
-    public void setPhotoClickListener(View.OnClickListener listener){
+    public void setPhotoClickListener(OnPhotoClickedListener listener){
         this.photoClickListener = listener;
     }
 
@@ -45,10 +45,7 @@ public class PhotoCollectionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        // Binds data (ImagePhoto) into the view using the given uri
-        ImageView innerImage = holder.itemView.findViewById(R.id.photo_item_IMG_inner_image);
-        CommonUtils.getInstance().setImageResource(innerImage, Uri.parse(photos[position].getUrl()));
-
+        ((PhotoViewHolder) holder).setPhoto(photos[position]);
     }
 
     @Override

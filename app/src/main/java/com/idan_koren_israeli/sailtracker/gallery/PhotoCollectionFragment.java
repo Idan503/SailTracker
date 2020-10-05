@@ -1,12 +1,12 @@
 package com.idan_koren_israeli.sailtracker.gallery;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,19 +29,16 @@ public class PhotoCollectionFragment extends Fragment {
     RecyclerView recyclerView;
     PhotoCollectionAdapter adapter;
 
+    public interface KEYS{
+        String PHOTO_URL = "photo_url";
+    }
+
     private static final int NUM_OF_COLUMNS = 3;
 
     public PhotoCollectionFragment() {
         // Required empty public constructor
     }
 
-
-    public static PhotoCollectionFragment newInstance(ClubMember member) {
-        PhotoCollectionFragment fragment = new PhotoCollectionFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     public void setMember(ClubMember member){
         this.member = member;
@@ -70,9 +67,12 @@ public class PhotoCollectionFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    private View.OnClickListener onPhotoClicked = new View.OnClickListener() {
+    private OnPhotoClickedListener onPhotoClicked = new OnPhotoClickedListener() {
         @Override
-        public void onClick(View view) {
+        public void onPhotoClicked(GalleryPhoto photo) {
+            Intent intent = new Intent(getActivity(), PhotoInspectActivity.class);
+            intent.putExtra(KEYS.PHOTO_URL,photo.getUrl());
+            startActivity(intent);
         }
     };
 
@@ -82,6 +82,8 @@ public class PhotoCollectionFragment extends Fragment {
         GalleryPhoto[] photosArray = new GalleryPhoto[photosList.size()];
         return photosList.toArray(photosArray);
     }
+
+
 
 
 }

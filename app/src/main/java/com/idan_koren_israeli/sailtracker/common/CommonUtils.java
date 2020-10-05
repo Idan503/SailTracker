@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.widget.ImageView;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestListener;
 
 import java.io.ByteArrayOutputStream;
 
@@ -56,6 +58,13 @@ public class CommonUtils {
                 .load(uri)
                 .into(image);
     }
+
+    public void setImageResource(@NonNull ImageView image, Uri uri, RequestListener<Drawable> listener){
+        Glide.with(context)
+                .load(uri).addListener(listener)
+                .into(image);
+    }
+
 
     //endregion
 
