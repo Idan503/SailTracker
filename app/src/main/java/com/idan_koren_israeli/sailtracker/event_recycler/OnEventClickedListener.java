@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker.calendar;
+package com.idan_koren_israeli.sailtracker.event_recycler;
 
 import com.idan_koren_israeli.sailtracker.club.Event;
 

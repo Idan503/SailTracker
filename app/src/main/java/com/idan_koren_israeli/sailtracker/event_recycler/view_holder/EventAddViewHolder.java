@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker.calendar;
+package com.idan_koren_israeli.sailtracker.event_recycler.view_holder;
 
 import android.view.View;
 import android.widget.ImageView;

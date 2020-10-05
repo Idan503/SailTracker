@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker.my_sails;
+package com.idan_koren_israeli.sailtracker.event_recycler.view_holder;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -17,7 +17,7 @@ import com.idan_koren_israeli.sailtracker.common.CommonUtils;
  * This is only for information providing, no actions
  *
  */
-public class EventInfoViewHolder extends RecyclerView.ViewHolder {
+public class EventViewHolder extends RecyclerView.ViewHolder {
 
     private interface IMAGE_ID_KEYS{
         int FREE_EVENT = R.drawable.ic_launcher_foreground;
@@ -29,7 +29,7 @@ public class EventInfoViewHolder extends RecyclerView.ViewHolder {
     private TextView nameText, descriptionText, timeText, registerStatusText;
     private ImageView image;
 
-    public EventInfoViewHolder(@NonNull View itemView) {
+    public EventViewHolder(@NonNull View itemView) {
         super(itemView);
         findViews();
     }

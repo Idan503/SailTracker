@@ -1,8 +1,7 @@
-package com.idan_koren_israeli.sailtracker.calendar;
+package com.idan_koren_israeli.sailtracker.event_recycler.adapter;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -11,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
+import com.idan_koren_israeli.sailtracker.event_recycler.view_holder.EventAddViewHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,11 +24,12 @@ import java.util.List;
  * Method that checks if a user is manager or not is written in @MembersDataManager
  *
  */
-public class ManagerEventRecyclerAdapter extends EventsRecyclerAdapter {
+public class ManagerEventRecyclerAdapter extends RegistrableEventRecyclerAdapter {
+
 
     View.OnClickListener onAddButtonPressed;
 
-    ManagerEventRecyclerAdapter(Context context, List<Event> events, List<Event> alreadyRegistered) {
+    public ManagerEventRecyclerAdapter(Context context, List<Event> events, List<Event> alreadyRegistered) {
         super(context, events, alreadyRegistered);
     }
 
@@ -41,7 +41,7 @@ public class ManagerEventRecyclerAdapter extends EventsRecyclerAdapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        if(viewType == ADD_BUTTON) {
+        if(viewType == VIEW_TYPE.ADD_BUTTON) {
             view = inflater.inflate(R.layout.recycler_add_event_item, parent, false);
             return new EventAddViewHolder(view);
         }
@@ -58,7 +58,6 @@ public class ManagerEventRecyclerAdapter extends EventsRecyclerAdapter {
             eventHolder.setClickListener(onAddButtonPressed);
         }
         else {
-            Log.i("pttt", "Going to super...");
             super.onBindViewHolder(holder,position);
             // Act as a regular user (load today's event items)
         }
@@ -76,7 +75,7 @@ public class ManagerEventRecyclerAdapter extends EventsRecyclerAdapter {
     @Override
     public int getItemViewType(int position) {
         if(position == eventsList.size())
-            return ADD_BUTTON;
+            return VIEW_TYPE.ADD_BUTTON;
         return super.getItemViewType(position);
     }
 

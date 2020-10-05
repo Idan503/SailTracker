@@ -9,7 +9,8 @@ import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.idan_koren_israeli.sailtracker.R;
-import com.idan_koren_israeli.sailtracker.calendar.EventsRecyclerAdapter;
+import com.idan_koren_israeli.sailtracker.event_recycler.adapter.EventRecyclerAdapter;
+import com.idan_koren_israeli.sailtracker.event_recycler.adapter.RegistrableEventRecyclerAdapter;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.common.LoadingFragment;
@@ -51,8 +52,8 @@ public class MySailsActivity extends AppCompatActivity {
     private void initEventsList(ArrayList<Event> myEvents){
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        EventsRecyclerAdapter eventsAdapter;
-        eventsAdapter = new EventsRecyclerAdapter(this, myEvents,myEvents);
+        EventRecyclerAdapter eventsAdapter;
+        eventsAdapter = new EventRecyclerAdapter(this, myEvents);
 
         recyclerView.setAdapter(eventsAdapter);
         loadingFragment.hide();

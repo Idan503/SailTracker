@@ -21,6 +21,9 @@ import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.common.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.common.PointsStatusFragment;
+import com.idan_koren_israeli.sailtracker.event_recycler.adapter.ManagerEventRecyclerAdapter;
+import com.idan_koren_israeli.sailtracker.event_recycler.OnEventClickedListener;
+import com.idan_koren_israeli.sailtracker.event_recycler.adapter.RegistrableEventRecyclerAdapter;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinishedListener;
@@ -79,7 +82,7 @@ public class CalendarActivity extends BaseActivity {
         events.setLayoutManager(new LinearLayoutManager(this));
 
         Log.i("pttt", "Registered Events : " + registered);
-        EventsRecyclerAdapter eventsAdapter;
+        RegistrableEventRecyclerAdapter eventsAdapter;
         if(isCurrentUserManager){
             // manager layout - with "add" button as last view
             eventsAdapter = new ManagerEventRecyclerAdapter(this, eventsToShow, registered);
@@ -87,7 +90,7 @@ public class CalendarActivity extends BaseActivity {
         }
         else{
             // a regular recycler view of all of today's events
-            eventsAdapter = new EventsRecyclerAdapter(this, eventsToShow, registered);
+            eventsAdapter = new RegistrableEventRecyclerAdapter(this, eventsToShow, registered);
         }
 
         eventsAdapter.setButtonsListeners(onRegisterClicked, onUnregisterClicked);

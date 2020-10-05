@@ -1,7 +1,7 @@
-package com.idan_koren_israeli.sailtracker.calendar;
+package com.idan_koren_israeli.sailtracker.event_recycler.view_holder;
 
 import android.view.View;
-import android.widget.ImageView;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -10,13 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
-import com.idan_koren_israeli.sailtracker.my_sails.EventInfoViewHolder;
+import com.idan_koren_israeli.sailtracker.event_recycler.OnEventClickedListener;
 
 /**
  * Event card with an option to register to the event.
  *
  */
-public class RegistrableEventViewHolder extends EventInfoViewHolder {
+public class RegistrableEventViewHolder extends EventViewHolder {
     private MaterialButton registerButton;
     private boolean registered;
 
@@ -29,6 +29,8 @@ public class RegistrableEventViewHolder extends EventInfoViewHolder {
     public void setEventContent(Event event){
         super.setEventContent(event);
     }
+
+
 
     public void setButtonListener(final OnEventClickedListener register, final OnEventClickedListener unregister){
         this.registerButton.setOnClickListener(new View.OnClickListener() {
