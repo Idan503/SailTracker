@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:id="@+id/photo_inspect_IMG_photo"
         android:contentDescription="@string/photo"
+        android:background="@android:color/black"
         />
 
     <fragment

@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.widget.ImageView;
 
 import com.bumptech.glide.load.DataSource;
@@ -25,19 +27,31 @@ import com.idan_koren_israeli.sailtracker.common.LoadingFragment;
  */
 public class PhotoInspectActivity extends AppCompatActivity {
 
+    private static final float MAX_SCALE = 5f;
+    private static final float MIN_SCALE = 1f;
+    private static final float SNAP_SCALE = 1.2f; // if scale is smaller, image snaps to center
+    private static final int SNAP_TIME = 150; // in ms, snap to center
+
     private LoadingFragment loadingFragment;
     private ImageView imageView;
     private String photoUrl;
+    private float scaleFactor = 1.0f;
+    private ScaleGestureDetector scaleDetector;
+
+    private float imageX, imageY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_inspect);
         findViews();
-        loadPhotoUrl();
-
         loadingFragment.show();
+
+        photoUrl = getIntent().getStringExtra(PhotoCollectionFragment.KEYS.PHOTO_URL);
         loadPhoto();
+
+        // Setting the scale zoom gestures
+        //scaleDetector = new ScaleGestureDetector(this, new ScaleListener());
 
     }
 
@@ -46,9 +60,6 @@ public class PhotoInspectActivity extends AppCompatActivity {
         loadingFragment = (LoadingFragment) getSupportFragmentManager().findFragmentById(R.id.photo_inspect_FRAG_loading);
     }
 
-    private void loadPhotoUrl(){
-        this.photoUrl = getIntent().getStringExtra(PhotoCollectionFragment.KEYS.PHOTO_URL);
-    }
 
     private void loadPhoto(){
         CommonUtils.getInstance().setImageResource(imageView, Uri.parse(photoUrl),imageLoadListener);
@@ -66,4 +77,30 @@ public class PhotoInspectActivity extends AppCompatActivity {
             return false;
         }
     };
+
+    //region Image Scale Gestures
+
+    //  redirects all touch events in the activity to the gesture detector
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+                imageX = imageView.getX() - event.getRawX();
+                imageY = imageView.getY() - event.getRawY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                imageView.animate().x(event.getRawX() + imageX).y(event.getRawY() + imageY).setDuration(0).start();
+                break;
+            case MotionEvent.ACTION_UP:
+                if(scaleFactor < SNAP_SCALE)
+                    imageView.animate().x(0).y(0).setDuration(SNAP_TIME).start();
+                scaleFactor = 1f;
+                break;
+            default:
+                imageView.animate().x(0).y(0).setDuration(SNAP_TIME).start();
+                scaleFactor = 1f;
+                break;
+        }
+        return true;
+    }
 }
