@@ -19,7 +19,7 @@ import com.google.android.material.button.MaterialButton;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
-import com.idan_koren_israeli.sailtracker.my_sails.MySailsActivity;
+import com.idan_koren_israeli.sailtracker.history.HistoryActivity;
 
 /**
  * Profile card is a resizable fragment that is showing information about a user ( a club member)
@@ -78,7 +78,7 @@ public class ProfileFragment extends Fragment {
         mySails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), MySailsActivity.class);
+                Intent intent = new Intent(getActivity(), HistoryActivity.class);
                 startActivity(intent);
                 // Caller activity is purposefully not finished.
                 // "My sails" activity would be finished and user will get back to the caller activity

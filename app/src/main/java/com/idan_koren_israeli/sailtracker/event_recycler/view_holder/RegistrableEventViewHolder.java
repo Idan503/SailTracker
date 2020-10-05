@@ -31,7 +31,6 @@ public class RegistrableEventViewHolder extends EventViewHolder {
     }
 
 
-
     public void setButtonListener(final OnEventClickedListener register, final OnEventClickedListener unregister){
         this.registerButton.setOnClickListener(new View.OnClickListener() {
             @Override

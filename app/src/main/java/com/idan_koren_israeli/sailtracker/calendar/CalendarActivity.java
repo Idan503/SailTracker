@@ -21,6 +21,7 @@ import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.common.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.common.PointsStatusFragment;
+import com.idan_koren_israeli.sailtracker.event_recycler.adapter.EventRecyclerAdapter;
 import com.idan_koren_israeli.sailtracker.event_recycler.adapter.ManagerEventRecyclerAdapter;
 import com.idan_koren_israeli.sailtracker.event_recycler.OnEventClickedListener;
 import com.idan_koren_israeli.sailtracker.event_recycler.adapter.RegistrableEventRecyclerAdapter;
@@ -29,6 +30,7 @@ import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinishedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ import java.util.ArrayList;
 public class CalendarActivity extends BaseActivity {
 
     private CalendarView calendar;
-    private RecyclerView events;
+    private RecyclerView eventsRecycler;
     private TextView dateTitle;
     private LocalDate selectedDate = LocalDate.now();
     private ArrayList<Event> eventsToShow = new ArrayList<>();
@@ -78,28 +80,35 @@ public class CalendarActivity extends BaseActivity {
 
 
     // Loading the events into ui, parameter for manager/normal user view mode
-    private void initEventsList(boolean isCurrentUserManager, ArrayList<Event> registered){
-        events.setLayoutManager(new LinearLayoutManager(this));
+    private void initEventsList(boolean isCurrentUserManager, ArrayList<Event> registered) {
+        eventsRecycler.setLayoutManager(new LinearLayoutManager(this));
 
         Log.i("pttt", "Registered Events : " + registered);
-        RegistrableEventRecyclerAdapter eventsAdapter;
-        if(isCurrentUserManager){
-            // manager layout - with "add" button as last view
-            eventsAdapter = new ManagerEventRecyclerAdapter(this, eventsToShow, registered);
-            ((ManagerEventRecyclerAdapter) eventsAdapter).setAddClickedListener(onClickedAddButton);
-        }
-        else{
-            // a regular recycler view of all of today's events
-            eventsAdapter = new RegistrableEventRecyclerAdapter(this, eventsToShow, registered);
+        EventRecyclerAdapter eventsAdapter;
+
+        if (selectedDate.toDateTimeAtStartOfDay().plusDays(1).getMillis() < DateTime.now().getMillis()) {
+            // Selected date is in the past, so there should not be an option to add/register to events
+            eventsAdapter = new EventRecyclerAdapter(this, eventsToShow);
+        } else {
+            if (isCurrentUserManager) {
+                // manager layout - with "add" button as last view
+                eventsAdapter = new ManagerEventRecyclerAdapter(this, eventsToShow, registered);
+                ((ManagerEventRecyclerAdapter) eventsAdapter).setAddClickedListener(onClickedAddButton);
+            } else {
+                // a register recycler view of all of selected day's events
+                eventsAdapter = new RegistrableEventRecyclerAdapter(this, eventsToShow, registered);
+            }
+            ((RegistrableEventRecyclerAdapter)eventsAdapter).setButtonsListeners(onRegisterClicked, onUnregisterClicked);
         }
 
-        eventsAdapter.setButtonsListeners(onRegisterClicked, onUnregisterClicked);
-        events.setAdapter(eventsAdapter);
+
+
+        eventsRecycler.setAdapter(eventsAdapter);
         loadingFragment.hide();
     }
 
     private void findViews(){
-        events = findViewById(R.id.calendar_RCY_daily_events);
+        eventsRecycler = findViewById(R.id.calendar_RCY_daily_events);
         calendar = findViewById(R.id.calendar_CALENDAR);
         dateTitle = findViewById(R.id.calendar_LBL_selected_day);
         loadingFragment = (LoadingFragment) getSupportFragmentManager().findFragmentById(R.id.calendar_FRAG_loading);
