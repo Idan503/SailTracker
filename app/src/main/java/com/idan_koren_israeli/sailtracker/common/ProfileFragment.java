@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker.user_info;
+package com.idan_koren_israeli.sailtracker.common;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -18,8 +18,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.R;
-import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
+import com.idan_koren_israeli.sailtracker.my_sails.MySailsActivity;
 
 /**
  * Profile card is a resizable fragment that is showing information about a user ( a club member)

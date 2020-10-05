@@ -1,5 +1,6 @@
 package com.idan_koren_israeli.sailtracker.calendar;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,20 +26,19 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     protected static final int ADD_BUTTON = 1;
     //endregion
 
-    protected List<Event> data;
+    protected List<Event> eventsList;
+    protected List<Event> registeredEvents; // Events that user viewing is already registered to
     protected LayoutInflater inflater;
-    protected ArrayList<String> registeredEventsIds; // Events that user viewing is already registered to
 
     private OnEventClickedListener onRegisterPress;
     private OnEventClickedListener onUnregisterPress;
 
-    // Should add purchase click listener here
 
 
-    EventsRecyclerAdapter(Context context,List<Event> events, ArrayList<String> registered){
+    public EventsRecyclerAdapter(Context context,List<Event> events, List<Event> registered){
         this.inflater = LayoutInflater.from(context);
-        this.data = events;
-        this.registeredEventsIds = registered;
+        this.eventsList = events;
+        this.registeredEvents = registered;
     }
 
     public void setButtonsListeners(OnEventClickedListener register, OnEventClickedListener unregister){
@@ -46,24 +46,25 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.onUnregisterPress = unregister;
     }
 
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         view = inflater.inflate(R.layout.recycler_event_item,parent,false);
-        return new EventViewHolder(view);
+        return new RegistrableEventViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        EventViewHolder eventHolder = new EventViewHolder(holder.itemView);
-        if(position < data.size()) {
-            Event event = data.get(position);
-            eventHolder.setEventContent(data.get(position));
+        RegistrableEventViewHolder eventHolder = new RegistrableEventViewHolder(holder.itemView);
+        if(position < eventsList.size()) {
+            Event event = eventsList.get(position);
+            eventHolder.setEventContent(eventsList.get(position));
             eventHolder.setButtonListener(onRegisterPress, onUnregisterPress);
 
-            if(registeredEventsIds.contains(event.getEid())){
+            Log.i("pttt", "Registered : " + registeredEvents);
+            Log.i("pttt", "All : " + eventsList);
+            if(registeredEvents.contains(event)){
                 // member is already registered
                 eventHolder.setIsRegistered(true);
             }
@@ -74,16 +75,16 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return eventsList.size();
     }
 
     public Event getItem(int position){
-        return data.get(position);
+        return eventsList.get(position);
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(data.get(position).getClass() == Event.class)
+        if(eventsList.get(position).getClass() == Event.class)
             return EVENT;
         return EVENT;
     }

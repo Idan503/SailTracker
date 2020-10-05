@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".gallery.PhotoInspectActivity"></activity>
-        <activity android:name=".user_info.MySailsActivity" />
+        <activity android:name=".my_sails.MySailsActivity" />
         <activity android:name=".calendar.AddEventActivity" />
         <activity
             android:name=".search.SearchActivity"

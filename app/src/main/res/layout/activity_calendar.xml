@@ -46,7 +46,7 @@
 
 
         <fragment
-            android:name="com.idan_koren_israeli.sailtracker.user_info.PointsStatusFragment"
+            android:name="com.idan_koren_israeli.sailtracker.common.PointsStatusFragment"
             tools:layout="@layout/fragment_points_status"
             android:layout_width="0dp"
             android:layout_height="0dp"

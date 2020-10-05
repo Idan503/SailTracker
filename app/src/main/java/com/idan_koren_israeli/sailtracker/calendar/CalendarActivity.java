@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,11 +20,10 @@ import com.idan_koren_israeli.sailtracker.club.exceptions.NotEnoughPointsExcepti
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.common.LoadingFragment;
-import com.idan_koren_israeli.sailtracker.user_info.PointsStatusFragment;
+import com.idan_koren_israeli.sailtracker.common.PointsStatusFragment;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinishedListener;
-import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventsLoadedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
 
 import org.joda.time.LocalDate;
@@ -77,22 +75,24 @@ public class CalendarActivity extends BaseActivity {
 
 
     // Loading the events into ui, parameter for manager/normal user view mode
-    private void initEventsList(boolean isCurrentUserManager, ArrayList<String> currentUserRegisteredEvents){
+    private void initEventsList(boolean isCurrentUserManager, ArrayList<Event> registered){
         events.setLayoutManager(new LinearLayoutManager(this));
 
+        Log.i("pttt", "Registered Events : " + registered);
         EventsRecyclerAdapter eventsAdapter;
         if(isCurrentUserManager){
             // manager layout - with "add" button as last view
-            eventsAdapter = new ManagerEventRecyclerAdapter(this, eventsToShow, currentUserRegisteredEvents);
+            eventsAdapter = new ManagerEventRecyclerAdapter(this, eventsToShow, registered);
             ((ManagerEventRecyclerAdapter) eventsAdapter).setAddClickedListener(onClickedAddButton);
         }
         else{
             // a regular recycler view of all of today's events
-            eventsAdapter = new EventsRecyclerAdapter(this, eventsToShow, currentUserRegisteredEvents);
+            eventsAdapter = new EventsRecyclerAdapter(this, eventsToShow, registered);
         }
 
         eventsAdapter.setButtonsListeners(onRegisterClicked, onUnregisterClicked);
         events.setAdapter(eventsAdapter);
+        loadingFragment.hide();
     }
 
     private void findViews(){
@@ -111,7 +111,7 @@ public class CalendarActivity extends BaseActivity {
                 selectedDate.getYear(), selectedDate.getMonthOfYear()-1, selectedDate.getDayOfMonth());
     }
 
-    //region UI Direct Callbacks
+    //region UI Related Callbacks
     private OnEventClickedListener onRegisterClicked = new OnEventClickedListener() {
         @Override
         public void onButtonClicked(Event eventClicked) {
@@ -159,13 +159,12 @@ public class CalendarActivity extends BaseActivity {
     //region Realtime Database callbacks
 
 
-    private OnEventsLoadedListener onEventsLoaded = new OnEventsLoadedListener() {
+    private OnListLoadedListener<Event> onEventsLoaded = new OnListLoadedListener<Event>() {
         @Override
-        public void onEventsListener(ArrayList<Event> eventsLoaded) {
+        public void onListLoaded(ArrayList<Event> eventsLoaded) {
             eventsToShow.clear();
             eventsToShow.addAll(eventsLoaded);
             MemberDataManager.getInstance().isManagerMember(onCheckedManager);
-            loadingFragment.hide();
         }
     };
 
@@ -179,9 +178,9 @@ public class CalendarActivity extends BaseActivity {
         }
     };
 
-    private OnListLoadedListener<String> onListLoadedListener = new OnListLoadedListener<String>() {
+    private OnListLoadedListener<Event> onListLoadedListener = new OnListLoadedListener<Event>() {
         @Override
-        public void onListLoaded(ArrayList<String> list) {
+        public void onListLoaded(ArrayList<Event> list) {
             // Code gets to here after we already know if the current user is a manager or not.
             // And also the list of the current user's member already registered events is loaded.
             initEventsList(managerView, list);
@@ -201,7 +200,7 @@ public class CalendarActivity extends BaseActivity {
             LocalDate dateSelected = new LocalDate(i,i1+1,i2);
             dateTitle.setText(dateSelected.toString());
             selectedDate = dateSelected;
-            EventDataManager.getInstance().loadEvents(dateSelected, onEventsLoaded);
+            EventDataManager.getInstance().loadEventsByDate(dateSelected, onEventsLoaded);
         }
     };
 

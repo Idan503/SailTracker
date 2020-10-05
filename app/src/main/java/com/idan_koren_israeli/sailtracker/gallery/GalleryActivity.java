@@ -17,7 +17,7 @@ import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnGalleryPhotoLoadListener;
-import com.idan_koren_israeli.sailtracker.user_info.ProfileFragment;
+import com.idan_koren_israeli.sailtracker.common.ProfileFragment;
 
 public class GalleryActivity extends BaseActivity {
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".user_info.MySailsActivity"
+    tools:context=".my_sails.MySailsActivity"
     android:orientation="vertical"
     >
 
@@ -34,6 +34,15 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="40dp"
         android:id="@+id/my_sails_FAB_back"
+        />
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.idan_koren_israeli.sailtracker.common.LoadingFragment"
+        android:layout_below="@id/my_sails_LBL_title"
+        android:id="@+id/my_sails_FRAG_loading"
+        tools:layout="@layout/fragment_loading"
         />
 
 </RelativeLayout>

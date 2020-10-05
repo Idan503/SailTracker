@@ -1,7 +1,5 @@
 package com.idan_koren_israeli.sailtracker.firebase;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -15,7 +13,6 @@ import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.exceptions.EventFullException;
 import com.idan_koren_israeli.sailtracker.club.exceptions.NotEnoughPointsException;
-import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventsLoadedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnNextSailLoadedListener;
 
@@ -37,6 +34,7 @@ public class EventDataManager {
 
     interface KEYS {
         String EVENTS = "events";
+        String DATE_TO_EVENTS = "date_to_events";
         String MEMBER_TO_EVENTS = "member_to_events";
         String MEMBER_TO_NEXT_SAIL = "member_to_next_sail";
         String SAIL_MEMBERS_LIST = "registeredMembers";
@@ -61,16 +59,16 @@ public class EventDataManager {
 
     // Adds an event to the db
     public void storeEvent(Event event){
-        database.child(KEYS.EVENTS).child(generateDateStamp(event.getStartDateTime().toLocalDate())).child(event.getEid()).setValue(event);
-
+        database.child(KEYS.EVENTS).child(event.getEid()).setValue(event);
+        database.child(KEYS.DATE_TO_EVENTS).child(generateDateStamp(event.getStartDateTime().toLocalDate())).child(event.getEid()).setValue(event.getName());
     }
 
     // Adds a member to its event by uid
     public void registerMember(final ClubMember member, final Event event) throws EventFullException, NotEnoughPointsException, AlreadyRegisteredException {
         event.registerMember(member);
 
-        // Updating the stored event object
-        database.child(KEYS.EVENTS).child(generateDateStamp(event.getStartDateTime().toLocalDate())).child(event.getEid())
+        // Updating the stored event object with the new member registered in the list
+        database.child(KEYS.EVENTS).child(event.getEid())
                 .child(KEYS.SAIL_MEMBERS_LIST).setValue(event.getRegisteredMembers());
 
 
@@ -130,7 +128,7 @@ public class EventDataManager {
     }
 
     // Loads all events ids that a single member is registered to
-    public void loadRegisteredEvents(final ClubMember member, final OnListLoadedListener<String> listener){
+    public void loadRegisteredEvents(final ClubMember member, final OnListLoadedListener<Event> onLoaded){
         ValueEventListener onDataLoaded = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -138,7 +136,7 @@ public class EventDataManager {
                 for(DataSnapshot child : snapshot.getChildren()){
                     eventsIds.add(child.getValue(String.class));
                 }
-                listener.onListLoaded(eventsIds);
+                loadEventsById(eventsIds,onLoaded);
             }
 
             @Override
@@ -184,16 +182,25 @@ public class EventDataManager {
     }
 
     // Loads all events from a single day
-    public void loadEvents(LocalDate day, final OnEventsLoadedListener onLoaded){
-        database.child(KEYS.EVENTS).child(generateDateStamp(day)).addListenerForSingleValueEvent(
+    public void loadEventsByDate(LocalDate day, final OnListLoadedListener<Event> onLoaded){
+
+        final OnListLoadedListener<String> onIdsLoaded = new OnListLoadedListener<String>() {
+            @Override
+            public void onListLoaded(ArrayList<String> list) {
+                loadEventsById(list, onLoaded);
+            }
+        };
+
+
+        database.child(KEYS.DATE_TO_EVENTS).child(generateDateStamp(day)).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        ArrayList<Event> events = new ArrayList<>();
+                        ArrayList<String> events = new ArrayList<>();
                         for(DataSnapshot child : snapshot.getChildren()){
-                            events.add(child.getValue(Event.class));
+                            events.add(child.getKey());
                         }
-                        onLoaded.onEventsListener(events);
+                        onIdsLoaded.onListLoaded(events);
                     }
 
                     @Override
@@ -204,6 +211,28 @@ public class EventDataManager {
                 }
         );
     }
+
+    public void loadEventsById(final ArrayList<String> eventsIdsToLoad, final OnListLoadedListener<Event> listener){
+        ValueEventListener onDataLoaded = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Event> events = new ArrayList<>();
+                for(DataSnapshot child : snapshot.getChildren()){
+                    if(eventsIdsToLoad.contains(child.getKey()))
+                        events.add(child.getValue(Event.class));
+                }
+                listener.onListLoaded(events);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        database.child(KEYS.EVENTS).addListenerForSingleValueEvent(onDataLoaded);
+    }
+
 
     public void loadNextSail(final ClubMember member, final OnNextSailLoadedListener onLoaded){
 
@@ -228,7 +257,7 @@ public class EventDataManager {
     }
 
     // Overloading - no member parameter applies to the current user's ClubMember
-    public void loadRegisteredEvents(final OnListLoadedListener<String> listener){
+    public void loadRegisteredEvents(final OnListLoadedListener<Event> listener){
         loadRegisteredEvents(MemberDataManager.getInstance().getCurrentUser(), listener);
     }
 

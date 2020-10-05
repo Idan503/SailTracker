@@ -68,7 +68,7 @@
            app:layout_constraintStart_toStartOf="parent"
            app:layout_constraintTop_toBottomOf="@id/profile_LBL_name"
            app:layout_constraintBottom_toTopOf="@id/profile_BTN_my_sails"
-           android:name="com.idan_koren_israeli.sailtracker.user_info.PointsStatusFragment"
+           android:name="com.idan_koren_israeli.sailtracker.common.PointsStatusFragment"
            tools:layout="@layout/fragment_points_status"
            android:id="@+id/profile_FRAG_points_status"
            />

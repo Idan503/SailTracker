@@ -20,7 +20,7 @@ import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
-import com.idan_koren_israeli.sailtracker.user_info.ProfileFragment;
+import com.idan_koren_israeli.sailtracker.common.ProfileFragment;
 
 import java.io.IOException;
 
