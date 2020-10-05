@@ -148,5 +148,13 @@
 
     </LinearLayout>
 
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_loading"
+        android:name="com.idan_koren_israeli.sailtracker.common.LoadingFragment"
+        android:id="@+id/home_FRAG_loading"
+        />
+
 
 </FrameLayout>

@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.UploadTask;
+import com.idan_koren_israeli.sailtracker.common.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnLoginFinishedListener;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
@@ -29,6 +30,7 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
     private LinearLayout loginLayout;
     private ProfileFragment profileFragment;
     private LoginFragment loginFragment;
+    private LoadingFragment loadingFragment;
     private NextSailFragment nextSailFragment;
 
     private MemberDataManager dbManager;
@@ -43,8 +45,6 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
         findViews();
         setListeners();
 
-        // Loading menu will be implemented in login fragment itself
-
         loginFragment.setOnCompleteListener(this);
     }
 
@@ -55,6 +55,7 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
         loginLayout = findViewById(R.id.home_LAY_login);
         profileFragment =(ProfileFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_profile);
         loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_login);
+        loadingFragment = (LoadingFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_loading);
         nextSailFragment = (NextSailFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_next_sailing);
 
     }
@@ -100,6 +101,8 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Code gets to here after camera intent is finished, data is the users chosen photo
+        loadingFragment.show();
+
         if (requestCode == 1 && resultCode == RESULT_OK) {
             Bitmap photoBitmap = null;
             if(data.getData()!=null) {
@@ -130,6 +133,7 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
             CommonUtils.getInstance().showToast("Profile photo saved!");
             profileFragment.updateUI(); // Updating interface to show the updated photo
+            loadingFragment.hide();
         }
     };
 

@@ -27,6 +27,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.common.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnLoginFinishedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnMemberLoadListener;
@@ -51,6 +52,7 @@ public class LoginFragment extends Fragment {
 
     private LoginState currentState = LoginState.NOT_STARTED;
     private String currentPhone;
+    private LoadingFragment loadingFragment;
 
     private Button nextButton;
     private EditText phoneEditText, codeEditText, nameEditText;
@@ -75,13 +77,6 @@ public class LoginFragment extends Fragment {
         finishedListener = listener;
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static LoginFragment newInstance(String param1, String param2) {
-        LoginFragment fragment = new LoginFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -94,12 +89,15 @@ public class LoginFragment extends Fragment {
         setOnCompleteListener((OnLoginFinishedListener) context);
     }
 
+
     private OnMemberLoadListener memberLoadFinished = new OnMemberLoadListener() {
         @Override
         public void onMemberLoad(ClubMember memberLoaded) {
+
             if(memberLoaded!=null){
                 finishedListener.onLoginFinished(memberLoaded); // already saved in db
             }
+            loadingFragment.hide();
         }
     };
 
@@ -137,6 +135,7 @@ public class LoginFragment extends Fragment {
 
         findViews(parent);
         setListeners();
+        loadingFragment.show();
 
         return parent;
     }
@@ -147,6 +146,7 @@ public class LoginFragment extends Fragment {
         messageText = root.findViewById(R.id.login_LBL_message);
         codeEditText = root.findViewById(R.id.login_EDT_code_box);
         nameEditText = root.findViewById(R.id.login_EDT_name_box);
+        loadingFragment = (LoadingFragment) getChildFragmentManager().findFragmentById(R.id.login_FRAG_loading);
 
     }
 

@@ -83,6 +83,7 @@
         />
 
 
+
     <Button
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -96,8 +97,17 @@
         android:text="@string/next"
         android:autoSizeTextType="uniform"
         android:padding="20dp"
+        android:background="@android:color/black"
         android:id="@+id/login_BTN_next"
-
         />
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.idan_koren_israeli.sailtracker.common.LoadingFragment"
+        tools:layout="@layout/fragment_loading"
+        android:id="@+id/login_FRAG_loading"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

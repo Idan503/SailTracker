@@ -20,6 +20,7 @@ import com.idan_koren_israeli.sailtracker.club.exceptions.EventFullException;
 import com.idan_koren_israeli.sailtracker.club.exceptions.NotEnoughPointsException;
 import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
+import com.idan_koren_israeli.sailtracker.common.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.user_info.PointsStatusFragment;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
@@ -42,7 +43,7 @@ public class CalendarActivity extends BaseActivity {
     private ClubMember currentUser;
 
     private boolean managerView = false;
-    private RelativeLayout loadingLayout;
+    private LoadingFragment loadingFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +99,7 @@ public class CalendarActivity extends BaseActivity {
         events = findViewById(R.id.calendar_RCY_daily_events);
         calendar = findViewById(R.id.calendar_CALENDAR);
         dateTitle = findViewById(R.id.calendar_LBL_selected_day);
-        loadingLayout = findViewById(R.id.calendar_LAY_loading);
+        loadingFragment = (LoadingFragment) getSupportFragmentManager().findFragmentById(R.id.calendar_FRAG_loading);
         pointsStatus = (PointsStatusFragment) getSupportFragmentManager().findFragmentById(R.id.calendar_FRAG_points_status);
 
     }
@@ -164,7 +165,7 @@ public class CalendarActivity extends BaseActivity {
             eventsToShow.clear();
             eventsToShow.addAll(eventsLoaded);
             MemberDataManager.getInstance().isManagerMember(onCheckedManager);
-            loadingLayout.setVisibility(View.GONE);
+            loadingFragment.hide();
         }
     };
 
@@ -196,11 +197,11 @@ public class CalendarActivity extends BaseActivity {
     CalendarView.OnDateChangeListener onDateChangeListener = new CalendarView.OnDateChangeListener() {
         @Override
         public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
+            loadingFragment.show();
             LocalDate dateSelected = new LocalDate(i,i1+1,i2);
             dateTitle.setText(dateSelected.toString());
             selectedDate = dateSelected;
             EventDataManager.getInstance().loadEvents(dateSelected, onEventsLoaded);
-            loadingLayout.setVisibility(View.VISIBLE);
         }
     };
 

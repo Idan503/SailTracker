@@ -18,6 +18,7 @@
     <string name="next">Next</string>
     <string name="back">Back</string>
     <string name="plus_sign">+</string>
+    <string name="loading">loading</string>
 
     <string name="my_next_sail">My Next Sail</string>
 
@@ -63,8 +64,11 @@
 
     <!-- MESSAGES -->
     <string name="no_next_sail">There is no upcoming sail…</string>
+    <string name="loading_screen">Loading...</string>
 
     <!-- SPECIAL FORMATS -->
     <string name="hour_time_format">%02d:%02d</string>
+
+
 
 </resources>

@@ -106,14 +106,10 @@ public class EventDataManager {
         OnNextSailLoadedListener onNextSailLoaded = new OnNextSailLoadedListener() {
             @Override
             public void onNextSailLoaded(Event sailLoaded) {
-                Log.i("pttt", "event sail is loaded what is saved");
                 if(sailLoaded==null || sailLoaded.getStartDateTime().getMillis() > event.getStartDateTime().getMillis()
                     || sailLoaded.getStartDateTime().getMillis() < DateTime.now().getMillis()){
                     // a new next sail was detected (Closer to now)
                     storeNextSail(member, event);
-                }
-                else{
-                    Log.i("pttt", "didn't update new next sail");
                 }
             }
         };
