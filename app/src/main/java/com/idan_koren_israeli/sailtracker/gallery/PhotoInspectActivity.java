@@ -1,5 +1,6 @@
 package com.idan_koren_israeli.sailtracker.gallery;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,15 +9,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.common.LoadingFragment;
+import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 
 
 /**
@@ -34,11 +42,15 @@ public class PhotoInspectActivity extends AppCompatActivity {
 
     private LoadingFragment loadingFragment;
     private ImageView imageView;
-    private String photoUrl;
-    private float scaleFactor = 1.0f;
-    private ScaleGestureDetector scaleDetector;
+    private GalleryPhoto displayedPhoto;
 
+    private FloatingActionButton deleteFAB, backFAB;
+
+    private float scaleFactor = 1.0f;
+    //private ScaleGestureDetector scaleDetector;
     private float imageX, imageY;
+
+    private ClubMember currentMember;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +59,10 @@ public class PhotoInspectActivity extends AppCompatActivity {
         findViews();
         loadingFragment.show();
 
-        photoUrl = getIntent().getStringExtra(PhotoCollectionFragment.KEYS.PHOTO_URL);
+        displayedPhoto = (GalleryPhoto) getIntent().getSerializableExtra(PhotoCollectionFragment.KEYS.PHOTO_OBJ);
         loadPhoto();
+        setListeners();
+        currentMember = MemberDataManager.getInstance().getCurrentUser();
 
         // Setting the scale zoom gestures
         //scaleDetector = new ScaleGestureDetector(this, new ScaleListener());
@@ -58,25 +72,35 @@ public class PhotoInspectActivity extends AppCompatActivity {
     private void findViews(){
         imageView = findViewById(R.id.photo_inspect_IMG_photo);
         loadingFragment = (LoadingFragment) getSupportFragmentManager().findFragmentById(R.id.photo_inspect_FRAG_loading);
+        deleteFAB = findViewById(R.id.photo_inspect_FAB_delete);
+        backFAB = findViewById(R.id.photo_inspect_FAB_back);
     }
+
+    private void setListeners(){
+        deleteFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MemberDataManager.getInstance().deleteGalleryPhoto(currentMember.getUid(),displayedPhoto,photoDeleteSuccess, photoDeleteFail);
+                currentMember.removeGalleryPhoto(displayedPhoto);
+                MemberDataManager.getInstance().storeMember(currentMember);
+                finish();
+            }
+        });
+
+        backFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
+
 
 
     private void loadPhoto(){
-        CommonUtils.getInstance().setImageResource(imageView, Uri.parse(photoUrl),imageLoadListener);
+        CommonUtils.getInstance().setImageResource(imageView, Uri.parse(displayedPhoto.getUrl()),imageLoadListener);
     }
 
-    private RequestListener<Drawable> imageLoadListener = new RequestListener<Drawable>() {
-        @Override
-        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-            return false;
-        }
-
-        @Override
-        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-            loadingFragment.hide();
-            return false;
-        }
-    };
 
     //region Image Scale Gestures
 
@@ -103,4 +127,37 @@ public class PhotoInspectActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    //region Photo Listeners
+
+    private RequestListener<Drawable> imageLoadListener = new RequestListener<Drawable>() {
+        @Override
+        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+            loadingFragment.hide();
+            return false;
+        }
+    };
+
+    private OnSuccessListener<Void> photoDeleteSuccess = new OnSuccessListener<Void>() {
+        @Override
+        public void onSuccess(Void aVoid) {
+            CommonUtils.getInstance().showToast("Photo deleted successfully");
+            finish();
+        }
+    };
+
+    private OnFailureListener photoDeleteFail = new OnFailureListener() {
+        @Override
+        public void onFailure(@NonNull Exception e) {
+            CommonUtils.getInstance().showToast("Please try again later");
+
+        }
+    };
+
+    //endregion
 }

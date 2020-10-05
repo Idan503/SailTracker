@@ -192,7 +192,7 @@ public class Event implements Serializable {
         if(maxMembersCount!= 0 && registeredMembers.size() == maxMembersCount)
             throw new EventFullException(EVENT_FULL_MESSAGE);
         registeredMembers.add(member.getUid());
-        member.removePoints(getPrice());
+        member.deductPoints(getPrice());
 
         // updating the database
         MemberDataManager.getInstance().storeMember(member);

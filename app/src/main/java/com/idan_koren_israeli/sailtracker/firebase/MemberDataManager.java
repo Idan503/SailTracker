@@ -248,7 +248,7 @@ public class MemberDataManager {
 
     // Uploads an image into storage database, as a part of current user gallery
     // Therefore, each authenticated user can only upload gallery to his own unique folder
-    public void storeGalleryPhoto(String uid,
+    public void storeGalleryPhoto(String memberUid,
                                   Bitmap photo,
                                   OnSuccessListener<UploadTask.TaskSnapshot> onSuccess,
                                   OnFailureListener onFailure) {
@@ -259,9 +259,20 @@ public class MemberDataManager {
         // This will be helpful to sort pictures by time without the need of 2 concurrent callbacks (uri & time - metadata)
         // This might be changed later on.
         StorageReference allGalleryPhotos = dbStorage.getReference().child(KEYS.GALLERY_PHOTOS);
-        StorageReference filePath = allGalleryPhotos.child(uid).child(fileName);
+        StorageReference filePath = allGalleryPhotos.child(memberUid).child(fileName);
         // Each member has a unique sub-folder of photos
         filePath.putBytes(bytes).addOnSuccessListener(onSuccess).addOnFailureListener(onFailure);
+    }
+
+
+    public void deleteGalleryPhoto(String memberUid, GalleryPhoto photo,
+                                   OnSuccessListener<? super Void> onSuccess,
+                                   OnFailureListener onFailure){
+        String fileName = Long.toString(photo.getTimeCreated());
+        StorageReference allGalleryPhotos = dbStorage.getReference().child(KEYS.GALLERY_PHOTOS);
+        StorageReference filePath = allGalleryPhotos.child(memberUid).child(fileName);
+        filePath.delete().addOnSuccessListener(onSuccess).addOnFailureListener(onFailure);
+
     }
 
     //endregion

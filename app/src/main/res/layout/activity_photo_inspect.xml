@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/black"
     tools:context=".gallery.PhotoInspectActivity">
 
 
@@ -21,6 +22,25 @@
         android:name="com.idan_koren_israeli.sailtracker.common.LoadingFragment"
         tools:layout="@layout/fragment_loading"
         android:id="@+id/photo_inspect_FRAG_loading"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/photo_inspect_FAB_back"
+        android:src="@drawable/ic_baseline_arrow_back_24"
+        android:layout_margin="40dp"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/photo_inspect_FAB_delete"
+        android:src="@drawable/ic_baseline_delete_24"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="40dp"
         />
 
 

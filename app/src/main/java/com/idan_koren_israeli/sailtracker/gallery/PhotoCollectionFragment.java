@@ -30,7 +30,7 @@ public class PhotoCollectionFragment extends Fragment {
     PhotoCollectionAdapter adapter;
 
     public interface KEYS{
-        String PHOTO_URL = "photo_url";
+        String PHOTO_OBJ = "photo_obj";
     }
 
     private static final int NUM_OF_COLUMNS = 3;
@@ -60,6 +60,11 @@ public class PhotoCollectionFragment extends Fragment {
         return parent;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
 
     private void updateUI(){
         adapter = new PhotoCollectionAdapter(getContext(),getMemberPhotos());
@@ -71,16 +76,19 @@ public class PhotoCollectionFragment extends Fragment {
         @Override
         public void onPhotoClicked(GalleryPhoto photo) {
             Intent intent = new Intent(getActivity(), PhotoInspectActivity.class);
-            intent.putExtra(KEYS.PHOTO_URL,photo.getUrl());
+            intent.putExtra(KEYS.PHOTO_OBJ,photo);
             startActivity(intent);
         }
     };
 
     private GalleryPhoto[] getMemberPhotos(){
-        member.getGalleryPhotos().sort(new SortByCreationTime());
-        ArrayList<GalleryPhoto> photosList = member.getGalleryPhotos();
-        GalleryPhoto[] photosArray = new GalleryPhoto[photosList.size()];
-        return photosList.toArray(photosArray);
+        if(member!=null) {
+            member.getGalleryPhotos().sort(new SortByCreationTime());
+            ArrayList<GalleryPhoto> photosList = member.getGalleryPhotos();
+            GalleryPhoto[] photosArray = new GalleryPhoto[photosList.size()];
+            return photosList.toArray(photosArray);
+        }
+        return new GalleryPhoto[0];
     }
 
 

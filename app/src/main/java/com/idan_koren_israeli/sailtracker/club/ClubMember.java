@@ -112,7 +112,11 @@ public class ClubMember {
             galleryPhotos.add(photo);
     }
 
-    public void removePoints(int count) throws NotEnoughPointsException {
+    public void removeGalleryPhoto(GalleryPhoto photo){
+        galleryPhotos.remove(photo);
+    }
+
+    public void deductPoints(int count) throws NotEnoughPointsException {
         if(pointsCount - count < 0)
             throw new NotEnoughPointsException("Member " + name + " has less than " + count + " points");
         this.pointsCount-=count;
