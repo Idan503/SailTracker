@@ -27,7 +27,6 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
     private OnEventClickedListener onUnregisterPress;
 
 
-
     public RegistrableEventRecyclerAdapter(Context context, List<Event> events, List<Event> registered){
         super(context,events);
         this.registeredEvents = registered;

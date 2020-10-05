@@ -26,11 +26,19 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
     }
 
     protected Event event;
-    private TextView nameText, descriptionText, timeText, registerStatusText;
+    private TextView nameText, descriptionText, timeOfDayText, dateText, registerStatusText;
     private ImageView image;
+    private boolean showDate;
 
     public EventViewHolder(@NonNull View itemView) {
         super(itemView);
+        showDate = false;
+        findViews();
+    }
+
+    public EventViewHolder(@NonNull View itemView, boolean isShowingDate) {
+        super(itemView);
+        showDate = isShowingDate;
         findViews();
     }
 
@@ -38,17 +46,21 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         this.event = event;
         nameText.setText(event.getName());
         descriptionText.setText(event.getDescription());
-        timeText.setText(generateTimeString(event));
+        timeOfDayText.setText(generateTimeString(event));
         registerStatusText.setText(generateRegisterStatusString(event));
+        if(showDate)
+            dateText.setText(generateDateString(event));
         setPicture(event.getType());
     }
 
     private void findViews(){
         nameText = itemView.findViewById(R.id.event_item_LBL_name);
         descriptionText = itemView.findViewById(R.id.event_item_LBL_description);
-        timeText = itemView.findViewById(R.id.event_item_LBL_time);
+        timeOfDayText = itemView.findViewById(R.id.event_item_LBL_time_of_day);
         image = itemView.findViewById(R.id.event_item_IMG_image);
         registerStatusText = itemView.findViewById(R.id.event_item_LBL_register_status);
+        if(showDate)
+            dateText = itemView.findViewById(R.id.event_item_LBL_date);
     }
 
 
@@ -65,6 +77,10 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
     private String generateRegisterStatusString(Event event) {
         return event.getRegisteredMembers().size() + "/"
                         + event.getMaxMembersCount() + " Registered";
+    }
+
+    private String generateDateString(Event event){
+        return event.getStartDateTime().toString("dd/MM/YYYY");
     }
 
     //endregion

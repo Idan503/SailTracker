@@ -13,6 +13,7 @@ import com.idan_koren_israeli.sailtracker.event_recycler.adapter.EventRecyclerAd
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.common.LoadingFragment;
+import com.idan_koren_israeli.sailtracker.event_recycler.adapter.SeparatedEventRecyclerAdapter;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
@@ -56,8 +57,8 @@ public class HistoryActivity extends AppCompatActivity {
     private void initEventsList(ArrayList<Event> myEvents){
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        EventRecyclerAdapter eventsAdapter;
-        eventsAdapter = new EventRecyclerAdapter(this, myEvents);
+        SeparatedEventRecyclerAdapter eventsAdapter;
+        eventsAdapter = new SeparatedEventRecyclerAdapter(this, myEvents);
 
         recyclerView.setAdapter(eventsAdapter);
         loadingFragment.hide();

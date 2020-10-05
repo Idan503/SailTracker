@@ -57,13 +57,13 @@
                     android:paddingStart="4dp"
                     android:layout_marginStart="15dp"
                     android:gravity="start"
-                    android:id="@+id/event_item_LBL_time"
+                    android:id="@+id/event_item_LBL_time_of_day"
                     />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/event_item_LBL_time"
+                    android:layout_below="@id/event_item_LBL_time_of_day"
                     android:autoSizeMinTextSize="14sp"
                     android:autoSizeMaxTextSize="24sp"
                     android:gravity="start"

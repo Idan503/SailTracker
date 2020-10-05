@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
+import com.idan_koren_israeli.sailtracker.club.SortByStartTime;
+import com.idan_koren_israeli.sailtracker.event_recycler.view_holder.EventViewHolder;
 import com.idan_koren_israeli.sailtracker.event_recycler.view_holder.RegistrableEventViewHolder;
 
 import java.util.List;
@@ -24,7 +26,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     protected interface VIEW_TYPE{
         int EVENT = 0;
         int ADD_BUTTON = 1;
-        int MESSAGE = 2;
+        int TITLE = 2;
     }
 
     protected List<Event> eventsList;
@@ -32,9 +34,10 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
 
 
-    public EventRecyclerAdapter(Context context, List<Event> registered){
+    public EventRecyclerAdapter(Context context, List<Event> events){
         this.inflater = LayoutInflater.from(context);
-        this.eventsList = registered;
+        this.eventsList = events;
+        events.sort(new SortByStartTime());
     }
 
 
@@ -44,18 +47,16 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         view = inflater.inflate(R.layout.recycler_event_item,parent,false);
-        return new RegistrableEventViewHolder(view);
+        return new EventViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        RegistrableEventViewHolder eventHolder = new RegistrableEventViewHolder(holder.itemView);
+        EventViewHolder eventHolder = (EventViewHolder) holder;
         if(position < eventsList.size()) {
             Event event = eventsList.get(position);
-            eventHolder.setEventContent(eventsList.get(position));
-
+            eventHolder.setEventContent(event);
         }
-
     }
 
     @Override

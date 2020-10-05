@@ -82,8 +82,6 @@ public class CalendarActivity extends BaseActivity {
     // Loading the events into ui, parameter for manager/normal user view mode
     private void initEventsList(boolean isCurrentUserManager, ArrayList<Event> registered) {
         eventsRecycler.setLayoutManager(new LinearLayoutManager(this));
-
-        Log.i("pttt", "Registered Events : " + registered);
         EventRecyclerAdapter eventsAdapter;
 
         if (selectedDate.toDateTimeAtStartOfDay().plusDays(1).getMillis() < DateTime.now().getMillis()) {

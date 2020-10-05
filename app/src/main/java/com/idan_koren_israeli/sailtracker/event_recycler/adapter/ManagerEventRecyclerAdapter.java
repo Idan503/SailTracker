@@ -68,10 +68,6 @@ public class ManagerEventRecyclerAdapter extends RegistrableEventRecyclerAdapter
         return eventsList.size()+1; // manager view has 1 more item (Add Button)
     }
 
-    public Event getItem(int position){
-        return eventsList.get(position);
-    }
-
     @Override
     public int getItemViewType(int position) {
         if(position == eventsList.size())

@@ -18,7 +18,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.9"
+        android:layout_weight="0.92"
         >
 
         <View
@@ -116,7 +116,7 @@
     <fragment
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.1"
+        android:layout_weight="0.08"
         android:id="@+id/home_FRAG_navigator_bar"
         android:name="com.idan_koren_israeli.sailtracker.common.NavigationBarFragment"
         tools:layout="@layout/fragment_navigation_bar" />
