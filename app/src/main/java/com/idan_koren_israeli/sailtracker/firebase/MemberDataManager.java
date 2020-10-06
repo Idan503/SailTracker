@@ -13,6 +13,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,12 +32,17 @@ import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnMemberLoadListene
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnGalleryPhotoLoadListener;
 import com.idan_koren_israeli.sailtracker.gallery.GalleryPhoto;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 /**
  * Using both Firestore and Storage Firabase components, to manage data of authenticated members.
  */
 public class MemberDataManager {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore dbFirestore; // used for storing members information (as objects)
+    private DatabaseReference dbRealtime;
     private FirebaseStorage dbStorage; // used for storing photos information (gallery and profile)
     private CommonUtils common;
 
@@ -44,6 +54,7 @@ public class MemberDataManager {
 
     interface KEYS {
         String MEMBERS = "members";
+        String PHONE_TO_MEMBERS = "phone_to_members";
         String LISTS = "lists";
         String MANAGERS = "managers";
         String ALL_MANAGERS = "all_managers";
@@ -60,6 +71,7 @@ public class MemberDataManager {
         firebaseAuth = FirebaseAuth.getInstance();
         dbFirestore = FirebaseFirestore.getInstance();
         dbStorage = FirebaseStorage.getInstance();
+        dbRealtime = FirebaseDatabase.getInstance().getReference();
         common = CommonUtils.getInstance();
         if (firebaseAuth.getCurrentUser() != null)
             loadMember(firebaseAuth.getCurrentUser().getUid(), null);
@@ -101,6 +113,10 @@ public class MemberDataManager {
         dbFirestore.collection(KEYS.MEMBERS)
                 .document(member.getUid())
                 .set(member);
+
+        dbRealtime.child(KEYS.PHONE_TO_MEMBERS)
+                .child(member.getPhoneNumber())
+                .setValue(member.getUid());
     }
 
 
@@ -122,6 +138,29 @@ public class MemberDataManager {
 
             }
         });
+    }
+
+    public void loadMemberByPhone(String phoneNumber, final OnMemberLoadListener onMemberLoaded){
+        if (currentUser!=null && phoneNumber.equals(currentUser.getPhoneNumber())){
+            onMemberLoaded.onMemberLoad(currentUser);
+            return; // currentuser is already loaded
+        }
+
+        dbRealtime.child(KEYS.PHONE_TO_MEMBERS).child(phoneNumber).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String memberUid = Objects.requireNonNull(snapshot.getValue()).toString();
+                        loadMember(memberUid,onMemberLoaded); // Load member by the uid we got from rtdb
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                }
+        );
+
     }
 
 

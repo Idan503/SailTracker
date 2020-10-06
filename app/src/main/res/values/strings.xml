@@ -42,6 +42,8 @@
     <string name="number_00">00</string>
     <string name="example_registration_status">3/6 Registered</string>
 
+    <!-- SEARCH SCREEN -->
+    <string name="searchbar_title">Club member phone num.</string>
 
     <!-- GALLERY SCREEN -->
     <string name="take_photo">Take a Photo</string>
@@ -65,7 +67,7 @@
 
     <!-- MESSAGES -->
     <string name="no_next_sail">There is no upcoming sail…</string>
-    <string name="loading_screen">Loading...</string>
+    <string name="loading_screen">Loading…</string>
 
     <!-- SPECIAL FORMATS -->
     <string name="hour_time_format">%02d:%02d</string>

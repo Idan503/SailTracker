@@ -192,7 +192,7 @@ public class GalleryActivity extends BaseActivity {
         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
             CommonUtils.getInstance().showToast("Gallery image saved!");
             photosFrag.hideLoading();
-            photosFrag.setMember(MemberDataManager.getInstance().getCurrentUser());
+            recreate();
         }
     };
 

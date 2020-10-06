@@ -34,14 +34,10 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
     private LoadingFragment loadingFragment;
     private NextSailFragment nextSailFragment;
 
-    private MemberDataManager dbManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-        dbManager = MemberDataManager.getInstance();
 
         findViews();
         setListeners();

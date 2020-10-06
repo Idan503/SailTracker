@@ -30,7 +30,7 @@ import java.util.ArrayList;
 public class EventDataManager {
     private static EventDataManager single_instance = null;
 
-    private DatabaseReference database;
+    private DatabaseReference dbRealtime;
 
     interface KEYS {
         String EVENTS = "events";
@@ -41,7 +41,7 @@ public class EventDataManager {
     }
 
     private EventDataManager(){
-        database = FirebaseDatabase.getInstance().getReference();
+        dbRealtime = FirebaseDatabase.getInstance().getReference();
     }
 
     public static EventDataManager getInstance() {
@@ -59,8 +59,8 @@ public class EventDataManager {
 
     // Adds an event to the db
     public void storeEvent(Event event){
-        database.child(KEYS.EVENTS).child(event.getEid()).setValue(event);
-        database.child(KEYS.DATE_TO_EVENTS).child(generateDateStamp(event.getStartDateTime().toLocalDate())).child(event.getEid()).setValue(event.getName());
+        dbRealtime.child(KEYS.EVENTS).child(event.getEid()).setValue(event);
+        dbRealtime.child(KEYS.DATE_TO_EVENTS).child(generateDateStamp(event.getStartDateTime().toLocalDate())).child(event.getEid()).setValue(event.getName());
     }
 
     // Adds a member to its event by uid
@@ -68,7 +68,7 @@ public class EventDataManager {
         event.registerMember(member);
 
         // Updating the stored event object with the new member registered in the list
-        database.child(KEYS.EVENTS).child(event.getEid())
+        dbRealtime.child(KEYS.EVENTS).child(event.getEid())
                 .child(KEYS.SAIL_MEMBERS_LIST).setValue(event.getRegisteredMembers());
 
 
@@ -93,7 +93,7 @@ public class EventDataManager {
             }
         };
 
-        database.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onMembersEventsListLoaded);
+        dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onMembersEventsListLoaded);
         //endregion
 
         if(event.getType()== EventType.FREE_EVENT)
@@ -120,11 +120,11 @@ public class EventDataManager {
 
 
     private void storeNextSail(ClubMember member, Event newNextSail){
-        database.child(KEYS.MEMBER_TO_NEXT_SAIL).child(member.getUid()).setValue(newNextSail);
+        dbRealtime.child(KEYS.MEMBER_TO_NEXT_SAIL).child(member.getUid()).setValue(newNextSail);
     }
 
     private void storeMemberRegisteredEventsList(ClubMember member, ArrayList<String> list){
-        database.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).setValue(list);
+        dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).setValue(list);
     }
 
     // Loads all events ids that a single member is registered to
@@ -145,7 +145,7 @@ public class EventDataManager {
             }
         };
 
-        database.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onDataLoaded);
+        dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onDataLoaded);
     }
 
     // Removes a member from an event that he was registered to
@@ -153,7 +153,7 @@ public class EventDataManager {
         event.unregisterMember(member);
 
         // Updating the stored event object
-        database.child(KEYS.EVENTS).child(generateDateStamp(event.getStartDateTime().toLocalDate())).child(event.getEid())
+        dbRealtime.child(KEYS.EVENTS).child(generateDateStamp(event.getStartDateTime().toLocalDate())).child(event.getEid())
                 .child(KEYS.SAIL_MEMBERS_LIST).setValue(event.getRegisteredMembers());
 
 
@@ -167,7 +167,7 @@ public class EventDataManager {
                 else
                     return; // Member isn't signed to anything yet
                 registeredEvents.remove(event.getEid());
-                database.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).setValue(registeredEvents);
+                dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).setValue(registeredEvents);
                 // Adding the new event to the list and re-saving it
             }
 
@@ -177,7 +177,7 @@ public class EventDataManager {
             }
         };
 
-        database.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onMembersEventsListLoaded);
+        dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onMembersEventsListLoaded);
 
     }
 
@@ -192,7 +192,7 @@ public class EventDataManager {
         };
 
 
-        database.child(KEYS.DATE_TO_EVENTS).child(generateDateStamp(day)).addListenerForSingleValueEvent(
+        dbRealtime.child(KEYS.DATE_TO_EVENTS).child(generateDateStamp(day)).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -230,7 +230,7 @@ public class EventDataManager {
             }
         };
 
-        database.child(KEYS.EVENTS).addListenerForSingleValueEvent(onDataLoaded);
+        dbRealtime.child(KEYS.EVENTS).addListenerForSingleValueEvent(onDataLoaded);
     }
 
 
@@ -249,7 +249,7 @@ public class EventDataManager {
             }
         };
 
-        database.child(KEYS.MEMBER_TO_NEXT_SAIL).child(member.getUid()).addListenerForSingleValueEvent(onValueLoaded);
+        dbRealtime.child(KEYS.MEMBER_TO_NEXT_SAIL).child(member.getUid()).addListenerForSingleValueEvent(onValueLoaded);
     }
 
     private String generateDateStamp(LocalDate time){

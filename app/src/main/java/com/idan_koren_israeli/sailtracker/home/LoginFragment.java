@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -124,6 +125,14 @@ public class LoginFragment extends Fragment {
             MemberDataManager.getInstance().loadMember(loggedUser.getUid(), memberLoadFinished);
             // User is already signed in
         }
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadingFragment.hide();
+            }
+        }, 1000);
     }
 
     @Override
