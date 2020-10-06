@@ -2,9 +2,7 @@ package com.idan_koren_israeli.sailtracker.club;
 
 import androidx.annotation.NonNull;
 
-import com.google.firebase.firestore.Exclude;
-import com.idan_koren_israeli.sailtracker.club.exceptions.NotEnoughPointsException;
-import com.idan_koren_israeli.sailtracker.gallery.GalleryPhoto;
+import com.idan_koren_israeli.sailtracker.club.exception.NotEnoughPointsException;
 
 import java.util.ArrayList;
 

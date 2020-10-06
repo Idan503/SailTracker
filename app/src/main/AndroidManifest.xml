@@ -20,18 +20,18 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".gallery.PhotoInspectActivity"
+        <activity android:name=".activity.PhotoInspectActivity"
             android:screenOrientation="sensorPortrait"/>
-        <activity android:name=".history.HistoryActivity"
+        <activity android:name=".activity.HistoryActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".calendar.AddEventActivity"
+        <activity android:name=".activity.AddEventActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".search.SearchActivity"
+            android:name=".activity.SearchActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing"/>
         <activity
-            android:name=".gallery.GalleryActivity"
+            android:name=".activity.GalleryActivity"
             android:screenOrientation="portrait"
             >
             <intent-filter>
@@ -41,10 +41,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".calendar.CalendarActivity"
+            android:name=".activity.CalendarActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".home.HomeActivity"
+            android:name=".activity.HomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing"
             >

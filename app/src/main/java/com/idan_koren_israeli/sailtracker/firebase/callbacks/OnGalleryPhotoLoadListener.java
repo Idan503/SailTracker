@@ -1,6 +1,6 @@
 package com.idan_koren_israeli.sailtracker.firebase.callbacks;
 
-import com.idan_koren_israeli.sailtracker.gallery.GalleryPhoto;
+import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
 
 /**
  * Those callbacks are created in order to control firebase tasks

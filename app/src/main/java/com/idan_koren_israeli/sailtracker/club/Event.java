@@ -3,9 +3,10 @@ package com.idan_koren_israeli.sailtracker.club;
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.Exclude;
-import com.idan_koren_israeli.sailtracker.club.exceptions.AlreadyRegisteredException;
-import com.idan_koren_israeli.sailtracker.club.exceptions.EventFullException;
-import com.idan_koren_israeli.sailtracker.club.exceptions.NotEnoughPointsException;
+import com.idan_koren_israeli.sailtracker.club.enums.EventType;
+import com.idan_koren_israeli.sailtracker.club.exception.AlreadyRegisteredException;
+import com.idan_koren_israeli.sailtracker.club.exception.EventFullException;
+import com.idan_koren_israeli.sailtracker.club.exception.NotEnoughPointsException;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 

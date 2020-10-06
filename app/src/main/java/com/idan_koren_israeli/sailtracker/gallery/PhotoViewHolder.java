@@ -7,7 +7,9 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
+import com.idan_koren_israeli.sailtracker.view_holder.listener.OnPhotoClickedListener;
 
 public class PhotoViewHolder extends RecyclerView.ViewHolder {
 

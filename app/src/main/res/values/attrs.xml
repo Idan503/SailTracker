@@ -4,6 +4,6 @@
         <attr name="show_name" format="boolean"/>
         <attr name="show_photo" format="boolean"/>
         <attr name="show_points_status" format="boolean"/>
-        <attr name="show_events_button" format="boolean"/>
+        <attr name="show_history_button" format="boolean"/>
     </declare-styleable>
 </resources>

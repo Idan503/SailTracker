@@ -7,12 +7,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.idan_koren_israeli.sailtracker.club.EventType;
-import com.idan_koren_israeli.sailtracker.club.exceptions.AlreadyRegisteredException;
+import com.idan_koren_israeli.sailtracker.club.enums.EventType;
+import com.idan_koren_israeli.sailtracker.club.exception.AlreadyRegisteredException;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
-import com.idan_koren_israeli.sailtracker.club.exceptions.EventFullException;
-import com.idan_koren_israeli.sailtracker.club.exceptions.NotEnoughPointsException;
+import com.idan_koren_israeli.sailtracker.club.exception.EventFullException;
+import com.idan_koren_israeli.sailtracker.club.exception.NotEnoughPointsException;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnNextSailLoadedListener;
 

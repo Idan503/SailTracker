@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestListener;
+import com.idan_koren_israeli.sailtracker.activity.BaseActivity;
 
 import java.io.ByteArrayOutputStream;
 

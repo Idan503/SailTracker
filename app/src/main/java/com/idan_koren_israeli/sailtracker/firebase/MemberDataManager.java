@@ -3,7 +3,6 @@ package com.idan_koren_israeli.sailtracker.firebase;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -30,10 +29,8 @@ import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinishedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnMemberLoadListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnGalleryPhotoLoadListener;
-import com.idan_koren_israeli.sailtracker.gallery.GalleryPhoto;
+import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 /**

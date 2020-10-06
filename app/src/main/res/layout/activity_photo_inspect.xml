@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
-    tools:context=".gallery.PhotoInspectActivity">
+    tools:context=".activity.PhotoInspectActivity">
 
 
     <ImageView
@@ -19,7 +19,7 @@
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.idan_koren_israeli.sailtracker.common.LoadingFragment"
+        android:name="com.idan_koren_israeli.sailtracker.fragment.LoadingFragment"
         tools:layout="@layout/fragment_loading"
         android:id="@+id/photo_inspect_FRAG_loading"
         />

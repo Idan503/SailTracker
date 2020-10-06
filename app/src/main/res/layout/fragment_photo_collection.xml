@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".gallery.PhotoCollectionFragment">
+    tools:context=".fragment.PhotoCollectionFragment">
 
     <!-- items here are photos as cells, like an Instagram feed-->
     <androidx.recyclerview.widget.RecyclerView
@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/photo_collection_FRAG_loading"
-        android:name="com.idan_koren_israeli.sailtracker.common.LoadingFragment"
+        android:name="com.idan_koren_israeli.sailtracker.fragment.LoadingFragment"
         tools:layout="@layout/fragment_loading"
         />
 

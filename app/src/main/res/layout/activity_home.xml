@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.HomeActivity"
+    tools:context=".activity.HomeActivity"
     >
 
 
@@ -64,7 +64,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/home_INV_3"
             android:id="@+id/home_FRAG_profile"
-            android:name="com.idan_koren_israeli.sailtracker.common.ProfileFragment"
+            android:name="com.idan_koren_israeli.sailtracker.fragment.ProfileFragment"
             tools:layout="@layout/fragment_profile_card"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
@@ -89,7 +89,7 @@
             app:layout_constraintBottom_toTopOf="@id/home_INV_4"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            android:name="com.idan_koren_israeli.sailtracker.home.NextSailFragment"
+            android:name="com.idan_koren_israeli.sailtracker.fragment.NextSailFragment"
             tools:layout="@layout/fragment_next_sail_card"
             android:id="@+id/home_FRAG_next_sailing"
             />
@@ -118,7 +118,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.08"
         android:id="@+id/home_FRAG_navigator_bar"
-        android:name="com.idan_koren_israeli.sailtracker.common.NavigationBarFragment"
+        android:name="com.idan_koren_israeli.sailtracker.fragment.NavigationBarFragment"
         tools:layout="@layout/fragment_navigation_bar" />
 
     </LinearLayout>
@@ -141,7 +141,7 @@
             android:layout_weight="0.65"
             android:layout_margin="40dp"
             android:id="@+id/home_FRAG_login"
-            android:name="com.idan_koren_israeli.sailtracker.home.LoginFragment"
+            android:name="com.idan_koren_israeli.sailtracker.fragment.LoginFragment"
             tools:layout="@layout/fragment_login"
             />
 
@@ -152,7 +152,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_loading"
-        android:name="com.idan_koren_israeli.sailtracker.common.LoadingFragment"
+        android:name="com.idan_koren_israeli.sailtracker.fragment.LoadingFragment"
         android:id="@+id/home_FRAG_loading"
         />
 

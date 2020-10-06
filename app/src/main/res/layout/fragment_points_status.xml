@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
-    tools:context=".common.PointsStatusFragment">
+    tools:context=".fragment.PointsStatusFragment">
 
     <ImageView
         android:layout_width="0dp"

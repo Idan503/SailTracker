@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".history.HistoryActivity"
+    tools:context=".activity.HistoryActivity"
     android:orientation="vertical"
     >
 
@@ -39,7 +39,7 @@
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.idan_koren_israeli.sailtracker.common.LoadingFragment"
+        android:name="com.idan_koren_israeli.sailtracker.fragment.LoadingFragment"
         android:layout_below="@id/my_sails_LBL_title"
         android:id="@+id/my_sails_FRAG_loading"
         tools:layout="@layout/fragment_loading"
