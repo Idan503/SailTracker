@@ -7,5 +7,6 @@
 
     <color name="navigator_ic">#2C2C2C</color>
     <color name="navigator_selected_ic">#257BB5</color>
+    <color name="photo_loading">#28282B</color>
 
 </resources>

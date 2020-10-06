@@ -1,5 +1,6 @@
 package com.idan_koren_israeli.sailtracker.home;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
+import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnNextSailLoadedListener;
@@ -27,6 +29,7 @@ public class NextSailFragment extends Fragment {
 
     private TextView titleText, dateText, startTimeText;
     private ImageView backgroundImage;
+    private Resources resources;
 
     public NextSailFragment() {
         // Required empty public constructor
@@ -42,6 +45,7 @@ public class NextSailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View parent = inflater.inflate(R.layout.fragment_next_sail_card, container, false);
+        resources = parent.getResources();
         findViews(parent);
 
         return parent;
@@ -79,7 +83,7 @@ public class NextSailFragment extends Fragment {
     }
 
     public void setNoSail(){
-        titleText.setText(getResources().getText(R.string.no_next_sail));
+        titleText.setText(resources.getText(R.string.no_next_sail));
         hideExtraInfo();
 
         // SET BACKGROUND IMAGE...

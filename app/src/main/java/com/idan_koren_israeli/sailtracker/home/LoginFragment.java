@@ -63,7 +63,7 @@ public class LoginFragment extends Fragment {
 
     private FirebaseAuth auth;
     private String mVerificationId;
-    private PhoneAuthProvider.ForceResendingToken mResendToken;
+    //private PhoneAuthProvider.ForceResendingToken mResendToken;
     private FirebaseUser loggedUser;
 
 
@@ -234,7 +234,7 @@ public class LoginFragment extends Fragment {
                                @NonNull PhoneAuthProvider.ForceResendingToken token) {
             CommonUtils.getInstance().showToast("Code Sent!");
             mVerificationId = verificationId;
-            mResendToken = token;
+            //mResendToken = token;
             currentState = LoginState.CODE_SENT;
 
             showAuthCodeLayout();

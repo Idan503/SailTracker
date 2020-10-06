@@ -26,6 +26,7 @@
         android:gravity="center"
         android:autoSizeMaxTextSize="45sp"
         android:autoSizeTextType="uniform"
+        android:id="@+id/loading_LBL_text"
         android:textColor="@android:color/white"
         android:alpha="0.9"
         />

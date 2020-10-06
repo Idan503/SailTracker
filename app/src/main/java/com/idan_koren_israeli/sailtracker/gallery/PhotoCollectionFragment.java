@@ -7,12 +7,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
+import com.idan_koren_israeli.sailtracker.common.LoadingFragment;
 
 import java.util.ArrayList;
 
@@ -27,6 +29,7 @@ public class PhotoCollectionFragment extends Fragment {
 
     ClubMember member;
     RecyclerView recyclerView;
+    LoadingFragment loadingFragment;
     PhotoCollectionAdapter adapter;
 
     public interface KEYS{
@@ -55,9 +58,16 @@ public class PhotoCollectionFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View parent = inflater.inflate(R.layout.fragment_photo_collection, container, false);
-        recyclerView = parent.findViewById(R.id.photo_collection_RCY_recycler);
+        findViews(parent);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), NUM_OF_COLUMNS));
+        adapter = new PhotoCollectionAdapter(getContext());
         return parent;
+    }
+
+    private void findViews(View parent){
+        recyclerView = parent.findViewById(R.id.photo_collection_RCY_recycler);
+        loadingFragment = (LoadingFragment) getChildFragmentManager().findFragmentById(R.id.photo_collection_FRAG_loading);
+
     }
 
     @Override
@@ -81,14 +91,22 @@ public class PhotoCollectionFragment extends Fragment {
         }
     };
 
-    private GalleryPhoto[] getMemberPhotos(){
-        if(member!=null) {
-            member.getGalleryPhotos().sort(new SortByCreationTime());
-            ArrayList<GalleryPhoto> photosList = member.getGalleryPhotos();
-            GalleryPhoto[] photosArray = new GalleryPhoto[photosList.size()];
-            return photosList.toArray(photosArray);
-        }
-        return new GalleryPhoto[0];
+    private ArrayList<GalleryPhoto> getMemberPhotos(){
+        if(member==null)
+            return null;
+        ArrayList<GalleryPhoto> photos = new ArrayList<>();
+        if(member.getGalleryPhotos()!=null)
+            photos.addAll(member.getGalleryPhotos());
+        photos.sort(new SortByCreationTime());
+        return photos;
+    }
+
+    public void hideLoading(){
+        loadingFragment.hide();
+    }
+
+    public void showLoading(){
+        loadingFragment.show();
     }
 
 

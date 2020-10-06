@@ -1,5 +1,6 @@
 package com.idan_koren_israeli.sailtracker.home;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -59,6 +60,7 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
         nextSailFragment = (NextSailFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_next_sailing);
 
     }
+
 
     private void setListeners(){
         profileFragment.getProfileImage().setOnLongClickListener(changeProfilePhoto);

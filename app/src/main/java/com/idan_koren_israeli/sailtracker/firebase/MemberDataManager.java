@@ -214,7 +214,7 @@ public class MemberDataManager {
     //region Gallery Functions
 
     // Getting current user member's profile photo link from storage, will be inserted into ui by Glide
-    public void loadGallery(String uid, final OnGalleryPhotoLoadListener onPhotoLoaded) {
+    public void loadGallery(String uid, final OnGalleryPhotoLoadListener onSinglePhotoLoaded) {
 
         // Folder success
         OnSuccessListener<ListResult> galleryFolderSuccess = new OnSuccessListener<ListResult>() {
@@ -229,8 +229,8 @@ public class MemberDataManager {
                     photo.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            if(onPhotoLoaded!=null)
-                                onPhotoLoaded.onPhotoLoaded(new GalleryPhoto(uri.toString(), time));
+                            if(onSinglePhotoLoaded!=null)
+                                onSinglePhotoLoaded.onPhotoLoaded(new GalleryPhoto(uri.toString(), time));
                         }
                     });
                 }

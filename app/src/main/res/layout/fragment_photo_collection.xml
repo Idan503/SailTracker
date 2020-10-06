@@ -10,8 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/photo_collection_RCY_recycler"
+        />
 
-
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/photo_collection_FRAG_loading"
+        android:name="com.idan_koren_israeli.sailtracker.common.LoadingFragment"
+        tools:layout="@layout/fragment_loading"
         />
 
 </FrameLayout>

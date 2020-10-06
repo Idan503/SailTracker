@@ -17,8 +17,18 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="50dp"
+            android:background="@color/photo_loading"
+            android:src="@drawable/ic_baseline_refresh_24"
+            android:layout_gravity="center"
+            android:contentDescription="@string/loading"
+            app:tint="@android:color/white"
+            android:alpha="0.9"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:id="@+id/photo_item_IMG_inner_image"
-            android:background="@android:color/darker_gray"
             android:scaleType="centerCrop"
             android:contentDescription="@string/gallery"
             />

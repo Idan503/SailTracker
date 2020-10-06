@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.event_recycler.adapter.EventRecyclerAdapter;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
  * Shows information on all user's registered past and future sails and events
  *
  */
-public class HistoryActivity extends AppCompatActivity {
+public class HistoryActivity extends BaseActivity {
 
     private FloatingActionButton backButton;
     private RecyclerView recyclerView;

@@ -17,6 +17,7 @@ import com.google.type.TimeOfDay;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.EventType;
+import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -33,7 +34,7 @@ import java.util.Locale;
  * This menu is in whole different activity to improve UX
  *
  */
-public class AddEventActivity extends AppCompatActivity {
+public class AddEventActivity extends BaseActivity {
 
     private RadioGroup eventTypeRadio;
     private EditText nameEdit, descriptionEdit, maxParticipantsEdit, priceEdit;

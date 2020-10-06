@@ -2,6 +2,7 @@ package com.idan_koren_israeli.sailtracker.club;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.firestore.Exclude;
 import com.idan_koren_israeli.sailtracker.club.exceptions.NotEnoughPointsException;
 import com.idan_koren_israeli.sailtracker.gallery.GalleryPhoto;
 
@@ -101,13 +102,18 @@ public class ClubMember {
         this.sailsCount = sailsCount;
     }
 
+    // Gallery photos are saved via Storage component and not Firestore
     public ArrayList<GalleryPhoto> getGalleryPhotos(){
+        if(galleryPhotos==null)
+            initGalleryPhotos();
         return this.galleryPhotos;
     }
 
     //endregion
 
     public void addGalleryPhoto(GalleryPhoto photo){
+        if(galleryPhotos==null)
+            initGalleryPhotos();
         if(!galleryPhotos.contains(photo))
             galleryPhotos.add(photo);
     }
@@ -126,6 +132,10 @@ public class ClubMember {
         this.pointsCount+=count;
     }
 
+
+    private void initGalleryPhotos(){
+        this.galleryPhotos = new ArrayList<>();
+    }
 
     @NonNull
     @Override      

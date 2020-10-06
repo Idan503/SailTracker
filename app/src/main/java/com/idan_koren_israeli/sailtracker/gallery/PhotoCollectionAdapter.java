@@ -13,20 +13,34 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 
+import java.util.ArrayList;
+
 public class PhotoCollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private GalleryPhoto[] photos;
+    private ArrayList<GalleryPhoto> photos;
     private LayoutInflater mInflater;
     private OnPhotoClickedListener photoClickListener;
     private static final int NUM_OF_COLUMNS = 3;
 
-    PhotoCollectionAdapter(Context context, GalleryPhoto[] photos){
+    PhotoCollectionAdapter(Context context){
         this.mInflater = LayoutInflater.from(context);
-        this.photos = photos;
+        this.photos = new ArrayList<GalleryPhoto>();
+    }
+
+    PhotoCollectionAdapter(Context context, ArrayList<GalleryPhoto> photos){
+        this.mInflater = LayoutInflater.from(context);
+        if(photos==null)
+            this.photos = new ArrayList<GalleryPhoto>();
+        else
+            this.photos = photos;
     }
 
     public void setPhotoClickListener(OnPhotoClickedListener listener){
         this.photoClickListener = listener;
+    }
+
+    public void setDate(ArrayList<GalleryPhoto> photos){
+        this.photos = photos;
     }
 
 
@@ -45,16 +59,16 @@ public class PhotoCollectionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((PhotoViewHolder) holder).setPhoto(photos[position]);
+        ((PhotoViewHolder) holder).setPhoto(photos.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return photos.length;
+        return photos.size();
     }
 
-    GalleryPhoto getItem(int id) {
-        return photos[id];
+    GalleryPhoto getItem(int position) {
+        return photos.get(position);
     }
 
 

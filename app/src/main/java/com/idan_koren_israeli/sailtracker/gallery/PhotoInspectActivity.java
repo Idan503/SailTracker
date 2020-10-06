@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
+import com.idan_koren_israeli.sailtracker.common.BaseActivity;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.common.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
@@ -33,7 +35,8 @@ import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
  * And zoom in and translate via touch gestures
  *
  */
-public class PhotoInspectActivity extends AppCompatActivity {
+
+public class PhotoInspectActivity extends BaseActivity {
 
     private static final float MAX_SCALE = 5f;
     private static final float MIN_SCALE = 1f;
@@ -56,6 +59,8 @@ public class PhotoInspectActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_inspect);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+        // Letting the user change to landscape mode when viewing photo
         findViews();
         loadingFragment.show();
 

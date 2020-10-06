@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.idan_koren_israeli.sailtracker.R;
 
@@ -14,6 +15,8 @@ import com.idan_koren_israeli.sailtracker.R;
 public class LoadingFragment extends Fragment {
 
     View parent;
+    TextView textView;
+
 
     public LoadingFragment() {
         // Required empty public constructor
@@ -30,8 +33,13 @@ public class LoadingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         this.parent = inflater.inflate(R.layout.fragment_loading, container, false);
+        findViews();
         hide();
         return parent;
+    }
+
+    private void findViews(){
+        textView = parent.findViewById(R.id.loading_LBL_text);
     }
 
     public void show(){
@@ -42,5 +50,8 @@ public class LoadingFragment extends Fragment {
         parent.setVisibility(View.GONE);
     }
 
+    public void setText(String text){
+        textView.setText(text);
+    }
 
 }
