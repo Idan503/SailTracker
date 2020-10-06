@@ -53,12 +53,14 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:text="@string/app_name"
-            app:layout_constraintHeight_percent="0.4"
-            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeMinTextSize="14sp"
+            android:autoSizeMaxTextSize="35sp"
             android:autoSizeTextType="uniform"
-            android:padding="5dp"
+            android:gravity="center_vertical"
+            android:padding="6dp"
             android:id="@+id/profile_LBL_name"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/profile_FRAG_points_status"
             app:layout_constraintStart_toStartOf="parent"
             />
 

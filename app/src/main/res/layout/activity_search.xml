@@ -32,6 +32,8 @@
             android:name="com.idan_koren_israeli.sailtracker.common.ProfileFragment"
             app:layout_constraintTop_toBottomOf="@id/search_SEARCH_searchbar"
             tools:layout="@layout/fragment_profile_card"
+            app:show_points_status="false"
+            app:show_events_button="false"
             android:id="@+id/search_FRAG_profile"
             android:layout_marginTop="20dp"
             />

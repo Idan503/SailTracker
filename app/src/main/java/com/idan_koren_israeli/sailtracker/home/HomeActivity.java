@@ -1,6 +1,5 @@
 package com.idan_koren_israeli.sailtracker.home;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -59,7 +58,7 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
 
 
     private void setListeners(){
-        profileFragment.getProfileImage().setOnLongClickListener(changeProfilePhoto);
+        profileFragment.getProfilePhoto().setOnLongClickListener(changeProfilePhoto);
     }
 
     private void hideLoginFragment()

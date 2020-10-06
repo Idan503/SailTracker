@@ -1,12 +1,16 @@
 package com.idan_koren_israeli.sailtracker.common;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,14 +32,15 @@ import com.idan_koren_israeli.sailtracker.history.HistoryActivity;
  */
 public class ProfileFragment extends Fragment {
 
-    private ImageView profileImage;
+    private ImageView profilePhoto;
     private TextView nameText;
-    private MaterialButton mySails;
+    private MaterialButton historyButton;
     private ClubMember member;
     private PointsStatusFragment pointsStatus;
 
     private CommonUtils common;
 
+    private boolean showName, showPhoto, showPointsStatus, showHistoryButton;
 
 
 
@@ -43,13 +48,24 @@ public class ProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance() {
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+
+    @Override
+    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
+        super.onInflate(context, attrs, savedInstanceState);
+
+        TypedArray type = context.obtainStyledAttributes(attrs,R.styleable.ProfileFragment);
+
+
+        //Retrieve attributes from xml
+        //By default, everything will be shown
+        showName = type.getBoolean(R.styleable.ProfileFragment_show_name,true);
+        showPhoto = type.getBoolean(R.styleable.ProfileFragment_show_photo,true);
+        showPointsStatus = type.getBoolean(R.styleable.ProfileFragment_show_points_status,true);
+        showHistoryButton = type.getBoolean(R.styleable.ProfileFragment_show_events_button,true);
+
+        type.recycle();
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,19 +79,38 @@ public class ProfileFragment extends Fragment {
         View parent = inflater.inflate(R.layout.fragment_profile_card, container, false);
         // Inflate the layout for this fragment
         findViews(parent);
+        hideViews();
         setListeners();
         return parent;
     }
 
     private void findViews(View parent){
-        profileImage = parent.findViewById(R.id.profile_IMG_picture);
+        profilePhoto = parent.findViewById(R.id.profile_IMG_picture);
         nameText = parent.findViewById(R.id.profile_LBL_name);
-        mySails = parent.findViewById(R.id.profile_BTN_my_sails);
+        historyButton = parent.findViewById(R.id.profile_BTN_my_sails);
         pointsStatus= (PointsStatusFragment) getChildFragmentManager().findFragmentById(R.id.profile_FRAG_points_status);
     }
 
+    //Hides views based on attrs from xml (determent in onInflate)
+    private void hideViews(){
+        // By default, all views will be shown.
+
+        if(!showName)
+            hideName();
+
+        if(!showPhoto)
+            hidePhoto();
+
+        if(!showPointsStatus)
+            hidePointsStatus();
+
+        if(!showHistoryButton)
+            hideHistoryButton();
+
+    }
+
     private void setListeners(){
-        mySails.setOnClickListener(new View.OnClickListener() {
+        historyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), HistoryActivity.class);
@@ -104,25 +139,25 @@ public class ProfileFragment extends Fragment {
     private OnSuccessListener<Uri> onProfileUriSuccess = new OnSuccessListener<Uri>(){
         @Override
         public void onSuccess(Uri uri) {
-            common.setImageResource(profileImage, uri);
+            common.setImageResource(profilePhoto, uri);
         }
     };
 
     private OnFailureListener onProfileUriFailure = new OnFailureListener() {
         @Override
         public void onFailure(@NonNull Exception e) {
-            common.setImageResource(profileImage, R.drawable.ic_profile_default);
+            common.setImageResource(profilePhoto, R.drawable.ic_profile_default);
         }
     };
 
 
     //region Getters and Setters
-    public ImageView getProfileImage() {
-        return profileImage;
+    public ImageView getProfilePhoto() {
+        return profilePhoto;
     }
 
-    public void setProfileImage(ImageView profileImage) {
-        this.profileImage = profileImage;
+    public void setProfilePhoto(ImageView profilePhoto) {
+        this.profilePhoto = profilePhoto;
     }
 
     public TextView getNameText() {
@@ -146,4 +181,24 @@ public class ProfileFragment extends Fragment {
     }
 
     //endregion
+
+    private void hideName(){
+        nameText.setVisibility(View.GONE);
+
+    }
+
+    private void hidePhoto(){
+        profilePhoto.setVisibility(View.GONE);
+    }
+
+    private void hidePointsStatus(){
+        FragmentManager fm = getChildFragmentManager();
+        fm.beginTransaction()
+                .hide(pointsStatus)
+                .commit();
+    }
+
+    private void hideHistoryButton(){
+        historyButton.setVisibility(View.GONE);
+    }
 }
