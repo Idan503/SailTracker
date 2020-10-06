@@ -22,7 +22,8 @@ import java.util.List;
  */
 public class SeparatedEventRecyclerAdapter extends EventRecyclerAdapter {
 
-    private String pastTitle, futureTitle;
+    private static final String PAST_TITLE = "Past";
+    private static final String FUTURE_TITLE = "Future";
     private int futureTitlePosition; // The item position of the "Future" title
 
     public SeparatedEventRecyclerAdapter(Context context, List<Event> events) {
@@ -39,31 +40,17 @@ public class SeparatedEventRecyclerAdapter extends EventRecyclerAdapter {
 
     }
 
-    @NonNull
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view;
-        if(viewType==VIEW_TYPE.TITLE){
-            view = inflater.inflate(R.layout.recycler_message_item,parent,false);
-            return new MessageViewHolder(view);
-        }
-        else {
-            view = inflater.inflate(R.layout.recycler_event_item, parent, false);
-            return new EventViewHolder(view,true);
-        }
-    }
-
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if(position==0){
             //its the past title
             MessageViewHolder pastMessageHolder = (MessageViewHolder) holder;
-            pastMessageHolder.setText("Past");
+            pastMessageHolder.setText(PAST_TITLE);
         }
         else if(position==futureTitlePosition){
             //its the future title
             MessageViewHolder futureMessageHolder = (MessageViewHolder) holder;
-            futureMessageHolder.setText("Future");
+            futureMessageHolder.setText(FUTURE_TITLE);
         }
         else{
             //its a regular item of event list
@@ -92,5 +79,9 @@ public class SeparatedEventRecyclerAdapter extends EventRecyclerAdapter {
         if(position==futureTitlePosition)
             return VIEW_TYPE.TITLE;
         return super.getItemViewType(position);
+    }
+
+    public int getFutureTitlePosition(){
+        return futureTitlePosition;
     }
 }

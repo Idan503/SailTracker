@@ -16,7 +16,7 @@ import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
-import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnNextSailLoadedListener;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventLoadedListener;
 
 import org.joda.time.DateTime;
 
@@ -24,13 +24,13 @@ import org.joda.time.DateTime;
  * This card present the next planned sail that the user purchased
  *
  */
-public class NextSailFragment extends Fragment {
+public class NextEventFragment extends Fragment {
 
     private TextView titleText, dateText, startTimeText;
     private ImageView backgroundImage;
     private Resources resources;
 
-    public NextSailFragment() {
+    public NextEventFragment() {
         // Required empty public constructor
     }
 
@@ -50,9 +50,9 @@ public class NextSailFragment extends Fragment {
         return parent;
     }
 
-    private OnNextSailLoadedListener onNextSailLoaded = new OnNextSailLoadedListener() {
+    private OnEventLoadedListener onNextSailLoaded = new OnEventLoadedListener() {
         @Override
-        public void onNextSailLoaded(Event sail) {
+        public void onEventLoaded(Event sail) {
             if(sail!=null && sail.getStartDateTime().getMillis() > DateTime.now().getMillis())
                 setSail(sail);
             else
@@ -69,7 +69,7 @@ public class NextSailFragment extends Fragment {
 
     public void updateUI(){
         ClubMember currentMember = MemberDataManager.getInstance().getCurrentUser();
-        EventDataManager.getInstance().loadNextSail(currentMember, onNextSailLoaded);
+        EventDataManager.getInstance().loadNextEvent(currentMember, onNextSailLoaded);
     }
 
     public void setSail(Event sail){

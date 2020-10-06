@@ -37,40 +37,33 @@ public class ManagerEventRecyclerAdapter extends RegistrableEventRecyclerAdapter
         this.onAddButtonPressed = listener;
     }
 
-    @NonNull
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view;
-        if(viewType == VIEW_TYPE.ADD_BUTTON) {
-            view = inflater.inflate(R.layout.recycler_add_event_item, parent, false);
-            return new EventAddViewHolder(view);
-        }
-        else{
-            return super.onCreateViewHolder(parent, viewType);
-        }
-    }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if(position== eventsList.size()){
+        if(position!= eventsList.size() || (noEvents && position==0)) {
+            super.onBindViewHolder(holder, position);
+            // Act as a regular user (load today's event items)
+        }
+        else {
             // Last item in the recyclerview (not in the data list), so it's the add button
             EventAddViewHolder eventHolder = new EventAddViewHolder(holder.itemView);
             eventHolder.setClickListener(onAddButtonPressed);
         }
-        else {
-            super.onBindViewHolder(holder,position);
-            // Act as a regular user (load today's event items)
-        }
+
     }
 
     @Override
     public int getItemCount() {
+        if(noEvents)
+            return 2; // manager has message and add button
         return eventsList.size()+1; // manager view has 1 more item (Add Button)
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(position == eventsList.size())
+        if(!noEvents && position == eventsList.size())
+            return VIEW_TYPE.ADD_BUTTON;
+        if(noEvents && position==1)
             return VIEW_TYPE.ADD_BUTTON;
         return super.getItemViewType(position);
     }

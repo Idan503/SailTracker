@@ -49,7 +49,7 @@ public class RegistrableEventViewHolder extends EventViewHolder {
     }
 
     private void findViews(){
-        registerButton = itemView.findViewById(R.id.event_item_BTN_purchase);
+        registerButton = itemView.findViewById(R.id.event_item_BTN_register);
     }
 
 }

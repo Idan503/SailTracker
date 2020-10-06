@@ -1,5 +1,7 @@
 package com.idan_koren_israeli.sailtracker.firebase;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -7,14 +9,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.idan_koren_israeli.sailtracker.club.enums.EventType;
 import com.idan_koren_israeli.sailtracker.club.exception.AlreadyRegisteredException;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.exception.EventFullException;
 import com.idan_koren_israeli.sailtracker.club.exception.NotEnoughPointsException;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
-import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnNextSailLoadedListener;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventLoadedListener;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -36,7 +37,7 @@ public class EventDataManager {
         String EVENTS = "events";
         String DATE_TO_EVENTS = "date_to_events";
         String MEMBER_TO_EVENTS = "member_to_events";
-        String MEMBER_TO_NEXT_SAIL = "member_to_next_sail";
+        String MEMBER_TO_NEXT_EVENT = "member_to_next_event";
         String SAIL_MEMBERS_LIST = "registeredMembers";
     }
 
@@ -78,13 +79,19 @@ public class EventDataManager {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<String> registeredEvents;
-                if(snapshot.getValue()!=null)
+                if(snapshot.getValue()!=null) {
                     registeredEvents = (ArrayList<String>) snapshot.getValue();
+
+                }
                 else
                     registeredEvents = new ArrayList<>();
                 registeredEvents.add(event.getEid());
+
                 storeMemberRegisteredEventsList(member, registeredEvents);
                 // Adding the new event to the list and re-saving it
+
+                updateNextEvent(member.getUid(), registeredEvents);
+                // Updating the value of next event
             }
 
             @Override
@@ -96,31 +103,12 @@ public class EventDataManager {
         dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onMembersEventsListLoaded);
         //endregion
 
-        if(event.getType()== EventType.FREE_EVENT)
-            return; // not a sail, so we should not update "next sail" value
-
-        //Update Next Sail of Member
-
-        OnNextSailLoadedListener onNextSailLoaded = new OnNextSailLoadedListener() {
-            @Override
-            public void onNextSailLoaded(Event sailLoaded) {
-                if(sailLoaded==null || sailLoaded.getStartDateTime().getMillis() > event.getStartDateTime().getMillis()
-                    || sailLoaded.getStartDateTime().getMillis() < DateTime.now().getMillis()){
-                    // a new next sail was detected (Closer to now)
-                    storeNextSail(member, event);
-                }
-            }
-        };
-
-        loadNextSail(member, onNextSailLoaded);
-
-        //endregion
 
     }
 
 
-    private void storeNextSail(ClubMember member, Event newNextSail){
-        dbRealtime.child(KEYS.MEMBER_TO_NEXT_SAIL).child(member.getUid()).setValue(newNextSail);
+    private void storeNextEvent(final String memberUid, Event newNextEvent){
+        dbRealtime.child(KEYS.MEMBER_TO_NEXT_EVENT).child(memberUid).setValue(newNextEvent.getEid());
     }
 
     private void storeMemberRegisteredEventsList(ClubMember member, ArrayList<String> list){
@@ -167,8 +155,11 @@ public class EventDataManager {
                 else
                     return; // Member isn't signed to anything yet
                 registeredEvents.remove(event.getEid());
-                dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).setValue(registeredEvents);
-                // Adding the new event to the list and re-saving it
+
+                storeMemberRegisteredEventsList(member,registeredEvents);
+                updateNextEvent(member.getUid(),registeredEvents);
+                //Saving list of event itself and updating
+
             }
 
             @Override
@@ -178,6 +169,32 @@ public class EventDataManager {
         };
 
         dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onMembersEventsListLoaded);
+
+    }
+
+    // "Next event" is the future event with the closest time to now
+    private void updateNextEvent(final String memberUid, ArrayList<String> usersEventsIds){
+
+        OnListLoadedListener<Event> onEventsLoaded = new OnListLoadedListener<Event>() {
+            @Override
+            public void onListLoaded(ArrayList<Event> list) {
+                Event nextEvent = null;
+                long nextEventTime = Long.MAX_VALUE;
+                for(Event event : list){
+                    //iterating on the list to find the next event that is closest to current time
+                    if(event.getStartDateTime().getMillis() > DateTime.now().getMillis()
+                        && event.getStartDateTime().getMillis() < nextEventTime){
+                        // a new "next event" was found"
+                        nextEvent = event;
+                        nextEventTime = event.getStartTime();
+                    }
+                }
+                if(nextEvent!=null)
+                    storeNextEvent(memberUid,nextEvent);
+            }
+        };
+
+        loadEventsById(usersEventsIds,onEventsLoaded);
 
     }
 
@@ -234,13 +251,18 @@ public class EventDataManager {
     }
 
 
-    public void loadNextSail(final ClubMember member, final OnNextSailLoadedListener onLoaded){
-
-        ValueEventListener onValueLoaded = new ValueEventListener() {
+    public void loadEventById(final String eventId, final OnEventLoadedListener listener){
+        ValueEventListener onDataLoaded = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Event loadedSail = snapshot.getValue(Event.class);
-                onLoaded.onNextSailLoaded(loadedSail);
+                Event loadedEvent;
+                for(DataSnapshot child : snapshot.getChildren()){
+                    if(eventId.equals(child.getKey())) {
+                        loadedEvent = child.getValue(Event.class);
+                        listener.onEventLoaded(loadedEvent); //found
+                        return;
+                    }
+                }
             }
 
             @Override
@@ -249,7 +271,28 @@ public class EventDataManager {
             }
         };
 
-        dbRealtime.child(KEYS.MEMBER_TO_NEXT_SAIL).child(member.getUid()).addListenerForSingleValueEvent(onValueLoaded);
+        dbRealtime.child(KEYS.EVENTS).addListenerForSingleValueEvent(onDataLoaded);
+    }
+
+    public void loadNextEvent(final ClubMember member, final OnEventLoadedListener onLoaded){
+
+        ValueEventListener onValueLoaded = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String nextEventId = snapshot.getValue(String.class);
+                if(nextEventId!=null)
+                    loadEventById(nextEventId, onLoaded);
+                else
+                    onLoaded.onEventLoaded(null);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        dbRealtime.child(KEYS.MEMBER_TO_NEXT_EVENT).child(member.getUid()).addListenerForSingleValueEvent(onValueLoaded);
     }
 
     private String generateDateStamp(LocalDate time){
@@ -260,6 +303,5 @@ public class EventDataManager {
     public void loadRegisteredEvents(final OnListLoadedListener<Event> listener){
         loadRegisteredEvents(MemberDataManager.getInstance().getCurrentUser(), listener);
     }
-
 
 }

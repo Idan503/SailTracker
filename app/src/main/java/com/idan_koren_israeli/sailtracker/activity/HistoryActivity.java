@@ -4,6 +4,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.DragEvent;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -21,6 +24,8 @@ import java.util.ArrayList;
 
 /**
  * Shows information on all user's registered past and future sails and events
+ * Ordered by time, while the reciyclerview will start by default as showing the future events on screen.
+ * Therefore, past events will be shown to the user when he will swipe to the upper section of the recycler
  *
  */
 public class HistoryActivity extends BaseActivity {
@@ -59,7 +64,19 @@ public class HistoryActivity extends BaseActivity {
         eventsAdapter = new SeparatedEventRecyclerAdapter(this, myEvents);
 
         recyclerView.setAdapter(eventsAdapter);
+        recyclerView.scrollToPosition(eventsAdapter.getFutureTitlePosition());
+
         loadingFragment.hide();
+        recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View view, int x, int y, int oldX, int oldY) {
+                if(y >= oldY){
+                    backButton.setVisibility(View.GONE);
+                }
+                else
+                    backButton.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
 

@@ -43,24 +43,31 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        view = inflater.inflate(R.layout.recycler_registrable_event_item,parent,false);
-        return new RegistrableEventViewHolder(view);
+        if(viewType==VIEW_TYPE.EVENT) {
+            view = inflater.inflate(R.layout.recycler_registrable_event_item, parent, false);
+            return new RegistrableEventViewHolder(view);
+        }
+        return super.onCreateViewHolder(parent,viewType);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        RegistrableEventViewHolder eventHolder = new RegistrableEventViewHolder(holder.itemView);
-        if(position < eventsList.size()) {
-            Event event = eventsList.get(position);
-            eventHolder.setEventContent(eventsList.get(position));
-            eventHolder.setButtonListener(onRegisterPress, onUnregisterPress);
+        if(position==0 && noEvents){
+            super.onBindViewHolder(holder, position);
+        }
+        else {
+            RegistrableEventViewHolder eventHolder = new RegistrableEventViewHolder(holder.itemView);
+            if (position < eventsList.size()) {
+                Event event = eventsList.get(position);
+                eventHolder.setEventContent(eventsList.get(position));
+                eventHolder.setButtonListener(onRegisterPress, onUnregisterPress);
 
-            if(registeredEvents.contains(event)){
-                // member is already registered
-                eventHolder.setIsRegistered(true);
+                if (registeredEvents.contains(event)) {
+                    // member is already registered
+                    eventHolder.setIsRegistered(true);
+                }
             }
         }
-
     }
 
 }

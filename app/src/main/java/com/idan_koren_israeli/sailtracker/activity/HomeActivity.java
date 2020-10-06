@@ -21,7 +21,7 @@ import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.fragment.ProfileFragment;
 import com.idan_koren_israeli.sailtracker.fragment.LoginFragment;
-import com.idan_koren_israeli.sailtracker.fragment.NextSailFragment;
+import com.idan_koren_israeli.sailtracker.fragment.NextEventFragment;
 
 import java.io.IOException;
 
@@ -32,7 +32,7 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
     private ProfileFragment profileFragment;
     private LoginFragment loginFragment;
     private LoadingFragment loadingFragment;
-    private NextSailFragment nextSailFragment;
+    private NextEventFragment nextEventFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
         profileFragment =(ProfileFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_profile);
         loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_login);
         loadingFragment = (LoadingFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_loading);
-        nextSailFragment = (NextSailFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_next_sailing);
+        nextEventFragment = (NextEventFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_next_sailing);
 
     }
 
@@ -151,7 +151,7 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
         MemberDataManager.getInstance().setCurrentUser(user);
         hideLoginFragment();
         updateInterface();
-        nextSailFragment.updateUI();
+        nextEventFragment.updateUI();
 
     }
 

@@ -1,5 +1,7 @@
 package com.idan_koren_israeli.sailtracker.adapter;
 import android.content.Context;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.comparator.SortByStartTime;
+import com.idan_koren_israeli.sailtracker.view_holder.EventAddViewHolder;
 import com.idan_koren_israeli.sailtracker.view_holder.EventViewHolder;
+import com.idan_koren_israeli.sailtracker.view_holder.MessageViewHolder;
 
 import java.util.List;
 
@@ -30,6 +34,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     protected List<Event> eventsList;
     protected LayoutInflater inflater;
+    protected boolean noEvents;
 
 
 
@@ -37,6 +42,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         this.inflater = LayoutInflater.from(context);
         this.eventsList = events;
         events.sort(new SortByStartTime());
+        noEvents = (events.size()==0);
     }
 
 
@@ -45,21 +51,43 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
+        switch (viewType){
+            case VIEW_TYPE.EVENT:
+                view = inflater.inflate(R.layout.recycler_event_item,parent,false);
+                return new EventViewHolder(view);
+            case VIEW_TYPE.TITLE:
+                view = inflater.inflate(R.layout.recycler_message_item,parent,false);
+                return new MessageViewHolder(view);
+            case VIEW_TYPE.ADD_BUTTON:
+                view = inflater.inflate(R.layout.recycler_add_event_item,parent,false);
+                return new EventAddViewHolder(view);
+        }
+
+        // in non of above, return regular view
         view = inflater.inflate(R.layout.recycler_event_item,parent,false);
         return new EventViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        EventViewHolder eventHolder = (EventViewHolder) holder;
-        if(position < eventsList.size()) {
-            Event event = eventsList.get(position);
-            eventHolder.setEventContent(event);
+        if(noEvents && position==0){
+            // showing message of "no events"
+            MessageViewHolder messageHolder = (MessageViewHolder) holder;
+            messageHolder.setText("No events for selected day");
+        }
+        else {
+            EventViewHolder eventHolder = (EventViewHolder) holder;
+            if (position < eventsList.size()) {
+                Event event = eventsList.get(position);
+                eventHolder.setEventContent(event);
+            }
         }
     }
 
     @Override
     public int getItemCount() {
+        if(noEvents)
+            return 1;
         return eventsList.size();
     }
 
@@ -69,6 +97,8 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemViewType(int position) {
+        if(noEvents && position==0)
+            return VIEW_TYPE.TITLE;
         return VIEW_TYPE.EVENT;
     }
 }
