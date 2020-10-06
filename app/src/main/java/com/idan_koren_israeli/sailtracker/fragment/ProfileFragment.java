@@ -51,7 +51,7 @@ public class ProfileFragment extends Fragment {
 
 
     @Override
-    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
+    public void onInflate(@NonNull Context context,@NonNull AttributeSet attrs, Bundle savedInstanceState) {
         super.onInflate(context, attrs, savedInstanceState);
 
         TypedArray type = context.obtainStyledAttributes(attrs,R.styleable.ProfileFragment);

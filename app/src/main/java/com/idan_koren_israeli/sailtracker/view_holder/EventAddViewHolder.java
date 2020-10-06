@@ -1,5 +1,6 @@
 package com.idan_koren_israeli.sailtracker.view_holder;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ public class EventAddViewHolder extends RecyclerView.ViewHolder {
 
     public void setClickListener(View.OnClickListener listener){
         button.setOnClickListener(listener);
+        Log.i("pttt", "onClick ste");
     }
 
 

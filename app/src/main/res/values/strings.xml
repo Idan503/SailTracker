@@ -67,7 +67,6 @@
 
     <!-- MESSAGES -->
     <string name="no_next_sail">There is no upcoming sail…</string>
-    <string name="loading_screen">Loading…</string>
 
     <!-- SPECIAL FORMATS -->
     <string name="hour_time_format">%02d:%02d</string>

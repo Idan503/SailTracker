@@ -14,16 +14,17 @@
         app:cardCornerRadius="10dp"
         >
 
+
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="50dp"
-            android:background="@color/photo_loading"
-            android:src="@drawable/ic_baseline_refresh_24"
-            android:layout_gravity="center"
+            android:id="@+id/photo_item_IMG_background"
+            android:src="@drawable/ic_loading"
+            android:background="@android:color/black"
+            android:padding="15dp"
             android:contentDescription="@string/loading"
-            app:tint="@android:color/white"
-            android:alpha="0.9"/>
+            />
 
         <ImageView
             android:layout_width="match_parent"

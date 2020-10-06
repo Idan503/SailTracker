@@ -6,4 +6,10 @@
         <attr name="show_points_status" format="boolean"/>
         <attr name="show_history_button" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="LoadingFragment">
+        <attr name="show_text" format="boolean"/>
+        <attr name="starts_hidden" format="boolean"/>
+        <attr name="text" format="string"/>
+    </declare-styleable>
 </resources>

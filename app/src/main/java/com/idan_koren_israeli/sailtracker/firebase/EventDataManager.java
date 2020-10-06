@@ -247,7 +247,8 @@ public class EventDataManager {
             }
         };
 
-        dbRealtime.child(KEYS.EVENTS).addListenerForSingleValueEvent(onDataLoaded);
+        dbRealtime.child(KEYS.EVENTS).addValueEventListener(onDataLoaded);
+        // Needs to load every time there is an update - registration is shared realtime among all users
     }
 
 
@@ -271,7 +272,8 @@ public class EventDataManager {
             }
         };
 
-        dbRealtime.child(KEYS.EVENTS).addListenerForSingleValueEvent(onDataLoaded);
+        dbRealtime.child(KEYS.EVENTS).addValueEventListener(onDataLoaded);
+        // Needs to load every time there is an update - registration is shared realtime among all users
     }
 
     public void loadNextEvent(final ClubMember member, final OnEventLoadedListener onLoaded){

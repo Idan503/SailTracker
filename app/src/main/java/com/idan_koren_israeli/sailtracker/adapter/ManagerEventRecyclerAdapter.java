@@ -40,7 +40,7 @@ public class ManagerEventRecyclerAdapter extends RegistrableEventRecyclerAdapter
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if(position!= eventsList.size() || (noEvents && position==0)) {
+        if((!noEvents && position!= eventsList.size()) || (noEvents && position==0)) {
             super.onBindViewHolder(holder, position);
             // Act as a regular user (load today's event items)
         }

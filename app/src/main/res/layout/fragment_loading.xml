@@ -1,34 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.LoadingFragment"
     android:background="@android:color/black"
-    android:alpha="0.9">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:alpha="0.9"
+    android:weightSum="1">
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_baseline_refresh_24"
+    <com.idan_koren_israeli.sailtracker.custom_views.SquareImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:src="@drawable/ic_loading"
         android:layout_gravity="center"
         android:contentDescription="@string/loading"
-        app:tint="@android:color/white"
+        android:id="@+id/loading_IMG_image"
         android:alpha="0.9"/>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
         android:layout_gravity="center"
-        android:layout_marginTop="45dp"
-        android:text="@string/loading_screen"
+        android:text="@string/loading"
         android:gravity="center"
-        android:autoSizeMaxTextSize="45sp"
+        android:autoSizeMinTextSize="8sp"
+        android:autoSizeMaxTextSize="50sp"
         android:autoSizeTextType="uniform"
+        android:padding="5dp"
         android:id="@+id/loading_LBL_text"
         android:textColor="@android:color/white"
         android:alpha="0.9"
         />
 
-</FrameLayout>
+</LinearLayout>

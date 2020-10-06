@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
 import com.idan_koren_israeli.sailtracker.view_holder.listener.OnPhotoClickedListener;
-import com.idan_koren_israeli.sailtracker.gallery.PhotoViewHolder;
+import com.idan_koren_israeli.sailtracker.view_holder.PhotoViewHolder;
 
 import java.util.ArrayList;
 
@@ -48,7 +48,7 @@ public class PhotoCollectionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflates the cell layout from xml
-        View itemView = mInflater.inflate(R.layout.recycler_gallery_item, parent, false);
+        View itemView = mInflater.inflate(R.layout.recycler_photo_item, parent, false);
         int height = parent.getMeasuredHeight() / NUM_OF_COLUMNS;
         itemView.setMinimumHeight(height);
         PhotoViewHolder photoHolder = new PhotoViewHolder(itemView);

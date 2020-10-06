@@ -102,9 +102,16 @@ public class AddEventActivity extends BaseActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewFlipper.setInAnimation(view.getContext(), android.R.anim.slide_in_left);
-                viewFlipper.setOutAnimation(view.getContext(), android.R.anim.slide_out_right);
-                viewFlipper.showPrevious();
+                if(viewFlipper.getDisplayedChild()==0){
+                    Intent intent = new Intent(AddEventActivity.this, CalendarActivity.class);
+                    startActivity(intent);
+                    finish(); // nothing to be back to
+                }
+                else {
+                    viewFlipper.setInAnimation(view.getContext(), android.R.anim.slide_in_left);
+                    viewFlipper.setOutAnimation(view.getContext(), android.R.anim.slide_out_right);
+                    viewFlipper.showPrevious();
+                }
             }
         });
 
@@ -186,4 +193,11 @@ public class AddEventActivity extends BaseActivity {
     };
 
     //endregion
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        backButton.performClick();
+    }
 }
