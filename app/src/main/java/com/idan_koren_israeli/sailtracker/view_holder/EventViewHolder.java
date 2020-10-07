@@ -22,7 +22,7 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
     private interface IMAGE_ID_KEYS{
         int FREE_EVENT = R.drawable.ic_launcher_foreground;
         int GUIDED_SAIL = R.drawable.ic_launcher_background;
-        int MEMBERS_SAIL = R.drawable.ic_profile_default;
+        int MEMBERS_SAIL = R.drawable.blank_profile_photo;
     }
 
     protected Event event;

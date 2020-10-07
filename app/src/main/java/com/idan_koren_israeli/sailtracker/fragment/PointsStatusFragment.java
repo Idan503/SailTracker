@@ -7,9 +7,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
@@ -19,8 +19,8 @@ public class PointsStatusFragment extends Fragment {
 
     private static final int pointsToAdd = 10;
 
-    private Button add;
-    private TextView count;
+    private MaterialButton addButton;
+    private TextView pointsCountText;
 
     public PointsStatusFragment() {
         // Required empty public constructor
@@ -59,16 +59,16 @@ public class PointsStatusFragment extends Fragment {
     }
 
     public void updateCount(int count){
-        this.count.setText(String.valueOf(count));
+        this.pointsCountText.setText(String.valueOf(count));
     }
 
     private void findViews(View parent){
-        count = parent.findViewById(R.id.points_status_LBL_points_count);
-        add = parent.findViewById(R.id.points_status_BTN_add);
+        pointsCountText = parent.findViewById(R.id.points_status_LBL_points_count);
+        addButton = parent.findViewById(R.id.points_status_BTN_add);
     }
 
     private void setAddListener(final ClubMember member){
-        add.setOnClickListener(new View.OnClickListener() {
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 member.addPoints(pointsToAdd);

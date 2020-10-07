@@ -48,7 +48,7 @@
         <fragment
             android:name="com.idan_koren_israeli.sailtracker.fragment.PointsStatusFragment"
             tools:layout="@layout/fragment_points_status"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="@id/calendar_LBL_selected_day"
             app:layout_constraintTop_toTopOf="@id/calendar_LBL_selected_day"

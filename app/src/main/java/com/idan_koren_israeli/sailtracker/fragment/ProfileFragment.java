@@ -147,7 +147,7 @@ public class ProfileFragment extends Fragment {
     private OnFailureListener onProfileUriFailure = new OnFailureListener() {
         @Override
         public void onFailure(@NonNull Exception e) {
-            common.setImageResource(profilePhoto, R.drawable.ic_profile_default);
+            common.setImageResource(profilePhoto, R.drawable.blank_profile_photo);
         }
     };
 

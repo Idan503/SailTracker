@@ -51,7 +51,7 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
         RotateAnimation loadingAnimation = new RotateAnimation(0, 360,
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        loadingAnimation.setDuration(LOADING_ANIMATION_DURATION );
+        loadingAnimation.setDuration(LOADING_ANIMATION_DURATION);
         loadingAnimation.setRepeatCount(Animation.INFINITE);
         loadingAnimation.setInterpolator(new LinearInterpolator());
         loadingImage.setAnimation(loadingAnimation);
