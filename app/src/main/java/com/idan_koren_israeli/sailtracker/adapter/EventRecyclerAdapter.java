@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    protected interface VIEW_TYPE{
+    protected interface ViewType {
         int EVENT = 0;
         int ADD_BUTTON = 1;
         int TITLE = 2;
@@ -59,13 +59,13 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             // When there are no events, the only thing that will be appeared is a message
         }
         switch (viewType){
-            case VIEW_TYPE.EVENT:
+            case ViewType.EVENT:
                 view = inflater.inflate(R.layout.recycler_event_item,parent,false);
                 return new EventViewHolder(view);
-            case VIEW_TYPE.TITLE:
+            case ViewType.TITLE:
                 view = inflater.inflate(R.layout.recycler_message_item,parent,false);
                 return new MessageViewHolder(view);
-            case VIEW_TYPE.ADD_BUTTON:
+            case ViewType.ADD_BUTTON:
                 view = inflater.inflate(R.layout.recycler_add_event_item,parent,false);
                 return new AddEventViewHolder(view);
         }
@@ -105,7 +105,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public int getItemViewType(int position) {
         if(noEvents && position==0)
-            return VIEW_TYPE.TITLE;
-        return VIEW_TYPE.EVENT;
+            return ViewType.TITLE;
+        return ViewType.EVENT;
     }
 }

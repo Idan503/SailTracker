@@ -1,14 +1,11 @@
 package com.idan_koren_israeli.sailtracker.adapter;
 import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
-import com.idan_koren_israeli.sailtracker.view_holder.EventViewHolder;
 import com.idan_koren_israeli.sailtracker.view_holder.MessageViewHolder;
 
 import org.joda.time.DateTime;
@@ -73,9 +70,9 @@ public class SeparatedEventRecyclerAdapter extends EventRecyclerAdapter {
     @Override
     public int getItemViewType(int position) {
         if(position==0)
-            return VIEW_TYPE.TITLE;
+            return ViewType.TITLE;
         if(position==futureTitlePosition)
-            return VIEW_TYPE.TITLE;
+            return ViewType.TITLE;
         return super.getItemViewType(position);
     }
 

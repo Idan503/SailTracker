@@ -43,7 +43,7 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        if(viewType==VIEW_TYPE.EVENT) {
+        if(viewType== ViewType.EVENT) {
             view = inflater.inflate(R.layout.recycler_registrable_event_item, parent, false);
             return new RegistrableEventViewHolder(view);
         }
