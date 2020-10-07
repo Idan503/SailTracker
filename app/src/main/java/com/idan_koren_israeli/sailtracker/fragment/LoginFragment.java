@@ -99,15 +99,6 @@ public class LoginFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        /*
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadingFragment.hide();
-            }
-        }, 1000);
-    */
     }
 
 
@@ -167,7 +158,7 @@ public class LoginFragment extends Fragment {
                     break;
 
                 default:
-                    currentPhone = phoneEditText.getText().toString();
+                    currentPhone = CommonUtils.getInstance().formatPhone(phoneEditText.getText().toString());
                     manager.verifyPhoneNumber(currentPhone, onVerificationStateChanged);
                     break;
             }
@@ -189,7 +180,8 @@ public class LoginFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle instanceBundle) {
-        instanceBundle.putString(KEYS.LOGIN_PHONE, phoneEditText.getText().toString());
+        currentPhone = CommonUtils.getInstance().formatPhone(phoneEditText.getText().toString());
+        instanceBundle.putString(KEYS.LOGIN_PHONE, currentPhone);
         super.onSaveInstanceState(instanceBundle);
     }
 

@@ -120,10 +120,18 @@ public class CommonUtils {
         if(input.length()<8)
             throw new InputMismatchException(MESSAGE);
 
-        // 0544881591 - > +972544881591
-
-        String number;
-        return input;
+        // 0554881591 - > +972554881591
+        char first = input.charAt(0);
+        switch (first){
+            case '0':
+                return "+972" + input.substring(1);
+            case '5':
+                return "+972" + input;
+            case '+':
+                return input;
+            default:
+                throw new InputMismatchException();
+        }
 
     }
 
