@@ -1,12 +1,10 @@
 package com.idan_koren_israeli.sailtracker.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +24,6 @@ import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.firebase.LoginManager;
-import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnLoginFinishedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnMemberLoadListener;
 
@@ -172,7 +169,7 @@ public class LoginFragment extends Fragment {
     private void checkUserNumber(){
         if(!phoneEditText.getText().toString().matches("")) {
             try {
-                currentPhone = CommonUtils.getInstance().formatPhone(phoneEditText.getText().toString());
+                currentPhone = CommonUtils.getInstance().convertStringToPhoneNumber(phoneEditText.getText().toString());
                 manager.verifyPhoneNumber(currentPhone, onVerificationStateChanged);
             }
             catch (InputMismatchException err){
@@ -245,7 +242,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle instanceBundle) {
         if(!phoneEditText.getText().toString().matches("")) {
-            currentPhone = CommonUtils.getInstance().formatPhone(phoneEditText.getText().toString());
+            currentPhone = CommonUtils.getInstance().convertStringToPhoneNumber(phoneEditText.getText().toString());
             instanceBundle.putString(KEYS.LOGIN_PHONE, currentPhone);
         }
         super.onSaveInstanceState(instanceBundle);

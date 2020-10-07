@@ -12,7 +12,6 @@ import com.idan_koren_israeli.sailtracker.fragment.PhotoCollectionFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Gallery;
 import android.widget.SearchView;
 
 public class SearchActivity extends BaseActivity {
@@ -44,8 +43,9 @@ public class SearchActivity extends BaseActivity {
 
     private SearchView.OnQueryTextListener onSearchPerformed = new SearchView.OnQueryTextListener() {
         @Override
-        public boolean onQueryTextSubmit(String s) {
-            MemberDataManager.getInstance().loadMemberByPhone(s, onMemberLoad);
+        public boolean onQueryTextSubmit(String input) {
+            String phoneNumber = CommonUtils.getInstance().convertStringToPhoneNumber(input);
+            MemberDataManager.getInstance().loadMemberByPhone(phoneNumber, onMemberLoad);
             return false;
         }
 
@@ -59,6 +59,10 @@ public class SearchActivity extends BaseActivity {
         @Override
         public void onMemberLoad(ClubMember memberLoaded) {
             resultMember = memberLoaded;
+            if(resultMember==null) {
+                CommonUtils.getInstance().showToast("User could not be found");
+                return;
+            }
             if(memberLoaded!= MemberDataManager.getInstance().getCurrentUser()) {
                 MemberDataManager.getInstance().loadGallery(memberLoaded.getUid(), photoLoaded);
                 profile.setMember(memberLoaded);

@@ -115,7 +115,7 @@ public class CommonUtils {
 
     //endregion
 
-    public String formatPhone(String input) throws InputMismatchException {
+    public String convertStringToPhoneNumber(String input) throws InputMismatchException {
         final int MIN_PHONE_LENGTH = 8;
         final String MESSAGE = "Invalid phone number";
         if(input.length()<8)
