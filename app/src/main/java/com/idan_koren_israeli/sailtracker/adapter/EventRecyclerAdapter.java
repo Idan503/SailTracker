@@ -56,6 +56,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         if(noEvents) {
             view = inflater.inflate(R.layout.recycler_message_item, parent, false);
             return new MessageViewHolder(view);
+            // When there are no events, the only thing that will be appeared is a message
         }
         switch (viewType){
             case VIEW_TYPE.EVENT:

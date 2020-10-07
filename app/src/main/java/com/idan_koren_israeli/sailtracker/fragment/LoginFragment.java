@@ -243,7 +243,7 @@ public class LoginFragment extends Fragment {
 
 
     @Override
-    public void onSaveInstanceState(Bundle instanceBundle) {
+    public void onSaveInstanceState(@NonNull Bundle instanceBundle) {
         if(!phoneEditText.getText().toString().matches("")) {
             currentPhone = CommonUtils.getInstance().formatPhone(phoneEditText.getText().toString());
             instanceBundle.putString(KEYS.LOGIN_PHONE, currentPhone);

@@ -23,8 +23,8 @@ public class AddEventViewHolder extends RecyclerView.ViewHolder {
 
 
     public void setClickListener(View.OnClickListener listener){
-        button.setOnClickListener(listener);
-        Log.i("pttt", "onClick ste");
+        if(button!=null)
+            button.setOnClickListener(listener);
     }
 
 
