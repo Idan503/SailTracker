@@ -15,23 +15,26 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.custom_views.SquareImageView;
 
+import java.util.Objects;
+
 
 public class LoadingFragment extends Fragment {
 
-    private static final String DEFAULT_MESSAGE = "Loading...";
+    private static final int DEFAULT_MESSAGE_ID = R.string.loading_msg_default;
+    private static final int ANIMATION_DURATION = 3000;
 
     private View parent;
 
+    private RotateAnimation rotateAnimation;
     private SquareImageView imageView;
     private TextView textView;
     private String message;
-    private boolean showText;
+    private boolean showMessage;
     private boolean startHidden;
 
 
@@ -44,18 +47,19 @@ public class LoadingFragment extends Fragment {
     public void onInflate(@NonNull Context context,@NonNull AttributeSet attrs, Bundle savedInstanceState) {
         super.onInflate(context, attrs, savedInstanceState);
 
-        TypedArray type = context.obtainStyledAttributes(attrs,R.styleable.ProfileFragment);
+        TypedArray type = context.obtainStyledAttributes(attrs,R.styleable.LoadingFragment);
 
 
         //Retrieve attributes from xml
-        showText = type.getBoolean(R.styleable.LoadingFragment_show_text,true);
-        message = type.getString(R.styleable.LoadingFragment_text);
+        showMessage = type.getBoolean(R.styleable.LoadingFragment_show_message,true);
+        message = type.getString(R.styleable.LoadingFragment_message);
         startHidden = type.getBoolean(R.styleable.LoadingFragment_starts_hidden, true);
 
-        if(message == null || message.equals(""))
-            message = DEFAULT_MESSAGE;
 
-        Log.i("pttt", "Loading Inflating");
+        if(message == null || message.equals(""))
+            message = Objects.requireNonNull(getActivity()).getResources().getString(DEFAULT_MESSAGE_ID);
+
+        Log.i("pttt", "Loading message " + message);
 
         type.recycle();
     }
@@ -63,6 +67,12 @@ public class LoadingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        rotateAnimation = new RotateAnimation(0,360,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotateAnimation.setDuration(ANIMATION_DURATION);
+        rotateAnimation.setRepeatCount(Animation.INFINITE);
+        rotateAnimation.setInterpolator(new LinearInterpolator());
+
     }
 
     @Override
@@ -71,9 +81,9 @@ public class LoadingFragment extends Fragment {
         // Inflate the layout for this fragment
         parent = inflater.inflate(R.layout.fragment_loading, container, false);
         findViews(parent);
+        imageView.setAnimation(rotateAnimation);
 
         applyAttributes();
-        rotateImage();
         return parent;
     }
 
@@ -88,7 +98,7 @@ public class LoadingFragment extends Fragment {
             hide();
         }
 
-        if(!showText)
+        if(!showMessage)
             textView.setVisibility(View.GONE);
         else
             textView.setText(message);
@@ -97,25 +107,19 @@ public class LoadingFragment extends Fragment {
 
     public void show(){
         parent.setVisibility(View.VISIBLE);
+        rotateAnimation.start();
+
     }
 
     public void hide(){
         parent.setVisibility(View.GONE);
+        rotateAnimation.cancel();
     }
 
     public void setMessage(String message){
         textView.setText(message);
     }
 
-    // Animation rotation for the loading view
-    private void rotateImage(){
-        RotateAnimation rotation = new RotateAnimation(0,360,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        rotation.setDuration(2000);
-        rotation.setRepeatCount(Animation.INFINITE);
-        imageView.setAnimation(rotation);
-        rotation.start();
 
-    }
 
 }

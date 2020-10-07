@@ -8,8 +8,8 @@
     </declare-styleable>
 
     <declare-styleable name="LoadingFragment">
-        <attr name="show_text" format="boolean"/>
+        <attr name="show_message" format="boolean"/>
         <attr name="starts_hidden" format="boolean"/>
-        <attr name="text" format="string"/>
+        <attr name="message" format="string"/>
     </declare-styleable>
 </resources>

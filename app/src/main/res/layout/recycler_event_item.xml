@@ -117,11 +117,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/event_item_IMG_image"
+                    app:layout_constraintStart_toStartOf="@id/event_item_IMG_image"
+                    app:layout_constraintEnd_toEndOf="@id/event_item_IMG_image"
                     android:autoSizeMinTextSize="14sp"
                     android:autoSizeMaxTextSize="24sp"
                     android:gravity="center"
                     android:text="@string/example_registration_status"
-                    android:layout_marginStart="15dp"
                     android:padding="4dp"
                     android:id="@+id/event_item_LBL_register_status"
                     />

@@ -65,8 +65,18 @@
     <string name="add_event_time_end_label">Ends at</string>
     <string name="add_event_hour_empty">--:--</string>
 
-    <!-- MESSAGES -->
-    <string name="no_next_sail">There is no upcoming sail…</string>
+    <!-- LABELS -->
+    <string name="no_next_event">Register to an event and it will be appeared here…</string>
+    <string name="no_events_calendar">There is nothing currently planned this day…</string>
+    <string name="future_events">Upcoming Sails and Events</string>
+    <string name="past_events">Past Sails and Events</string>
+
+
+    <!-- LOADING MESSAGES -->
+    <string name="loading_msg_default">Loading…</string>
+    <string name="loading_msg_events">Loading Events…</string>
+    <string name="loading_msg_profile">Loading Profile…</string>
+    <string name="loading_msg_photos">Loading Photos…</string>
 
     <!-- SPECIAL FORMATS -->
     <string name="hour_time_format">%02d:%02d</string>

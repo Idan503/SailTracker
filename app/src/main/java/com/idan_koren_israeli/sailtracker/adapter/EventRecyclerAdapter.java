@@ -32,13 +32,17 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         int TITLE = 2;
     }
 
+    private static final int NO_EVENTS_LABEL = R.string.no_events_calendar;
+
     protected List<Event> eventsList;
     protected LayoutInflater inflater;
+    protected Context context; // Used for loading strings ids from resource
     protected boolean noEvents;
 
 
 
     public EventRecyclerAdapter(Context context, List<Event> events){
+        this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.eventsList = events;
         events.sort(new SortByStartTime());
@@ -73,7 +77,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         if(noEvents && position==0){
             // showing message of "no events"
             MessageViewHolder messageHolder = (MessageViewHolder) holder;
-            messageHolder.setText("No events for selected day");
+            messageHolder.setText(context.getResources().getText(NO_EVENTS_LABEL));
         }
         else {
             EventViewHolder eventHolder = (EventViewHolder) holder;

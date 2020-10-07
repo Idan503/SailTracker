@@ -5,6 +5,8 @@ Sailing club membership manager and tracker application
 
 # References & Attributes
 Drawables: 
-	- Loading: https://www.flaticon.com/authors/roundicons
+	- App Icon: https://www.flaticon.com/authors/turkkub
+	- Loading Image: https://www.flaticon.com/authors/roundicons
+
 
 # Presentation Video

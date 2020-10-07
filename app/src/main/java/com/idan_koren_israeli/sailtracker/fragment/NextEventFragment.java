@@ -82,7 +82,7 @@ public class NextEventFragment extends Fragment {
     }
 
     public void setNoSail(){
-        titleText.setText(resources.getText(R.string.no_next_sail));
+        titleText.setText(resources.getText(R.string.no_next_event));
         hideExtraInfo();
 
         // SET BACKGROUND IMAGE...

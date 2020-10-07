@@ -18,7 +18,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     }
 
 
-    public void setText(String text){
+    public void setText(CharSequence text){
         textView.setText(text);
     }
 

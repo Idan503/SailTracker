@@ -19,6 +19,7 @@
         android:layout_gravity="center"
         android:contentDescription="@string/loading"
         android:id="@+id/loading_IMG_image"
+        android:padding="5dp"
         android:alpha="0.9"/>
 
     <TextView

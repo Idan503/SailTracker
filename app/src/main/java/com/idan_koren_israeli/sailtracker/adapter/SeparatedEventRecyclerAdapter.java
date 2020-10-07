@@ -22,8 +22,8 @@ import java.util.List;
  */
 public class SeparatedEventRecyclerAdapter extends EventRecyclerAdapter {
 
-    private static final String PAST_TITLE = "Past";
-    private static final String FUTURE_TITLE = "Future";
+    private static final int PAST_TITLE_ID = R.string.past_events;
+    private static final int FUTURE_TITLE_ID = R.string.future_events;
     private int futureTitlePosition; // The item position of the "Future" title
 
     public SeparatedEventRecyclerAdapter(Context context, List<Event> events) {
@@ -45,12 +45,12 @@ public class SeparatedEventRecyclerAdapter extends EventRecyclerAdapter {
         if(position==0){
             //its the past title
             MessageViewHolder pastMessageHolder = (MessageViewHolder) holder;
-            pastMessageHolder.setText(PAST_TITLE);
+            pastMessageHolder.setText(context.getResources().getText(R.string.past_events));
         }
         else if(position==futureTitlePosition){
             //its the future title
             MessageViewHolder futureMessageHolder = (MessageViewHolder) holder;
-            futureMessageHolder.setText(FUTURE_TITLE);
+            futureMessageHolder.setText(context.getResources().getText(R.string.future_events));
         }
         else{
             //its a regular item of event list
@@ -61,7 +61,7 @@ public class SeparatedEventRecyclerAdapter extends EventRecyclerAdapter {
 
     @Override
     public int getItemCount() {
-        return super.getItemCount() + 2; // 2 titles
+        return super.getItemCount() + 2; // 2 titles (separates the ryc)
     }
 
     // de-converting from position of separated to position in the list
