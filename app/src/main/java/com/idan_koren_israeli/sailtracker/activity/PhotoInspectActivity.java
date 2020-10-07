@@ -3,6 +3,7 @@ package com.idan_koren_israeli.sailtracker.activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
@@ -97,15 +99,7 @@ public class PhotoInspectActivity extends BaseActivity {
     }
 
     private void setListeners(){
-        deleteFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MemberDataManager.getInstance().deleteGalleryPhoto(currentMember.getUid(),displayedPhoto,photoDeleteSuccess, photoDeleteFail);
-                currentMember.removeGalleryPhoto(displayedPhoto);
-                MemberDataManager.getInstance().storeMember(currentMember);
-                finish();
-            }
-        });
+        deleteFAB.setOnClickListener(onDeleteButtonClicked);
 
         backFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,6 +108,7 @@ public class PhotoInspectActivity extends BaseActivity {
             }
         });
     }
+
 
 
 
@@ -148,8 +143,8 @@ public class PhotoInspectActivity extends BaseActivity {
         return true;
     }
 
-    //region Photo Listeners
 
+    //region Photo Loaded Listener
     private RequestListener<Drawable> imageLoadListener = new RequestListener<Drawable>() {
         @Override
         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -162,6 +157,32 @@ public class PhotoInspectActivity extends BaseActivity {
             return false;
         }
     };
+
+    //endregion
+
+    //region Photo Delete Listeners
+    private View.OnClickListener onDeleteButtonClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(view.getContext());
+            dialog.setMessage("Are you sure you want to delete this photo?");
+            dialog.setTitle("Delete Image");
+            dialog.setPositiveButton("Delete", onDeleteConfirmed);
+            dialog.setNegativeButton("Cancel", null);
+            dialog.show();
+        }
+    };
+
+    private DialogInterface.OnClickListener onDeleteConfirmed = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+            MemberDataManager.getInstance().deleteGalleryPhoto(currentMember.getUid(),displayedPhoto,photoDeleteSuccess, photoDeleteFail);
+            currentMember.removeGalleryPhoto(displayedPhoto);
+            MemberDataManager.getInstance().storeMember(currentMember);
+            finish();
+        }
+    };
+
 
     private OnSuccessListener<Void> photoDeleteSuccess = new OnSuccessListener<Void>() {
         @Override

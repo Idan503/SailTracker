@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.view_holder.AddEventViewHolder;
+import com.idan_koren_israeli.sailtracker.view_holder.EventViewHolder;
 import com.idan_koren_israeli.sailtracker.view_holder.RegistrableEventViewHolder;
 
 import java.util.List;
@@ -44,11 +45,21 @@ public class ManagerEventRecyclerAdapter extends RegistrableEventRecyclerAdapter
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        if(viewType== ViewType.ADD_BUTTON) {
-            view = inflater.inflate(R.layout.recycler_add_event_item, parent, false);
-            return new AddEventViewHolder(view);
+        switch (viewType){
+            case ViewType.ADD_BUTTON:
+                // managers can add new events
+                view = inflater.inflate(R.layout.recycler_add_event_item, parent, false);
+                return new AddEventViewHolder(view);
+            case ViewType.EVENT:
+                // managers can delete events, so holder will attach the listener
+                view = inflater.inflate(R.layout.recycler_registrable_event_item, parent, false);
+                Log.i("pttt", "INFRLATE EVENT MANAGER");
+                return new RegistrableEventViewHolder(view,true);
+            default:
+                return super.onCreateViewHolder(parent,viewType);
+
         }
-        return super.onCreateViewHolder(parent,viewType);
+
     }
 
 

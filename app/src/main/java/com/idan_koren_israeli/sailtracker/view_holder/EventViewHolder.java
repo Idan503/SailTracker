@@ -1,16 +1,19 @@
 package com.idan_koren_israeli.sailtracker.view_holder;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.enums.EventType;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
+import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 
 /**
  * Shows an event without extra functionality (no option to register/unregister)
@@ -32,15 +35,15 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
 
     public EventViewHolder(@NonNull View itemView) {
         super(itemView);
-        showDate = false;
         findViews();
     }
 
-    public EventViewHolder(@NonNull View itemView, boolean isShowingDate) {
+    public EventViewHolder(@NonNull View itemView, boolean showingDate) {
         super(itemView);
-        showDate = isShowingDate;
+        this.showDate = showingDate;
         findViews();
     }
+
 
     public void setEventContent(Event event){
         this.event = event;
@@ -62,6 +65,8 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         if(showDate)
             dateText = itemView.findViewById(R.id.event_item_LBL_date);
     }
+
+
 
 
 

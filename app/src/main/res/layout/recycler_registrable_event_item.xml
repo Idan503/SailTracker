@@ -10,7 +10,17 @@
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="1:0.375"
         app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/event_item_LAY_card"
         >
+
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end|top"
+            android:background="@drawable/ic_delete"
+            android:id="@+id/register_event_item_BTN_delete"
+            app:backgroundTint="@android:color/black"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"

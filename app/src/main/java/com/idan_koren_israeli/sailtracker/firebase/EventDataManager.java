@@ -33,6 +33,8 @@ public class EventDataManager {
 
     private DatabaseReference dbRealtime;
 
+
+
     interface KEYS {
         String EVENTS = "events";
         String DATE_TO_EVENTS = "date_to_events";
@@ -60,8 +62,24 @@ public class EventDataManager {
 
     // Adds an event to the db
     public void storeEvent(Event event){
+        // event id -> event full object
         dbRealtime.child(KEYS.EVENTS).child(event.getEid()).setValue(event);
-        dbRealtime.child(KEYS.DATE_TO_EVENTS).child(generateDateStamp(event.getStartDateTime().toLocalDate())).child(event.getEid()).setValue(event.getName());
+
+        //date timestamp -> event id
+        String eventTimeStamp = generateDateStamp(event.getStartDateTime().toLocalDate());
+        dbRealtime.child(KEYS.DATE_TO_EVENTS).child(eventTimeStamp).child(event.getEid()).setValue(event.getName());
+    }
+
+    public void deleteEvent(Event event) {
+        Log.i("pttt", "Delteing " + event.getEid());
+
+        //delete from id -> event map
+        dbRealtime.child(KEYS.EVENTS).child(event.getEid()).removeValue();
+
+        //delete from date timestamp -> event map
+        String eventTimeStamp = generateDateStamp(event.getStartDateTime().toLocalDate());
+        dbRealtime.child(KEYS.DATE_TO_EVENTS).child(eventTimeStamp).child(event.getEid()).removeValue();
+
     }
 
     // Adds a member to its event by uid
@@ -124,7 +142,7 @@ public class EventDataManager {
                 for(DataSnapshot child : snapshot.getChildren()){
                     eventsIds.add(child.getValue(String.class));
                 }
-                loadEventsById(eventsIds,onLoaded);
+                loadEventsByIds(eventsIds,onLoaded);
             }
 
             @Override
@@ -194,7 +212,7 @@ public class EventDataManager {
             }
         };
 
-        loadEventsById(usersEventsIds,onEventsLoaded);
+        loadEventsByIds(usersEventsIds,onEventsLoaded);
 
     }
 
@@ -204,7 +222,7 @@ public class EventDataManager {
         final OnListLoadedListener<String> onIdsLoaded = new OnListLoadedListener<String>() {
             @Override
             public void onListLoaded(ArrayList<String> list) {
-                loadEventsById(list, onLoaded);
+                loadEventsByIds(list, onLoaded);
             }
         };
 
@@ -229,7 +247,7 @@ public class EventDataManager {
         );
     }
 
-    public void loadEventsById(final ArrayList<String> eventsIdsToLoad, final OnListLoadedListener<Event> listener){
+    public void loadEventsByIds(final ArrayList<String> eventsIdsToLoad, final OnListLoadedListener<Event> listener){
         ValueEventListener onDataLoaded = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -252,7 +270,7 @@ public class EventDataManager {
     }
 
 
-    public void loadEventById(final String eventId, final OnEventLoadedListener listener){
+    public void loadEvent(final String eventId, final OnEventLoadedListener listener){
         ValueEventListener onDataLoaded = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -260,10 +278,13 @@ public class EventDataManager {
                 for(DataSnapshot child : snapshot.getChildren()){
                     if(eventId.equals(child.getKey())) {
                         loadedEvent = child.getValue(Event.class);
-                        listener.onEventLoaded(loadedEvent); //found
+                        if(listener!=null)
+                            listener.onEventLoaded(loadedEvent); //found
                         return;
                     }
                 }
+                // code gets to here when event id not found
+                listener.onEventLoaded(null);
             }
 
             @Override
@@ -283,7 +304,7 @@ public class EventDataManager {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String nextEventId = snapshot.getValue(String.class);
                 if(nextEventId!=null)
-                    loadEventById(nextEventId, onLoaded);
+                    loadEvent(nextEventId, onLoaded);
                 else
                     onLoaded.onEventLoaded(null);
             }

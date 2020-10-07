@@ -1,5 +1,6 @@
 package com.idan_koren_israeli.sailtracker.adapter;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,6 +24,7 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
 
     protected List<Event> registeredEvents; // Events that user viewing is already registered to
 
+
     private OnEventClickedListener onRegisterPress;
     private OnEventClickedListener onUnregisterPress;
 
@@ -31,6 +33,7 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
         super(context,events);
         this.registeredEvents = registered;
         eventsList.sort(new SortByStartTime());
+
     }
 
     public void setButtonsListeners(OnEventClickedListener register, OnEventClickedListener unregister){
@@ -56,11 +59,11 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
             super.onBindViewHolder(holder, position);
         }
         else {
-            RegistrableEventViewHolder eventHolder = new RegistrableEventViewHolder(holder.itemView);
+            RegistrableEventViewHolder eventHolder = (RegistrableEventViewHolder) holder;
             if (position < eventsList.size()) {
                 Event event = eventsList.get(position);
                 eventHolder.setEventContent(eventsList.get(position));
-                eventHolder.setButtonListener(onRegisterPress, onUnregisterPress);
+                eventHolder.setRegisterButtonListener(onRegisterPress, onUnregisterPress);
 
                 if (registeredEvents.contains(event)) {
                     // member is already registered
