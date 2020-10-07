@@ -79,7 +79,7 @@
     <string name="loading_msg_photos">Loading Photos…</string>
 
     <!-- SPECIAL FORMATS -->
-    <string name="hour_time_format">%02d:%02d</string>
+    <string name="hour_time_format">%02d:%02d %2s</string>
 
 
 </resources>

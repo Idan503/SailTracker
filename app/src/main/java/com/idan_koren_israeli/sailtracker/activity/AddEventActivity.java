@@ -4,6 +4,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -15,6 +16,8 @@ import com.google.type.TimeOfDay;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.enums.EventType;
+import com.idan_koren_israeli.sailtracker.club.exception.AddedEventInputMismatch;
+import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -37,7 +40,7 @@ public class AddEventActivity extends BaseActivity {
     private MaterialButton nextButton, backButton;
     private MaterialButton startTimeButton, endTimeButton;
 
-    private TimeOfDay startTime, endTime;
+    private TimeOfDay startTime = null, endTime = null;
 
     private Context mContext = this;
 
@@ -79,25 +82,7 @@ public class AddEventActivity extends BaseActivity {
 
         // Setting dialog time
 
-        nextButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(viewFlipper.getDisplayedChild()==2) {
-                            // user is in the last screen, event can be generated
-                            // this should be finished
-                            Intent intent = new Intent(AddEventActivity.this, CalendarActivity.class);
-                            intent.putExtra(KEYS.ADDED_EVENT, generateEvent());
-                            startActivity(intent);
-                            finish();
-                        }
-                        else {
-                            viewFlipper.setInAnimation(view.getContext(), R.anim.slide_in_right);
-                            viewFlipper.setOutAnimation(view.getContext(), R.anim.slide_out_left);
-                            viewFlipper.showNext();
-                        }
-                    }
-                });
+        nextButton.setOnClickListener(loadNextMenu);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,6 +119,64 @@ public class AddEventActivity extends BaseActivity {
                 picker.show();
             }
         });
+
+    }
+
+    private View.OnClickListener loadNextMenu = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (viewFlipper.getDisplayedChild() == 2) {
+                // user is in the last menu screen
+                try {
+                    validateInput();
+                    // Code gets to here iff all input is valid, new event can be created
+                    Intent intent = new Intent(AddEventActivity.this, CalendarActivity.class);
+                    intent.putExtra(KEYS.ADDED_EVENT, generateEvent());
+                    startActivity(intent);
+                    finish();
+                } catch (AddedEventInputMismatch exception) {
+                    CommonUtils.getInstance().showToast(exception.getMessage());
+                    Log.i("pttt", "child: " + exception.getMenuId());
+                    viewFlipper.setDisplayedChild(exception.getMenuId());
+                }
+
+            } else {
+                viewFlipper.setInAnimation(view.getContext(), R.anim.slide_in_right);
+                viewFlipper.setOutAnimation(view.getContext(), R.anim.slide_out_left);
+                viewFlipper.showNext();
+            }
+        }
+    };
+
+    // Checks that all input is valid and an event can be generated
+    private void validateInput() throws AddedEventInputMismatch{
+
+        if(eventTypeRadio.getCheckedRadioButtonId() == -1) //No button checked
+            throw new AddedEventInputMismatch("Please select event type", 0);
+
+        if(nameEdit.getText().toString().matches(""))
+            throw new AddedEventInputMismatch("Please enter event name", 0);
+
+        if(startTime==null)
+            throw new AddedEventInputMismatch("Please enter start time", 1);
+
+        if(endTime==null)
+            throw new AddedEventInputMismatch("Please enter end time", 1);
+
+        if(calculateMinutesBetween(startTime,endTime) <= 0)
+            throw new AddedEventInputMismatch("End time should be after start time", 1);
+
+        if(maxParticipantsEdit.getText().toString().matches(""))
+            throw new AddedEventInputMismatch("Please enter price", 2);
+
+        if(maxParticipantsEdit.getText().toString().matches(""))
+            throw new AddedEventInputMismatch("Please enter price", 2);
+
+        if(maxParticipantsEdit.getText().toString().matches(""))
+            throw new AddedEventInputMismatch("Please enter max. participants", 2);
+
+        if(descriptionEdit.getText().toString().matches(""))
+            throw new AddedEventInputMismatch("Please enter event description", 2);
 
     }
 
@@ -180,7 +223,8 @@ public class AddEventActivity extends BaseActivity {
         @Override
         public void onTimeSet(TimePicker timePicker, int i, int i1) {
             startTime = TimeOfDay.newBuilder().setHours(i).setMinutes(i1).build();
-            startTimeButton.setText(getResources().getString(R.string.hour_time_format,i,i1));
+            String suffix = (startTime.getHours()<12)?"AM":"PM";
+            startTimeButton.setText(getResources().getString(R.string.hour_time_format,i,i1,suffix));
         }
     };
 
@@ -188,7 +232,8 @@ public class AddEventActivity extends BaseActivity {
         @Override
         public void onTimeSet(TimePicker timePicker, int i, int i1) {
             endTime = TimeOfDay.newBuilder().setHours(i).setMinutes(i1).build();
-            endTimeButton.setText(getResources().getString(R.string.hour_time_format,i,i1));
+            String suffix = (endTime.getHours()<12)?"AM":"PM";
+            endTimeButton.setText(getResources().getString(R.string.hour_time_format,i,i1,suffix));
         }
     };
 
