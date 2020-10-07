@@ -114,7 +114,9 @@ public class PhotoCollectionFragment extends Fragment {
         loadingFragment.show();
     }
 
-
+    public LoadingFragment getLoadingFragment(){
+        return this.loadingFragment;
+    }
 
 
 }

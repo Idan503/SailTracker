@@ -107,7 +107,8 @@ public class CommonUtils {
 
     public byte[] convertBitmapToBytes(Bitmap photo, int quality){
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.JPEG, quality, stream);
+        if(photo!=null)
+            photo.compress(Bitmap.CompressFormat.JPEG, quality, stream);
 
         return stream.toByteArray();
     }

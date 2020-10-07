@@ -76,6 +76,7 @@
             android:id="@+id/calendar_FRAG_loading"
             app:layout_constraintTop_toBottomOf="@id/calendar_CALENDAR"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:show_app_icon="true"
             android:name="com.idan_koren_israeli.sailtracker.fragment.LoadingFragment"
             app:show_message="true"
             app:message="@string/loading_msg_events"

@@ -7,18 +7,18 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.service.autofill.VisibilitySetterAction;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.idan_koren_israeli.sailtracker.R;
-import com.idan_koren_israeli.sailtracker.custom_views.SquareImageView;
 
 import java.util.Objects;
 
@@ -31,11 +31,11 @@ public class LoadingFragment extends Fragment {
     private View parent;
 
     private RotateAnimation rotateAnimation;
-    private SquareImageView imageView;
+    private ImageView spinnerImage, appIconImage;
     private TextView textView;
     private String message;
-    private boolean showMessage;
-    private boolean startHidden;
+    private boolean showMessage, showAppIcon,startHidden;
+
 
 
     public LoadingFragment() {
@@ -52,8 +52,10 @@ public class LoadingFragment extends Fragment {
 
         //Retrieve attributes from xml
         showMessage = type.getBoolean(R.styleable.LoadingFragment_show_message,true);
+        showAppIcon = type.getBoolean(R.styleable.LoadingFragment_show_app_icon, false);
         message = type.getString(R.styleable.LoadingFragment_message);
         startHidden = type.getBoolean(R.styleable.LoadingFragment_starts_hidden, true);
+
 
 
         if(message == null || message.equals(""))
@@ -79,7 +81,7 @@ public class LoadingFragment extends Fragment {
         // Inflate the layout for this fragment
         parent = inflater.inflate(R.layout.fragment_loading, container, false);
         findViews(parent);
-        imageView.setAnimation(rotateAnimation);
+        spinnerImage.setAnimation(rotateAnimation);
 
         applyAttributes();
         return parent;
@@ -87,7 +89,8 @@ public class LoadingFragment extends Fragment {
 
     private void findViews(View parent){
         textView = parent.findViewById(R.id.loading_LBL_text);
-        imageView = parent.findViewById(R.id.loading_IMG_image);
+        spinnerImage = parent.findViewById(R.id.loading_IMG_spinner);
+        appIconImage = parent.findViewById(R.id.loading_IMG_app_icon);
     }
 
 
@@ -98,9 +101,15 @@ public class LoadingFragment extends Fragment {
 
         if(!showMessage)
             textView.setVisibility(View.GONE);
-        else
+        else {
+            textView.setVisibility(View.VISIBLE);
             textView.setText(message);
+        }
 
+        if(!showAppIcon)
+            appIconImage.setVisibility(View.GONE);
+        else
+            appIconImage.setVisibility(View.VISIBLE);
     }
 
     public void show(){

@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
@@ -162,9 +164,13 @@ public class MemberDataManager {
         dbRealtime.child(KEYS.PHONE_TO_MEMBERS).child(phoneNumber).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String memberUid = Objects.requireNonNull(snapshot.getValue()).toString();
-                        loadMember(memberUid,onMemberLoaded); // Load member by the uid we got from rtdb
+                    public void onDataChange(@Nullable DataSnapshot snapshot) {
+                        if(snapshot==null || snapshot.getValue()==null)
+                            onMemberLoaded.onMemberLoad(null); // Member could not be found
+                        else {
+                            String memberUid = Objects.requireNonNull(snapshot.getValue()).toString();
+                            loadMember(memberUid, onMemberLoaded); // Load member by the uid we got from rtdb
+                        }
                     }
 
                     @Override
@@ -306,7 +312,8 @@ public class MemberDataManager {
     public void storeGalleryPhoto(String memberUid,
                                   Bitmap photo,
                                   OnSuccessListener<UploadTask.TaskSnapshot> onSuccess,
-                                  OnFailureListener onFailure) {
+                                  OnFailureListener onFailure,
+                                  OnProgressListener<UploadTask.TaskSnapshot> onProgress) {
 
         byte[] bytes = common.convertBitmapToBytes(photo, PHOTOS_QUALITY);
         String fileName = Long.toString(Timestamp.now().getSeconds());
@@ -316,7 +323,8 @@ public class MemberDataManager {
         StorageReference allGalleryPhotos = dbStorage.getReference().child(KEYS.GALLERY_PHOTOS);
         StorageReference filePath = allGalleryPhotos.child(memberUid).child(fileName);
         // Each member has a unique sub-folder of photos
-        filePath.putBytes(bytes).addOnSuccessListener(onSuccess).addOnFailureListener(onFailure);
+        filePath.putBytes(bytes).
+                addOnSuccessListener(onSuccess).addOnFailureListener(onFailure).addOnProgressListener(onProgress);
     }
 
 
@@ -352,8 +360,9 @@ public class MemberDataManager {
 
     public void storeGalleryPhoto(Bitmap photo,
                                   OnSuccessListener<UploadTask.TaskSnapshot> onSuccess,
-                                  OnFailureListener onFailure) {
-        storeGalleryPhoto(currentUser.getUid(), photo, onSuccess, onFailure);
+                                  OnFailureListener onFailure,
+                                  OnProgressListener<UploadTask.TaskSnapshot> onProgress) {
+        storeGalleryPhoto(currentUser.getUid(), photo, onSuccess, onFailure, onProgress);
     }
 
     public void isManagerMember(final OnCheckFinishedListener onFinish){

@@ -17,6 +17,7 @@ import androidx.exifinterface.media.ExifInterface;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
@@ -31,6 +32,7 @@ import org.joda.time.DateTime;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 public class GalleryActivity extends BaseActivity {
 
@@ -144,7 +146,7 @@ public class GalleryActivity extends BaseActivity {
             }catch (IOException exception){
                 CommonUtils.getInstance().showToast("Problem occurred, could not rotate captured picture.");
             }
-            dbManager.storeGalleryPhoto(rotatedBitmap, photoUploadSuccess, photoUploadFailure);
+            dbManager.storeGalleryPhoto(rotatedBitmap, photoUploadSuccess, photoUploadFailure, photoUploadProgress);
             photosFrag.showLoading();
         }
 
@@ -204,6 +206,13 @@ public class GalleryActivity extends BaseActivity {
         }
     };
 
+    private OnProgressListener<UploadTask.TaskSnapshot> photoUploadProgress = new OnProgressListener<UploadTask.TaskSnapshot>() {
+        @Override
+        public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+            double percent = 100.00 * ((double) snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+            photosFrag.getLoadingFragment().setMessage("Uploading photo (" + (int) percent + "%)");
+        }
+    };
 
 
 
