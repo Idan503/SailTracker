@@ -59,8 +59,6 @@ public class LoadingFragment extends Fragment {
         if(message == null || message.equals(""))
             message = Objects.requireNonNull(getActivity()).getResources().getString(DEFAULT_MESSAGE_ID);
 
-        Log.i("pttt", "Loading message " + message);
-
         type.recycle();
     }
 
