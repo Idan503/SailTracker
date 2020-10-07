@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -21,26 +22,31 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
+import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
+import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnGalleryPhotoLoadListener;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
 import com.idan_koren_israeli.sailtracker.fragment.ProfileFragment;
 import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
 import com.idan_koren_israeli.sailtracker.fragment.PhotoCollectionFragment;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class GalleryActivity extends BaseActivity {
 
-    private FloatingActionButton addPhotoButton;
+    private FloatingActionButton captureButton;
     private ProfileFragment profileFrag;
     private PhotoCollectionFragment photosFrag;
     private ClubMember member;
     private MemberDataManager dbManager;
+    private boolean currentlyInEvent;
 
     private String capturedPhotoPath;
 
@@ -55,7 +61,9 @@ public class GalleryActivity extends BaseActivity {
         member = dbManager.getCurrentUser();
 
         findViews();
-        setListeners();
+        captureButton.setVisibility(View.GONE);
+        initCurrentlyInEvent();
+        // Will be shown after we will know if user is currently in event
 
         photosFrag.setMember(dbManager.getCurrentUser());
         dbManager.loadGallery(dbManager.getCurrentUser().getUid(),photoLoaded);
@@ -74,20 +82,24 @@ public class GalleryActivity extends BaseActivity {
 
 
     private void findViews(){
-        addPhotoButton = findViewById(R.id.gallery_FAB_add_photo);
+        captureButton = findViewById(R.id.gallery_FAB_add_photo);
         profileFrag = (ProfileFragment) getSupportFragmentManager().findFragmentById(R.id.gallery_FRAG_profile);
         photosFrag = (PhotoCollectionFragment) getSupportFragmentManager().findFragmentById(R.id.gallery_FRAG_photo_collection);
     }
 
-    private void setListeners(){
-        addPhotoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //CommonUtils.getInstance().dispatchTakePictureIntent(GalleryActivity.this);
-                dispatchTakePictureIntent();
-            }
-        });
+
+
+    private void setCaptureButtonListener(){
+        if(currentlyInEvent){
+            captureButton.setOnClickListener(onClickCurrentlyInEvent);
+        }
+        else {
+            captureButton.setOnClickListener(onClickNotInEvent);
+        }
+
     }
+
+
 
     //region Picture Capture & Upload
 
@@ -216,6 +228,67 @@ public class GalleryActivity extends BaseActivity {
 
 
 
+
+    //endregion
+
+
+    //region Capture Button
+    // Photos can be taken and uploaded only when the user is in a sail/event currently
+
+    private void initCurrentlyInEvent(){
+
+        OnListLoadedListener<Event> onTodayEventsLoaded = new OnListLoadedListener<Event>() {
+            @Override
+            public void onListLoaded(ArrayList<Event> todayEvents) {
+                ArrayList<Event> nowEvents = new ArrayList<>(); // All events that are right now
+
+
+                for(Event event : todayEvents){
+                    if(isEventRightNow(event)){
+                        nowEvents.add(event);
+                    }
+                }
+
+                // Trying to find current member in members lists of current events
+                boolean found = false;
+                for(Event event : nowEvents){
+                    if(event.getRegisteredMembers().contains(member.getUid())) {
+                        currentlyInEvent = true;
+                        found = true; // The user was found in one of the current events list
+                    }
+                }
+                if(!found)
+                    currentlyInEvent = false; // Member is not found in the lists
+
+                setCaptureButtonListener();
+                captureButton.setVisibility(View.VISIBLE);
+            }
+        };
+
+        EventDataManager.getInstance().loadEventsByDate(LocalDate.now(),onTodayEventsLoaded);
+    }
+
+
+
+    private boolean isEventRightNow(Event event){
+        return event.getStartDateTime().getMillis() < DateTime.now().getMillis()
+                && DateTime.now().getMillis() < event.getEndDateTime().getMillis();
+        // Event is right now if current time is between start time & end time
+    }
+
+    private View.OnClickListener onClickCurrentlyInEvent = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            dispatchTakePictureIntent();
+        }
+    };
+
+    private View.OnClickListener onClickNotInEvent = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            CommonUtils.getInstance().showToast("Photos can be taken only while in event");
+        }
+    };
 
     //endregion
 }
