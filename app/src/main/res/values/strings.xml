@@ -21,7 +21,11 @@
     <string name="loading">loading</string>
     <string name="photo">photo</string>
 
-    <string name="my_next_sail">My Next Sail</string>
+    <!-- NEXT SAIL FRAGMENT -->
+    <string name="my_next_event_title">My Next Event</string>
+    <string name="my_next_event_load_name">Loading Your Next Event</string>
+    <string name="my_next_event_load_date">00.00.0000</string>
+    <string name="my_next_event_load_hour">00:00</string>
 
     <!-- Event/Sail Types -->
     <string name="free_event">Free Event</string>
@@ -37,8 +41,8 @@
     <string name="example_phone">050—1234567</string>
     <string name="example_code">123456</string>
     <string name="example_name">Israel Israeli</string>
-    <string name="example_sail_name">Single Handed Guided Sail</string>
-    <string name="example_sail_description">Learn how to sail by using one hand only</string>
+    <string name="example_event_name">Single Handed Guided Sail</string>
+    <string name="example_event_description">Learn how to sail by using one hand only</string>
     <string name="number_00">00</string>
     <string name="example_registration_status">3/6 Registered</string>
 

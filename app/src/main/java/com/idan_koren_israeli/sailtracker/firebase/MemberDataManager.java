@@ -3,6 +3,7 @@ package com.idan_koren_israeli.sailtracker.firebase;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -188,8 +189,11 @@ public class MemberDataManager {
     private OnCheckFinishedListener onCurrentUserSearched = new OnCheckFinishedListener() {
         @Override
         public void onCheckFinished(boolean found) {
-            if(!found)
+            if(!found) {
+                Log.i("pttt", currentUser.toString());
                 storeMember(currentUser);
+
+            }
         }
     };
 

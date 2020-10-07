@@ -22,8 +22,6 @@ import java.util.List;
  */
 public class SeparatedEventRecyclerAdapter extends EventRecyclerAdapter {
 
-    private static final int PAST_TITLE_ID = R.string.past_events;
-    private static final int FUTURE_TITLE_ID = R.string.future_events;
     private int futureTitlePosition; // The item position of the "Future" title
 
     public SeparatedEventRecyclerAdapter(Context context, List<Event> events) {

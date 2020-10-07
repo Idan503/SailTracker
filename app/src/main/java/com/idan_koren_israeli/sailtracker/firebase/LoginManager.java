@@ -24,15 +24,15 @@ public class LoginManager {
 
     private FirebaseAuth firebaseAuth;
     private String mVerificationId;
-    private FirebaseUser userAuthenticated;
     private LoginState currentState;
     private Activity callerActivity;
+    private String authenticatedId; // id of user that is logged in successfully
 
     private LoginManager(){
         firebaseAuth = FirebaseAuth.getInstance();
         currentState = LoginState.NOT_STARTED;
         firebaseAuth.useAppLanguage();
-        userAuthenticated = null; // there is no authenticated user yet
+        authenticatedId = null;
     }
 
     public void setCallerActivity(Activity callerActivity) {
@@ -83,6 +83,10 @@ public class LoginManager {
         return null;
     }
 
+    public void setAuthenticatedId(String id){
+        this.authenticatedId = id;
+    }
+
     public LoginState getCurrentState() {
         return currentState;
     }
@@ -107,13 +111,6 @@ public class LoginManager {
         this.mVerificationId = mVerificationId;
     }
 
-    public FirebaseUser getUserAuthenticated() {
-        return userAuthenticated;
-    }
-
-    public void setUserAuthenticated(FirebaseUser userAuthenticated) {
-        this.userAuthenticated = userAuthenticated;
-    }
 
     public Activity getCallerActivity() {
         return callerActivity;

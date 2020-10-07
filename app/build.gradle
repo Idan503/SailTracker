@@ -46,6 +46,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'net.danlew:android.joda:2.10.6.1'
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
 
     // Firebase components

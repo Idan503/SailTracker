@@ -1,7 +1,5 @@
 package com.idan_koren_israeli.sailtracker.adapter;
 import android.content.Context;
-import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.comparator.SortByStartTime;
-import com.idan_koren_israeli.sailtracker.view_holder.EventAddViewHolder;
+import com.idan_koren_israeli.sailtracker.view_holder.AddEventViewHolder;
 import com.idan_koren_israeli.sailtracker.view_holder.EventViewHolder;
 import com.idan_koren_israeli.sailtracker.view_holder.MessageViewHolder;
 
@@ -55,6 +53,10 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
+        if(noEvents) {
+            view = inflater.inflate(R.layout.recycler_message_item, parent, false);
+            return new MessageViewHolder(view);
+        }
         switch (viewType){
             case VIEW_TYPE.EVENT:
                 view = inflater.inflate(R.layout.recycler_event_item,parent,false);
@@ -64,7 +66,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 return new MessageViewHolder(view);
             case VIEW_TYPE.ADD_BUTTON:
                 view = inflater.inflate(R.layout.recycler_add_event_item,parent,false);
-                return new EventAddViewHolder(view);
+                return new AddEventViewHolder(view);
         }
 
         // in non of above, return regular view

@@ -3,14 +3,12 @@ package com.idan_koren_israeli.sailtracker.adapter;
 
 import android.content.Context;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
-import com.idan_koren_israeli.sailtracker.view_holder.EventAddViewHolder;
+import com.idan_koren_israeli.sailtracker.view_holder.AddEventViewHolder;
 
 import java.util.List;
 
@@ -46,7 +44,7 @@ public class ManagerEventRecyclerAdapter extends RegistrableEventRecyclerAdapter
         }
         else {
             // Last item in the recyclerview (not in the data list), so it's the add button
-            EventAddViewHolder eventHolder = new EventAddViewHolder(holder.itemView);
+            AddEventViewHolder eventHolder = new AddEventViewHolder(holder.itemView);
             eventHolder.setClickListener(onAddButtonPressed);
         }
 

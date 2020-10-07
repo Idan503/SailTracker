@@ -14,9 +14,13 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
+import com.idan_koren_israeli.sailtracker.firebase.LoginManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnMemberLoadListener;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -28,13 +32,26 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        // Loading already authenticated user (if exists) into local data while splashscreen is showing
+        FirebaseUser authenticatedUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(authenticatedUser!=null){
+            MemberDataManager.getInstance().loadCurrentMember(authenticatedUser.getUid(),null);
+        }
+
+
         findViews();
         applySource();
         applyAnimation();
 
 
-
     }
+
+    private OnMemberLoadListener onCurrentMemberLoaded = new OnMemberLoadListener() {
+        @Override
+        public void onMemberLoad(ClubMember memberLoaded) {
+            startApp();
+        }
+    };
 
     private void findViews(){
         appIcon = findViewById(R.id.splash_IMG_icon);

@@ -11,11 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
-import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventLoadedListener;
 
 import org.joda.time.DateTime;
@@ -29,6 +29,7 @@ public class NextEventFragment extends Fragment {
     private TextView titleText, dateText, startTimeText;
     private ImageView backgroundImage;
     private Resources resources;
+    //private ShimmerFrameLayout shimmer;
 
     public NextEventFragment() {
         // Required empty public constructor
@@ -43,36 +44,37 @@ public class NextEventFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View parent = inflater.inflate(R.layout.fragment_next_sail_card, container, false);
+        View parent = inflater.inflate(R.layout.fragment_next_event_card, container, false);
         resources = parent.getResources();
         findViews(parent);
 
         return parent;
     }
 
-    private OnEventLoadedListener onNextSailLoaded = new OnEventLoadedListener() {
+    private OnEventLoadedListener onNextEventLoaded = new OnEventLoadedListener() {
         @Override
         public void onEventLoaded(Event sail) {
             if(sail!=null && sail.getStartDateTime().getMillis() > DateTime.now().getMillis())
-                setSail(sail);
+                setEvent(sail);
             else
-                setNoSail();
+                setNoEvent();
+            // Data is loaded
         }
     };
 
     private void findViews(View parent){
-        titleText = parent.findViewById(R.id.next_sail_LBL_sail_name);
-        backgroundImage = parent.findViewById(R.id.next_sail_IMG_background);
-        startTimeText = parent.findViewById(R.id.next_sail_LBL_start_time);
-        dateText = parent.findViewById(R.id.next_sail_LBL_date);
+        titleText = parent.findViewById(R.id.next_event_LBL_event_name);
+        backgroundImage = parent.findViewById(R.id.next_event_IMG_background);
+        startTimeText = parent.findViewById(R.id.next_event_LBL_start_time);
+        dateText = parent.findViewById(R.id.next_event_LBL_date);
+        //shimmer = parent.findViewById(R.id.next_event_LAY_shimmer);
     }
 
-    public void updateUI(){
-        ClubMember currentMember = MemberDataManager.getInstance().getCurrentUser();
-        EventDataManager.getInstance().loadNextEvent(currentMember, onNextSailLoaded);
+    public void updateUI(ClubMember member){
+        EventDataManager.getInstance().loadNextEvent(member, onNextEventLoaded);
     }
 
-    public void setSail(Event sail){
+    public void setEvent(Event sail){
         titleText.setText(sail.getName());
         dateText.setText(generateDateString(sail.getStartDateTime()));
         startTimeText.setText(generateTimeOfDayString(sail.getStartDateTime()));
@@ -81,7 +83,7 @@ public class NextEventFragment extends Fragment {
         // SET BACKGROUND IMAGE...
     }
 
-    public void setNoSail(){
+    public void setNoEvent(){
         titleText.setText(resources.getText(R.string.no_next_event));
         hideExtraInfo();
 

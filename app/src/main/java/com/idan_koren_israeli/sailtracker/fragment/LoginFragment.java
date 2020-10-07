@@ -65,14 +65,6 @@ public class LoginFragment extends Fragment {
     }
 
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-
-        setOnCompleteListener((OnLoginFinishedListener) context);
-    }
-
 
     private OnMemberLoadListener memberLoadFinished = new OnMemberLoadListener() {
         @Override
@@ -89,6 +81,9 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if(getActivity()!=null)
+            manager = LoginManager.getInstance(getActivity());
+
         if(savedInstanceState!=null) {
             currentPhone = savedInstanceState.getString(KEYS.LOGIN_PHONE);
 
@@ -98,10 +93,6 @@ public class LoginFragment extends Fragment {
                 manager.verifyPhoneNumber(currentPhone, onVerificationStateChanged);
 
         }
-
-        if(getActivity()!=null)
-            manager = LoginManager.getInstance(getActivity());
-
     }
 
     @Override
@@ -148,6 +139,10 @@ public class LoginFragment extends Fragment {
         nextButton.setOnClickListener(nextButtonListener);
     }
 
+    public LoginManager getManager(){
+        return this.manager;
+    }
+
     private View.OnClickListener nextButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -163,7 +158,6 @@ public class LoginFragment extends Fragment {
                     if(manager.getAuthenticatedId()!=null){
                         // Creating the new member based on information from inside the fragment
                         ClubMember loggedMember = new ClubMember(manager.getAuthenticatedId(),nameEditText.getText().toString(),currentPhone);
-                        MemberDataManager.getInstance().setCurrentUser(loggedMember);
                         manager.setCurrentState(LoginManager.LoginState.COMPLETED);
                         CommonUtils.getInstance().showToast("Logged in successfully");
 
@@ -173,7 +167,8 @@ public class LoginFragment extends Fragment {
                     break;
 
                 default:
-                    manager.verifyPhoneNumber(phoneEditText.getText().toString(), onVerificationStateChanged);
+                    currentPhone = phoneEditText.getText().toString();
+                    manager.verifyPhoneNumber(currentPhone, onVerificationStateChanged);
                     break;
             }
         }
@@ -208,8 +203,8 @@ public class LoginFragment extends Fragment {
             if (task.isSuccessful()) {
                 // Sign in success, update UI with the signed-in user's information
                  manager.setCurrentState(LoginManager.LoginState.CODE_APPROVED);
-                if(task.getResult()!=null)
-                    manager.setUserAuthenticated(task.getResult().getUser());
+                if(task.getResult()!=null && task.getResult().getUser()!=null)
+                    manager.setAuthenticatedId(task.getResult().getUser().getUid());
 
                 showNextLayout();
             } else {

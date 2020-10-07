@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -12,6 +13,8 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.firebase.LoginManager;
 import com.idan_koren_israeli.sailtracker.fragment.LoadingFragment;
@@ -40,12 +43,15 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+
         findViews();
         setListeners();
 
-        if(LoginManager.getInstance(this).getUserAuthenticated()!=null) {
-            String currentUserUid = LoginManager.getInstance(this).getUserAuthenticated().getUid();
-            MemberDataManager.getInstance().loadCurrentMember(currentUserUid, null);
+        user = MemberDataManager.getInstance().getCurrentUser();
+        if(user!=null) {
+            // No need for login, user is already authenticated
+            hideLoginFragment();
+            updateInterface();
         }
         else
             loginFragment.setOnCompleteListener(onLoginFinished);
@@ -82,7 +88,7 @@ public class HomeActivity extends BaseActivity {
     private void updateInterface(){
         if(profileFragment!=null) {
             profileFragment.setMember(user);
-            // next sail should be added
+            nextEventFragment.updateUI(user);
 
         }
     }
@@ -95,6 +101,7 @@ public class HomeActivity extends BaseActivity {
         public boolean onLongClick(View view) {
             if(user !=null) {
                 CommonUtils.getInstance().dispatchChoosePictureIntent(HomeActivity.this);
+                updateInterface();
                 return true;
             }
             return false;
@@ -158,7 +165,6 @@ public class HomeActivity extends BaseActivity {
             MemberDataManager.getInstance().setCurrentUser(user);
             hideLoginFragment();
             updateInterface();
-            nextEventFragment.updateUI();
         }
     };
 

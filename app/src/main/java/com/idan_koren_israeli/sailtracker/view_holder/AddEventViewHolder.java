@@ -13,10 +13,10 @@ import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 
-public class EventAddViewHolder extends RecyclerView.ViewHolder {
+public class AddEventViewHolder extends RecyclerView.ViewHolder {
     private MaterialButton button;
 
-    public EventAddViewHolder(@NonNull View itemView) {
+    public AddEventViewHolder(@NonNull View itemView) {
         super(itemView);
         findViews();
     }
