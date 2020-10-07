@@ -8,80 +8,141 @@
     tools:context=".fragment.LoginFragment">
 
 
-    <TextView
+
+
+    <ViewFlipper
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHeight_percent="0.2"
-        android:layout_marginTop="50dp"
-        android:id="@+id/login_LBL_message"
-        android:text="@string/login_phone"
-        android:autoSizeTextType="uniform"
-        android:padding="10dp"
-        android:gravity="center"
-        />
+        android:layout_height="match_parent"
+        android:id="@+id/login_FLIP_flipper"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="1"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"
+                android:layout_marginTop="50dp"
+                android:id="@+id/login_LBL_message_phone"
+                android:text="@string/login_phone"
+                android:autoSizeTextType="uniform"
+                android:padding="10dp"
+                android:gravity="center"
+                />
 
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.1"
-        android:ems="10"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/login_LBL_message"
-        android:autoSizeTextType="uniform"
-        android:id="@+id/login_EDT_phone_box"
-        android:inputType="phone"
-        android:hint="@string/example_phone"
-        android:layout_marginEnd="30dp"
-        android:layout_marginStart="30dp"
-        android:gravity="center"
-        android:autofillHints="0"
-        />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"
+                android:ems="12"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:autoSizeTextType="uniform"
+                android:id="@+id/login_EDT_phone_box"
+                android:inputType="phone"
+                android:hint="@string/example_phone"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:gravity="center"
+                android:autofillHints="0"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="1"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"
+                android:layout_marginTop="50dp"
+                android:id="@+id/login_LBL_message_code"
+                android:text="@string/login_code"
+                android:autoSizeTextType="uniform"
+                android:padding="10dp"
+                android:gravity="center"
+                />
 
 
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.1"
-        android:ems="6"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/login_LBL_message"
-        android:autoSizeTextType="uniform"
-        android:id="@+id/login_EDT_code_box"
-        android:inputType="number"
-        android:hint="@string/example_code"
-        android:layout_marginEnd="30dp"
-        android:layout_marginStart="30dp"
-        android:gravity="center"
-        android:visibility="gone"
-        android:autofillHints="0"
-        />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="0.25"
+                android:layout_gravity="center_horizontal"
+                android:ems="6"
+                android:layout_marginTop="20dp"
+                android:autoSizeTextType="uniform"
+                android:id="@+id/login_EDT_code"
+                android:inputType="number"
+                android:hint="@string/example_code"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:autofillHints="0"
+                />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.1"
-        android:ems="10"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/login_LBL_message"
-        android:autoSizeTextType="uniform"
-        android:id="@+id/login_EDT_name_box"
-        android:inputType="textPersonName"
-        android:hint="@string/example_name"
-        android:layout_marginEnd="30dp"
-        android:layout_marginStart="30dp"
-        android:gravity="center"
-        android:visibility="gone"
-        android:autofillHints="0"
-        />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"
+                android:layout_marginTop="50dp"
+                android:id="@+id/login_LBL_message_name"
+                android:text="@string/login_name"
+                android:autoSizeTextType="uniform"
+                android:padding="10dp"
+                android:gravity="center"
+                />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"
+                android:ems="10"
+                android:layout_marginTop="20dp"
+                android:autoSizeTextType="uniform"
+                android:id="@+id/login_EDT_name"
+                android:inputType="textPersonName"
+                android:hint="@string/example_name"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:visibility="gone"
+                android:autofillHints="0"
+                />
+        </LinearLayout>
+
+
+    </ViewFlipper>
+
+
+
+
 
 
     <com.google.android.material.button.MaterialButton

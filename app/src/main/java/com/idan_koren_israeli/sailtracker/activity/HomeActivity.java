@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.UploadTask;
+import com.idan_koren_israeli.sailtracker.firebase.LoginManager;
 import com.idan_koren_israeli.sailtracker.fragment.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnLoginFinishedListener;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
@@ -25,7 +26,7 @@ import com.idan_koren_israeli.sailtracker.fragment.NextEventFragment;
 
 import java.io.IOException;
 
-public class HomeActivity extends BaseActivity implements OnLoginFinishedListener {
+public class HomeActivity extends BaseActivity {
 
     private ClubMember user; // the current specific user's member object
     private LinearLayout loginLayout;
@@ -42,7 +43,12 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
         findViews();
         setListeners();
 
-        loginFragment.setOnCompleteListener(this);
+        if(LoginManager.getInstance(this).getUserAuthenticated()!=null) {
+            String currentUserUid = LoginManager.getInstance(this).getUserAuthenticated().getUid();
+            MemberDataManager.getInstance().loadCurrentMember(currentUserUid, null);
+        }
+        else
+            loginFragment.setOnCompleteListener(onLoginFinished);
     }
 
 
@@ -145,15 +151,16 @@ public class HomeActivity extends BaseActivity implements OnLoginFinishedListene
 
     //endregion
 
-    @Override
-    public void onLoginFinished(ClubMember authenticatedMember) {
-        user = authenticatedMember;
-        MemberDataManager.getInstance().setCurrentUser(user);
-        hideLoginFragment();
-        updateInterface();
-        nextEventFragment.updateUI();
-
-    }
+    private OnLoginFinishedListener onLoginFinished = new OnLoginFinishedListener() {
+        @Override
+        public void onLoginFinished(ClubMember authenticatedMember) {
+            user = authenticatedMember;
+            MemberDataManager.getInstance().setCurrentUser(user);
+            hideLoginFragment();
+            updateInterface();
+            nextEventFragment.updateUI();
+        }
+    };
 
 
 }

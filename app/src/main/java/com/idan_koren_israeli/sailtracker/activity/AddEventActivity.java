@@ -49,7 +49,7 @@ public class AddEventActivity extends BaseActivity {
     public interface KEYS{
         String ADDED_EVENT = "addedEvent";
         String EVENT_DATE = "eventDate";
-    };
+    }
 
 
     @Override

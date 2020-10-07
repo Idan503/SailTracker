@@ -12,4 +12,5 @@
         <attr name="starts_hidden" format="boolean"/>
         <attr name="message" format="string"/>
     </declare-styleable>
+
 </resources>

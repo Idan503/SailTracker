@@ -105,6 +105,20 @@ public class MemberDataManager {
         });
     }
 
+    public void loadCurrentMember(String uid, final OnMemberLoadListener onMemberLoaded){
+        DocumentReference doc = dbFirestore.collection(KEYS.MEMBERS).document(uid);
+        doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                ClubMember loadedMember = documentSnapshot.toObject(ClubMember.class);
+                setCurrentUser(loadedMember);
+                if(onMemberLoaded!=null) {
+                    onMemberLoaded.onMemberLoad(loadedMember);
+                }
+            }
+        });
+    }
+
     // Writing a member as an object into firestore
     public void storeMember(ClubMember member) {
         dbFirestore.collection(KEYS.MEMBERS)
@@ -132,7 +146,6 @@ public class MemberDataManager {
                             onFinish.onCheckFinished(false);
                     }
                 }
-
             }
         });
     }

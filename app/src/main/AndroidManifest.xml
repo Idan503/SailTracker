@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
         android:name=".common.MyApp"
         android:allowBackup="false"
@@ -20,39 +19,47 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.PhotoInspectActivity"
-            android:screenOrientation="sensorPortrait"/>
-        <activity android:name=".activity.HistoryActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.AddEventActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".activity.SearchActivity"
+        <activity android:name=".activity.SplashActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustNothing"/>
-        <activity
-            android:name=".activity.GalleryActivity"
-            android:screenOrientation="portrait"
-            >
-            <intent-filter>
-                <action android:name="android.intent.action.CHOOSER" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".activity.CalendarActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".activity.HomeActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustNothing"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activity.HomeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"/>
+
+        <activity
+            android:name=".activity.PhotoInspectActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".activity.HistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddEventActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SearchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".activity.GalleryActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.CHOOSER" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.CalendarActivity"
+            android:screenOrientation="portrait" />
 
 
         <!-- FOR CAMERA CAPTURE SAVE PURPOSE -->
@@ -65,7 +72,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

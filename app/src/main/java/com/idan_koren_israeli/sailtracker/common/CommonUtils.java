@@ -13,10 +13,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.idan_koren_israeli.sailtracker.activity.BaseActivity;
 
 import java.io.ByteArrayOutputStream;
+import java.util.InputMismatchException;
 
 // For making glide usage more convenient
 public class CommonUtils {
@@ -51,6 +56,10 @@ public class CommonUtils {
     public void setImageResource(@NonNull ImageView image, int resId){
         Glide.with(context)
                 .load(resId)
+                .apply(new RequestOptions()
+                        .fitCenter()
+                        .format(DecodeFormat.PREFER_ARGB_8888)
+                        .override(Target.SIZE_ORIGINAL))
                 .into(image);
     }
 
@@ -104,5 +113,18 @@ public class CommonUtils {
     }
 
     //endregion
+
+    public String formatPhone(String input) throws InputMismatchException {
+        final int MIN_PHONE_LENGTH = 8;
+        final String MESSAGE = "Invalid phone number";
+        if(input.length()<8)
+            throw new InputMismatchException(MESSAGE);
+
+        // 0544881591 - > +972544881591
+
+        String number;
+        return input;
+
+    }
 
 }
