@@ -162,9 +162,11 @@ public class HomeActivity extends BaseActivity {
         @Override
         public void onLoginFinished(ClubMember authenticatedMember) {
             user = authenticatedMember;
-            MemberDataManager.getInstance().setCurrentUser(user);
-            hideLoginFragment();
-            updateInterface();
+            if(user!=null) {
+                MemberDataManager.getInstance().setCurrentUser(user);
+                hideLoginFragment();
+                updateInterface();
+            }
         }
     };
 

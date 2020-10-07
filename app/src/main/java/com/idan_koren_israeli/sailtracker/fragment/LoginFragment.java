@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,8 @@ import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnLoginFinishedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnMemberLoadListener;
 
+import java.util.InputMismatchException;
+
 
 /**
  *  This class purpose is just to log in and authenticate the user via its phone number
@@ -46,7 +49,7 @@ public class LoginFragment extends Fragment {
     private String currentPhone;
     private LoadingFragment loadingFragment;
 
-    private Button nextButton;
+    private Button nextButton, backButton;
     private EditText phoneEditText, codeEditText, nameEditText;
     private ViewFlipper viewFlipper;
 
@@ -92,6 +95,7 @@ public class LoginFragment extends Fragment {
             else if (manager.getCurrentState() == LoginManager.LoginState.IN_PROGRESS)
                 manager.verifyPhoneNumber(currentPhone, onVerificationStateChanged);
 
+
         }
     }
 
@@ -118,6 +122,7 @@ public class LoginFragment extends Fragment {
 
     private void findViews(View root){
         nextButton = root.findViewById(R.id.login_BTN_next);
+        backButton =  root.findViewById(R.id.login_BTN_back);
         phoneEditText = root.findViewById(R.id.login_EDT_phone_box);
         viewFlipper = root.findViewById(R.id.login_FLIP_flipper);
         codeEditText = root.findViewById(R.id.login_EDT_code);
@@ -128,54 +133,113 @@ public class LoginFragment extends Fragment {
 
     private void setListeners(){
         nextButton.setOnClickListener(nextButtonListener);
+        backButton.setOnClickListener(backButtonListener);
     }
 
-    public LoginManager getManager(){
-        return this.manager;
-    }
 
+    //region Next & Back listeners
     private View.OnClickListener nextButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             switch (manager.getCurrentState()){
                 case CODE_SENT:
                     // Code user entered the code, we will check if it is correct
-                    String code = codeEditText.getText().toString();
-                    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(manager.getVerificationId(), code);
-                    manager.signInWithPhoneAuthCredential(credential, onSignInCompleted);
+                    checkUserCode();
                     break;
                 case CODE_APPROVED:
                     // User type his profile name, setting it to the current logged profile
-                    if(manager.getAuthenticatedId()!=null){
-                        // Creating the new member based on information from inside the fragment
-                        ClubMember loggedMember = new ClubMember(manager.getAuthenticatedId(),nameEditText.getText().toString(),currentPhone);
-                        manager.setCurrentState(LoginManager.LoginState.COMPLETED);
-                        CommonUtils.getInstance().showToast("Logged in successfully");
-
-                        // Fragment can now be finished
-                        finishedListener.onLoginFinished(loggedMember);
-                    }
+                    generateMember();
                     break;
-
-                default:
-                    currentPhone = CommonUtils.getInstance().formatPhone(phoneEditText.getText().toString());
-                    manager.verifyPhoneNumber(currentPhone, onVerificationStateChanged);
+                case NOT_STARTED:
+                    // Verifying user's entered phone
+                    checkUserNumber();
                     break;
             }
         }
     };
 
+    private View.OnClickListener backButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            showPreviousLayout();
+        }
+    };
+
+    //endregion
+
+    //region Authentication Steps Methods
+    // Using input number to connect to firebase auth server
+    private void checkUserNumber(){
+        if(!phoneEditText.getText().toString().matches("")) {
+            try {
+                currentPhone = CommonUtils.getInstance().formatPhone(phoneEditText.getText().toString());
+                manager.verifyPhoneNumber(currentPhone, onVerificationStateChanged);
+            }
+            catch (InputMismatchException err){
+                CommonUtils.getInstance().showToast("Please insert a valid phone number");
+                err.printStackTrace();
+            }
+        }
+        else{
+            CommonUtils.getInstance().showToast("Please insert a phone number");
+        }
+    }
+
+    // Using the verification code that user enters to check for validation
+    private void checkUserCode(){
+        String code = codeEditText.getText().toString();
+        if(!code.matches("")) {
+            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(manager.getVerificationId(), code);
+            manager.signInWithPhoneAuthCredential(credential, onSignInCompleted);
+            backButton.setEnabled(false);
+        }
+        else
+        {
+            CommonUtils.getInstance().showToast("Please insert a valid code");
+        }
+    }
+
+    // Using the input name of the new connected user to generate member object and send it to the callback
+    private void generateMember(){
+        if(manager.getAuthenticatedId()!=null){
+            if(!nameEditText.getText().toString().matches("")) {
+                // Creating the new member based on information from inside the fragment
+                ClubMember loggedMember = new ClubMember(manager.getAuthenticatedId(), nameEditText.getText().toString(), currentPhone);
+                manager.setCurrentState(LoginManager.LoginState.COMPLETED);
+                CommonUtils.getInstance().showToast("Logged in successfully");
+
+                // Fragment can now be finished
+                finishedListener.onLoginFinished(loggedMember);
+            }
+            else
+                CommonUtils.getInstance().showToast("Please insert name");
+        }
+    }
+
+    //endregion
+
+    //region Layout Flipper
     private void showNextLayout(){
         viewFlipper.setInAnimation(getContext(), R.anim.slide_in_right);
         viewFlipper.setOutAnimation(getContext(), R.anim.slide_out_left);
         viewFlipper.showNext();
+        if(viewFlipper.getDisplayedChild()==1)
+        {
+            backButton.setVisibility(View.VISIBLE);
+        }
+        else
+            backButton.setVisibility(View.GONE);
+
     }
 
     private void showPreviousLayout(){
         viewFlipper.setInAnimation(getContext(), android.R.anim.slide_in_left);
         viewFlipper.setOutAnimation(getContext(), android.R.anim.slide_out_right);
         viewFlipper.showPrevious();
+        manager.setCurrentState(LoginManager.LoginState.NOT_STARTED); // back to the start
     }
+
+    //endregion
 
 
     @Override
@@ -188,7 +252,8 @@ public class LoginFragment extends Fragment {
 
 
 
-    //region Callbacks
+
+    //region Authentication Callbacks
     OnCompleteListener<AuthResult> onSignInCompleted =  new OnCompleteListener<AuthResult>() {
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -203,6 +268,7 @@ public class LoginFragment extends Fragment {
                 // Sign in failed, display a message and update the UI
                 if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                     CommonUtils.getInstance().showToast("Invalid code, please try again");
+                    backButton.setEnabled(true);
                     // The verification code entered was invalid
                 }
             }
@@ -221,7 +287,7 @@ public class LoginFragment extends Fragment {
         @Override
         public void onVerificationFailed(@NonNull FirebaseException e) {
             //CommonUtils.getInstance().showToast("Failed!");
-             manager.setCurrentState(LoginManager.LoginState.FAILED);
+             manager.setCurrentState(LoginManager.LoginState.NOT_STARTED);
 
             if(e instanceof FirebaseAuthInvalidCredentialsException){
                 CommonUtils.getInstance().showToast("Error - Invalid request");

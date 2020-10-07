@@ -112,7 +112,8 @@ public class MemberDataManager {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 ClubMember loadedMember = documentSnapshot.toObject(ClubMember.class);
-                setCurrentUser(loadedMember);
+                if(loadedMember!=null)
+                    setCurrentUser(loadedMember);
                 if(onMemberLoaded!=null) {
                     onMemberLoaded.onMemberLoad(loadedMember);
                 }
