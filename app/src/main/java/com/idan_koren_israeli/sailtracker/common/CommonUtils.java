@@ -1,12 +1,15 @@
 package com.idan_koren_israeli.sailtracker.common;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -136,4 +139,7 @@ public class CommonUtils {
 
     }
 
+    public int getScreenWidth(Activity activity) {
+        return activity.getResources().getDisplayMetrics().widthPixels;
+    }
 }

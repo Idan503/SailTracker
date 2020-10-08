@@ -8,12 +8,12 @@
     tools:context=".activity.PhotoInspectActivity">
 
 
-    <ImageView
+    <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:id="@+id/photo_inspect_IMG_photo"
         android:contentDescription="@string/photo"
-        android:background="@android:color/black"
         />
 
     <fragment
@@ -34,6 +34,7 @@
         android:layout_margin="40dp"
         app:fabCustomSize="50dp"
         />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="50dp"
