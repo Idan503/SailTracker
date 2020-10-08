@@ -7,15 +7,17 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:0.375"
+        android:layout_height="wrap_content"
+        app:layout_constraintDimensionRatio="h,1:0.375"
         app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/event_item_LAY_card"
+        app:cardCornerRadius="1dp"
+        app:cardUseCompatPadding="true"
+        android:animateLayoutChanges="true"
         >
 
         <Button
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_gravity="end|top"
             android:background="@drawable/ic_delete"
             android:id="@+id/register_event_item_BTN_delete"
@@ -28,12 +30,16 @@
             android:weightSum="1"
             android:orientation="horizontal"
             android:padding="10dp"
+            android:baselineAligned="false"
+            android:animateLayoutChanges="true"
+            android:id="@+id/event_item_LAY_outer_info"
             >
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="0.7"
+                android:animateLayoutChanges="true"
                 >
 
                 <TextView
@@ -83,20 +89,34 @@
                     android:id="@+id/event_item_LBL_register_status"
                     />
 
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:textSize="13sp"
+                    android:text="@string/event_card_more_info"
+                    android:autoSizeMinTextSize="12sp"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMaxTextSize="15sp"
+                    android:gravity="start|bottom"
+                    android:id="@+id/event_item_BTN_toggle_info"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:visibility="visible"
+                    android:layout_below="@id/event_item_LBL_register_status"
+                    />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:text="@string/example_event_description"
-                    android:lines="1"
                     android:autoSizeMinTextSize="12sp"
-                    android:autoSizeMaxTextSize="25sp"
                     android:autoSizeTextType="uniform"
                     android:padding="4dp"
-                    android:layout_marginStart="15dp"
                     android:gravity="start|bottom"
-                    android:layout_alignParentBottom="true"
                     android:id="@+id/event_item_LBL_description"
+                    android:visibility="gone"
+                    android:layout_below="@id/event_item_BTN_toggle_info"
                     />
 
 
@@ -105,7 +125,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="0.3"
                 >
                 
@@ -122,14 +142,17 @@
 
                 <com.google.android.material.button.MaterialButton
                     app:layout_constraintTop_toBottomOf="@id/event_item_IMG_image"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    app:icon="@drawable/ic_baseline_photo_camera_24"
-                    app:iconTint="@android:color/black"
-                    android:theme="@style/FormButton"
+                    android:layout_height="35dp"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="12sp"
+                    android:autoSizeMaxTextSize="22sp"
+                    android:includeFontPadding="false"
+                    app:layout_constraintStart_toStartOf="parent"
                     android:id="@+id/event_item_BTN_register"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:text="@string/register"
+
                     />
 
 

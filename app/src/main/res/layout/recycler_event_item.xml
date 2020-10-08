@@ -7,10 +7,11 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintDimensionRatio="1:0.375"
         app:layout_constraintTop_toTopOf="parent"
-        app:cardCornerRadius="5dp"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="1dp"
         android:id="@+id/event_item_LAY_card"
         >
 
@@ -20,12 +21,15 @@
             android:weightSum="1"
             android:orientation="horizontal"
             android:padding="10dp"
+            android:animateLayoutChanges="true"
+            android:id="@+id/event_item_LAY_outer_info"
             >
 
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.7"
+                android:animateLayoutChanges="true"
                 >
 
                 <TextView
@@ -78,22 +82,36 @@
 
 
 
+
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:textSize="13sp"
+                    android:text="@string/event_card_more_info"
+                    android:autoSizeMinTextSize="12sp"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMaxTextSize="15sp"
+                    android:gravity="start|bottom"
+                    android:id="@+id/event_item_BTN_toggle_info"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:visibility="visible"
+                    android:layout_below="@id/event_item_LBL_time_of_day"
+                    />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:text="@string/example_event_description"
-                    android:lines="1"
-                    android:autoSizeMinTextSize="12sp"
-                    android:autoSizeMaxTextSize="25sp"
                     android:autoSizeTextType="uniform"
                     android:padding="4dp"
-                    android:layout_marginStart="15dp"
                     android:gravity="start|bottom"
-                    android:layout_alignParentBottom="true"
                     android:id="@+id/event_item_LBL_description"
+                    android:visibility="gone"
+                    android:layout_below="@id/event_item_BTN_toggle_info"
                     />
-
 
             </RelativeLayout>
 

@@ -20,6 +20,7 @@
     <string name="plus_sign">+</string>
     <string name="loading">loading</string>
     <string name="photo">photo</string>
+    <string name="register">register</string>
 
     <!-- NEXT SAIL FRAGMENT -->
     <string name="my_next_event_title">My Next Event</string>
@@ -32,6 +33,10 @@
     <string name="guided_sail">Guided Sail</string>
     <string name="members_sail">Members Sail</string>
 
+    <!-- EVENT CARD -->
+    <string name="event_card_more_info">More Info…</string>
+    <string name="event_card_less_info">Less Info…</string>
+
 
     <!-- LAYOUT EXAMPLES -->
     <string name="example_date">19.09.2020</string>
@@ -42,7 +47,8 @@
     <string name="example_code">123456</string>
     <string name="example_name">Israel Israeli</string>
     <string name="example_event_name">Single Handed Guided Sail</string>
-    <string name="example_event_description">Learn how to sail by using one hand only</string>
+    <string name="example_event_description">In this guided sail you will learn how to sail by
+        using one hand only, this is a very interesting topic for who wants to discover new things about sailing techniques</string>
     <string name="number_00">00</string>
     <string name="example_registration_status">3/6 Registered</string>
 

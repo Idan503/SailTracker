@@ -1,9 +1,11 @@
 package com.idan_koren_israeli.sailtracker.view_holder;
 
+import android.animation.LayoutTransition;
 import android.content.DialogInterface;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
