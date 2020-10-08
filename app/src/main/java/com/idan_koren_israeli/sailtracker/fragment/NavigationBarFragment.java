@@ -110,8 +110,8 @@ public class NavigationBarFragment extends Fragment {
             TextView text = icon.findViewById(R.id.navigation_icon_LBL_text);
 
             if(icon == selectedIcon) {
-                image.setColorFilter(ContextCompat.getColor(parent.getContext(), R.color.navigator_selected_ic));
-                text.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.navigator_selected_ic));
+                image.setColorFilter(ContextCompat.getColor(parent.getContext(), R.color.colorPrimary));
+                text.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.colorPrimary));
             }
             else {
                 image.setColorFilter(ContextCompat.getColor(parent.getContext(), R.color.navigator_ic));

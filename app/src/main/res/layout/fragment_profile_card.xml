@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@android:color/darker_gray">
+    android:background="@color/colorPrimaryWhite">
 
 
     <!-- setting image inside constraint layout in order to be able to force it to be squared -->
@@ -79,7 +79,6 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.3"
             android:id="@+id/profile_BTN_my_sails"
             android:autoSizeMaxTextSize="22sp"
             android:autoSizeTextType="uniform"

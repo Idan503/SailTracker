@@ -18,7 +18,7 @@
     <string name="next">Next</string>
     <string name="back">Back</string>
     <string name="plus_sign">+</string>
-    <string name="loading">loading</string>
+    <string name="loading">Loading</string>
     <string name="photo">photo</string>
     <string name="register">register</string>
     <string name="cancel">cancel</string>
@@ -31,7 +31,7 @@
     <string name="my_next_event_load_hour">00:00</string>
 
     <!-- EVENT TYPES -->
-    <string name="free_event">Free Event</string>
+    <string name="evening_event">Evening Event</string>
     <string name="guided_sail">Guided Sail</string>
     <string name="members_sail">Members Sail</string>
 

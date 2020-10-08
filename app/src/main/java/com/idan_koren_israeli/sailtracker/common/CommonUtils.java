@@ -8,6 +8,8 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.widget.ImageView;
@@ -141,5 +143,10 @@ public class CommonUtils {
 
     public int getScreenWidth(Activity activity) {
         return activity.getResources().getDisplayMetrics().widthPixels;
+    }
+
+    public void delayedTask(Runnable task, int delay){
+        final Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(task, delay);
     }
 }

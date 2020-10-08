@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3da5d9</color>
-    <color name="colorPrimaryDark">#2364aa</color>
-    <color name="colorText">#232F34</color>
+    <color name="colorPrimary">#2364AA</color>
+    <color name="colorPrimaryDark">#1c5088</color>
+    <color name="colorPrimaryDarker">#153c66</color>
+    <color name="colorPrimaryDarkest">#0a1e33</color>
+    <color name="colorPrimaryLight">#4f83bb</color>
+    <color name="colorPrimaryLighter">#7ba2cc</color>
+    <color name="colorPrimaryLightest">#e9f0f7</color>
+    <color name="colorPrimaryWhite">#D0D1D1</color>
+    <color name="colorPrimaryText">#17212B</color>
     <color name="colorAccent">#73bfb8</color>
-    <color name="colorAccentYellow">#fec601</color>
+    <color name="colorAccentYellow">#EB9D21</color>
     <color name="colorAccentOrange">#ea7317</color>
 
 
     <color name="navigator_ic">#2C2C2C</color>
-    <color name="navigator_selected_ic">#257BB5</color>
+    <color name="colorText">#2C2C2C</color>
     <color name="photo_loading">#28282B</color>
 
 </resources>

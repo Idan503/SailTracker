@@ -4,12 +4,14 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="fontFamily">@font/montserrat</item>
+        <item name="buttonStyle">@style/MaterialButtonDefaultStyle</item>
     </style>
 
 
     <style name="NavigatorIcon">
-
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">3</item>
@@ -35,11 +37,13 @@
     </style>
 
 
-    <style name="FormButton" parent="Theme.MaterialComponents">
+
+    <style name="MaterialButtonDefaultStyle" parent="Theme.MaterialComponents">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorOnPrimary">@color/colorText</item>
+        <item name="colorOnPrimary">@android:color/white</item>
         <item name="colorOnSurface">@color/colorAccent</item>
-        <item name="android:textColor">@color/colorText</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">14dp</item>
     </style>
 
     <style name="FormRadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
@@ -47,6 +51,7 @@
         <item name="autoSizeMinTextSize">12dp</item>
         <item name="autoSizeMaxTextSize">18dp</item>
         <item name="android:gravity">top|center_horizontal</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:padding">5dp</item>
         <item name="android:layout_margin">8dp</item>
         <item name="android:background">@color/colorPrimary</item>
@@ -63,7 +68,7 @@
         <item name="autoSizeTextType">uniform</item>
         <item name="android:gravity">center</item>
         <item name="android:lines">1</item>
-        <item name="color">@color/colorText</item>
+        <item name="color">@color/colorPrimaryDark</item>
     </style>
 
 
