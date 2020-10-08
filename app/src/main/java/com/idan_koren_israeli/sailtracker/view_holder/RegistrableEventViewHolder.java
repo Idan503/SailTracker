@@ -1,14 +1,11 @@
 package com.idan_koren_israeli.sailtracker.view_holder;
 
-import android.animation.LayoutTransition;
 import android.content.DialogInterface;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
@@ -72,9 +69,24 @@ public class RegistrableEventViewHolder extends EventViewHolder {
 
     public void setIsRegistered(boolean isRegistered){
         this.registered = isRegistered;
-        // change the button view to something else
-        registerButton.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimaryDark));
+        if(event!=null)
+            updateRegisterButton(event.getPrice());
 
+    }
+
+    private void updateRegisterButton(int eventPrice){
+        if(registered){
+            String unregisterLabel = String.format(registerButton.getResources().getString(R.string.event_register_price_label), eventPrice);
+            registerButton.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimaryDark));
+            Log.i("pttt", unregisterLabel);
+            registerButton.setText(unregisterLabel);
+        }
+        else{
+            String registerLabel = String.format(registerButton.getResources().getString(R.string.event_unregister_price_label), eventPrice);
+            registerButton.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimary));
+            Log.i("pttt", registerLabel);
+            registerButton.setText(registerLabel);
+        }
     }
 
     private void findViews(){

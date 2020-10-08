@@ -90,6 +90,8 @@
 
     <!-- SPECIAL FORMATS -->
     <string name="hour_time_format">%02d:%02d %2s</string>
+    <string name="event_register_price_label">%d Register</string>
+    <string name="event_unregister_price_label">%d Unregister</string>
 
 
 </resources>

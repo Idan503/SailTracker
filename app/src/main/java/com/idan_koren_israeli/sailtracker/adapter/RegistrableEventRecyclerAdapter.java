@@ -69,6 +69,8 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
                     // member is already registered
                     eventHolder.setIsRegistered(true);
                 }
+                else
+                    eventHolder.setIsRegistered(false);
             }
         }
     }

@@ -38,7 +38,7 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.7"
+                android:layout_weight="0.65"
                 android:animateLayoutChanges="true"
                 >
 
@@ -62,7 +62,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/event_item_LBL_name"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     android:text="@string/example_hour_range"
                     android:lines="1"
                     android:autoSizeMinTextSize="18sp"
@@ -71,6 +71,7 @@
                     android:padding="4dp"
                     android:paddingEnd="25dp"
                     android:paddingStart="4dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginStart="15dp"
                     android:gravity="start"
                     android:id="@+id/event_item_LBL_time_of_day"
@@ -99,6 +100,7 @@
                     android:autoSizeTextType="uniform"
                     android:autoSizeMaxTextSize="15sp"
                     android:gravity="start|bottom"
+                    android:layout_marginTop="15dp"
                     android:id="@+id/event_item_BTN_toggle_info"
                     style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:visibility="visible"
@@ -126,35 +128,41 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.3"
+                android:layout_weight="0.35"
                 >
                 
                 <ImageView
                     android:layout_width="match_parent"
+                    android:layout_margin="18dp"
                     android:layout_height="0dp"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintTop_toTopOf="parent"
                     android:id="@+id/event_item_IMG_image"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_baseline_add_24"
-                    android:layout_margin="25dp"
                     />
 
                 <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/event_item_IMG_image"
-                    android:layout_height="35dp"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMinTextSize="12sp"
-                    android:autoSizeMaxTextSize="22sp"
-                    android:includeFontPadding="false"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:icon="@drawable/ic_points_wheel"
+                    app:iconSize="23dp"
+                    app:iconPadding="5dp"
+                    app:iconGravity="textStart"
+                    android:lines="1"
                     android:id="@+id/event_item_BTN_register"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:text="@string/register"
+                    android:textSize="12sp"
+                    android:autoSizeMaxTextSize="14sp"
+                    android:autoSizeMinTextSize="10sp"
+                    android:autoSizeTextType="uniform"
+                    app:iconTintMode="multiply"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    app:cornerRadius="20dp"
+                    app:iconTint="@android:color/white"
+                    android:text="@string/number_00"
 
                     />
-
 
 
 
