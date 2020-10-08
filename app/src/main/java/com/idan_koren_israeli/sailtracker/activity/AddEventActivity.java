@@ -1,17 +1,25 @@
 package com.idan_koren_israeli.sailtracker.activity;
 
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.ViewFlipper;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.radiobutton.MaterialRadioButton;
+import com.google.api.Distribution;
 import com.google.type.TimeOfDay;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
@@ -22,6 +30,7 @@ import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 /**
@@ -35,7 +44,8 @@ import java.util.InputMismatchException;
 public class AddEventActivity extends BaseActivity {
 
     private RadioGroup eventTypeRadio;
-    private EditText nameEdit, descriptionEdit, maxParticipantsEdit, priceEdit;
+    private EditText nameEdit, descriptionEdit;
+    private MaterialButton maxParticipantsButton, priceButton;
     private ViewFlipper viewFlipper;
     private MaterialButton nextButton, backButton;
     private MaterialButton startTimeButton, endTimeButton;
@@ -69,8 +79,8 @@ public class AddEventActivity extends BaseActivity {
         nameEdit = findViewById(R.id.add_event_EDT_name);
         descriptionEdit = findViewById(R.id.add_event_EDT_description);
         eventTypeRadio = findViewById(R.id.add_event_RAT_select_type);
-        maxParticipantsEdit = findViewById(R.id.add_event_EDT_max_participants);
-        priceEdit = findViewById(R.id.add_event_EDT_price);
+        maxParticipantsButton = findViewById(R.id.add_event_BTN_max_participants);
+        priceButton = findViewById(R.id.add_event_BTN_price);
         backButton = findViewById(R.id.add_event_BTN_back);
         nextButton = findViewById(R.id.add_event_BTN_next);
         startTimeButton = findViewById(R.id.add_event_BTN_start_time);
@@ -79,8 +89,7 @@ public class AddEventActivity extends BaseActivity {
     }
 
     private void setListeners(){
-
-        // Setting dialog time
+        eventTypeRadio.setOnCheckedChangeListener(onRadioButtonChanged);
 
         nextButton.setOnClickListener(loadNextMenu);
 
@@ -120,7 +129,34 @@ public class AddEventActivity extends BaseActivity {
             }
         });
 
+        priceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPricePicker();
+            }
+        });
+
+        maxParticipantsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showMaxParticipantsPicker();
+            }
+        });
+
     }
+
+    private RadioGroup.OnCheckedChangeListener onRadioButtonChanged = new RadioGroup.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(RadioGroup radioGroup, int id) {
+            for(int i=0;i<radioGroup.getChildCount();i++){
+                MaterialRadioButton child = (MaterialRadioButton) radioGroup.getChildAt(i);
+                if(child.getId()==id)
+                    child.setAlpha(1f);
+                else
+                    child.setAlpha(0.35f);
+            }
+        }
+    };
 
     private View.OnClickListener loadNextMenu = new View.OnClickListener() {
         @Override
@@ -136,7 +172,6 @@ public class AddEventActivity extends BaseActivity {
                     finish();
                 } catch (AddedEventInputMismatch exception) {
                     CommonUtils.getInstance().showToast(exception.getMessage());
-                    Log.i("pttt", "child: " + exception.getMenuId());
                     viewFlipper.setDisplayedChild(exception.getMenuId());
                 }
 
@@ -148,6 +183,101 @@ public class AddEventActivity extends BaseActivity {
         }
     };
 
+    //region Number Pickers (Participants Limit & Price)
+
+    private void showMaxParticipantsPicker(){
+        final Dialog dialog = new Dialog(AddEventActivity.this);
+        String title = "Select Participants Limit";
+        dialog.setTitle(title);
+        dialog.setContentView(R.layout.dialog_numpicker);
+        // Finding inside dialog views
+        TextView titleText = dialog.findViewById(R.id.numpick_LBL_title);
+        MaterialButton setBtn = (MaterialButton) dialog.findViewById(R.id.numpick_BTN_set);
+        MaterialButton cancelBtn = (MaterialButton) dialog.findViewById(R.id.numpick_BTN_cancel);
+        final NumberPicker picker = (NumberPicker) dialog.findViewById(R.id.numpick_PICK_picker);
+
+        titleText.setText(title);
+        // Setting picker values
+        final String[] pickerValues = new String[50 + 1];
+        pickerValues[0] = "Unlimited";
+        for(int i=1;i<=50;i++){
+            pickerValues[i] = String.valueOf(i);
+        }
+
+        picker.setWrapSelectorWheel(false);
+        picker.setDisplayedValues(pickerValues);
+        picker.setMinValue(0);
+        picker.setMaxValue(pickerValues.length-1);
+        picker.setValue(1);
+        // Setting buttons listeners that effects the inner dialog created
+        setBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                maxParticipantsButton.setText(pickerValues[picker.getValue()]);
+                dialog.dismiss();
+            }
+        });
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+
+
+    private void showPricePicker(){
+
+        final Dialog dialog = new Dialog(AddEventActivity.this);
+        String title = "Select Event Price";
+        dialog.setTitle(title);
+        dialog.setContentView(R.layout.dialog_numpicker);
+        // Finding inside dialog views
+        TextView titleText = dialog.findViewById(R.id.numpick_LBL_title);
+        MaterialButton setBtn = dialog.findViewById(R.id.numpick_BTN_set);
+        MaterialButton cancelBtn = dialog.findViewById(R.id.numpick_BTN_cancel);
+        final NumberPicker picker = dialog.findViewById(R.id.numpick_PICK_picker);
+
+        titleText.setText(title);
+        // Setting picker values
+        final String[] pickerValues = new String[10 + 1];
+        pickerValues[0] = "Free";
+        for(int i=1;i<=10;i++){
+            pickerValues[i] = String.valueOf(i);
+        }
+
+        picker.setWrapSelectorWheel(false);
+        picker.setDisplayedValues(pickerValues);
+        picker.setMinValue(0);
+        picker.setMaxValue(pickerValues.length-1);
+        picker.setValue(1);
+        // Setting buttons listeners that effects the inner dialog created
+        setBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                priceButton.setText(pickerValues[picker.getValue()]);
+                dialog.dismiss();
+            }
+        });
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+
+
+    //endregion
+
+
+    //region Event Generation
     // Checks that all input is valid and an event can be generated
     private void validateInput() throws AddedEventInputMismatch{
 
@@ -166,13 +296,10 @@ public class AddEventActivity extends BaseActivity {
         if(calculateMinutesBetween(startTime,endTime) <= 0)
             throw new AddedEventInputMismatch("End time should be after start time", 1);
 
-        if(maxParticipantsEdit.getText().toString().matches(""))
+        if(priceButton.getText().toString().matches(""))
             throw new AddedEventInputMismatch("Please enter price", 2);
 
-        if(maxParticipantsEdit.getText().toString().matches(""))
-            throw new AddedEventInputMismatch("Please enter price", 2);
-
-        if(maxParticipantsEdit.getText().toString().matches(""))
+        if(maxParticipantsButton.getText().toString().matches(""))
             throw new AddedEventInputMismatch("Please enter max. participants", 2);
 
         if(descriptionEdit.getText().toString().matches(""))
@@ -192,8 +319,20 @@ public class AddEventActivity extends BaseActivity {
         int lengthMinutes = calculateMinutesBetween(startTime, endTime);
 
 
-        int price = Integer.parseInt(priceEdit.getText().toString());
-        int maxMemberCount = Integer.parseInt(maxParticipantsEdit.getText().toString());
+        String priceString = priceButton.getText().toString();
+        String maxMemberCountString = maxParticipantsButton.getText().toString();
+        int price, maxMemberCount; // final results
+
+        if(priceString.equalsIgnoreCase("Free"))
+            price = 0; //Free
+        else
+            price = Integer.parseInt(priceString);
+
+        if(maxMemberCountString.equalsIgnoreCase("Unlimited"))
+            maxMemberCount = -1;
+        else
+            maxMemberCount = Integer.parseInt(maxMemberCountString);
+
 
         EventType type = EventType.FREE_EVENT;
         switch (eventTypeRadio.getCheckedRadioButtonId()){
@@ -216,6 +355,8 @@ public class AddEventActivity extends BaseActivity {
     private int calculateMinutesBetween(TimeOfDay a, TimeOfDay b){
         return ((b.getHours() - a.getHours()) * 60) + (b.getMinutes() - a.getMinutes());
     }
+
+    //endregion
 
 
     //region Time Selection Callbacks

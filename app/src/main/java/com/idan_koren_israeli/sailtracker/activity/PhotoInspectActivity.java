@@ -111,7 +111,7 @@ public class PhotoInspectActivity extends BaseActivity {
         imageWeb.getSettings().setUseWideViewPort(true);
         imageWeb.getSettings().setSupportZoom(true);
         imageWeb.loadUrl(displayedPhoto.getUrl());
-        imageWeb.setAlpha(0); // Loading process doesnt look good, will fade in at the end
+        imageWeb.setAlpha(0); // Loading process doesnt look good, will fade in at the end 
         loadingFragment.show(); // Will be hidden when picture finishes downloading
 
         imageWeb.setWebViewClient(finishedLoadingListener);

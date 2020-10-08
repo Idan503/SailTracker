@@ -37,7 +37,7 @@ public class Event implements Serializable {
 
     private int price; // Price (in points) for a single participant register
     private ArrayList<String> registeredMembers;
-    private int maxMembersCount; // 0 for inf.
+    private int maxMembersCount; // -1 for inf.
 
 
     public Event(){
@@ -191,7 +191,7 @@ public class Event implements Serializable {
             throw new AlreadyRegisteredException(ALREADY_REGISTERED);
         }
 
-        if(maxMembersCount!= 0 && registeredMembers.size() == maxMembersCount)
+        if(maxMembersCount!= -1 && registeredMembers.size() == maxMembersCount)
             throw new EventFullException(EVENT_FULL_MESSAGE);
         registeredMembers.add(member.getUid());
         member.addOneEvent();

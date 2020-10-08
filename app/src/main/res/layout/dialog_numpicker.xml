@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoSizeMinTextSize="14sp"
+        android:autoSizeMaxTextSize="18sp"
+        android:textSize="28sp"
+        android:padding="8dp"
+        android:autoSizeTextType="uniform"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/numpick_LBL_title"
+        android:gravity="center_horizontal"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginTop="18dp"
+
+        />
+
+    <NumberPicker
+        android:id="@+id/numpick_PICK_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="84dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="84dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/numpick_PICK_picker"
+        >
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/numpick_BTN_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel" />
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="0dp"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/numpick_BTN_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/set" />
+
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

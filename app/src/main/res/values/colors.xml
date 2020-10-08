@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#3da5d9</color>
+    <color name="colorPrimaryDark">#2364aa</color>
+    <color name="colorText">#232F34</color>
+    <color name="colorAccent">#73bfb8</color>
+    <color name="colorAccentYellow">#fec601</color>
+    <color name="colorAccentOrange">#ea7317</color>
 
 
     <color name="navigator_ic">#2C2C2C</color>

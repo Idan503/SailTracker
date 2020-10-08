@@ -21,6 +21,8 @@
     <string name="loading">loading</string>
     <string name="photo">photo</string>
     <string name="register">register</string>
+    <string name="cancel">cancel</string>
+    <string name="set">set</string>
 
     <!-- NEXT SAIL FRAGMENT -->
     <string name="my_next_event_title">My Next Event</string>
@@ -68,14 +70,14 @@
 
     <!-- ADDING EVENT TITLES -->
     <string name="add_event_title">Add Event/Sail</string>
-    <string name="add_event_name_label">Choose Name:</string>
+    <string name="add_event_name_label">Choose Name and Type</string>
     <string name="add_event_name_hint">Insert Event/Sail Name</string>
     <string name="add_event_max_participants">Max Participants</string>
     <string name="add_event_start">Select Start Time</string>
     <string name="add_event_end">Select End Time</string>
     <string name="add_event_description">Insert Event Description</string>
-    <string name="add_event_time_start_label">Starts at</string>
-    <string name="add_event_time_end_label">Ends at</string>
+    <string name="add_event_time_start_label">Start Time</string>
+    <string name="add_event_time_end_label">Ends Time</string>
     <string name="add_event_hour_empty">--:--</string>
 
     <!-- LABELS -->
