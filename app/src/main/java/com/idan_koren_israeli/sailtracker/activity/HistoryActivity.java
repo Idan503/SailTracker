@@ -3,8 +3,11 @@ package com.idan_koren_israeli.sailtracker.activity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.Animator;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.idan_koren_israeli.sailtracker.R;
@@ -31,6 +34,9 @@ public class HistoryActivity extends BaseActivity {
     private RecyclerView recyclerView;
     private ClubMember currentUser;
     private LoadingFragment loadingFragment;
+
+    private boolean backButtonShowing = true;
+    private final int BACK_ANIMATION_DURATION = 300; //in ms
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +73,45 @@ public class HistoryActivity extends BaseActivity {
         recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View view, int x, int y, int oldX, int oldY) {
-                if(y > oldY){
-                    backButton.setVisibility(View.GONE);
+                // FAB will be shown after swipe up or at the bottom scroll for better ux
+
+                if(!recyclerView.canScrollVertically(1)){
+                    // Bottom of recycler
+                    if(!backButtonShowing)
+                        showBackButton();
                 }
-                else
-                    backButton.setVisibility(View.VISIBLE);
+                else if(y > oldY) {
+                    if(backButtonShowing)
+                        hideBackButton();
+                }
             }
         });
+    }
+
+    private void showBackButton(){
+        backButtonShowing = true;
+        backButton.setScaleX(0.0f);
+        backButton.setScaleY(0.0f);
+        backButton.setAlpha(0.0f);
+        backButton.animate()
+                .alpha(1.0f)
+                .scaleX(1.0f)
+                .yBy(-100)
+                .scaleY(1.0f)
+                .setDuration(BACK_ANIMATION_DURATION)
+                .setInterpolator(new AccelerateInterpolator());
+    }
+
+
+    private void hideBackButton(){
+        backButtonShowing = false;
+        backButton.animate()
+                .alpha(0.0f)
+                .scaleX(0.0f)
+                .scaleY(0.0f)
+                .yBy(100)
+                .setDuration(BACK_ANIMATION_DURATION)
+                .setInterpolator(new AccelerateInterpolator());
     }
 
 
