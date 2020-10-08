@@ -85,7 +85,7 @@ public class CalendarActivity extends BaseActivity {
 
         if (selectedDate.toDateTimeAtStartOfDay().plusDays(1).getMillis() < DateTime.now().getMillis()) {
             // Selected date is in the past, so there should not be an option to add/register to events
-            eventsAdapter = new EventRecyclerAdapter(this, eventsToShow);
+            eventsAdapter = new EventRecyclerAdapter(this, eventsToShow,false);
         } else {
             if (isCurrentUserManager) {
                 // manager layout - with "add" button as last view

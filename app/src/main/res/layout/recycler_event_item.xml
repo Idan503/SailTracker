@@ -12,92 +12,148 @@
         app:layout_constraintTop_toTopOf="parent"
         app:cardUseCompatPadding="true"
         app:cardCornerRadius="1dp"
-        android:id="@+id/event_item_LAY_card"
+        android:id="@+id/event_item_LAY_outer_card"
+        android:animateLayoutChanges="true"
         >
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:weightSum="1"
-            android:orientation="horizontal"
-            android:padding="10dp"
             android:animateLayoutChanges="true"
-            android:id="@+id/event_item_LAY_outer_info"
             >
 
-            <RelativeLayout
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.7"
+                android:weightSum="1"
+                android:orientation="horizontal"
+                android:padding="10dp"
                 android:animateLayoutChanges="true"
+                android:id="@+id/event_item_LAY_outer_info"
+                >
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.7"
+                    android:animateLayoutChanges="true"
+                    android:padding="12dp"
+                    >
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:textSize="26sp"
+                        android:text="@string/example_event_name"
+                        android:lines="1"
+                        android:autoSizeMinTextSize="16sp"
+                        android:autoSizeMaxTextSize="30sp"
+                        android:autoSizeTextType="uniform"
+                        android:includeFontPadding="false"
+                        android:gravity="start|center"
+                        android:id="@+id/event_item_LBL_name"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/event_item_LBL_name"
+                        android:textSize="20sp"
+                        android:autoSizeMinTextSize="14sp"
+                        android:autoSizeMaxTextSize="24sp"
+                        android:gravity="start"
+                        android:text="@string/example_date"
+                        android:id="@+id/event_item_LBL_date"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/event_item_LBL_date"
+                        android:textSize="16sp"
+                        android:text="@string/example_hour_range"
+                        android:lines="1"
+                        android:autoSizeMinTextSize="14sp"
+                        android:layout_marginTop="5dp"
+                        android:autoSizeMaxTextSize="18sp"
+                        android:autoSizeTextType="uniform"
+                        android:gravity="start"
+                        android:id="@+id/event_item_LBL_time_of_day"
+                        />
+
+
+
+
+
+
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:textSize="13sp"
+                        android:text="@string/event_card_more_info"
+                        android:autoSizeMinTextSize="12sp"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMaxTextSize="15sp"
+                        android:gravity="start|bottom"
+                        android:id="@+id/event_item_BTN_toggle_info"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:visibility="visible"
+                        android:layout_below="@id/event_item_LBL_time_of_day"
+                        />
+
+                </RelativeLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.3"
+                    >
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        app:layout_constraintDimensionRatio="1:1"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:id="@+id/event_item_IMG_image"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_baseline_add_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_margin="10dp"
+                        />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/event_item_LAY_more_info"
+                android:visibility="gone"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/event_item_LAY_outer_info"
+                android:animateLayoutChanges="true"
+                android:paddingBottom="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 >
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="26sp"
-                    android:text="@string/example_event_name"
-                    android:lines="1"
-                    android:autoSizeMinTextSize="20sp"
-                    android:autoSizeMaxTextSize="38sp"
-                    android:autoSizeTextType="uniform"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="2dp"
-                    android:includeFontPadding="false"
-                    android:gravity="start|center"
-                    android:id="@+id/event_item_LBL_name"
-                    />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/event_item_LBL_name"
-                    android:textSize="20sp"
+                    android:layout_height="24dp"
                     android:autoSizeMinTextSize="14sp"
                     android:autoSizeMaxTextSize="24sp"
-                    android:gravity="start"
-                    android:text="@string/example_date"
-                    android:layout_marginStart="15dp"
-                    android:padding="4dp"
-                    android:id="@+id/event_item_LBL_date"
-                    />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/event_item_LBL_date"
-                    android:textSize="14sp"
-                    android:text="@string/example_hour_range"
-                    android:lines="1"
-                    android:autoSizeMinTextSize="14sp"
-                    android:autoSizeMaxTextSize="18sp"
                     android:autoSizeTextType="uniform"
-                    android:padding="4dp"
-                    android:paddingEnd="25dp"
-                    android:paddingStart="4dp"
-                    android:layout_marginStart="15dp"
                     android:gravity="start"
-                    android:id="@+id/event_item_LBL_time_of_day"
-                    />
-
-
-
-
-
-
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="35dp"
-                    android:textSize="13sp"
-                    android:text="@string/event_card_more_info"
-                    android:autoSizeMinTextSize="12sp"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMaxTextSize="15sp"
-                    android:gravity="start|bottom"
-                    android:id="@+id/event_item_BTN_toggle_info"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:visibility="visible"
-                    android:layout_below="@id/event_item_LBL_time_of_day"
+                    android:text="@string/example_registration_status"
+                    android:id="@+id/event_item_LBL_register_status"
                     />
 
                 <TextView
@@ -105,52 +161,20 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:text="@string/example_event_description"
-                    android:autoSizeTextType="uniform"
-                    android:padding="4dp"
-                    android:gravity="start|bottom"
+                    android:autoSizeMinTextSize="12sp"
+                    android:layout_marginTop="8dp"
                     android:id="@+id/event_item_LBL_description"
-                    android:visibility="gone"
-                    android:layout_below="@id/event_item_BTN_toggle_info"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="start"
                     />
 
-            </RelativeLayout>
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.3"
-                >
-                
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:id="@+id/event_item_IMG_image"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_baseline_add_24"
-                    android:layout_margin="25dp"
-                    />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/event_item_IMG_image"
-                    app:layout_constraintStart_toStartOf="@id/event_item_IMG_image"
-                    app:layout_constraintEnd_toEndOf="@id/event_item_IMG_image"
-                    android:autoSizeMinTextSize="14sp"
-                    android:autoSizeMaxTextSize="24sp"
-                    android:gravity="center"
-                    android:text="@string/example_registration_status"
-                    android:padding="4dp"
-                    android:id="@+id/event_item_LBL_register_status"
-                    />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        </LinearLayout>
 
 
     </androidx.cardview.widget.CardView>

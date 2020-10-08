@@ -36,14 +36,16 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     protected List<Event> eventsList;
     protected LayoutInflater inflater;
     protected Context context; // Used for loading strings ids from resource
+    private boolean showDate;
     protected boolean noEvents;
 
 
 
-    public EventRecyclerAdapter(Context context, List<Event> events){
+    public EventRecyclerAdapter(Context context, List<Event> events, boolean showDate){
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.eventsList = events;
+        this.showDate = showDate;
         events.sort(new SortByStartTime());
         noEvents = (events.size()==0);
     }
@@ -85,6 +87,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
         else {
             EventViewHolder eventHolder = (EventViewHolder) holder;
+            eventHolder.setShowDate(showDate);
             if (position < eventsList.size()) {
                 Event event = eventsList.get(position);
                 eventHolder.setEventContent(event);

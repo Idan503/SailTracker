@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -31,24 +32,29 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
 
     protected Event event;
     private TextView nameText, descriptionText, timeOfDayText, dateText, registerStatusText;
+    private LinearLayout moreInfoLayout;
     private ImageView image;
     private MaterialButton infoToggleButton;
-    private LinearLayout outerInfoLayout; // For enabling card expend animation
+    private CardView outerCardLayout; // For enabling card expend animation
     private boolean showDate;
     
-    private String moreInfo, lessInfo;
+    private String moreInfoMessage, lessInfoMessage;
+    private boolean isMoreInfoShowing = false;
 
     public EventViewHolder(@NonNull View itemView) {
         super(itemView);
         findViews();
-        setListeners();
+        setMoreInfoListener();
+        isMoreInfoShowing = false;
     }
 
     public EventViewHolder(@NonNull View itemView, boolean showingDate) {
         super(itemView);
         this.showDate = showingDate;
         findViews();
-        setListeners();
+        setMoreInfoListener();
+        setShowDate(showingDate);
+        isMoreInfoShowing = false;
     }
 
 
@@ -70,43 +76,71 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         image = itemView.findViewById(R.id.event_item_IMG_image);
         registerStatusText = itemView.findViewById(R.id.event_item_LBL_register_status);
         infoToggleButton = itemView.findViewById(R.id.event_item_BTN_toggle_info);
-        outerInfoLayout = itemView.findViewById(R.id.event_item_LAY_outer_info);
-        if(showDate) {
-            dateText = itemView.findViewById(R.id.event_item_LBL_date);
-        }
+        outerCardLayout = itemView.findViewById(R.id.event_item_LAY_outer_card);
+        dateText = itemView.findViewById(R.id.event_item_LBL_date);
+        moreInfoLayout = itemView.findViewById(R.id.event_item_LAY_more_info);
 
-        moreInfo = itemView.getResources().getString(R.string.event_card_more_info);
-        lessInfo = itemView.getResources().getString(R.string.event_card_less_info);
+        moreInfoMessage = itemView.getResources().getString(R.string.event_card_more_info);
+        lessInfoMessage = itemView.getResources().getString(R.string.event_card_less_info);
     }
 
-    private void setListeners(){
-        LayoutTransition layoutTransition = outerInfoLayout.getLayoutTransition();
+
+    //region Date Showing
+
+    public void setShowDate(boolean showDate){
+        this.showDate = showDate;
+        updateDateView();
+    }
+
+    private void updateDateView(){
+        if(dateText!=null){
+            if(showDate){
+                dateText.setVisibility(View.VISIBLE);
+            }
+            else{
+                dateText.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    //endregion
+
+    //region More Info
+
+    private void setMoreInfoListener(){
+        // Enables the expend animation of the card, when pressing "More Info..."
+        LayoutTransition layoutTransition = outerCardLayout.getLayoutTransition();
         layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
+
 
         infoToggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(infoToggleButton.getText().equals(moreInfo)){
-                    // description is currently not showing, so we will show it
-                    showDescription();
+                if(!isMoreInfoShowing){
+                    showMoreInfo();
+                    Log.i("pttt", " pressed more info");
                 }
-                else
-                    hideDescription();
+                else {
+                    hideMoreInfo();
+                }
             }
         });
     }
 
 
-    private void showDescription(){
-        infoToggleButton.setText(lessInfo);
-        descriptionText.setVisibility(View.VISIBLE);
-        Log.i("pttt", "SHOW DESC");
+    private void showMoreInfo(){
+        infoToggleButton.setText(lessInfoMessage);
+        moreInfoLayout.setVisibility(View.VISIBLE);
+        isMoreInfoShowing = true;
     }
 
-    private void hideDescription(){
-        infoToggleButton.setText(moreInfo);
-        descriptionText.setVisibility(View.GONE);
+    private void hideMoreInfo(){
+        infoToggleButton.setText(moreInfoMessage);
+        moreInfoLayout.setVisibility(View.GONE);
+        isMoreInfoShowing = false;
     }
+
+    //endregion
 
 
 

@@ -42,18 +42,19 @@ public class RegistrableEventViewHolder extends EventViewHolder {
         setDeleteOption();
     }
 
-    private void setDeleteOption() {
-        if(deletable)
-            deleteButton.setOnClickListener(onDeleteButtonClicked);
-        else
-            deleteButton.setVisibility(View.GONE);
-    }
+
 
     public void setEventContent(Event event){
         super.setEventContent(event);
     }
 
 
+    private void findViews(){
+        registerButton = itemView.findViewById(R.id.event_item_BTN_register);
+        deleteButton = itemView.findViewById(R.id.register_event_item_BTN_delete);
+    }
+
+    //region Register
     public void setRegisterButtonListener(final OnEventClickedListener register, final OnEventClickedListener unregister){
         this.registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +76,7 @@ public class RegistrableEventViewHolder extends EventViewHolder {
     }
 
     private void updateRegisterButton(int eventPrice){
-        if(registered){
+        if(!registered){
             String unregisterLabel = String.format(registerButton.getResources().getString(R.string.event_register_price_label), eventPrice);
             registerButton.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimaryDark));
             Log.i("pttt", unregisterLabel);
@@ -88,12 +89,16 @@ public class RegistrableEventViewHolder extends EventViewHolder {
             registerButton.setText(registerLabel);
         }
     }
+    //endregion
 
-    private void findViews(){
-        registerButton = itemView.findViewById(R.id.event_item_BTN_register);
-        deleteButton = itemView.findViewById(R.id.register_event_item_BTN_delete);
+    //region Delete Event
+
+    private void setDeleteOption() {
+        if(deletable)
+            deleteButton.setOnClickListener(onDeleteButtonClicked);
+        else
+            deleteButton.setVisibility(View.GONE);
     }
-
 
     private View.OnClickListener onDeleteButtonClicked = new View.OnClickListener() {
         @Override
@@ -115,5 +120,7 @@ public class RegistrableEventViewHolder extends EventViewHolder {
             EventDataManager.getInstance().deleteEvent(event);
         }
     };
+
+    //endregion
 
 }

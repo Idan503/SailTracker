@@ -30,7 +30,7 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
 
 
     public RegistrableEventRecyclerAdapter(Context context, List<Event> events, List<Event> registered){
-        super(context,events);
+        super(context,events,false); // register type recyclerviews not showing dates
         this.registeredEvents = registered;
         eventsList.sort(new SortByStartTime());
 

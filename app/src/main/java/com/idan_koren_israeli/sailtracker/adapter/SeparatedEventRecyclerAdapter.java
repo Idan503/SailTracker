@@ -22,7 +22,7 @@ public class SeparatedEventRecyclerAdapter extends EventRecyclerAdapter {
     private int futureTitlePosition; // The item position of the "Future" title
 
     public SeparatedEventRecyclerAdapter(Context context, List<Event> events) {
-        super(context, events);
+        super(context, events,true);
 
         futureTitlePosition = 1; // past title is 0
 
