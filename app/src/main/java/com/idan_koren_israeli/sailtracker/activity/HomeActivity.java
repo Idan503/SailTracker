@@ -112,8 +112,6 @@ public class HomeActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Code gets to here after camera intent is finished, data is the users chosen photo
-        loadingFragment.show();
-
         if (requestCode == 1 && resultCode == RESULT_OK) {
             Bitmap photoBitmap = null;
             if(data.getData()!=null) {
@@ -134,6 +132,8 @@ public class HomeActivity extends BaseActivity {
             }
             if (photoBitmap != null) {
                 MemberDataManager.getInstance().storeProfilePhoto(photoBitmap, photoUploadSuccess, photoUploadFailure);
+                loadingFragment.setMessage("Uploading Profile Picture...");
+                loadingFragment.show();
             }
         }
 

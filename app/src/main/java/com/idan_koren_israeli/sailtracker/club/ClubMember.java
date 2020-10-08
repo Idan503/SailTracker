@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.idan_koren_israeli.sailtracker.club.exception.NotEnoughPointsException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -14,26 +15,26 @@ import java.util.ArrayList;
  * uid is the primary key that shared between ClubMember and Firebase authentication
  *
  */
-public class ClubMember {
+public class ClubMember implements Serializable {
     private String uid;
     private String profilePictureUrl;
     private String name;
     private String phoneNumber;
     private int pointsCount;
-    private int sailsCount;
+    private int eventCount;
     private ArrayList<GalleryPhoto> galleryPhotos;
 
     public ClubMember(){
 
     }
 
-    public ClubMember(String uid, String pictureURI, String name, String phoneNumber, int pointsCount, int sailsCount) {
+    public ClubMember(String uid, String pictureURI, String name, String phoneNumber, int pointsCount, int eventCount) {
         this.uid = uid;
         this.profilePictureUrl = pictureURI;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.pointsCount = pointsCount;
-        this.sailsCount = sailsCount;
+        this.eventCount = eventCount;
         this.galleryPhotos = new ArrayList<>();
     }
 
@@ -45,7 +46,7 @@ public class ClubMember {
         this.phoneNumber = phoneNumber;
         this.profilePictureUrl = null;
         this.pointsCount = 0;
-        this.sailsCount = 0;
+        this.eventCount = 0;
         this.galleryPhotos = new ArrayList<>();
     }
 
@@ -92,12 +93,12 @@ public class ClubMember {
         this.pointsCount = pointsCount;
     }
 
-    public int getSailsCount() {
-        return sailsCount;
+    public int getEventCount() {
+        return eventCount;
     }
 
-    public void setSailsCount(int sailsCount) {
-        this.sailsCount = sailsCount;
+    public void setEventCount(int eventCount) {
+        this.eventCount = eventCount;
     }
 
     // Gallery photos are saved via Storage component and not Firestore
@@ -126,6 +127,14 @@ public class ClubMember {
         this.pointsCount-=count;
     }
 
+    public void addOneEvent(){
+        this.eventCount++;
+    }
+
+    public void deductOneEvent(){
+        this.eventCount--;
+    }
+
     public void addPoints(int count){
         this.pointsCount+=count;
     }
@@ -141,7 +150,7 @@ public class ClubMember {
         return "ID: " + uid
                 + "\nName: "+ name
                 + "\nPhone: " +phoneNumber
-                + "\nNumber of Sails: " + sailsCount
+                + "\nNumber of Sails: " + eventCount
                 + "\nNumber of Points: " + pointsCount
                 + "\nHave a profile picture: " + (profilePictureUrl!=null);
     }

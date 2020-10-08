@@ -28,7 +28,7 @@
     <string name="my_next_event_load_date">00.00.0000</string>
     <string name="my_next_event_load_hour">00:00</string>
 
-    <!-- Event/Sail Types -->
+    <!-- EVENT TYPES -->
     <string name="free_event">Free Event</string>
     <string name="guided_sail">Guided Sail</string>
     <string name="members_sail">Members Sail</string>
@@ -63,6 +63,9 @@
     <string name="login_code">We sent you an SMS with a code:</string>
     <string name="login_name">Choose your display name:</string>
 
+    <!-- PROFILE FRAGMENT -->
+    <string name="profile_events_history">Events History</string>
+
     <!-- ADDING EVENT TITLES -->
     <string name="add_event_title">Add Event/Sail</string>
     <string name="add_event_name_label">Choose Name:</string>
@@ -92,6 +95,8 @@
     <string name="hour_time_format">%02d:%02d %2s</string>
     <string name="event_register_price_label">%d Register</string>
     <string name="event_unregister_price_label">%d Unregister</string>
+    <string name="profile_events_history_label">%d Events</string>
+    <string name="profile_events_history_single_label">%d Event</string>
 
 
 </resources>

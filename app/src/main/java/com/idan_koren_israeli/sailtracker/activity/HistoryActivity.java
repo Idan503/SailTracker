@@ -3,16 +3,15 @@ package com.idan_koren_israeli.sailtracker.activity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.animation.Animator;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.LinearInterpolator;
+import android.view.animation.AnticipateOvershootInterpolator;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
+import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.fragment.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.adapter.SeparatedEventRecyclerAdapter;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
@@ -30,13 +29,17 @@ import java.util.ArrayList;
  */
 public class HistoryActivity extends BaseActivity {
 
+    public interface KEYS {
+        String MEMBER_TO_SHOW = "member_to_show";
+    }
+
     private FloatingActionButton backButton;
     private RecyclerView recyclerView;
-    private ClubMember currentUser;
+    private ClubMember member;
     private LoadingFragment loadingFragment;
 
     private boolean backButtonShowing = true;
-    private final int BACK_ANIMATION_DURATION = 300; //in ms
+    private final int BACK_ANIMATION_DURATION = 450; //in ms
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +47,19 @@ public class HistoryActivity extends BaseActivity {
         setContentView(R.layout.activity_history);
         findViews();
         setListeners();
+        initMemberToShow();
 
-        currentUser = MemberDataManager.getInstance().getCurrentUser();
-
-        EventDataManager.getInstance().loadRegisteredEvents(onEventsLoaded);
+        EventDataManager.getInstance().loadRegisteredEvents(member,onEventsLoaded);
 
 
+    }
+
+    private void initMemberToShow(){
+        member = (ClubMember) getIntent().getSerializableExtra(KEYS.MEMBER_TO_SHOW);
+        if(member==null){
+            CommonUtils.getInstance().showToast("Member could not be found");
+            finish();
+        }
     }
 
     private OnListLoadedListener<Event> onEventsLoaded = new OnListLoadedListener<Event>() {
@@ -84,34 +94,12 @@ public class HistoryActivity extends BaseActivity {
                     if(backButtonShowing)
                         hideBackButton();
                 }
+                else{
+                    if(!backButtonShowing)
+                        showBackButton();
+                }
             }
         });
-    }
-
-    private void showBackButton(){
-        backButtonShowing = true;
-        backButton.setScaleX(0.0f);
-        backButton.setScaleY(0.0f);
-        backButton.setAlpha(0.0f);
-        backButton.animate()
-                .alpha(1.0f)
-                .scaleX(1.0f)
-                .yBy(-100)
-                .scaleY(1.0f)
-                .setDuration(BACK_ANIMATION_DURATION)
-                .setInterpolator(new AccelerateInterpolator());
-    }
-
-
-    private void hideBackButton(){
-        backButtonShowing = false;
-        backButton.animate()
-                .alpha(0.0f)
-                .scaleX(0.0f)
-                .scaleY(0.0f)
-                .yBy(100)
-                .setDuration(BACK_ANIMATION_DURATION)
-                .setInterpolator(new AccelerateInterpolator());
     }
 
 
@@ -130,4 +118,31 @@ public class HistoryActivity extends BaseActivity {
         recyclerView = findViewById(R.id.my_sails_RYC_recycler);
         loadingFragment = (LoadingFragment) getSupportFragmentManager().findFragmentById(R.id.my_sails_FRAG_loading);
     }
+
+
+    //region Back Button Animation
+    private void showBackButton(){
+        backButtonShowing = true;
+        backButton.setScaleX(0.0f);
+        backButton.setScaleY(0.0f);
+        backButton.setAlpha(0.0f);
+        backButton.animate()
+                .alpha(1.0f)
+                .scaleX(1.0f)
+                .scaleY(1.0f)
+                .setDuration(BACK_ANIMATION_DURATION)
+                .setInterpolator(new AnticipateOvershootInterpolator());
+    }
+
+
+    private void hideBackButton(){
+        backButtonShowing = false;
+        backButton.animate()
+                .alpha(0.0f)
+                .scaleX(0.0f)
+                .scaleY(0.0f)
+                .setDuration(BACK_ANIMATION_DURATION)
+                .setInterpolator(new AnticipateOvershootInterpolator());
+    }
+    //endregion
 }

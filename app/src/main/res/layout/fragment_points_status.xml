@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="40dp"
+    android:layout_height="35dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
@@ -9,21 +9,22 @@
     tools:context=".fragment.PointsStatusFragment">
 
     <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:src="@drawable/ic_points_wheel"
         android:id="@+id/points_status_IMG_points_logo"
         android:contentDescription="@string/points"
         />
 
     <TextView
-        android:layout_width="60dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginStart="5dp"
+        android:padding="4dp"
         android:gravity="center|start"
         android:autoSizeMaxTextSize="40sp"
         android:autoSizeMinTextSize="12sp"
-        android:padding="3dp"
+        android:textSize="22sp"
         android:text="@string/number_00"
         android:lines="1"
         android:autoSizeTextType="uniform"
@@ -31,15 +32,15 @@
         />
 
     <com.google.android.material.button.MaterialButton
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         app:layout_constraintStart_toEndOf="@id/points_status_LBL_points_count"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/plus_sign"
-        android:autoSizeTextType="uniform"
-        app:cornerRadius="20dp"
+        android:gravity="center"
+        android:background="@drawable/ic_baseline_add_circle_24"
+        app:backgroundTint="@android:color/white"
+        android:layout_margin="5dp"
         android:id="@+id/points_status_BTN_add"
         />
 

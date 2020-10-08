@@ -115,6 +115,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), HistoryActivity.class);
+                intent.putExtra(HistoryActivity.KEYS.MEMBER_TO_SHOW,member);
                 startActivity(intent);
                 // Caller activity is purposefully not finished.
                 // "My sails" activity would be finished and user will get back to the caller activity
@@ -134,6 +135,16 @@ public class ProfileFragment extends Fragment {
         nameText.setText(member.getName());
         MemberDataManager.getInstance().loadProfilePhoto(member.getUid(), onProfileUriSuccess, onProfileUriFailure);
         pointsStatus.setMember(member);
+        if(showHistoryButton){
+            int numOfEvents = member.getEventCount();
+            String historyButtonLabel;
+            if(numOfEvents==1){
+                historyButtonLabel = String.format(getResources().getString(R.string.profile_events_history_single_label), numOfEvents);
+            }
+            else
+                historyButtonLabel = String.format(getResources().getString(R.string.profile_events_history_label), numOfEvents);
+            historyButton.setText(historyButtonLabel);
+        }
     }
 
 
