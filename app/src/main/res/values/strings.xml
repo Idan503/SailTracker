@@ -31,9 +31,9 @@
     <string name="my_next_event_load_hour">00:00</string>
 
     <!-- EVENT TYPES -->
-    <string name="evening_event">Evening Event</string>
-    <string name="guided_sail">Guided Sail</string>
-    <string name="members_sail">Members Sail</string>
+    <string name="evening_event">Evening\nEvent</string>
+    <string name="guided_sail">Guided\nSail</string>
+    <string name="members_sail">Members\nSail</string>
 
     <!-- EVENT CARD -->
     <string name="event_card_more_info">More Info…</string>
@@ -77,7 +77,7 @@
     <string name="add_event_end">Select End Time</string>
     <string name="add_event_description">Insert Event Description</string>
     <string name="add_event_time_start_label">Start Time</string>
-    <string name="add_event_time_end_label">Ends Time</string>
+    <string name="add_event_time_end_label">End Time</string>
     <string name="add_event_hour_empty">--:--</string>
 
     <!-- LABELS -->

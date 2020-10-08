@@ -24,7 +24,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/my_sails_LBL_title"
         android:id="@+id/my_sails_RYC_recycler"
-        android:paddingBottom="150dp"
+        android:paddingBottom="120dp"
         android:clipToPadding="false"
         />
 

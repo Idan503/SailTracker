@@ -193,7 +193,6 @@
                 app:iconPadding="0dp"
                 app:iconSize="32dp"
                 android:padding="20dp"
-                android:textColor="@color/colorPrimaryDark"
                 app:layout_constraintTop_toBottomOf="@id/add_event_LBL_end_time"
                 android:text="@string/add_event_hour_empty"
                 android:id="@+id/add_event_BTN_end_time"
@@ -231,9 +230,9 @@
                     android:ems="11"
                     app:icon="@drawable/ic_baseline_person_24"
                     app:iconSize="36dp"
+                    android:textColorHint="@android:color/white"
                     android:lines="2"
                     android:maxLines="2"
-                    android:textColorHint="@color/colorPrimaryDark"
                     android:hint="@string/add_event_max_participants"
                     android:id="@+id/add_event_BTN_max_participants"
                     />
@@ -251,11 +250,11 @@
                     app:icon="@drawable/ic_points_wheel"
                     app:iconSize="36dp"
                     app:iconTintMode="multiply"
+                    android:textColorHint="@android:color/white"
                     android:inputType="number"
                     android:gravity="center"
                     android:id="@+id/add_event_BTN_price"
                     android:hint="@string/price"
-                    android:textColorHint="@color/colorPrimaryDark"
                     />
 
             </LinearLayout>

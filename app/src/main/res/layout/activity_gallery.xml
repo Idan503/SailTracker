@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@id/gallery_INV_2"
-            app:layout_constraintHeight_percent="0.6"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/gallery_FRAG_photo_collection"
             android:name="com.idan_koren_israeli.sailtracker.fragment.PhotoCollectionFragment"
             tools:layout="@layout/fragment_photo_collection"
