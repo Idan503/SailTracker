@@ -28,9 +28,12 @@
 
     <color name="colorAccent">#73bfb8</color>
 
+    <!-- OTHER COLORS -->
+
     <color name="navigator_ic">#2C2C2C</color>
     <color name="colorText">#2C2C2C</color>
     <color name="photo_loading">#28282B</color>
+    <color name="off_white">#eeeeee</color>
 
     <color name="profile_photo_stroke">#1E01579B</color>
 

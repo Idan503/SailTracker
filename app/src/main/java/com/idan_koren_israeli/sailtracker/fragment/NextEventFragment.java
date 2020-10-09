@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.shimmer.ShimmerFrameLayout;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
@@ -84,7 +83,7 @@ public class NextEventFragment extends Fragment {
     }
 
     public void setNoEvent(){
-        titleText.setText(resources.getText(R.string.no_next_event));
+        titleText.setText(resources.getText(R.string.label_no_next_event));
         hideExtraInfo();
 
         // SET BACKGROUND IMAGE...

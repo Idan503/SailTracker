@@ -40,12 +40,12 @@ public class SeparatedEventRecyclerAdapter extends EventRecyclerAdapter {
         if(position==0){
             //its the past title
             MessageViewHolder pastMessageHolder = (MessageViewHolder) holder;
-            pastMessageHolder.setText(context.getResources().getText(R.string.past_events));
+            pastMessageHolder.setText(context.getResources().getText(R.string.label_past_events));
         }
         else if(position==futureTitlePosition){
             //its the future title
             MessageViewHolder futureMessageHolder = (MessageViewHolder) holder;
-            futureMessageHolder.setText(context.getResources().getText(R.string.future_events));
+            futureMessageHolder.setText(context.getResources().getText(R.string.label_future_events));
         }
         else{
             //its a regular item of event list

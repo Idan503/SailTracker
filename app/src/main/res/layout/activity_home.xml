@@ -24,7 +24,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.075"
+            app:layout_constraintHeight_percent="0.065"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -40,6 +40,7 @@
             app:layout_constraintTop_toBottomOf="@id/home_INV_1"
             app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/home_IMG_banner"
+            android:padding="10dp"
             />
 
 
@@ -50,10 +51,11 @@
             app:layout_constraintTop_toBottomOf="@id/home_IMG_banner"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/home_INV_3"
+            app:layout_constraintBottom_toTopOf="@id/home_INV_2"
             android:id="@+id/home_FRAG_profile"
             android:name="com.idan_koren_israeli.sailtracker.fragment.ProfileFragment"
             tools:layout="@layout/fragment_profile_card"
+            android:layout_marginTop="15dp"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             />
@@ -65,7 +67,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/home_FRAG_next_sailing"
-            android:id="@+id/home_INV_3"
+            android:id="@+id/home_INV_2"
             />
 
         <fragment
@@ -74,7 +76,7 @@
             app:layout_constraintHeight_percent="0.35"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/home_INV_4"
+            app:layout_constraintBottom_toTopOf="@id/home_INV_3"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:name="com.idan_koren_israeli.sailtracker.fragment.NextEventFragment"
@@ -89,7 +91,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:id="@+id/home_INV_4"
+            android:id="@+id/home_INV_3"
             />
 
 

@@ -20,9 +20,24 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_margin="20dp"
             app:layout_constraintHeight_percent="0.1"
+            android:queryHint="@string/example_phone"
             android:id="@+id/search_SEARCH_searchbar"
             android:inputType="phone"
             android:iconifiedByDefault="false"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintTop_toBottomOf="@id/search_SEARCH_searchbar"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeMaxTextSize="18sp"
+            android:layout_marginTop="42dp"
+            android:id="@+id/search_LBL_label"
+            android:text="@string/label_search_screen"
+            android:gravity="center_horizontal"
             />
 
         <fragment

@@ -56,6 +56,7 @@
 
     <!-- SEARCH SCREEN -->
     <string name="searchbar_title">Club member phone num.</string>
+    <string name="label_search_screen">Search for club members\nand take a look at their photos.</string>
 
     <!-- GALLERY SCREEN -->
     <string name="take_photo">Take a Photo</string>
@@ -84,10 +85,10 @@
     <string name="add_event_hour_empty">--:--</string>
 
     <!-- LABELS -->
-    <string name="no_next_event">Register to an event and it will be appeared here…</string>
-    <string name="no_events_calendar">No Events or Sails were found…</string>
-    <string name="future_events">Upcoming Sails and Events</string>
-    <string name="past_events">Past Sails and Events</string>
+    <string name="label_no_next_event">Register to an event and it will be appeared here…</string>
+    <string name="label_no_events_calendar">No Events or Sails were found…</string>
+    <string name="label_future_events">Upcoming Sails and Events</string>
+    <string name="label_past_events">Past Sails and Events</string>
 
 
     <!-- LOADING MESSAGES -->

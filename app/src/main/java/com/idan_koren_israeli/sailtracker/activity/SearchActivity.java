@@ -13,13 +13,17 @@ import com.idan_koren_israeli.sailtracker.fragment.PhotoCollectionFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.SearchView;
+import android.widget.TextView;
+
+import androidx.fragment.app.FragmentManager;
 
 public class SearchActivity extends BaseActivity {
 
     private SearchView searchView;
-    private ProfileFragment profile;
+    private ProfileFragment profileFragment;
     private PhotoCollectionFragment resultPhotos;
     private ClubMember resultMember;
+    private TextView searchLabel;
 
 
     @Override
@@ -28,13 +32,27 @@ public class SearchActivity extends BaseActivity {
         setContentView(R.layout.activity_search);
         findViews();
         setListeners();
+        hideProfileFragment();
     }
 
     private void findViews(){
         searchView = findViewById(R.id.search_SEARCH_searchbar);
-        profile = (ProfileFragment) getSupportFragmentManager().findFragmentById(R.id.search_FRAG_profile);
+        profileFragment = (ProfileFragment) getSupportFragmentManager().findFragmentById(R.id.search_FRAG_profile);
         resultPhotos = (PhotoCollectionFragment) getSupportFragmentManager().findFragmentById(R.id.search_FRAG_collection);
+    }
 
+    private void showProfileFragment(){
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .show(profileFragment)
+                .commit();
+    }
+
+    private void hideProfileFragment(){
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .hide(profileFragment)
+                .commit();
     }
 
     private void setListeners(){
@@ -64,8 +82,10 @@ public class SearchActivity extends BaseActivity {
                 return;
             }
             if(memberLoaded!= MemberDataManager.getInstance().getCurrentUser()) {
+                // Result found - loading the requested gallery
                 MemberDataManager.getInstance().loadGallery(memberLoaded.getUid(), photoLoaded);
-                profile.setMember(memberLoaded);
+                profileFragment.setMember(memberLoaded);
+                showProfileFragment();
             }
             else {
                 CommonUtils.getInstance().showToast("You photos are in your own gallery");

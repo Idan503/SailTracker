@@ -1,6 +1,5 @@
 package com.idan_koren_israeli.sailtracker.adapter;
 import android.content.Context;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +31,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         int TITLE = 2;
     }
 
-    private static final int NO_EVENTS_LABEL = R.string.no_events_calendar;
+    private static final int NO_EVENTS_LABEL = R.string.label_no_events_calendar;
 
     protected List<Event> eventsList;
     protected LayoutInflater inflater;
