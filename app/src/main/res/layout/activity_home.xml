@@ -24,7 +24,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.05"
+            app:layout_constraintHeight_percent="0.075"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -34,32 +34,20 @@
         <ImageView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintHeight_percent="0.25"
             app:layout_constraintDimensionRatio="2:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/home_INV_1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/home_INV_2"
-            android:contentDescription="@string/app_name"
-            android:background="@android:color/holo_blue_light"
-            android:id="@+id/home_IMG_logo"
+            android:id="@+id/home_IMG_banner"
             />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.05"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/home_IMG_logo"
-            android:id="@+id/home_INV_2"
-            />
 
         <fragment
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.2"
-            app:layout_constraintTop_toBottomOf="@id/home_INV_2"
+            app:layout_constraintTop_toBottomOf="@id/home_IMG_banner"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/home_INV_3"
@@ -73,7 +61,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.05"
+            app:layout_constraintHeight_percent="0.025"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/home_FRAG_next_sailing"

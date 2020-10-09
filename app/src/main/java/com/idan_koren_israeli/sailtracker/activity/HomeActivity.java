@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -31,6 +32,7 @@ public class HomeActivity extends BaseActivity {
 
     private ClubMember user; // the current specific user's member object
     private LinearLayout loginLayout;
+    private ImageView bannerImage;
     private ProfileFragment profileFragment;
     private LoginFragment loginFragment;
     private LoadingFragment loadingFragment;
@@ -46,6 +48,8 @@ public class HomeActivity extends BaseActivity {
         findViews();
         setListeners();
 
+        loadBannerImage();
+
         user = MemberDataManager.getInstance().getCurrentUser();
         if(user!=null) {
             // No need for login, user is already authenticated
@@ -58,9 +62,12 @@ public class HomeActivity extends BaseActivity {
             // User is not logged in, activity will wait for LoginFragment to finish
             loginFragment.setOnCompleteListener(onLoginFinished);
             navigationBarFragment.setClickable(false);
-            Log.i("pttt", "NEED LOGIN");
         }
 
+    }
+
+    private void loadBannerImage() {
+        CommonUtils.getInstance().setImageResource(bannerImage, R.drawable.img_app_banner);
     }
 
 
@@ -68,6 +75,7 @@ public class HomeActivity extends BaseActivity {
 
     private void findViews(){
         loginLayout = findViewById(R.id.home_LAY_login);
+        bannerImage = findViewById(R.id.home_IMG_banner);
         profileFragment =(ProfileFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_profile);
         loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_login);
         loadingFragment = (LoadingFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_loading);

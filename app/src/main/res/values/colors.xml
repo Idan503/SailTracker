@@ -1,22 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- PRIMARY -->
     <color name="colorPrimary">#2364AA</color>
-    <color name="colorPrimaryDark">#1c5088</color>
-    <color name="colorPrimaryDarker">#153c66</color>
+
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryDarker">#1A237E</color>
     <color name="colorPrimaryDarkest">#0a1e33</color>
-    <color name="colorPrimaryLight">#4f83bb</color>
-    <color name="colorPrimaryLighter">#7ba2cc</color>
-    <color name="colorPrimaryLightest">#e9f0f7</color>
-    <color name="colorPrimaryWhite">#D0D1D1</color>
+
+    <color name="colorPrimaryLight">#64B5F6</color>
+    <color name="colorPrimaryLighter">#90CAF9</color>
+    <color name="colorPrimaryLightest">#E3F2FD</color>
+
+    <!-- SECONDARY -->
+
+    <color name="colorSecondary">#FFC107</color>
+
+    <color name="colorSecondaryDark">#FFA000</color>
+    <color name="colorSecondaryDarker">#FF6F00</color>
+
+    <color name="colorSecondaryLight">#FFD54F</color>
+    <color name="colorSecondaryLighter">#FFE082</color>
+
     <color name="colorPrimaryText">#17212B</color>
-    <color name="colorAccent">#73bfb8</color>
-    <color name="colorAccentYellow">#FEC601</color>
     <color name="colorAccentYellowDark">#DDAF0A</color>
     <color name="colorAccentOrange">#ea7317</color>
 
+    <color name="colorAccent">#73bfb8</color>
 
     <color name="navigator_ic">#2C2C2C</color>
     <color name="colorText">#2C2C2C</color>
     <color name="photo_loading">#28282B</color>
+
+    <color name="profile_photo_stroke">#1E01579B</color>
 
 </resources>

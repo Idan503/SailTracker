@@ -3,7 +3,7 @@
     android:insetLeft="-3dp">
 
     <shape>
-        <solid android:color="@color/colorAccentYellow"/>
+        <solid android:color="@color/colorSecondary"/>
         <stroke
             android:width="3dp"
             android:color="@color/colorAccentYellowDark"

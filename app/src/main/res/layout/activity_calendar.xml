@@ -23,7 +23,7 @@
             android:theme="@style/CalenderViewCustom"
             android:dateTextAppearance="@style/CalenderViewDateCustomText"
             android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"
-            android:background="@drawable/background_light_gradient"
+            android:background="@drawable/shape_light_gradient_bg"
             />
 
 
@@ -47,7 +47,7 @@
             android:autoSizeMaxTextSize="22sp"
             android:autoSizeMinTextSize="12sp"
             android:autoSizeTextType="uniform"
-            android:background="@drawable/background_calendar_date_title"
+            android:background="@drawable/shape_calendar_date_background"
             />
 
 

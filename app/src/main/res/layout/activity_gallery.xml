@@ -52,7 +52,7 @@
             app:fabSize="normal"
             android:src="@drawable/ic_baseline_photo_camera_24"
             app:tint="@color/colorPrimaryDarker"
-            app:backgroundTint="@color/colorAccentYellow"
+            app:backgroundTint="@color/colorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_margin="25dp"

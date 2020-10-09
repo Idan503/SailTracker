@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:baselineAligned="false"
     android:weightSum="4"
-    android:background="@color/colorPrimaryWhite"
+    android:background="@color/colorPrimaryLightest"
     android:orientation="horizontal"
     >
 
