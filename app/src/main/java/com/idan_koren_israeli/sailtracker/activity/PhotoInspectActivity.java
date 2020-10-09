@@ -57,7 +57,7 @@ public class PhotoInspectActivity extends BaseActivity {
 
     private ClubMember currentMember;
 
-    private static final int FADE_IN_DURATION = 500;
+    private static final int FADE_IN_DURATION = 450;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +79,7 @@ public class PhotoInspectActivity extends BaseActivity {
     private void findViews(){
         //imageView = findViewById(R.id.photo_inspect_IMG_photo);
         loadingFragment = (LoadingFragment) getSupportFragmentManager().findFragmentById(R.id.photo_inspect_FRAG_loading);
-        imageWeb = (WebView) findViewById(R.id.photo_inspect_IMG_photo);
+        imageWeb = findViewById(R.id.photo_inspect_IMG_photo);
         deleteFAB = findViewById(R.id.photo_inspect_FAB_delete);
         backFAB = findViewById(R.id.photo_inspect_FAB_back);
     }
@@ -95,6 +95,7 @@ public class PhotoInspectActivity extends BaseActivity {
         });
     }
 
+    // Retrieving information from intent if its current user showing its own picture or not
     private void applyIntentPrefs(){
         boolean showDeleteButton = getIntent().getBooleanExtra(KEYS.SHOW_DELETE_BUTTON, false);
         displayedPhoto = (GalleryPhoto) getIntent().getSerializableExtra(KEYS.PHOTO_OBJ);
@@ -119,6 +120,7 @@ public class PhotoInspectActivity extends BaseActivity {
     }
 
 
+    //region Loading Callbacks
 
     private WebViewClient finishedLoadingListener = new WebViewClient(){
         @Override
@@ -139,11 +141,12 @@ public class PhotoInspectActivity extends BaseActivity {
         }
     };
 
+    //endregion
 
 
 
 
-    //region Photo Delete Listeners
+    //region Photo Delete Callbacks
 
     private View.OnClickListener onDeleteButtonClicked = new View.OnClickListener() {
         @Override

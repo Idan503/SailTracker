@@ -12,6 +12,7 @@ import com.idan_koren_israeli.sailtracker.fragment.PhotoCollectionFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ public class SearchActivity extends BaseActivity {
 
     private void findViews(){
         searchView = findViewById(R.id.search_SEARCH_searchbar);
+        searchLabel = findViewById(R.id.search_LBL_label);
         profileFragment = (ProfileFragment) getSupportFragmentManager().findFragmentById(R.id.search_FRAG_profile);
         resultPhotos = (PhotoCollectionFragment) getSupportFragmentManager().findFragmentById(R.id.search_FRAG_collection);
     }
@@ -58,6 +60,8 @@ public class SearchActivity extends BaseActivity {
     private void setListeners(){
         searchView.setOnQueryTextListener(onSearchPerformed);
     }
+
+    //region Callbacks
 
     private SearchView.OnQueryTextListener onSearchPerformed = new SearchView.OnQueryTextListener() {
         @Override
@@ -86,6 +90,7 @@ public class SearchActivity extends BaseActivity {
                 MemberDataManager.getInstance().loadGallery(memberLoaded.getUid(), photoLoaded);
                 profileFragment.setMember(memberLoaded);
                 showProfileFragment();
+                searchLabel.setVisibility(View.GONE);
             }
             else {
                 CommonUtils.getInstance().showToast("You photos are in your own gallery");
@@ -104,4 +109,6 @@ public class SearchActivity extends BaseActivity {
             // a new photo is loaded, adding it to the internal stored member object and re-render ui
         }
     };
+
+    //endregion
 }
