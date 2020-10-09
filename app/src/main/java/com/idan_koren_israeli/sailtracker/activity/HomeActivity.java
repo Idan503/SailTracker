@@ -40,14 +40,12 @@ public class HomeActivity extends BaseActivity {
     private NextEventFragment nextEventFragment;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
         findViews();
         setListeners();
-
         loadBannerImage();
 
         user = MemberDataManager.getInstance().getCurrentUser();

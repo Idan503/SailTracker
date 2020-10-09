@@ -48,7 +48,7 @@ public class PhotoInspectActivity extends BaseActivity {
     private static final int FADE_IN_DURATION = 450;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_inspect);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);

@@ -19,10 +19,11 @@
     <string name="back">Back</string>
     <string name="plus_sign">+</string>
     <string name="loading">Loading</string>
-    <string name="photo">photo</string>
-    <string name="register">register</string>
-    <string name="cancel">cancel</string>
-    <string name="set">set</string>
+    <string name="photo">Photo</string>
+    <string name="register">Register</string>
+    <string name="cancel">Cancel</string>
+    <string name="set">Set</string>
+    <string name="background">Background</string>
 
     <!-- NEXT SAIL FRAGMENT -->
     <string name="my_next_event_title">My Next Event</string>

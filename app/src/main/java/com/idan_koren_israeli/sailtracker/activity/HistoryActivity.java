@@ -43,7 +43,7 @@ public class HistoryActivity extends BaseActivity {
     private final int BACK_ANIMATION_DURATION = 450; //in ms
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         findViews();

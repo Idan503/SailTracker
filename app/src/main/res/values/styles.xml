@@ -1,7 +1,6 @@
 <resources>
-    <!-- Base application theme. -->
+    <!-- BASE APP THEME -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:textColor">@color/colorPrimaryText</item>
@@ -33,11 +32,16 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.App.ProfilePictureCorners" parent="">
-        <item name="cornerSize">15%</item>
+    <style name="BackgroundImageView" parent="Widget.AppCompat.ImageButton">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:alpha">0.35</item>
+        <item name="android:contentDescription">@string/background</item>
     </style>
 
 
+    <!-- BUTTONS -->
 
     <style name="MaterialButtonDefaultStyle" parent="Theme.MaterialComponents">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -46,6 +50,7 @@
         <item name="autoSizeTextType">uniform</item>
         <item name="autoSizeMinTextSize">14dp</item>
     </style>
+
 
     <style name="FormRadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
         <item name="autoSizeTextType">uniform</item>
@@ -71,7 +76,9 @@
         <item name="color">@color/colorPrimaryDark</item>
     </style>
 
-    <!-- Calendar Styles -->
+
+
+    <!-- CALENDAR -->
 
     <style name="CalenderViewCustom" parent="Theme.AppCompat">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -86,6 +93,13 @@
 
     <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
         <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+
+    <!-- CUSTOM -->
+
+    <style name="ShapeAppearanceOverlay.App.ProfilePictureCorners" parent="">
+        <item name="cornerSize">15%</item>
     </style>
 
 </resources>

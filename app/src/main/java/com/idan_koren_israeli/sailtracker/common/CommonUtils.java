@@ -11,18 +11,23 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
+import android.text.Layout;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.CustomViewTarget;
 import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.idan_koren_israeli.sailtracker.activity.BaseActivity;
 
 import java.io.ByteArrayOutputStream;
@@ -55,7 +60,6 @@ public class CommonUtils {
     }
 
 
-
     //region Glide Image Load
 
     public void setImageResource(@NonNull ImageView image, int resId){
@@ -67,6 +71,7 @@ public class CommonUtils {
                         .override(Target.SIZE_ORIGINAL))
                 .into(image);
     }
+
 
     public void setImageResource(@NonNull ImageView image, Uri uri){
         Glide.with(context)

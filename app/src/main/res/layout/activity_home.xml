@@ -7,6 +7,10 @@
     tools:context=".activity.HomeActivity"
     >
 
+    <ImageView
+        style="@style/BackgroundImageView"
+        android:id="@+id/base_IMG_background"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"

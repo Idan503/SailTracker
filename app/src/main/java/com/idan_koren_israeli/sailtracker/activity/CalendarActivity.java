@@ -49,7 +49,7 @@ public class CalendarActivity extends BaseActivity {
     private boolean managerView = false;
     private LoadingFragment loadingFragment;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 

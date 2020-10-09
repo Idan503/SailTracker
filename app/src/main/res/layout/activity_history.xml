@@ -8,6 +8,16 @@
     android:orientation="vertical"
     >
 
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/base_IMG_background"
+        android:scaleType="centerCrop"
+        android:alpha="0.35"
+        android:contentDescription="@string/background"
+        />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="80dp"
