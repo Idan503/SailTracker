@@ -99,13 +99,14 @@ public class CommonUtils {
         }
     }
 
+
     // Let user choose between having the photo from camera or from device's file system
-    public void dispatchChoosePictureIntent(BaseActivity callerActivity){
+    public void dispatchChoosePictureIntent(BaseActivity callerActivity, String message){
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         Intent storagePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
         storagePictureIntent.setType("image/*");
 
-        Intent chooserIntent = Intent.createChooser(takePictureIntent, "Upload or take a picture...");
+        Intent chooserIntent = Intent.createChooser(takePictureIntent, message);
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{storagePictureIntent});
         callerActivity.startActivityForResult(chooserIntent, REQUEST_IMAGE_CHOOSE );
     }
@@ -120,13 +121,26 @@ public class CommonUtils {
 
     //endregion
 
-    public String convertStringToPhoneNumber(String input) throws InputMismatchException {
+
+    public int getScreenWidth(@NonNull Activity activity) {
+        return activity.getResources().getDisplayMetrics().widthPixels;
+    }
+
+    public void delayedTask(Runnable task, int delay){
+        final Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(task, delay);
+    }
+
+    //region String Manipulations
+
+
+    public String toPhoneString(String input) throws InputMismatchException {
         final int MIN_PHONE_LENGTH = 8;
         final String MESSAGE = "Invalid phone number";
         if(input.length()<8)
             throw new InputMismatchException(MESSAGE);
 
-        // 0554881591 - > +972554881591
+        // 0551234567 - > +97255123467
         char first = input.charAt(0);
         switch (first){
             case '0':
@@ -141,12 +155,15 @@ public class CommonUtils {
 
     }
 
-    public int getScreenWidth(Activity activity) {
-        return activity.getResources().getDisplayMetrics().widthPixels;
+    // Returns a string that contains only numbers from the input one
+    public String toNumericString(@NonNull String input){
+        StringBuilder builder = new StringBuilder();
+        for(char c : input.toCharArray()){
+            if(c >= '0' && c <='9')
+                builder.append(c);
+        }
+        return builder.toString();
     }
 
-    public void delayedTask(Runnable task, int delay){
-        final Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(task, delay);
-    }
+    //endregion
 }

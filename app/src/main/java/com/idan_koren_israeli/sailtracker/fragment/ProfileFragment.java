@@ -199,6 +199,7 @@ public class ProfileFragment extends Fragment {
 
     }
 
+
     private void hidePhoto(){
         profilePhoto.setVisibility(View.GONE);
     }

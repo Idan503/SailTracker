@@ -69,7 +69,7 @@
                 app:layout_constraintTop_toBottomOf="@id/add_event_LBL_name"
                 android:gravity="center"
                 android:autofillHints="@string/add_event_name_label"
-                android:inputType="textPersonName"
+                android:inputType="textCapWords"
                 android:layout_marginTop="10dp"
                 android:ems="12"
                 android:autoSizeTextType="uniform"

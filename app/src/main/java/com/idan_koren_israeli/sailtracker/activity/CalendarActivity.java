@@ -3,6 +3,7 @@ package com.idan_koren_israeli.sailtracker.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.TextView;
@@ -83,6 +84,7 @@ public class CalendarActivity extends BaseActivity {
     private void initEventsList(boolean isCurrentUserManager, List<Event> registered) {
         eventsRecycler.setLayoutManager(new LinearLayoutManager(this));
         EventRecyclerAdapter eventsAdapter;
+
 
         if (selectedDate.toDateTimeAtStartOfDay().plusDays(1).getMillis() < DateTime.now().getMillis()) {
             // Selected date is in the past, so there should not be an option to add/register to events

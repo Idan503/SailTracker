@@ -61,9 +61,9 @@
     <string name="take_photo">Take a Photo</string>
 
     <!-- LOGIN SCREEN -->
-    <string name="login_phone">Please insert your phone number to log-in</string>
-    <string name="login_code">We sent you an SMS with a code:</string>
-    <string name="login_name">Choose your display name:</string>
+    <string name="login_phone">Enter your phone number to log-in</string>
+    <string name="login_code">We sent you an SMS with a verification code:</string>
+    <string name="login_name">Choose your app display name:</string>
 
     <!-- PROFILE FRAGMENT -->
     <string name="profile_events_history">Events History</string>

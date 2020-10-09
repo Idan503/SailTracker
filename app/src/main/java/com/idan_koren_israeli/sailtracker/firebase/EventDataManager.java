@@ -39,7 +39,7 @@ public class EventDataManager {
         String DATE_TO_EVENTS = "date_to_events";
         String MEMBER_TO_EVENTS = "member_to_events";
         String MEMBER_TO_NEXT_EVENT = "member_to_next_event";
-        String SAIL_MEMBERS_LIST = "registeredMembers";
+        String EVENT_MEMBERS_LIST = "registeredMembers";
     }
 
     private EventDataManager(){
@@ -101,7 +101,7 @@ public class EventDataManager {
 
         // Updating the stored event object with the new member registered in the list
         dbRealtime.child(KEYS.EVENTS).child(event.getEid())
-                .child(KEYS.SAIL_MEMBERS_LIST).setValue(event.getRegisteredMembers());
+                .child(KEYS.EVENT_MEMBERS_LIST).setValue(event.getRegisteredMembers());
 
 
         //region Add Event to Member's List
@@ -109,10 +109,11 @@ public class EventDataManager {
             @SuppressWarnings("unchecked")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<String> registeredEvents;
+                ArrayList<String> registeredEvents = new ArrayList<String>();
                 if(snapshot.getValue()!=null) {
-                    registeredEvents = (ArrayList<String>) snapshot.getValue();
-
+                    for(DataSnapshot child : snapshot.getChildren()){
+                        registeredEvents.add(child.getKey());
+                    }
                 }
                 else
                     registeredEvents = new ArrayList<>();
@@ -133,8 +134,6 @@ public class EventDataManager {
 
         dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onMembersEventsListLoaded);
         //endregion
-
-
     }
 
 
@@ -142,8 +141,17 @@ public class EventDataManager {
         dbRealtime.child(KEYS.MEMBER_TO_NEXT_EVENT).child(memberUid).setValue(newNextEvent.getEid());
     }
 
+    private void removeNextEvent(String memberUid) {
+        dbRealtime.child(KEYS.MEMBER_TO_NEXT_EVENT).child(memberUid).removeValue();
+    }
+
     private void storeMemberRegisteredEventsList(ClubMember member, ArrayList<String> list){
-        dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).setValue(list);
+        for(String eid : list)
+            dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).child(eid).setValue("");
+    }
+
+    private void removeEventFromMemberList(ClubMember member, Event event){
+        dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).child(event.getEid()).removeValue();
     }
 
     // Loads all events ids that a single member is registered to
@@ -153,7 +161,7 @@ public class EventDataManager {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<String> eventsIds = new ArrayList<>();
                 for(DataSnapshot child : snapshot.getChildren()){
-                    eventsIds.add(child.getValue(String.class));
+                    eventsIds.add(child.getKey());
                 }
                 loadEventsList(eventsIds,onLoaded);
             }
@@ -171,25 +179,29 @@ public class EventDataManager {
     public void unregisterMember(final ClubMember member, final Event event){
         event.unregisterMember(member);
 
-        // Updating the stored event object
-        dbRealtime.child(KEYS.EVENTS).child(generateDateStamp(event.getStartDateTime().toLocalDate())).child(event.getEid())
-                .child(KEYS.SAIL_MEMBERS_LIST).setValue(event.getRegisteredMembers());
 
 
         ValueEventListener onMembersEventsListLoaded = new ValueEventListener() {
             @SuppressWarnings("unchecked")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<String> registeredEvents;
-                if(snapshot.getValue()!=null)
-                    registeredEvents = (ArrayList<String>) snapshot.getValue();
+                ArrayList<String> registeredEvents = new ArrayList<>();
+                if(snapshot.getValue()!=null) {
+                    for(DataSnapshot child : snapshot.getChildren()){
+                        registeredEvents.add(child.getKey());
+                    }
+                }
                 else
                     return; // Member isn't signed to anything yet
                 registeredEvents.remove(event.getEid());
 
-                storeMemberRegisteredEventsList(member,registeredEvents);
+                removeEventFromMemberList(member, event);
                 updateNextEvent(member.getUid(),registeredEvents);
                 //Saving list of event itself and updating
+
+                dbRealtime.child(KEYS.EVENTS).child(generateDateStamp(event.getStartDateTime().toLocalDate())).child(event.getEid())
+                        .child(KEYS.EVENT_MEMBERS_LIST).setValue(event.getRegisteredMembers());
+                // Updating the stored event object
 
             }
 
@@ -200,6 +212,7 @@ public class EventDataManager {
         };
 
         dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onMembersEventsListLoaded);
+
 
     }
 
@@ -222,12 +235,16 @@ public class EventDataManager {
                 }
                 if(nextEvent!=null)
                     storeNextEvent(memberUid,nextEvent);
+                else
+                    removeNextEvent(memberUid);
             }
         };
 
         loadEventsList(usersEventsIds,onEventsLoaded);
 
     }
+
+
 
     // Loads all events from a single day
     public void loadEventsByDate(LocalDate day, final OnListLoadedListener<Event> onLoaded){

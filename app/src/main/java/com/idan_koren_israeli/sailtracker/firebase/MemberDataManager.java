@@ -58,7 +58,7 @@ public class MemberDataManager {
 
     private final static String TAG = "MemberDataManager";
 
-    private static final int PHOTOS_QUALITY = 100;
+    private static final int PHOTOS_QUALITY = 100; // Highest quality possible
 
     interface KEYS {
         String MEMBERS = "members";
@@ -150,7 +150,7 @@ public class MemberDataManager {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 ClubMember loadedMember = documentSnapshot.toObject(ClubMember.class);
                 if(loadedMember!=null)
-                    setCurrentUser(loadedMember);
+                    setCurrentMember(loadedMember);
                 if(onMemberLoaded!=null) {
                     onMemberLoaded.onMemberLoad(loadedMember);
                 }
@@ -222,7 +222,7 @@ public class MemberDataManager {
         return currentUser;
     }
 
-    public void setCurrentUser(ClubMember currentUserMember) {
+    public void setCurrentMember(ClubMember currentUserMember) {
         currentUser = currentUserMember;
         currentUserIsManager = null;
         isMemberStored(currentUser.getUid(), onCurrentUserSearched);
@@ -317,7 +317,8 @@ public class MemberDataManager {
             @Override
             public void onSuccess(ListResult gallery) {
                 for (final StorageReference photo : gallery.getItems()) {
-                    final long time = Long.parseLong(photo.getName());
+                    String photoTimeStamp = CommonUtils.getInstance().toNumericString(photo.getName());
+                    final long time = Long.parseLong(photoTimeStamp);
                     // All photos names are the times that they where taken in
                     // This prevents double-listeners concurrently, sync for uri AND metadata of each file
                     // This might be changed later.

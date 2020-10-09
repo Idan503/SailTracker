@@ -44,7 +44,7 @@ public class SearchActivity extends BaseActivity {
     private SearchView.OnQueryTextListener onSearchPerformed = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String input) {
-            String phoneNumber = CommonUtils.getInstance().convertStringToPhoneNumber(input);
+            String phoneNumber = CommonUtils.getInstance().toPhoneString(input);
             MemberDataManager.getInstance().loadMemberByPhone(phoneNumber, onMemberLoad);
             return false;
         }

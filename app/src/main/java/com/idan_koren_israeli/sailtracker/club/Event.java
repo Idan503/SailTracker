@@ -1,5 +1,7 @@
 package com.idan_koren_israeli.sailtracker.club;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.Exclude;
@@ -187,15 +189,19 @@ public class Event implements Serializable {
         if(registeredMembers==null)
             initRegisteredList();
 
+        member.deductPoints(getPrice());
+
         if(registeredMembers.contains(member.getUid())){
+            Log.i("pttt", registeredMembers.toString());
             throw new AlreadyRegisteredException(ALREADY_REGISTERED);
         }
 
-        if(maxMembersCount!= -1 && registeredMembers.size() == maxMembersCount)
+        if(maxMembersCount!= -1 && registeredMembers.size() == maxMembersCount) {
             throw new EventFullException(EVENT_FULL_MESSAGE);
+        }
         registeredMembers.add(member.getUid());
+
         member.addOneEvent();
-        member.deductPoints(getPrice());
 
         // updating the database
         MemberDataManager.getInstance().storeMember(member);

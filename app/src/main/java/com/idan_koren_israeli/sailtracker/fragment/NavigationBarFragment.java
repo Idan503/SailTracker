@@ -22,6 +22,7 @@ import com.idan_koren_israeli.sailtracker.activity.CalendarActivity;
 import com.idan_koren_israeli.sailtracker.activity.GalleryActivity;
 import com.idan_koren_israeli.sailtracker.activity.HomeActivity;
 import com.idan_koren_israeli.sailtracker.activity.SearchActivity;
+import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 
 /**
  * Navigator Bar: This fragment will be re-used in the apps activities
@@ -33,6 +34,7 @@ public class NavigationBarFragment extends Fragment {
     private ViewGroup parent;
     private LinearLayout home, calendar, gallery, search; // Activities options
     private BaseActivity currentActivity; // Parent activity of the fragment
+    private boolean clickable = true;
 
 
 
@@ -70,6 +72,7 @@ public class NavigationBarFragment extends Fragment {
         setIconColors();
         return parent;
     }
+
 
 
     // region Initialization Methods
@@ -124,6 +127,9 @@ public class NavigationBarFragment extends Fragment {
 
     // endregion
 
+    public void setClickable(boolean flag){
+        this.clickable = flag;
+    }
 
     // region Listeners
 
@@ -146,7 +152,7 @@ public class NavigationBarFragment extends Fragment {
     private View.OnClickListener calendarListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if(!isCurrentActivity(CalendarActivity.class)){
+            if(!isCurrentActivity(CalendarActivity.class) && clickable){
                 Intent intent = new Intent(currentActivity, CalendarActivity.class);
                 startActivity(intent);
                 currentActivity.finish();
@@ -157,7 +163,7 @@ public class NavigationBarFragment extends Fragment {
     private View.OnClickListener galleryListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if(!isCurrentActivity(GalleryActivity.class)){
+            if(!isCurrentActivity(GalleryActivity.class) && clickable){
                 Intent intent = new Intent(currentActivity, GalleryActivity.class);
                 startActivity(intent);
                 currentActivity.finish();
@@ -168,7 +174,7 @@ public class NavigationBarFragment extends Fragment {
     private View.OnClickListener searchListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if(!isCurrentActivity(SearchActivity.class)){
+            if(!isCurrentActivity(SearchActivity.class) && clickable){
                 Intent intent = new Intent(currentActivity, SearchActivity.class);
                 startActivity(intent);
                 currentActivity.finish();

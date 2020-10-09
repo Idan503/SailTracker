@@ -169,7 +169,7 @@ public class LoginFragment extends Fragment {
     private void checkUserNumber(){
         if(!phoneEditText.getText().toString().matches("")) {
             try {
-                currentPhone = CommonUtils.getInstance().convertStringToPhoneNumber(phoneEditText.getText().toString());
+                currentPhone = CommonUtils.getInstance().toPhoneString(phoneEditText.getText().toString());
                 manager.verifyPhoneNumber(currentPhone, onVerificationStateChanged);
             }
             catch (InputMismatchException err){
@@ -242,7 +242,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle instanceBundle) {
         if(!phoneEditText.getText().toString().matches("")) {
-            currentPhone = CommonUtils.getInstance().convertStringToPhoneNumber(phoneEditText.getText().toString());
+            currentPhone = CommonUtils.getInstance().toPhoneString(phoneEditText.getText().toString());
             instanceBundle.putString(KEYS.LOGIN_PHONE, currentPhone);
         }
         super.onSaveInstanceState(instanceBundle);
@@ -294,7 +294,7 @@ public class LoginFragment extends Fragment {
                 CommonUtils.getInstance().showToast("Too many requests");
             }
             else{
-                CommonUtils.getInstance().showToast("Failed - Unknown Cause");
+                CommonUtils.getInstance().showToast("Filed - Please try again later");
             }
         }
 

@@ -13,16 +13,14 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.UploadTask;
-import com.idan_koren_israeli.sailtracker.firebase.LoginManager;
 import com.idan_koren_israeli.sailtracker.fragment.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnLoginFinishedListener;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
+import com.idan_koren_israeli.sailtracker.fragment.NavigationBarFragment;
 import com.idan_koren_israeli.sailtracker.fragment.ProfileFragment;
 import com.idan_koren_israeli.sailtracker.fragment.LoginFragment;
 import com.idan_koren_israeli.sailtracker.fragment.NextEventFragment;
@@ -36,6 +34,7 @@ public class HomeActivity extends BaseActivity {
     private ProfileFragment profileFragment;
     private LoginFragment loginFragment;
     private LoadingFragment loadingFragment;
+    private NavigationBarFragment navigationBarFragment;
     private NextEventFragment nextEventFragment;
 
     @Override
@@ -52,9 +51,16 @@ public class HomeActivity extends BaseActivity {
             // No need for login, user is already authenticated
             hideLoginFragment();
             updateInterface();
+            navigationBarFragment.setClickable(true);
+
         }
-        else
+        else{
+            // User is not logged in, activity will wait for LoginFragment to finish
             loginFragment.setOnCompleteListener(onLoginFinished);
+            navigationBarFragment.setClickable(false);
+            Log.i("pttt", "NEED LOGIN");
+        }
+
     }
 
 
@@ -66,12 +72,12 @@ public class HomeActivity extends BaseActivity {
         loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_login);
         loadingFragment = (LoadingFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_loading);
         nextEventFragment = (NextEventFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_next_sailing);
-
+        navigationBarFragment = (NavigationBarFragment) getSupportFragmentManager().findFragmentById(R.id.home_FRAG_navigator_bar);
     }
 
 
     private void setListeners(){
-        profileFragment.getProfilePhoto().setOnLongClickListener(changeProfilePhoto);
+        profileFragment.getProfilePhoto().setOnClickListener(changeProfilePhoto);
     }
 
     private void hideLoginFragment()
@@ -96,15 +102,14 @@ public class HomeActivity extends BaseActivity {
 
     //region Profile Photo Change
 
-    private View.OnLongClickListener changeProfilePhoto = new View.OnLongClickListener() {
+    private View.OnClickListener changeProfilePhoto = new View.OnClickListener() {
         @Override
-        public boolean onLongClick(View view) {
+        public void onClick(View view) {
             if(user !=null) {
-                CommonUtils.getInstance().dispatchChoosePictureIntent(HomeActivity.this);
+                CommonUtils common = CommonUtils.getInstance();
+                common.dispatchChoosePictureIntent(HomeActivity.this,"Upload or take a picture...");
                 updateInterface();
-                return true;
             }
-            return false;
         }
     };
 
@@ -163,9 +168,10 @@ public class HomeActivity extends BaseActivity {
         public void onLoginFinished(ClubMember authenticatedMember) {
             user = authenticatedMember;
             if(user!=null) {
-                MemberDataManager.getInstance().setCurrentUser(user);
+                MemberDataManager.getInstance().setCurrentMember(user);
                 hideLoginFragment();
                 updateInterface();
+                navigationBarFragment.setClickable(true);
             }
         }
     };
