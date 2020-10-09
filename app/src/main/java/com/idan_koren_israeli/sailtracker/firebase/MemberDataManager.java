@@ -19,9 +19,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.OnProgressListener;
@@ -30,10 +33,13 @@ import com.google.firebase.storage.UploadTask;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinishedListener;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnMemberLoadListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnGalleryPhotoLoadListener;
 import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -49,6 +55,8 @@ public class MemberDataManager {
     private ClubMember currentUser; // A lot of calls will use the current user, so it is stored as a property.
     private Boolean currentUserIsManager = null; // prevents multiple db calls for same question, null when unknown
     // This prevents redundant calls to the database (Over and over for the same current user's clubmember).
+
+    private final static String TAG = "MemberDataManager";
 
     private static final int PHOTOS_QUALITY = 100;
 
@@ -106,6 +114,33 @@ public class MemberDataManager {
                     onMemberLoaded.onMemberLoad(documentSnapshot.toObject(ClubMember.class));
             }
         });
+    }
+
+    public void loadMembersList(List<String> uidsToLoad, final OnListLoadedListener<ClubMember> onLoaded){
+        //Using query to firestore database to get all uids
+
+        if(uidsToLoad.isEmpty()){
+            onLoaded.onListLoaded(new ArrayList<ClubMember>());
+            return;
+        }
+
+        OnCompleteListener<QuerySnapshot> listLoadComplete = new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<ClubMember> result = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                        result.add(document.toObject(ClubMember.class));
+                    }
+                    onLoaded.onListLoaded(result);
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        };
+
+        CollectionReference allMembers = dbFirestore.collection(KEYS.MEMBERS);
+        allMembers.whereIn("uid", uidsToLoad).get().addOnCompleteListener(listLoadComplete);
     }
 
     public void loadCurrentMember(String uid, final OnMemberLoadListener onMemberLoaded){

@@ -1,7 +1,5 @@
 package com.idan_koren_israeli.sailtracker.firebase;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -21,6 +19,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -70,15 +69,29 @@ public class EventDataManager {
         dbRealtime.child(KEYS.DATE_TO_EVENTS).child(eventTimeStamp).child(event.getEid()).setValue(event.getName());
     }
 
-    public void deleteEvent(Event event) {
-        Log.i("pttt", "Delteing " + event.getEid());
+    public void deleteEvent(final Event event) {
+        // Un-registering all users from this event that is gonna be deleted
+        OnListLoadedListener<ClubMember> onRegisterListLoaded = new OnListLoadedListener<ClubMember>() {
+            @Override
+            public void onListLoaded(List<ClubMember> list) {
+                for(ClubMember registeredMember : list){
+                    unregisterMember(registeredMember, event);
 
-        //delete from id -> event map
-        dbRealtime.child(KEYS.EVENTS).child(event.getEid()).removeValue();
+                }
 
-        //delete from date timestamp -> event map
-        String eventTimeStamp = generateDateStamp(event.getStartDateTime().toLocalDate());
-        dbRealtime.child(KEYS.DATE_TO_EVENTS).child(eventTimeStamp).child(event.getEid()).removeValue();
+                // Now we can delete event itself safely
+                //delete from id -> event map
+                dbRealtime.child(KEYS.EVENTS).child(event.getEid()).removeValue();
+
+                //delete from date timestamp -> event map
+                String eventTimeStamp = generateDateStamp(event.getStartDateTime().toLocalDate());
+                dbRealtime.child(KEYS.DATE_TO_EVENTS).child(eventTimeStamp).child(event.getEid()).removeValue();
+            }
+        };
+        MemberDataManager.getInstance().loadMembersList(event.getRegisteredMembers(), onRegisterListLoaded);
+
+
+
 
     }
 
@@ -142,7 +155,7 @@ public class EventDataManager {
                 for(DataSnapshot child : snapshot.getChildren()){
                     eventsIds.add(child.getValue(String.class));
                 }
-                loadEventsByIds(eventsIds,onLoaded);
+                loadEventsList(eventsIds,onLoaded);
             }
 
             @Override
@@ -195,7 +208,7 @@ public class EventDataManager {
 
         OnListLoadedListener<Event> onEventsLoaded = new OnListLoadedListener<Event>() {
             @Override
-            public void onListLoaded(ArrayList<Event> list) {
+            public void onListLoaded(List<Event> list) {
                 Event nextEvent = null;
                 long nextEventTime = Long.MAX_VALUE;
                 for(Event event : list){
@@ -212,7 +225,7 @@ public class EventDataManager {
             }
         };
 
-        loadEventsByIds(usersEventsIds,onEventsLoaded);
+        loadEventsList(usersEventsIds,onEventsLoaded);
 
     }
 
@@ -221,8 +234,8 @@ public class EventDataManager {
 
         final OnListLoadedListener<String> onIdsLoaded = new OnListLoadedListener<String>() {
             @Override
-            public void onListLoaded(ArrayList<String> list) {
-                loadEventsByIds(list, onLoaded);
+            public void onListLoaded(List<String> list) {
+                loadEventsList(list, onLoaded);
             }
         };
 
@@ -247,7 +260,7 @@ public class EventDataManager {
         );
     }
 
-    public void loadEventsByIds(final ArrayList<String> eventsIdsToLoad, final OnListLoadedListener<Event> listener){
+    public void loadEventsList(final List<String> eventsIdsToLoad, final OnListLoadedListener<Event> listener){
         ValueEventListener onDataLoaded = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

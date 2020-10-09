@@ -33,6 +33,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CalendarActivity extends BaseActivity {
 
@@ -79,7 +80,7 @@ public class CalendarActivity extends BaseActivity {
 
 
     // Loading the events into ui, parameter for manager/normal user view mode
-    private void initEventsList(boolean isCurrentUserManager, ArrayList<Event> registered) {
+    private void initEventsList(boolean isCurrentUserManager, List<Event> registered) {
         eventsRecycler.setLayoutManager(new LinearLayoutManager(this));
         EventRecyclerAdapter eventsAdapter;
 
@@ -170,7 +171,7 @@ public class CalendarActivity extends BaseActivity {
 
     private OnListLoadedListener<Event> onEventsLoaded = new OnListLoadedListener<Event>() {
         @Override
-        public void onListLoaded(ArrayList<Event> eventsLoaded) {
+        public void onListLoaded(List<Event> eventsLoaded) {
             eventsToShow.clear();
             eventsToShow.addAll(eventsLoaded);
             MemberDataManager.getInstance().isManagerMember(onCheckedManager);
@@ -189,7 +190,7 @@ public class CalendarActivity extends BaseActivity {
 
     private OnListLoadedListener<Event> onListLoadedListener = new OnListLoadedListener<Event>() {
         @Override
-        public void onListLoaded(ArrayList<Event> list) {
+        public void onListLoaded(List<Event> list) {
             // Code gets to here after we already know if the current user is a manager or not.
             // And also the list of the current user's member already registered events is loaded.
             initEventsList(managerView, list);

@@ -38,6 +38,7 @@ import org.joda.time.LocalDate;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GalleryActivity extends BaseActivity {
 
@@ -239,7 +240,7 @@ public class GalleryActivity extends BaseActivity {
 
         OnListLoadedListener<Event> onTodayEventsLoaded = new OnListLoadedListener<Event>() {
             @Override
-            public void onListLoaded(ArrayList<Event> todayEvents) {
+            public void onListLoaded(List<Event> todayEvents) {
                 ArrayList<Event> nowEvents = new ArrayList<>(); // All events that are right now
 
 

@@ -19,6 +19,7 @@ import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -63,14 +64,13 @@ public class HistoryActivity extends BaseActivity {
     }
 
     private OnListLoadedListener<Event> onEventsLoaded = new OnListLoadedListener<Event>() {
-
         @Override
-        public void onListLoaded(ArrayList<Event> list) {
+        public void onListLoaded(List<Event> list) {
             initEventsList(list);
         }
     };
 
-    private void initEventsList(ArrayList<Event> myEvents){
+    private void initEventsList(List<Event> myEvents){
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         SeparatedEventRecyclerAdapter eventsAdapter;
