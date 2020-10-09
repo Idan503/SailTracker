@@ -10,7 +10,8 @@
     <color name="colorPrimaryWhite">#D0D1D1</color>
     <color name="colorPrimaryText">#17212B</color>
     <color name="colorAccent">#73bfb8</color>
-    <color name="colorAccentYellow">#EB9D21</color>
+    <color name="colorAccentYellow">#FEC601</color>
+    <color name="colorAccentYellowDark">#DDAF0A</color>
     <color name="colorAccentOrange">#ea7317</color>
 
 

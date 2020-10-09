@@ -53,6 +53,7 @@ public class GalleryActivity extends BaseActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,6 +162,7 @@ public class GalleryActivity extends BaseActivity {
             }
             dbManager.storeGalleryPhoto(rotatedBitmap, photoUploadSuccess, photoUploadFailure, photoUploadProgress);
             photosFrag.showLoading();
+            captureButton.setVisibility(View.GONE);
         }
 
     }
@@ -216,6 +218,7 @@ public class GalleryActivity extends BaseActivity {
         public void onFailure(@NonNull Exception e) {
             CommonUtils.getInstance().showToast("Problem occurred.");
             photosFrag.hideLoading();
+            captureButton.setVisibility(View.VISIBLE);
         }
     };
 
@@ -292,4 +295,6 @@ public class GalleryActivity extends BaseActivity {
     };
 
     //endregion
+
+
 }

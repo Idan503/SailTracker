@@ -20,14 +20,17 @@
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.4"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="@android:color/darker_gray"
+            android:theme="@style/CalenderViewCustom"
+            android:dateTextAppearance="@style/CalenderViewDateCustomText"
+            android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"
+            android:background="@drawable/background_light_gradient"
             />
 
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.055"
+            app:layout_constraintHeight_percent="0.06"
             app:layout_constraintWidth_percent="0.4"
             app:layout_constraintTop_toBottomOf="@id/calendar_CALENDAR"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,13 +38,16 @@
             android:id="@+id/calendar_LBL_selected_day"
             android:gravity="center_vertical"
             android:text="@string/example_date"
-            android:layout_margin="5dp"
-            android:padding="4dp"
             app:layout_constraintBottom_toTopOf="@id/calendar_RCY_daily_events"
-            android:autoSizeMaxTextSize="35sp"
+            android:layout_marginTop="10dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="5dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:autoSizeMaxTextSize="22sp"
             android:autoSizeMinTextSize="12sp"
             android:autoSizeTextType="uniform"
-            android:layout_marginStart="10dp"
+            android:background="@drawable/background_calendar_date_title"
             />
 
 
@@ -80,7 +86,7 @@
             android:name="com.idan_koren_israeli.sailtracker.fragment.LoadingFragment"
             app:show_message="true"
             app:message="@string/loading_msg_events"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
 

@@ -60,6 +60,9 @@
     <!-- GALLERY SCREEN -->
     <string name="take_photo">Take a Photo</string>
 
+    <!-- HISTORY SCREEN -->
+    <string name="history_title">My Sails and Events</string>
+
     <!-- LOGIN SCREEN -->
     <string name="login_phone">Enter your phone number to log-in</string>
     <string name="login_code">We sent you an SMS with a verification code:</string>
@@ -82,7 +85,7 @@
 
     <!-- LABELS -->
     <string name="no_next_event">Register to an event and it will be appeared here…</string>
-    <string name="no_events_calendar">There is nothing currently planned this day…</string>
+    <string name="no_events_calendar">No Events or Sails were found…</string>
     <string name="future_events">Upcoming Sails and Events</string>
     <string name="past_events">Past Sails and Events</string>
 

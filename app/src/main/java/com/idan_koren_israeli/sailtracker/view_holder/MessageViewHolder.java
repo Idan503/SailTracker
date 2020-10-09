@@ -17,9 +17,14 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         findViews();
     }
 
+    public void setTextGravity(int gravity){
+        if(textView!=null)
+            textView.setGravity(gravity);
+    }
 
     public void setText(CharSequence text){
-        textView.setText(text);
+        if(textView!=null)
+            textView.setText(text);
     }
 
 

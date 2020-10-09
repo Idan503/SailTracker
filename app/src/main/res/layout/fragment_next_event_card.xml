@@ -55,7 +55,10 @@
                     android:autoSizeTextType="uniform"
                     android:id="@+id/next_event_LBL_event_name"
                     android:padding="5dp"
-                    android:autoSizeMaxTextSize="25sp"
+                    android:autoSizeMinTextSize="12sp"
+                    android:autoSizeMaxTextSize="20sp"
+                    android:layout_gravity="center|center_vertical"
+                    android:gravity="center"
                     />
 
 

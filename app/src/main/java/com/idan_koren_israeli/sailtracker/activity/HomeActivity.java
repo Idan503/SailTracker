@@ -107,7 +107,7 @@ public class HomeActivity extends BaseActivity {
         public void onClick(View view) {
             if(user !=null) {
                 CommonUtils common = CommonUtils.getInstance();
-                common.dispatchChoosePictureIntent(HomeActivity.this,"Upload or take a picture...");
+                common.dispatchChoosePictureIntent(HomeActivity.this,"Change profile picture...");
                 updateInterface();
             }
         }

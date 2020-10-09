@@ -1,6 +1,7 @@
 package com.idan_koren_israeli.sailtracker.adapter;
 import android.content.Context;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,6 +85,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             // showing message of "no events"
             MessageViewHolder messageHolder = (MessageViewHolder) holder;
             messageHolder.setText(context.getResources().getText(NO_EVENTS_LABEL));
+            messageHolder.setTextGravity(Gravity.CENTER_HORIZONTAL);
         }
         else {
             EventViewHolder eventHolder = (EventViewHolder) holder;

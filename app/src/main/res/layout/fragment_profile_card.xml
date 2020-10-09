@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorPrimaryWhite">
+    android:background="@drawable/background_light_gradient">
 
 
     <!-- setting image inside constraint layout in order to be able to force it to be squared -->
@@ -66,10 +66,10 @@
 
        <fragment
            android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
+           android:layout_height="35dp"
            app:layout_constraintStart_toStartOf="parent"
            app:layout_constraintTop_toBottomOf="@id/profile_LBL_name"
-           android:layout_marginTop="5dp"
+           android:layout_marginTop="4dp"
            android:name="com.idan_koren_israeli.sailtracker.fragment.PointsStatusFragment"
            tools:layout="@layout/fragment_points_status"
            android:id="@+id/profile_FRAG_points_status"
@@ -83,7 +83,7 @@
             android:autoSizeMaxTextSize="22sp"
             android:autoSizeTextType="uniform"
             android:text="@string/profile_events_history"
-            android:padding="4dp"
+            android:padding="3dp"
             android:lines="1"
             app:layout_constraintTop_toBottomOf="@id/profile_FRAG_points_status"
             app:layout_constraintBottom_toBottomOf="parent"

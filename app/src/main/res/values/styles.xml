@@ -71,5 +71,21 @@
         <item name="color">@color/colorPrimaryDark</item>
     </style>
 
+    <!-- Calendar Styles -->
+
+    <style name="CalenderViewCustom" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccentYellow</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryDarker</item>
+    </style>
+
+    <style name="CalenderViewDateCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/colorPrimaryDarker</item>
+        <item name="android:weekNumberColor">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
 
 </resources>

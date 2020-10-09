@@ -151,6 +151,7 @@ public class CalendarActivity extends BaseActivity {
     private OnEventClickedListener onUnregisterClicked = new OnEventClickedListener(){
         @Override
         public void onButtonClicked(Event eventClicked) {
+
             EventDataManager.getInstance().unregisterMember(currentUser, eventClicked);
             reloadData();
         }
