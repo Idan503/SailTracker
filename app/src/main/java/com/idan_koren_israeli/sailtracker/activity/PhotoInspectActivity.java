@@ -1,26 +1,14 @@
 package com.idan_koren_israeli.sailtracker.activity;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Display;
-import android.view.MotionEvent;
 import android.view.View;
-import android.webkit.RenderProcessGoneDetail;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
 
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -31,7 +19,6 @@ import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.fragment.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
-import com.idan_koren_israeli.sailtracker.fragment.PhotoCollectionFragment;
 
 
 /**
@@ -56,6 +43,7 @@ public class PhotoInspectActivity extends BaseActivity {
     private FloatingActionButton deleteFAB, backFAB;
 
     private ClubMember currentMember;
+    private boolean showDeleteButton = false;
 
     private static final int FADE_IN_DURATION = 450;
 
@@ -68,7 +56,7 @@ public class PhotoInspectActivity extends BaseActivity {
         currentMember = MemberDataManager.getInstance().getCurrentUser();
 
         findViews();
-        applyIntentPrefs();
+        retrieveIntentPrefs();
 
         setListeners();
         initPhotoView();
@@ -95,17 +83,16 @@ public class PhotoInspectActivity extends BaseActivity {
         });
     }
 
-    // Retrieving information from intent if its current user showing its own picture or not
-    private void applyIntentPrefs(){
-        boolean showDeleteButton = getIntent().getBooleanExtra(KEYS.SHOW_DELETE_BUTTON, false);
+    // When current user is viewing his own photo, it can be deleted
+    private void retrieveIntentPrefs(){
+        deleteFAB.setVisibility(View.GONE); // Starts at hidden
+        showDeleteButton = getIntent().getBooleanExtra(KEYS.SHOW_DELETE_BUTTON, false);
         displayedPhoto = (GalleryPhoto) getIntent().getSerializableExtra(KEYS.PHOTO_OBJ);
 
-        if(!showDeleteButton){
-            deleteFAB.setVisibility(View.GONE);
-        }
     }
 
     private void initPhotoView(){
+        // Using a web-image to control pinch to zoom and move by touch
         imageWeb.getSettings().setBuiltInZoomControls(true);
         imageWeb.getSettings().setDisplayZoomControls(false);
         imageWeb.getSettings().setLoadWithOverviewMode(true);
@@ -133,6 +120,17 @@ public class PhotoInspectActivity extends BaseActivity {
                     .alphaBy(1)
                     .setDuration(FADE_IN_DURATION)
                     .start();
+
+            // Current user viewing his own photo, so it can be deleted
+            if(showDeleteButton){
+                deleteFAB.setAlpha(0f);
+                deleteFAB.setVisibility(View.VISIBLE);
+                deleteFAB.animate()
+                        .alphaBy(1)
+                        .setDuration(FADE_IN_DURATION)
+                        .start();
+            }
+
         }
 
         @Override

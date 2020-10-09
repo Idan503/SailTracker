@@ -44,7 +44,7 @@
             android:id="@+id/gallery_FRAG_photo_collection"
             android:name="com.idan_koren_israeli.sailtracker.fragment.PhotoCollectionFragment"
             tools:layout="@layout/fragment_photo_collection"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

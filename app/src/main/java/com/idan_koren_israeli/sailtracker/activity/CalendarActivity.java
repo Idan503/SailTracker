@@ -211,7 +211,7 @@ public class CalendarActivity extends BaseActivity {
         public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
             loadingFragment.show();
             LocalDate dateSelected = new LocalDate(i,i1+1,i2);
-            dateTitle.setText(dateSelected.toString("dd/MM/YYYY"));
+            dateTitle.setText(dateSelected.toString("dd.MM.YYYY"));
             selectedDate = dateSelected;
             EventDataManager.getInstance().loadEventsByDate(dateSelected, onEventsLoaded);
         }

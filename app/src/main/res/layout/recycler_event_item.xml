@@ -55,6 +55,10 @@
                         android:includeFontPadding="false"
                         android:gravity="start|center"
                         android:id="@+id/event_item_LBL_name"
+                        android:paddingEnd="4dp"
+                        android:paddingStart="0dp"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
                         />
 
                     <TextView
@@ -63,7 +67,8 @@
                         android:layout_below="@id/event_item_LBL_name"
                         android:textSize="20sp"
                         android:autoSizeMinTextSize="14sp"
-                        android:autoSizeMaxTextSize="24sp"
+                        android:layout_marginTop="5dp"
+                        android:autoSizeMaxTextSize="20sp"
                         android:gravity="start"
                         android:text="@string/example_date"
                         android:id="@+id/event_item_LBL_date"
@@ -77,11 +82,12 @@
                         android:text="@string/example_hour_range"
                         android:lines="1"
                         android:autoSizeMinTextSize="14sp"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="3dp"
                         android:autoSizeMaxTextSize="18sp"
                         android:autoSizeTextType="uniform"
                         android:gravity="start"
                         android:id="@+id/event_item_LBL_time_of_day"
+                        android:visibility="gone"
                         />
 
 
@@ -91,7 +97,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:layout_width="wrap_content"
-                        android:layout_height="35dp"
+                        android:layout_height="40dp"
                         android:textSize="13sp"
                         android:text="@string/event_card_more_info"
                         android:autoSizeMinTextSize="12sp"

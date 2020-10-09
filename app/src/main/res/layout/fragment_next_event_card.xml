@@ -27,12 +27,12 @@
         >
 
 
-        <!-- Image will be loaded using Glide -->
+        <!-- This bg image will be loaded using Glide -->
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:elevation="0dp"
-            android:background="@android:color/black"
+            android:background="@color/light_grey"
             android:alpha="0.45"
             android:id="@+id/next_event_IMG_background"
             android:contentDescription="@string/my_next_event_title"
