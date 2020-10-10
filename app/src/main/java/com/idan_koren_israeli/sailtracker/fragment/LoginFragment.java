@@ -24,6 +24,7 @@ import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.firebase.LoginManager;
+import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnLoginFinishedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnMemberLoadListener;
 
@@ -139,17 +140,23 @@ public class LoginFragment extends Fragment {
         @Override
         public void onClick(View view) {
             switch (manager.getCurrentState()){
-                case CODE_SENT:
+                case CODE_SENT: // Code Screen
                     // Code user entered the code, we will check if it is correct
                     checkUserCode();
                     break;
-                case CODE_APPROVED:
+                case CODE_APPROVED: // Display Name Screen
                     // User type his profile name, setting it to the current logged profile
                     generateMember();
                     break;
-                case NOT_STARTED:
-                    // Verifying user's entered phone
-                    checkUserNumber();
+                case NOT_STARTED: // Phone number screen
+                    currentPhone = CommonUtils.getInstance().toPhoneString(phoneEditText.getText().toString());
+
+                    loadingFragment.show();
+                    // First we check if the phone number is already exists in our db
+                    MemberDataManager.getInstance().loadMemberByPhone(currentPhone, onMemberFoundByPhone);
+
+                    // verifyUserPhoneNUmber() is called in onNumberChecked callback
+
                     break;
             }
         }
@@ -166,10 +173,9 @@ public class LoginFragment extends Fragment {
 
     //region Authentication Steps Methods
     // Using input number to connect to firebase auth server
-    private void checkUserNumber(){
+    private void verifyUserPhoneNUmber(){
         if(!phoneEditText.getText().toString().matches("")) {
             try {
-                currentPhone = CommonUtils.getInstance().toPhoneString(phoneEditText.getText().toString());
                 manager.verifyPhoneNumber(currentPhone, onVerificationStateChanged);
             }
             catch (InputMismatchException err){
@@ -253,7 +259,22 @@ public class LoginFragment extends Fragment {
 
 
     //region Authentication Callbacks
-    OnCompleteListener<AuthResult> onSignInCompleted =  new OnCompleteListener<AuthResult>() {
+    private OnMemberLoadListener onMemberFoundByPhone = new OnMemberLoadListener() {
+        @Override
+        public void onMemberLoad(ClubMember memberLoaded) {
+            loadingFragment.hide();
+            if(memberLoaded==null)
+                verifyUserPhoneNUmber(); // New member -> new auth verify
+            else {
+                finishedListener.onLoginFinished(memberLoaded);
+                // Member is already exists in db
+            }
+
+        }
+    };
+
+
+    private OnCompleteListener<AuthResult> onSignInCompleted =  new OnCompleteListener<AuthResult>() {
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
             if (task.isSuccessful()) {
