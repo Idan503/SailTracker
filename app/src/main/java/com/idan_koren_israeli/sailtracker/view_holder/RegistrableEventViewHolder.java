@@ -1,6 +1,7 @@
 package com.idan_koren_israeli.sailtracker.view_holder;
 
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,8 +13,11 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
+import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.view_holder.listener.OnEventClickedListener;
+
+import org.joda.time.DateTime;
 
 /**
  * Event card with an option to register to the event.
@@ -43,9 +47,17 @@ public class RegistrableEventViewHolder extends EventViewHolder {
     }
 
 
-
     public void setEventContent(Event event){
         super.setEventContent(event);
+
+        if(event.getStartDateTime().getMillis() < DateTime.now().getMillis()){
+            // Event is already started
+            this.registerButton.setOnClickListener(onClickedAfterStarted);
+
+            ColorStateList disabledBackground = ContextCompat.getColorStateList(registerButton.getContext(), R.color.lighter_grey);
+            this.registerButton.setBackgroundTintList(disabledBackground);
+        }
+
     }
 
 
@@ -56,6 +68,9 @@ public class RegistrableEventViewHolder extends EventViewHolder {
 
     //region Register
     public void setRegisterButtonListener(final OnEventClickedListener register, final OnEventClickedListener unregister){
+        if(event.getStartDateTime().getMillis() < DateTime.now().getMillis())
+            return; // event already started, button should not be functional
+
         this.registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,20 +94,18 @@ public class RegistrableEventViewHolder extends EventViewHolder {
         if(!registered){
             String unregisterLabel = String.format(registerButton.getResources().getString(R.string.event_register_price_label), eventPrice);
             registerButton.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimaryDark));
-            Log.i("pttt", unregisterLabel);
             registerButton.setText(unregisterLabel);
         }
         else{
             String registerLabel = String.format(registerButton.getResources().getString(R.string.event_unregister_price_label), eventPrice);
             registerButton.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimary));
-            Log.i("pttt", registerLabel);
             registerButton.setText(registerLabel);
         }
     }
     //endregion
 
-    //region Delete Event
 
+    //region Delete Event
     private void setDeleteOption() {
         if(deletable)
             deleteButton.setOnClickListener(onDeleteButtonClicked);
@@ -118,6 +131,17 @@ public class RegistrableEventViewHolder extends EventViewHolder {
         @Override
         public void onClick(DialogInterface dialogInterface, int i) {
             EventDataManager.getInstance().deleteEvent(event);
+        }
+    };
+
+    //endregion
+
+    //region Unable to Register Callbacks
+
+    private View.OnClickListener onClickedAfterStarted = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            CommonUtils.getInstance().showToast("Event is already started");
         }
     };
 

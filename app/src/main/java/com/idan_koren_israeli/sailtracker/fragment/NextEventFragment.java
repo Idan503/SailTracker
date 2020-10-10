@@ -98,10 +98,6 @@ public class NextEventFragment extends Fragment {
             case MEMBERS_SAIL:
                 common.setImageResource(backgroundImage,R.drawable.img_members_sail);
                 break;
-
-
-
-
         }
 
     }

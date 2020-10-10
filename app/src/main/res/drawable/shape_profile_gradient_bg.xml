@@ -3,15 +3,15 @@
     android:shape="rectangle"
     >
     <stroke
-        android:color="@color/profile_photo_stroke"
-        android:width="2dp"
+        android:color="@color/colorPrimaryLight"
+        android:width="1.5dp"
         />
     <corners
-        android:radius="0dp"
+        android:radius="8dp"
         />
     <gradient
         android:angle="90"
-        android:endColor="#DFDBDB"
-        android:startColor="#C1C7CF"
+        android:endColor="#E6D9E2EA"
+        android:startColor="#C9D5E6F3"
         android:type="linear"/>
 </shape>

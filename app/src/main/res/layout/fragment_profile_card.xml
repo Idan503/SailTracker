@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/profile_IMG_picture"
-            android:background="@android:color/darker_gray"
+            android:background="@color/light_grey"
             app:strokeWidth="2dp"
             app:strokeColor="@color/profile_photo_stroke"
             app:layout_constraintTop_toTopOf="parent"

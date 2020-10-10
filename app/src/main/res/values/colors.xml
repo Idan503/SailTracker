@@ -2,6 +2,7 @@
 <resources>
 
     <!-- PRIMARY -->
+
     <color name="colorPrimary">#2364AA</color>
 
     <color name="colorPrimaryDark">#194677</color>
@@ -34,6 +35,8 @@
     <color name="colorText">#2C2C2C</color>
     <color name="photo_loading">#28282B</color>
     <color name="off_white">#eeeeee</color>
+
+    <color name="lighter_grey">#E3E3E3</color>
     <color name="light_grey">#cccccc</color>
 
     <color name="profile_photo_stroke">#1E01579B</color>

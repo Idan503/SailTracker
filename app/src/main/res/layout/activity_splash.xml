@@ -4,22 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
+    android:gravity="center"
+    android:orientation="vertical"
     android:background="@drawable/shape_light_gradient_bg"
+
     tools:context=".activity.SplashActivity">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/splash_LAY_parent"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:layout_width="256dp"
+            android:layout_height="256dp"
+            android:adjustViewBounds="true"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:padding="30dp"
+            android:src="@drawable/ic_launcher_foreground"
+            android:id="@+id/splash_IMG_icon"
+            android:contentDescription="@string/app_name"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="82dp"
+            android:id="@+id/splash_LBL_text"
+            android:text="@string/app_name"
+            android:layout_gravity="center_horizontal"
+            android:autoSizeMinTextSize="28dp"
+            android:autoSizeMaxTextSize="44dp"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:textStyle="italic|bold"
+            />
+
+    </LinearLayout>
 
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitCenter"
-        android:layout_gravity="center"
-
-        android:id="@+id/splash_IMG_icon"
-        android:contentDescription="@string/app_name"
-        />
-
-    <!--android:src="@drawable/ic_launcher_foreground"-->
 
 </LinearLayout>

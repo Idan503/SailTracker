@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
@@ -20,8 +22,11 @@ import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnMemberLoadListene
 
 public class SplashActivity extends AppCompatActivity {
 
-    private ImageView appIcon;
-    private static final int DURATION = 1500; //in ms
+    private LinearLayout parentLayout;
+    private ImageView iconImage;
+    private TextView labelText;
+    private static final int ANIMATION_DURATION = 1500; //in ms
+    private static final int CHANGE_TEXT_DELAY = 500; //in ms
 
     private SharedPrefsManager sp;
     private boolean startAppAsAnimationEnds = false;
@@ -72,23 +77,25 @@ public class SplashActivity extends AppCompatActivity {
     };
 
     private void findViews(){
-        appIcon = findViewById(R.id.splash_IMG_icon);
+        parentLayout = findViewById(R.id.splash_LAY_parent);
+        iconImage = findViewById(R.id.splash_IMG_icon);
+        labelText = findViewById(R.id.splash_LBL_text);
 
     }
 
     private void applySource(){
-        CommonUtils.getInstance().setImageResource(appIcon, R.drawable.ic_launcher_foreground);
+        CommonUtils.getInstance().setImageResource(iconImage, R.drawable.ic_launcher_foreground);
     }
 
     private void applyAnimation(){
-        appIcon.setScaleX(0.55f);
-        appIcon.setScaleY(0.55f);
-        appIcon.setAlpha(0.0f);
-        appIcon.animate()
+        parentLayout.setScaleX(0.55f);
+        parentLayout.setScaleY(0.55f);
+        parentLayout.setAlpha(0.0f);
+        parentLayout.animate()
                 .alpha(1.0f)
                 .scaleX(1.0f)
                 .scaleY(1.0f)
-                .setDuration(DURATION)
+                .setDuration(ANIMATION_DURATION)
                 .setInterpolator(new LinearInterpolator())
                 .setListener(new Animator.AnimatorListener() {
                     @Override
@@ -100,6 +107,19 @@ public class SplashActivity extends AppCompatActivity {
                     public void onAnimationEnd(Animator animator) {
                         if(startAppAsAnimationEnds)
                             startApp();
+                        else
+                        {
+                            final Handler handler = new Handler(Looper.getMainLooper());
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    labelText.setText(getResources().getString(R.string.label_loading_splash_screen));
+                                }
+                            }, CHANGE_TEXT_DELAY);
+
+                        }
+
+
                     }
 
                     @Override

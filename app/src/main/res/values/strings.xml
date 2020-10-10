@@ -27,9 +27,7 @@
 
     <!-- NEXT SAIL FRAGMENT -->
     <string name="my_next_event_title">My Next Event</string>
-    <string name="my_next_event_load_name">Loading Your Next Event</string>
-    <string name="my_next_event_load_date">00.00.0000</string>
-    <string name="my_next_event_load_hour">00:00</string>
+    <string name="my_next_event_load_name">Loading Your Next Event…</string>
 
     <!-- EVENT TYPES -->
     <string name="evening_event">Evening\nEvent</string>
@@ -90,6 +88,7 @@
     <string name="label_no_events_calendar">No Events or Sails were found…</string>
     <string name="label_future_events">Upcoming Sails and Events</string>
     <string name="label_past_events">Past Sails and Events</string>
+    <string name="label_loading_splash_screen">Loading…</string>
 
 
     <!-- LOADING MESSAGES -->
