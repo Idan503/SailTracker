@@ -36,5 +36,4 @@ public abstract class BaseActivity extends AppCompatActivity {
         if(backgroundImage!=null)
             CommonUtils.getInstance().setImageResource(backgroundImage,R.drawable.img_background);
     }
-
 }

@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -60,17 +59,17 @@ public class GalleryActivity extends BaseActivity {
         setContentView(R.layout.activity_gallery);
 
         dbManager = MemberDataManager.getInstance();
-        member = dbManager.getCurrentUser();
+        member = dbManager.getCurrentMember();
 
         findViews();
         captureButton.setVisibility(View.GONE);
         initCurrentlyInEvent();
         // Will be shown after we will know if user is currently in event
 
-        photosFrag.setMember(dbManager.getCurrentUser());
-        dbManager.loadGallery(dbManager.getCurrentUser().getUid(),photoLoaded);
+        photosFrag.setMember(dbManager.getCurrentMember());
+        dbManager.loadGallery(dbManager.getCurrentMember().getUid(),photoLoaded);
 
-        profileFrag.setMember(dbManager.getCurrentUser());
+        profileFrag.setMember(dbManager.getCurrentMember());
     }
 
     private OnGalleryPhotoLoadListener photoLoaded = new OnGalleryPhotoLoadListener() {

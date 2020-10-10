@@ -4,11 +4,11 @@
     <!-- PRIMARY -->
     <color name="colorPrimary">#2364AA</color>
 
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorPrimaryDarker">#1A237E</color>
-    <color name="colorPrimaryDarkest">#0a1e33</color>
+    <color name="colorPrimaryDark">#194677</color>
+    <color name="colorPrimaryDarker">#0a1e33</color>
+    <color name="colorPrimaryDarkest">#030a11</color>
 
-    <color name="colorPrimaryLight">#64B5F6</color>
+    <color name="colorPrimaryLight">#6593c4</color>
     <color name="colorPrimaryLighter">#90CAF9</color>
     <color name="colorPrimaryLightest">#E3F2FD</color>
 

@@ -3,7 +3,6 @@ package com.idan_koren_israeli.sailtracker.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.TextView;
@@ -53,7 +52,7 @@ public class CalendarActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
-        currentUser = MemberDataManager.getInstance().getCurrentUser();
+        currentUser = MemberDataManager.getInstance().getCurrentMember();
         findViews();
         initAddedEvent();
 

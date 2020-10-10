@@ -354,7 +354,7 @@ public class EventDataManager {
 
     // Overloading - no member parameter applies to the current user's ClubMember
     public void loadRegisteredEvents(final OnListLoadedListener<Event> listener){
-        loadRegisteredEvents(MemberDataManager.getInstance().getCurrentUser(), listener);
+        loadRegisteredEvents(MemberDataManager.getInstance().getCurrentMember(), listener);
     }
 
 }

@@ -5,39 +5,43 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
-import com.idan_koren_israeli.sailtracker.firebase.LoginManager;
+import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinishedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnMemberLoadListener;
 
 public class SplashActivity extends AppCompatActivity {
 
     private ImageView appIcon;
-    private static final int DURATION = 1250; //in ms
+    private static final int DURATION = 1500; //in ms
+
+    private SharedPrefsManager sp;
+    private boolean startAppAsAnimationEnds = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        sp = SharedPrefsManager.getInstance();
+
         // Loading already authenticated user (if exists) into local data while splashscreen is showing
-        FirebaseUser authenticatedUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(authenticatedUser!=null){
-            MemberDataManager.getInstance().loadCurrentMember(authenticatedUser.getUid(),null);
+        String loggedPhone = sp.getString(SharedPrefsManager.KEYS.CURRENT_USER_PHONE,null);
+        if(loggedPhone !=null){
+            MemberDataManager.getInstance().isMemberStoredByPhone(loggedPhone, onCurrentMemberFound);
+            MemberDataManager.getInstance().loadMemberByPhone(loggedPhone,onCurrentMemberLoaded);
+        }
+        else{
+            startAppAsAnimationEnds = true;
+            // Nothing to check w/ db, app can start
         }
 
 
@@ -51,7 +55,19 @@ public class SplashActivity extends AppCompatActivity {
     private OnMemberLoadListener onCurrentMemberLoaded = new OnMemberLoadListener() {
         @Override
         public void onMemberLoad(ClubMember memberLoaded) {
+            MemberDataManager.getInstance().setCurrentMember(memberLoaded);
             startApp();
+            // User found and set, app can start
+        }
+    };
+
+    private OnCheckFinishedListener onCurrentMemberFound = new OnCheckFinishedListener() {
+        @Override
+        public void onCheckFinished(boolean result) {
+            if(!result){
+                startApp();
+                // User is not found in the database, start app to login
+            }
         }
     };
 
@@ -65,8 +81,8 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void applyAnimation(){
-        appIcon.setScaleX(0.6f);
-        appIcon.setScaleY(0.6f);
+        appIcon.setScaleX(0.55f);
+        appIcon.setScaleY(0.55f);
         appIcon.setAlpha(0.0f);
         appIcon.animate()
                 .alpha(1.0f)
@@ -77,19 +93,24 @@ public class SplashActivity extends AppCompatActivity {
                 .setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animator) {
-                        appIcon.setVisibility(View.VISIBLE);
+
                     }
 
                     @Override
                     public void onAnimationEnd(Animator animator) {
-                        startApp();
+                        if(startAppAsAnimationEnds)
+                            startApp();
                     }
 
                     @Override
-                    public void onAnimationCancel(Animator animator) { }
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
 
                     @Override
-                    public void onAnimationRepeat(Animator animator) { }
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
                 });
     }
     

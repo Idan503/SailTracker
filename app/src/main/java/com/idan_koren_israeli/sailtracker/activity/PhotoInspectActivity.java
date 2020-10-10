@@ -53,7 +53,7 @@ public class PhotoInspectActivity extends BaseActivity {
         setContentView(R.layout.activity_photo_inspect);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
         // Letting the user change to landscape mode when viewing photo
-        currentMember = MemberDataManager.getInstance().getCurrentUser();
+        currentMember = MemberDataManager.getInstance().getCurrentMember();
 
         findViews();
         retrieveIntentPrefs();

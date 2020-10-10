@@ -85,7 +85,7 @@ public class SearchActivity extends BaseActivity {
                 CommonUtils.getInstance().showToast("User could not be found");
                 return;
             }
-            if(memberLoaded!= MemberDataManager.getInstance().getCurrentUser()) {
+            if(memberLoaded!= MemberDataManager.getInstance().getCurrentMember()) {
                 // Result found - loading the requested gallery
                 MemberDataManager.getInstance().loadGallery(memberLoaded.getUid(), photoLoaded);
                 profileFragment.setMember(memberLoaded);

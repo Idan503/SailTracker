@@ -6,29 +6,21 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.text.InputType;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.radiobutton.MaterialRadioButton;
-import com.google.api.Distribution;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
-
-import org.joda.time.LocalDate;
 
 import java.util.Locale;
 
@@ -67,7 +59,7 @@ public class PointsStatusFragment extends Fragment {
         findViews(parent);
 
         // by default view will start as the current member
-        ClubMember current = MemberDataManager.getInstance().getCurrentUser();
+        ClubMember current = MemberDataManager.getInstance().getCurrentMember();
         if(current!=null)
             setMember(current);
         return parent;
@@ -101,7 +93,7 @@ public class PointsStatusFragment extends Fragment {
     };
 
     private void showPurchaseDialog(Context context, final RadioGroup options){
-        final ClubMember currentMember = MemberDataManager.getInstance().getCurrentUser();
+        final ClubMember currentMember = MemberDataManager.getInstance().getCurrentMember();
         MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
         dialog.setTitle("Purchase Points");
         dialog.setMessage("How many points would you like to purchase?");

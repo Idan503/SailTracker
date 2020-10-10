@@ -52,7 +52,7 @@ public class MemberDataManager {
     private FirebaseStorage dbStorage; // used for storing photos information (gallery and profile)
     private CommonUtils common;
 
-    private ClubMember currentUser; // A lot of calls will use the current user, so it is stored as a property.
+    private ClubMember currentMember; // A lot of calls will use the current user, so it is stored as a property.
     private Boolean currentUserIsManager = null; // prevents multiple db calls for same question, null when unknown
     // This prevents redundant calls to the database (Over and over for the same current user's clubmember).
 
@@ -101,8 +101,8 @@ public class MemberDataManager {
 
     // Uid is the primary key of the firestore database
     public void loadMember(String uid, final OnMemberLoadListener onMemberLoaded) {
-        if (currentUser!=null && uid.equals(currentUser.getUid())){
-            onMemberLoaded.onMemberLoad(currentUser);
+        if (currentMember !=null && uid.equals(currentMember.getUid())){
+            onMemberLoaded.onMemberLoad(currentMember);
             return; // currentuser is already loaded
         }
 
@@ -158,6 +158,7 @@ public class MemberDataManager {
         });
     }
 
+
     // Writing a member as an object into firestore
     public void storeMember(ClubMember member) {
         dbFirestore.collection(KEYS.MEMBERS)
@@ -190,42 +191,72 @@ public class MemberDataManager {
         });
     }
 
-    public void loadMemberByPhone(String phoneNumber, final OnMemberLoadListener onMemberLoaded){
-        if (currentUser!=null && phoneNumber.equals(currentUser.getPhoneNumber())){
-            onMemberLoaded.onMemberLoad(currentUser);
+    public void isMemberStoredByPhone(@NonNull final String phoneNumber, final OnCheckFinishedListener onCheckFinished){
+        if(onCheckFinished!=null)
+            dbRealtime.child(KEYS.PHONE_TO_MEMBERS).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.hasChild(phoneNumber)){
+                        //exists
+                        onCheckFinished.onCheckFinished(true);
+                    }
+                    else
+                        onCheckFinished.onCheckFinished(false);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    onCheckFinished.onCheckFinished(false);
+                    CommonUtils.getInstance().showToast("There was a problem.");
+                    Log.e(TAG,error.getDetails());
+                }
+            });
+
+    }
+
+    public void loadMemberByPhone(@NonNull final String phoneNumber,
+                                  @Nullable final OnMemberLoadListener onMemberLoaded){
+        if (currentMember !=null && phoneNumber.equals(currentMember.getPhoneNumber())){
+            onMemberLoaded.onMemberLoad(currentMember);
             return; // currentuser is already loaded
         }
 
-        dbRealtime.child(KEYS.PHONE_TO_MEMBERS).child(phoneNumber).addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@Nullable DataSnapshot snapshot) {
-                        if(snapshot==null || snapshot.getValue()==null)
-                            onMemberLoaded.onMemberLoad(null); // Member could not be found
-                        else {
-                            String memberUid = Objects.requireNonNull(snapshot.getValue()).toString();
-                            loadMember(memberUid, onMemberLoaded); // Load member by the uid we got from rtdb
+        //region ClubMember Object Load Listening
+        if(onMemberLoaded!=null)
+            dbRealtime.child(KEYS.PHONE_TO_MEMBERS).child(phoneNumber).addListenerForSingleValueEvent(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@Nullable DataSnapshot snapshot) {
+                            if(snapshot==null || snapshot.getValue()==null)
+                                onMemberLoaded.onMemberLoad(null); // Member could not be found
+                            else {
+                                String memberUid = Objects.requireNonNull(snapshot.getValue()).toString();
+                                loadMember(memberUid, onMemberLoaded); // Load member by the uid we got from rtdb
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            onMemberLoaded.onMemberLoad(null);
+                            CommonUtils.getInstance().showToast("There was a problem.");
+                            Log.e(TAG,error.getDetails());
                         }
                     }
+            );
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                }
-        );
+        //endregion
 
     }
 
 
-    public ClubMember getCurrentUser() {
-        return currentUser;
+    public ClubMember getCurrentMember() {
+        return currentMember;
     }
 
     public void setCurrentMember(ClubMember currentUserMember) {
-        currentUser = currentUserMember;
+        currentMember = currentUserMember;
         currentUserIsManager = null;
-        isMemberStored(currentUser.getUid(), onCurrentUserSearched);
+        isMemberStored(currentMember.getUid(), onCurrentUserSearched);
     }
 
 
@@ -233,9 +264,7 @@ public class MemberDataManager {
         @Override
         public void onCheckFinished(boolean found) {
             if(!found) {
-                Log.i("pttt", currentUser.toString());
-                storeMember(currentUser);
-
+                storeMember(currentMember);
             }
         }
     };
@@ -257,13 +286,13 @@ public class MemberDataManager {
                                 String[] allManagersUid = allManagersUidString.split(KEYS.ALL_MANAGERS_REGEX);
                                 for(String uid : allManagersUid){
                                     if(member.getUid().equals(uid)){
-                                        if(member==currentUser)
+                                        if(member== currentMember)
                                             currentUserIsManager = true;
                                         onFinish.onCheckFinished(true); // member uid found in list of managers
                                         return;
                                     }
                                 }
-                                if(member==currentUser)
+                                if(member== currentMember)
                                     currentUserIsManager = false;
                                 onFinish.onCheckFinished(false); // not found in the list
                             }
@@ -352,7 +381,7 @@ public class MemberDataManager {
                                   OnProgressListener<UploadTask.TaskSnapshot> onProgress) {
 
         byte[] bytes = common.convertBitmapToBytes(photo, PHOTOS_QUALITY);
-        String fileName = Long.toString(Timestamp.now().getSeconds());
+        String fileName = (Timestamp.now().getSeconds()) + ".png";
         // Name of picture is its time, user will not take 2 pictures in the same second
         // This will be helpful to sort pictures by time without the need of 2 concurrent callbacks (uri & time - metadata)
         // This might be changed later on.
@@ -381,30 +410,30 @@ public class MemberDataManager {
     //region Method Overloading: no uid parameter -> apply to currentUser
     public void loadProfilePhoto(OnSuccessListener<Uri> onSuccess,
                                  OnFailureListener onFailure) {
-        loadProfilePhoto(currentUser.getUid(), onSuccess, onFailure);
+        loadProfilePhoto(currentMember.getUid(), onSuccess, onFailure);
     }
 
     public void storeProfilePhoto(Bitmap photo,
                                   OnSuccessListener<UploadTask.TaskSnapshot> onSuccess,
                                   OnFailureListener onFailure) {
-        storeProfilePhoto(currentUser.getUid(), photo, onSuccess, onFailure);
+        storeProfilePhoto(currentMember.getUid(), photo, onSuccess, onFailure);
     }
 
     public void loadGallery(final OnGalleryPhotoLoadListener onLoaded) {
-        loadGallery(currentUser.getUid(),onLoaded);
+        loadGallery(currentMember.getUid(),onLoaded);
     }
 
     public void storeGalleryPhoto(Bitmap photo,
                                   OnSuccessListener<UploadTask.TaskSnapshot> onSuccess,
                                   OnFailureListener onFailure,
                                   OnProgressListener<UploadTask.TaskSnapshot> onProgress) {
-        storeGalleryPhoto(currentUser.getUid(), photo, onSuccess, onFailure, onProgress);
+        storeGalleryPhoto(currentMember.getUid(), photo, onSuccess, onFailure, onProgress);
     }
 
     public void isManagerMember(final OnCheckFinishedListener onFinish){
         if(currentUserIsManager != null) // answer is already known
             onFinish.onCheckFinished(currentUserIsManager); // prevent multiple db calls
-        isManagerMember(currentUser,onFinish);
+        isManagerMember(currentMember,onFinish);
     }
 
 

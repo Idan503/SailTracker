@@ -48,7 +48,7 @@ public class HomeActivity extends BaseActivity {
         setListeners();
         loadBannerImage();
 
-        user = MemberDataManager.getInstance().getCurrentUser();
+        user = MemberDataManager.getInstance().getCurrentMember();
         if(user!=null) {
             // No need for login, user is already authenticated
             hideLoginFragment();
@@ -58,6 +58,7 @@ public class HomeActivity extends BaseActivity {
         }
         else{
             // User is not logged in, activity will wait for LoginFragment to finish
+            Log.i("pttt", "NULL");
             loginFragment.setOnCompleteListener(onLoginFinished);
             navigationBarFragment.setClickable(false);
         }

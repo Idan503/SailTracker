@@ -17,12 +17,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
 import com.idan_koren_israeli.sailtracker.firebase.LoginManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnLoginFinishedListener;
@@ -54,6 +58,7 @@ public class LoginFragment extends Fragment {
     private OnLoginFinishedListener finishedListener;
 
     private LoginManager manager;
+    private SharedPrefsManager sp;
 
 
     public LoginFragment() {
@@ -82,8 +87,11 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(getActivity()!=null)
+        sp = SharedPrefsManager.getInstance();
+
+        if(getActivity()!=null) {
             manager = LoginManager.getInstance(getActivity());
+        }
 
         if(savedInstanceState!=null) {
             currentPhone = savedInstanceState.getString(KEYS.LOGIN_PHONE);
@@ -113,7 +121,6 @@ public class LoginFragment extends Fragment {
 
         findViews(parent);
         setListeners();
-        //loadingFragment.show();
 
         return parent;
     }
@@ -153,7 +160,7 @@ public class LoginFragment extends Fragment {
 
                     loadingFragment.show();
                     // First we check if the phone number is already exists in our db
-                    MemberDataManager.getInstance().loadMemberByPhone(currentPhone, onMemberFoundByPhone);
+                    MemberDataManager.getInstance().loadMemberByPhone(currentPhone, onMemberLoaded);
 
                     // verifyUserPhoneNUmber() is called in onNumberChecked callback
 
@@ -259,15 +266,16 @@ public class LoginFragment extends Fragment {
 
 
     //region Authentication Callbacks
-    private OnMemberLoadListener onMemberFoundByPhone = new OnMemberLoadListener() {
+    private OnMemberLoadListener onMemberLoaded = new OnMemberLoadListener() {
         @Override
         public void onMemberLoad(ClubMember memberLoaded) {
             loadingFragment.hide();
             if(memberLoaded==null)
                 verifyUserPhoneNUmber(); // New member -> new auth verify
             else {
-                finishedListener.onLoginFinished(memberLoaded);
                 // Member is already exists in db
+                sp.putString(SharedPrefsManager.KEYS.CURRENT_USER_PHONE, currentPhone); // storing for next login
+                finishedListener.onLoginFinished(memberLoaded);
             }
 
         }
