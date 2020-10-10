@@ -25,9 +25,9 @@ import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 public class EventViewHolder extends RecyclerView.ViewHolder {
 
     private interface IMAGE_ID_KEYS{
-        int FREE_EVENT = R.drawable.ic_launcher_foreground;
-        int GUIDED_SAIL = R.drawable.ic_launcher_background;
-        int MEMBERS_SAIL = R.drawable.img_blank_profile;
+        int EVENING_EVENT = R.drawable.img_evening_event;
+        int GUIDED_SAIL = R.drawable.img_guided_sail;
+        int MEMBERS_SAIL = R.drawable.img_members_sail;
     }
 
     protected Event event;
@@ -176,7 +176,7 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         CommonUtils common = CommonUtils.getInstance();
         switch (type){
             case FREE_EVENT:
-                common.setImageResource(image, IMAGE_ID_KEYS.FREE_EVENT);
+                common.setImageResource(image, IMAGE_ID_KEYS.EVENING_EVENT);
                 break;
             case GUIDED_SAIL:
                 common.setImageResource(image, IMAGE_ID_KEYS.GUIDED_SAIL);

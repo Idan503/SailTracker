@@ -15,14 +15,15 @@
         android:layout_weight="0.92"
         >
 
-        <ImageView
+        <View
             style="@style/BackgroundImageView"
-            android:id="@+id/base_IMG_background"
+            android:id="@+id/calendar_VIEW_background"
             android:contentDescription="@string/background"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:background="@color/colorPrimaryLightest"
             />
 
 
@@ -85,7 +86,9 @@
             app:layout_constraintTop_toBottomOf="@id/calendar_LBL_selected_day"
             app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/calendar_RCY_daily_events"
-            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
             />
 
         <fragment
