@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
+import com.idan_koren_israeli.sailtracker.club.enums.EventType;
+import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventLoadedListener;
 
@@ -77,9 +79,31 @@ public class NextEventFragment extends Fragment {
         titleText.setText(sail.getName());
         dateText.setText(generateDateString(sail.getStartDateTime()));
         startTimeText.setText(generateTimeOfDayString(sail.getStartDateTime()));
+        setBackgroundResource(sail.getType());
+
         showExtraInfo();
 
         // SET BACKGROUND IMAGE...
+    }
+
+    private void setBackgroundResource(EventType type){
+        CommonUtils common = CommonUtils.getInstance();
+        switch (type){
+            case FREE_EVENT:
+                common.setImageResource(backgroundImage,R.drawable.img_evening_event);
+                break;
+            case GUIDED_SAIL:
+                common.setImageResource(backgroundImage,R.drawable.img_guided_sail);
+                break;
+            case MEMBERS_SAIL:
+                common.setImageResource(backgroundImage,R.drawable.img_members_sail);
+                break;
+
+
+
+
+        }
+
     }
 
     public void setNoEvent(){

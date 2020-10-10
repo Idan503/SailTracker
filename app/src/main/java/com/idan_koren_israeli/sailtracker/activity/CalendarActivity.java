@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.exception.AlreadyRegisteredException;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
@@ -70,6 +72,7 @@ public class CalendarActivity extends BaseActivity {
         }
 
         if(addedEvent!=null) {
+            // Back from @AddEventActivity
             EventDataManager.getInstance().storeEvent(addedEvent);
             selectedDate = addedEvent.getStartDateTime().toLocalDate();
             calendar.setDate(selectedDate.toDateTimeAtStartOfDay().getMillis());

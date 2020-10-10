@@ -7,10 +7,6 @@
     tools:context=".activity.HomeActivity"
     >
 
-    <ImageView
-        style="@style/BackgroundImageView"
-        android:id="@+id/base_IMG_background"
-        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,6 +20,16 @@
         android:layout_height="0dp"
         android:layout_weight="0.92"
         >
+
+        <ImageView
+            style="@style/BackgroundImageView"
+            android:id="@+id/base_IMG_background"
+            android:contentDescription="@string/background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
 
         <View
             android:layout_width="0dp"

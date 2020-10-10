@@ -15,6 +15,18 @@
         android:layout_weight="0.92"
         >
 
+        <ImageView
+            style="@style/BackgroundImageView"
+            android:id="@+id/base_IMG_background"
+            android:contentDescription="@string/background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+
+
         <CalendarView
             android:id="@+id/calendar_CALENDAR"
             android:layout_width="match_parent"

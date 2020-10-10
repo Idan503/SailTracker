@@ -32,12 +32,16 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="BackgroundImageView" parent="Widget.AppCompat.ImageButton">
+    <style name="BackgroundImageView">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:scaleType">centerCrop</item>
-        <item name="android:alpha">0.35</item>
         <item name="android:contentDescription">@string/background</item>
+        <item name="android:alpha">0.355</item>
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
     </style>
 
 

@@ -5,8 +5,17 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/shape_light_gradient_bg"
-    android:id="@+id/base_IMG_background"
     tools:context=".activity.AddEventActivity">
+
+    <ImageView
+        style="@style/BackgroundImageView"
+        android:id="@+id/base_IMG_background"
+        android:contentDescription="@string/background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
     <TextView
         android:id="@+id/add_event_LBL_title"

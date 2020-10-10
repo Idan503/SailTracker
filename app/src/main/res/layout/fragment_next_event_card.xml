@@ -28,12 +28,22 @@
 
 
         <!-- This bg image will be loaded using Glide -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="0dp"
+            android:background="#C1C7CF"
+            android:alpha="0.95"
+            android:contentDescription="@string/my_next_event_title"
+            />
+
+        <!-- This bg image will be loaded using Glide -->
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:elevation="0dp"
-            android:background="@color/light_grey"
-            android:alpha="0.45"
+            android:alpha="0.2"
+            android:scaleType="centerCrop"
             android:id="@+id/next_event_IMG_background"
             android:contentDescription="@string/my_next_event_title"
             />
@@ -56,7 +66,7 @@
                     android:id="@+id/next_event_LBL_event_name"
                     android:padding="5dp"
                     android:autoSizeMinTextSize="12sp"
-                    android:autoSizeMaxTextSize="20sp"
+                    android:autoSizeMaxTextSize="24sp"
                     android:layout_gravity="center|center_vertical"
                     android:gravity="center"
                     />
@@ -78,7 +88,7 @@
                         android:text="@string/my_next_event_load_date"
                         android:autoSizeTextType="uniform"
                         android:autoSizeMaxTextSize="25sp"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:id="@+id/next_event_LBL_date"
                         />
 
@@ -88,8 +98,8 @@
                         android:text="@string/my_next_event_load_hour"
                         android:autoSizeTextType="uniform"
                         android:id="@+id/next_event_LBL_start_time"
+                        android:textSize="18sp"
                         android:autoSizeMaxTextSize="25sp"
-                        android:textSize="16sp"
                         />
 
 

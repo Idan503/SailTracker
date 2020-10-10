@@ -78,7 +78,8 @@ public class PhotoCollectionFragment extends Fragment {
     }
 
     private void updateUI(){
-        adapter = new PhotoCollectionAdapter(getContext(),getMemberPhotos());
+        if(getContext()!=null)
+            adapter = new PhotoCollectionAdapter(getContext(),getMemberPhotos());
         adapter.setPhotoClickListener(onPhotoClicked);
         recyclerView.setAdapter(adapter);
     }
