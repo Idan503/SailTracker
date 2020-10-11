@@ -5,9 +5,11 @@ import androidx.annotation.NonNull;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,6 +22,9 @@ import com.idan_koren_israeli.sailtracker.fragment.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
 
+import org.joda.time.Chronology;
+import org.joda.time.DateTime;
+
 
 /**
  *
@@ -31,7 +36,7 @@ import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
 public class PhotoInspectActivity extends BaseActivity {
 
     public interface KEYS{
-        String SHOW_DELETE_BUTTON = "show_delete_button";
+        String MEMBER_TOOK = "member_took";
         String PHOTO_OBJ = "photo_obj";
     }
 
@@ -39,11 +44,11 @@ public class PhotoInspectActivity extends BaseActivity {
     private LoadingFragment loadingFragment;
     private WebView imageWeb;
     private GalleryPhoto displayedPhoto;
+    private TextView imageInfoText;
 
     private FloatingActionButton deleteFAB, backFAB;
 
-    private ClubMember currentMember;
-    private boolean showDeleteButton = false;
+    private ClubMember photoMember; // Clubmember who took the photo
 
     private static final int FADE_IN_DURATION = 450;
 
@@ -53,7 +58,6 @@ public class PhotoInspectActivity extends BaseActivity {
         setContentView(R.layout.activity_photo_inspect);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
         // Letting the user change to landscape mode when viewing photo
-        currentMember = MemberDataManager.getInstance().getCurrentMember();
 
         findViews();
         retrieveIntentPrefs();
@@ -65,11 +69,11 @@ public class PhotoInspectActivity extends BaseActivity {
 
 
     private void findViews(){
-        //imageView = findViewById(R.id.photo_inspect_IMG_photo);
         loadingFragment = (LoadingFragment) getSupportFragmentManager().findFragmentById(R.id.photo_inspect_FRAG_loading);
         imageWeb = findViewById(R.id.photo_inspect_IMG_photo);
         deleteFAB = findViewById(R.id.photo_inspect_FAB_delete);
         backFAB = findViewById(R.id.photo_inspect_FAB_back);
+        imageInfoText = findViewById(R.id.photo_inspect_LBL_info);
     }
 
     private void setListeners(){
@@ -83,10 +87,11 @@ public class PhotoInspectActivity extends BaseActivity {
         });
     }
 
+
     // When current user is viewing his own photo, it can be deleted
     private void retrieveIntentPrefs(){
         deleteFAB.setVisibility(View.GONE); // Starts at hidden
-        showDeleteButton = getIntent().getBooleanExtra(KEYS.SHOW_DELETE_BUTTON, false);
+        photoMember = (ClubMember) getIntent().getSerializableExtra(KEYS.MEMBER_TOOK);
         displayedPhoto = (GalleryPhoto) getIntent().getSerializableExtra(KEYS.PHOTO_OBJ);
 
     }
@@ -107,13 +112,17 @@ public class PhotoInspectActivity extends BaseActivity {
     }
 
 
-    //region Loading Callbacks
 
+
+    //region Loading Callbacks
     private WebViewClient finishedLoadingListener = new WebViewClient(){
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             loadingFragment.hide();
+            deleteFAB.setVisibility(View.VISIBLE);
+            setDisplayedPhotoInfo();
+
 
             // Smooth showing by fade in simple animation
             imageWeb.animate()
@@ -121,10 +130,9 @@ public class PhotoInspectActivity extends BaseActivity {
                     .setDuration(FADE_IN_DURATION)
                     .start();
 
-            // Current user viewing his own photo, so it can be deleted
-            if(showDeleteButton){
+            // Photos can be deleted via inspect activity iff member owns this collection (current user)
+            if(photoMember == MemberDataManager.getInstance().getCurrentMember()){
                 deleteFAB.setAlpha(0f);
-                deleteFAB.setVisibility(View.VISIBLE);
                 deleteFAB.animate()
                         .alphaBy(1)
                         .setDuration(FADE_IN_DURATION)
@@ -139,8 +147,21 @@ public class PhotoInspectActivity extends BaseActivity {
         }
     };
 
+
+
     //endregion
 
+    private void setDisplayedPhotoInfo(){
+        int createdTimestamp = (int) displayedPhoto.getTimeCreated();
+
+
+
+        String label = "";
+        label += "Was taken by " + photoMember.getName();
+        label += " on " + (new DateTime(0)).plusSeconds(createdTimestamp).toString("dd.MM.YYYY");
+
+        imageInfoText.setText(label);
+    }
 
 
 
@@ -161,9 +182,11 @@ public class PhotoInspectActivity extends BaseActivity {
     private DialogInterface.OnClickListener onDeleteConfirmed = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialogInterface, int i) {
-            MemberDataManager.getInstance().deleteGalleryPhoto(currentMember.getUid(),displayedPhoto,photoDeleteSuccess, photoDeleteFail);
-            currentMember.removeGalleryPhoto(displayedPhoto);
-            MemberDataManager.getInstance().storeMember(currentMember);
+            if(photoMember!=MemberDataManager.getInstance().getCurrentMember())
+                return; //For extra safety - a given member can only delete his own photos
+            MemberDataManager.getInstance().deleteGalleryPhoto(photoMember.getUid(),displayedPhoto,photoDeleteSuccess, photoDeleteFail);
+            photoMember.removeGalleryPhoto(displayedPhoto);
+            MemberDataManager.getInstance().storeMember(photoMember);
             finish();
         }
     };

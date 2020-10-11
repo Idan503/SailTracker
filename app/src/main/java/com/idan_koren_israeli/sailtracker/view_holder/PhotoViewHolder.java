@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DownloadManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -30,6 +31,7 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
     private ImageView innerImage;
     private ImageView loadingImage;
+    private RotateAnimation loadingAnimation;
     private GalleryPhoto photo;
 
     private final static int LOADING_ANIMATION_DURATION = 3000;
@@ -48,7 +50,6 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
     private void initLoadingAnimation(){
         CommonUtils.getInstance().setImageResource(loadingImage, R.drawable.ic_loading);
-
         RotateAnimation loadingAnimation = new RotateAnimation(0, 360,
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         loadingAnimation.setDuration(LOADING_ANIMATION_DURATION);
@@ -72,7 +73,6 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
         this.photo = photo;
         CommonUtils.getInstance().setImageResource(innerImage, Uri.parse(photo.getUrl()));
     }
-
 
 
 

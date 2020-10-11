@@ -87,12 +87,11 @@ public class PhotoCollectionFragment extends Fragment {
     private OnPhotoClickedListener onPhotoClicked = new OnPhotoClickedListener() {
         @Override
         public void onPhotoClicked(GalleryPhoto photo) {
-            boolean deletablePhoto = (member == MemberDataManager.getInstance().getCurrentMember());
-            // Photos can be deleted via inspect activity iff member owns this collection (current user)
+
 
             Intent intent = new Intent(getActivity(), PhotoInspectActivity.class);
             intent.putExtra(PhotoInspectActivity.KEYS.PHOTO_OBJ,photo);
-            intent.putExtra(PhotoInspectActivity.KEYS.SHOW_DELETE_BUTTON, deletablePhoto);
+            intent.putExtra(PhotoInspectActivity.KEYS.MEMBER_TOOK, member);
             startActivity(intent);
         }
     };

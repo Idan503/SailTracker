@@ -37,7 +37,10 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.7"
                     android:animateLayoutChanges="true"
-                    android:padding="12dp"
+                    android:paddingTop="12dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="6dp"
                     >
 
                     <TextView
@@ -93,13 +96,12 @@
 
 
 
-
-
                     <com.google.android.material.button.MaterialButton
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:textSize="13sp"
                         android:text="@string/event_card_more_info"
+                        android:layout_marginTop="10dp"
                         android:autoSizeMinTextSize="12sp"
                         android:autoSizeTextType="uniform"
                         android:autoSizeMaxTextSize="15sp"

@@ -6,12 +6,17 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * After getting the photos' uris from Firebase Storage, we can save them as a gallery photo
- * This will reduce the number of calls to the cloud database significantly.
+ * Photos that members take in their events are saved as an object of GalleryPhoto
+ * url is saved in Firebase Storage-Databse.
+ *
+ * Number of calls to db is reduces by naming the images files as the time they have been created in.
+ * This way we have one-to-one function between user and photo, because user can't take 2 photos at the same time.
  */
 public class GalleryPhoto implements Serializable {
     private String url;
     private long timeCreated;
+
+
 
     public GalleryPhoto() {
     }

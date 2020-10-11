@@ -19,9 +19,9 @@ import java.util.List;
 
 /**
  *
- * Special adapter for list of the events for each days.
+ * Special adapter for list of the events for each days in calendar.
  * The last item in the list will be an "Add Event" button.
- * ManagerEventRecyclerAdapter will be only shown to manager-users
+ * ManagerEventRecyclerAdapter will be only shown to manager-users only.
  *
  * A certain user is considered a manager iff its uid is in the designated list in the firestore db
  * Method that checks if a user is manager or not is written in @MembersDataManager

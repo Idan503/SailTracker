@@ -1,6 +1,5 @@
 package com.idan_koren_israeli.sailtracker.adapter;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -17,8 +16,8 @@ import java.util.List;
 
 
 /**
- * This adapter controls the events items that will be shown to users every day on the calendar
- *
+ * Showing today's and future events in user's calendar
+ * User can only register to today's and future events.
  */
 public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
 
@@ -63,7 +62,7 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
             if (position < eventsList.size()) {
                 Event event = eventsList.get(position);
                 eventHolder.setEventContent(eventsList.get(position));
-                eventHolder.setRegisterButtonListener(onRegisterPress, onUnregisterPress);
+                eventHolder.setButtonListener(onRegisterPress, onUnregisterPress);
 
                 if (registeredEvents.contains(event)) {
                     // member is already registered

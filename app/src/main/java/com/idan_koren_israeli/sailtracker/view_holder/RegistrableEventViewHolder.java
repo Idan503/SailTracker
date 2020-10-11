@@ -20,8 +20,10 @@ import com.idan_koren_israeli.sailtracker.view_holder.listener.OnEventClickedLis
 import org.joda.time.DateTime;
 
 /**
- * Event card with an option to register to the event.
- * Extends the regular card event which doesn't have the register button
+ * Event View Holder with extra functionality
+ * to register/unregister from events by pressing an additional button
+ *
+ * Each Registrable card will show information as a regular Event card.
  *
  */
 public class RegistrableEventViewHolder extends EventViewHolder {
@@ -46,12 +48,17 @@ public class RegistrableEventViewHolder extends EventViewHolder {
         setDeleteOption();
     }
 
+    private void findViews(){
+        registerButton = itemView.findViewById(R.id.event_item_BTN_register);
+        deleteButton = itemView.findViewById(R.id.register_event_item_BTN_delete);
+    }
+
 
     public void setEventContent(Event event){
         super.setEventContent(event);
 
         if(event.getStartDateTime().getMillis() < DateTime.now().getMillis()){
-            // Event is already started
+            // This event is already started, disabling functionality
             this.registerButton.setOnClickListener(onClickedAfterStarted);
 
             ColorStateList disabledBackground = ContextCompat.getColorStateList(registerButton.getContext(), R.color.lighter_grey);
@@ -61,13 +68,8 @@ public class RegistrableEventViewHolder extends EventViewHolder {
     }
 
 
-    private void findViews(){
-        registerButton = itemView.findViewById(R.id.event_item_BTN_register);
-        deleteButton = itemView.findViewById(R.id.register_event_item_BTN_delete);
-    }
-
-    //region Register
-    public void setRegisterButtonListener(final OnEventClickedListener register, final OnEventClickedListener unregister){
+    //region Register/Unregister Functionality
+    public void setButtonListener(final OnEventClickedListener register, final OnEventClickedListener unregister){
         if(event.getStartDateTime().getMillis() < DateTime.now().getMillis())
             return; // event already started, button should not be functional
 

@@ -13,6 +13,10 @@ import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 
+/**
+ * Holder that holds the "Add Event" button's card
+ * It will be shown as the last card, in the calendar events list of managers only.
+ */
 public class AddEventViewHolder extends RecyclerView.ViewHolder {
     private MaterialButton button;
 

@@ -39,11 +39,16 @@ import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnGalleryPhotoLoadL
 import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * Using both Firestore and Storage Firabase components, to manage data of authenticated members.
+ * Using Cloud Firestore, Realtime Database, and Storage Firabase components, to manage data of authenticated members.
+ *
+ * Cloud Firestore -> Authenticated members list & Managers members list
+ * Realtime Database -> Phone of members
+ * Firebase Storage -> Member's photos
  */
 public class MemberDataManager {
     private FirebaseAuth firebaseAuth;
@@ -53,7 +58,7 @@ public class MemberDataManager {
     private CommonUtils common;
 
     private ClubMember currentMember; // A lot of calls will use the current user, so it is stored as a property.
-    private Boolean currentUserIsManager = null; // prevents multiple db calls for same question, null when unknown
+    private Boolean currentMemberIsManager = null; // prevents multiple db calls for same question, null when unknown
     // This prevents redundant calls to the database (Over and over for the same current user's clubmember).
 
     private final static String TAG = "MemberDataManager";
@@ -141,21 +146,6 @@ public class MemberDataManager {
 
         CollectionReference allMembers = dbFirestore.collection(KEYS.MEMBERS);
         allMembers.whereIn("uid", uidsToLoad).get().addOnCompleteListener(listLoadComplete);
-    }
-
-    public void loadCurrentMember(String uid, final OnMemberLoadListener onMemberLoaded){
-        DocumentReference doc = dbFirestore.collection(KEYS.MEMBERS).document(uid);
-        doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                ClubMember loadedMember = documentSnapshot.toObject(ClubMember.class);
-                if(loadedMember!=null)
-                    setCurrentMember(loadedMember);
-                if(onMemberLoaded!=null) {
-                    onMemberLoaded.onMemberLoad(loadedMember);
-                }
-            }
-        });
     }
 
 
@@ -255,7 +245,7 @@ public class MemberDataManager {
 
     public void setCurrentMember(ClubMember currentUserMember) {
         currentMember = currentUserMember;
-        currentUserIsManager = null;
+        currentMemberIsManager = null;
         isMemberStored(currentMember.getUid(), onCurrentUserSearched);
     }
 
@@ -270,7 +260,7 @@ public class MemberDataManager {
     };
 
 
-    // Checks if a certain member is saved as a club manager in the db
+    // Checks if a given member is saved as a club manager in the db
     private void isManagerMember(final ClubMember member, final OnCheckFinishedListener onFinish) {
         DocumentReference docRef = dbFirestore.collection(KEYS.LISTS).document(KEYS.MANAGERS);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -278,34 +268,25 @@ public class MemberDataManager {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if (onFinish != null) {
-                        if (document != null && document.exists()) {
-                            // All managers are stored by uid in a single string called "all_managers"
-                            String allManagersUidString = (String) document.get(KEYS.ALL_MANAGERS);
-                            if(allManagersUidString!=null){
-                                String[] allManagersUid = allManagersUidString.split(KEYS.ALL_MANAGERS_REGEX);
-                                for(String uid : allManagersUid){
-                                    if(member.getUid().equals(uid)){
-                                        if(member== currentMember)
-                                            currentUserIsManager = true;
-                                        onFinish.onCheckFinished(true); // member uid found in list of managers
-                                        return;
-                                    }
-                                }
-                                if(member== currentMember)
-                                    currentUserIsManager = false;
-                                onFinish.onCheckFinished(false); // not found in the list
-                            }
-                        }
-                        else
-                            onFinish.onCheckFinished(false);
-                    }
-                }
+                    if (document != null && document.exists()) {
+                        // All managers are stored by uid in a single string called "all_managers"
+                        String allManagersUidString = (String) document.get(KEYS.ALL_MANAGERS);
+                        if(allManagersUidString!=null){
+                            String[] allManagersUid = allManagersUidString.split(KEYS.ALL_MANAGERS_REGEX);
+                            boolean result = Arrays.asList(allManagersUid).contains(member.getUid());
 
+                            if(member == currentMember)
+                                currentMemberIsManager = result;
+                            if(onFinish!=null)
+                                onFinish.onCheckFinished(result);
+                        }
+                    }
+                    else
+                        onFinish.onCheckFinished(false);
+                }
             }
         });
     }
-
 
 
     //endregion
@@ -348,9 +329,8 @@ public class MemberDataManager {
                 for (final StorageReference photo : gallery.getItems()) {
                     String photoTimeStamp = CommonUtils.getInstance().toNumericString(photo.getName());
                     final long time = Long.parseLong(photoTimeStamp);
-                    // All photos names are the times that they where taken in
-                    // This prevents double-listeners concurrently, sync for uri AND metadata of each file
-                    // This might be changed later.
+                    // All photos names are the times that they where taken in.
+                    // This makes one-to-one function between Photo ans User. (Users can't take 2 photos at the same time)
 
                     photo.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
@@ -382,9 +362,7 @@ public class MemberDataManager {
 
         byte[] bytes = common.convertBitmapToBytes(photo, PHOTOS_QUALITY);
         String fileName = (Timestamp.now().getSeconds()) + ".png";
-        // Name of picture is its time, user will not take 2 pictures in the same second
-        // This will be helpful to sort pictures by time without the need of 2 concurrent callbacks (uri & time - metadata)
-        // This might be changed later on.
+        // Name of picture is its time, because user can't take 2 pictures in the same time
         StorageReference allGalleryPhotos = dbStorage.getReference().child(KEYS.GALLERY_PHOTOS);
         StorageReference filePath = allGalleryPhotos.child(memberUid).child(fileName);
         // Each member has a unique sub-folder of photos
@@ -408,6 +386,7 @@ public class MemberDataManager {
 
 
     //region Method Overloading: no uid parameter -> apply to currentUser
+
     public void loadProfilePhoto(OnSuccessListener<Uri> onSuccess,
                                  OnFailureListener onFailure) {
         loadProfilePhoto(currentMember.getUid(), onSuccess, onFailure);
@@ -431,8 +410,8 @@ public class MemberDataManager {
     }
 
     public void isManagerMember(final OnCheckFinishedListener onFinish){
-        if(currentUserIsManager != null) // answer is already known
-            onFinish.onCheckFinished(currentUserIsManager); // prevent multiple db calls
+        if(currentMemberIsManager != null) // answer is already known
+            onFinish.onCheckFinished(currentMemberIsManager); // prevent multiple db calls
         isManagerMember(currentMember,onFinish);
     }
 

@@ -21,6 +21,20 @@
         android:contentDescription="@string/photo"
         />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="125dp"
+        android:autoSizeMinTextSize="14sp"
+        android:autoSizeMaxTextSize="24sp"
+        android:padding="8dp"
+        android:textColor="@color/lighter_grey"
+        android:gravity="center"
+        android:background="#66131313"
+        android:id="@+id/photo_inspect_LBL_info"
+        />
+
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"

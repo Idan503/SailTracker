@@ -14,8 +14,10 @@ import java.util.List;
 
 
 /**
- * Adapter that holds events that are separated between past and future, with messages of "past" and "future"
+ * Shows events' card items that are separated between titles of "past" and "future"
  * This is used in HistoryActivity to show history of past and future sails and events
+ *
+ * Holds events cards, with 2 extra items for "past" and "future" messages labels
  */
 public class SeparatedEventRecyclerAdapter extends EventRecyclerAdapter {
 
@@ -23,16 +25,7 @@ public class SeparatedEventRecyclerAdapter extends EventRecyclerAdapter {
 
     public SeparatedEventRecyclerAdapter(Context context, List<Event> events) {
         super(context, events,true);
-
-        futureTitlePosition = 1; // past title is 0
-
-        long now = DateTime.now().getMillis();
-        for(Event event : events){
-            if(event.getStartTime() > now)
-                break;
-            futureTitlePosition++; // current event is part of the past
-        }
-
+        calculateFutureLabelPosition(events);
     }
 
     @Override
@@ -53,6 +46,18 @@ public class SeparatedEventRecyclerAdapter extends EventRecyclerAdapter {
         }
 
     }
+
+    private void calculateFutureLabelPosition(List<Event> events) {
+        futureTitlePosition = 1; // "past" title is 0
+
+        long now = DateTime.now().getMillis();
+        for (Event event : events) {
+            if (event.getStartTime() > now)
+                break;
+            futureTitlePosition++; // current event is part of the past
+        }
+    }
+
 
     @Override
     public int getItemCount() {

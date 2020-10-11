@@ -27,27 +27,31 @@
         >
 
 
-        <!-- This bg image will be loaded using Glide -->
-        <View
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:elevation="0dp"
-            android:background="#C1C7CF"
-            android:alpha="0.95"
-            android:contentDescription="@string/my_next_event_title"
-            />
+            app:cardCornerRadius="18dp"
+            app:cardElevation="0dp"
+            >
 
-        <!-- This bg image will be loaded using Glide -->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:elevation="0dp"
-            android:alpha="0.2"
-            android:scaleType="centerCrop"
-            android:id="@+id/next_event_IMG_background"
-            android:contentDescription="@string/my_next_event_title"
-            />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#D4D7DA"
+                android:alpha="0.95"
+                />
 
+            <!-- This bg image will be loaded using Glide -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:elevation="0dp"
+                android:alpha="0.225"
+                android:scaleType="centerCrop"
+                android:id="@+id/next_event_IMG_background"
+                android:contentDescription="@string/my_next_event_title"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,6 +59,7 @@
                 android:weightSum="1"
                 android:orientation="vertical"
                 android:padding="15dp"
+                android:visibility="visible"
                 >
 
                 <TextView
@@ -66,7 +71,7 @@
                     android:id="@+id/next_event_LBL_event_name"
                     android:padding="5dp"
                     android:autoSizeMinTextSize="12sp"
-                    android:autoSizeMaxTextSize="24sp"
+                    android:autoSizeMaxTextSize="32sp"
                     android:layout_gravity="center|center_vertical"
                     android:gravity="center"
                     />
@@ -106,6 +111,9 @@
 
 
             </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
 
 
 

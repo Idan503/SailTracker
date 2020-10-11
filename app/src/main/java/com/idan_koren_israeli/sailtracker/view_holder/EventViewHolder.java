@@ -1,7 +1,6 @@
 package com.idan_koren_israeli.sailtracker.view_holder;
 
 import android.animation.LayoutTransition;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,9 +17,10 @@ import com.idan_koren_israeli.sailtracker.club.enums.EventType;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 
 /**
- * Shows an event without extra functionality (no option to register/unregister)
- * This is only for information providing, no actions
+ * Base class for event cards view holders
  *
+ * Shows information about a certain event
+ * "More Info" button can be pressed, and card will be expanded by animation
  */
 public class EventViewHolder extends RecyclerView.ViewHolder {
 
@@ -31,30 +31,24 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
     }
 
     protected Event event;
+
+    //region Holding Views
     private TextView nameText, descriptionText, timeOfDayText, dateText, registerStatusText;
     private LinearLayout moreInfoLayout;
     private ImageView image;
     private MaterialButton infoToggleButton;
-    private CardView outerCardLayout; // For enabling card expend animation
-    private boolean showDate;
+    //endregion
+
+
+    private CardView outerCardLayout; // For card expand/collapse animations
+    private boolean showDateText;
     
-    private String moreInfoMessage, lessInfoMessage;
-    private boolean isMoreInfoShowing = false;
+    private boolean cardExpended = false; // "More info" starts as hidden
 
     public EventViewHolder(@NonNull View itemView) {
         super(itemView);
         findViews();
         setMoreInfoListener();
-        isMoreInfoShowing = false;
-    }
-
-    public EventViewHolder(@NonNull View itemView, boolean showingDate) {
-        super(itemView);
-        this.showDate = showingDate;
-        findViews();
-        setMoreInfoListener();
-        setShowDate(showingDate);
-        isMoreInfoShowing = false;
     }
 
 
@@ -64,7 +58,7 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         timeOfDayText.setText(generateTimeString(event));
         descriptionText.setText(event.getDescription());
         registerStatusText.setText(generateRegisterStatusString(event));
-        if(showDate)
+        if(showDateText)
             dateText.setText(generateDateString(event));
         setPicture(event.getType());
     }
@@ -80,21 +74,20 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         dateText = itemView.findViewById(R.id.event_item_LBL_date);
         moreInfoLayout = itemView.findViewById(R.id.event_item_LAY_more_info);
 
-        moreInfoMessage = itemView.getResources().getString(R.string.event_card_more_info);
-        lessInfoMessage = itemView.getResources().getString(R.string.event_card_less_info);
+
     }
 
 
-    //region Date Showing
+    //region Show/Hide Date Text
 
-    public void setShowDate(boolean showDate){
-        this.showDate = showDate;
+    public void setShowDateText(boolean showDateText){
+        this.showDateText = showDateText;
         updateDateView();
     }
 
     private void updateDateView(){
         if(dateText!=null){
-            if(showDate){
+            if(showDateText){
                 dateText.setVisibility(View.VISIBLE);
             }
             else{
@@ -105,10 +98,10 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
 
     //endregion
 
-    //region More Info
+    //region Show/Hide More Info (Card Expend)
 
     private void setMoreInfoListener(){
-        // Enables the expend animation of the card, when pressing "More Info..."
+        // Enables the expend animation of the card, after pressing "More Info..."
         LayoutTransition layoutTransition = outerCardLayout.getLayoutTransition();
         layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
 
@@ -116,9 +109,8 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         infoToggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!isMoreInfoShowing){
+                if(!cardExpended){
                     showMoreInfo();
-                    Log.i("pttt", " pressed more info");
                 }
                 else {
                     hideMoreInfo();
@@ -129,15 +121,17 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
 
 
     private void showMoreInfo(){
+        String lessInfoMessage = itemView.getResources().getString(R.string.event_card_less_info);
         infoToggleButton.setText(lessInfoMessage);
         moreInfoLayout.setVisibility(View.VISIBLE);
-        isMoreInfoShowing = true;
+        cardExpended = true;
     }
 
     private void hideMoreInfo(){
+        String moreInfoMessage = itemView.getResources().getString(R.string.event_card_more_info);
         infoToggleButton.setText(moreInfoMessage);
         moreInfoLayout.setVisibility(View.GONE);
-        isMoreInfoShowing = false;
+        cardExpended = false;
     }
 
     //endregion
@@ -146,7 +140,7 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
 
 
 
-    //region Labels string generation
+    //region Labels String Generation
 
     private String generateTimeString(Event event){
         return event.getStartDateTime().toString("HH:mm") +

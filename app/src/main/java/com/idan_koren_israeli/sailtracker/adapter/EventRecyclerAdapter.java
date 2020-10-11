@@ -88,7 +88,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
         else {
             EventViewHolder eventHolder = (EventViewHolder) holder;
-            eventHolder.setShowDate(showDate);
+            eventHolder.setShowDateText(showDate);
             if (position < eventsList.size()) {
                 Event event = eventsList.get(position);
                 eventHolder.setEventContent(event);
