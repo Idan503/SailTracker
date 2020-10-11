@@ -62,9 +62,6 @@ public class SeaLocationManager {
         if(location==null)
             return;
 
-        location.setLatitude(32.807106);
-        location.setLongitude(35.029945);
-
         LatLng currentLatLng = LatLng.newBuilder()
                 .setLatitude(location.getLatitude())
                 .setLongitude(location.getLongitude())

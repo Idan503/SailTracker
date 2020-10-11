@@ -182,7 +182,8 @@ public class PhotoInspectActivity extends BaseActivity {
     private DialogInterface.OnClickListener onDeleteConfirmed = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialogInterface, int i) {
-            if(photoMember!=MemberDataManager.getInstance().getCurrentMember())
+            //Log.i("pttt","photo: " + photoMember.getUid() + " | " + )
+            if(!photoMember.getUid().equals(MemberDataManager.getInstance().getCurrentMember().getUid()))
                 return; //For extra safety - a given member can only delete his own photos
             MemberDataManager.getInstance().deleteGalleryPhoto(photoMember.getUid(),displayedPhoto,photoDeleteSuccess, photoDeleteFail);
             photoMember.removeGalleryPhoto(displayedPhoto);
@@ -203,7 +204,7 @@ public class PhotoInspectActivity extends BaseActivity {
     private OnFailureListener photoDeleteFail = new OnFailureListener() {
         @Override
         public void onFailure(@NonNull Exception e) {
-            CommonUtils.getInstance().showToast("Please try again later");
+            CommonUtils.getInstance().showToast("Please try again later.");
 
         }
     };

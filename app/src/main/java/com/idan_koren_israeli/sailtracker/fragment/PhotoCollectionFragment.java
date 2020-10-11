@@ -3,10 +3,12 @@ package com.idan_koren_israeli.sailtracker.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +33,14 @@ import java.util.ArrayList;
  */
 public class PhotoCollectionFragment extends Fragment {
 
-    ClubMember member;
-    RecyclerView recyclerView;
-    LoadingFragment loadingFragment;
-    PhotoCollectionAdapter adapter;
+    private ClubMember member;
+    private RecyclerView recyclerView;
+    private LoadingFragment loadingFragment;
+    private PhotoCollectionAdapter adapter;
+
+
+    public static final int INSPECTOR_OPENED = 503;
+
 
 
     private static final int NUM_OF_COLUMNS = 3;
@@ -92,7 +98,7 @@ public class PhotoCollectionFragment extends Fragment {
             Intent intent = new Intent(getActivity(), PhotoInspectActivity.class);
             intent.putExtra(PhotoInspectActivity.KEYS.PHOTO_OBJ,photo);
             intent.putExtra(PhotoInspectActivity.KEYS.MEMBER_TOOK, member);
-            startActivity(intent);
+            startActivityForResult(intent,INSPECTOR_OPENED);
         }
     };
 
@@ -118,5 +124,14 @@ public class PhotoCollectionFragment extends Fragment {
         return this.loadingFragment;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==INSPECTOR_OPENED) {
+            Log.i("pttt", "HEY");
+            updateUI();
 
+        }
+
+    }
 }

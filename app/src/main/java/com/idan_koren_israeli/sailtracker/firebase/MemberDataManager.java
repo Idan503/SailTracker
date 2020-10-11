@@ -74,6 +74,7 @@ public class MemberDataManager {
         String ALL_MANAGERS_REGEX = ";";
         String GALLERY_PHOTOS = "gallery_photos";
         String PROFILE_PHOTOS = "profile_photos";
+        String FILE_NAME_SUFFIX = ".png";
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -361,7 +362,7 @@ public class MemberDataManager {
                                   OnProgressListener<UploadTask.TaskSnapshot> onProgress) {
 
         byte[] bytes = common.convertBitmapToBytes(photo, PHOTOS_QUALITY);
-        String fileName = (Timestamp.now().getSeconds()) + ".png";
+        String fileName = (Timestamp.now().getSeconds()) + KEYS.FILE_NAME_SUFFIX;
         // Name of picture is its time, because user can't take 2 pictures in the same time
         StorageReference allGalleryPhotos = dbStorage.getReference().child(KEYS.GALLERY_PHOTOS);
         StorageReference filePath = allGalleryPhotos.child(memberUid).child(fileName);
@@ -374,7 +375,7 @@ public class MemberDataManager {
     public void deleteGalleryPhoto(String memberUid, GalleryPhoto photo,
                                    OnSuccessListener<? super Void> onSuccess,
                                    OnFailureListener onFailure){
-        String fileName = Long.toString(photo.getTimeCreated());
+        String fileName = (photo.getTimeCreated()) + KEYS.FILE_NAME_SUFFIX;
         StorageReference allGalleryPhotos = dbStorage.getReference().child(KEYS.GALLERY_PHOTOS);
         StorageReference filePath = allGalleryPhotos.child(memberUid).child(fileName);
         filePath.delete().addOnSuccessListener(onSuccess).addOnFailureListener(onFailure);
