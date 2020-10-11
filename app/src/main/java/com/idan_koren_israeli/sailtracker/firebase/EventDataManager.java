@@ -172,7 +172,8 @@ public class EventDataManager {
             }
         };
 
-        dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onDataLoaded);
+        dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addValueEventListener(onDataLoaded);
+        // not using single because we want the screen to refresh on all users
     }
 
     // Removes a member from an event that he was registered to

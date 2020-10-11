@@ -11,8 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.exception.AlreadyRegisteredException;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
@@ -40,12 +38,14 @@ import java.util.List;
 public class CalendarActivity extends BaseActivity {
 
     private CalendarView calendar;
-    private RecyclerView eventsRecycler;
     private TextView dateTitle;
     private LocalDate selectedDate = LocalDate.now();
     private ArrayList<Event> eventsToShow = new ArrayList<>();
     private PointsStatusFragment pointsStatus;
     private ClubMember currentUser;
+
+    private RecyclerView eventsRecycler;
+    private EventRecyclerAdapter eventsAdapter;
 
     private boolean managerView = false;
     private LoadingFragment loadingFragment;
@@ -60,7 +60,7 @@ public class CalendarActivity extends BaseActivity {
 
 
         calendar.setOnDateChangeListener(onDateChangeListener);
-        reloadData();
+        recreateData();
     }
 
     // Finds the added event if manager-user gets back from @AddEventActivity
@@ -85,7 +85,6 @@ public class CalendarActivity extends BaseActivity {
     // Loading the events into ui, parameter for manager/normal user view mode
     private void initEventsList(boolean isCurrentUserManager, List<Event> registered) {
         eventsRecycler.setLayoutManager(new LinearLayoutManager(this));
-        EventRecyclerAdapter eventsAdapter;
 
 
         if (selectedDate.toDateTimeAtStartOfDay().plusDays(1).getMillis() < DateTime.now().getMillis()) {
@@ -119,11 +118,12 @@ public class CalendarActivity extends BaseActivity {
     }
 
     // Loading data from database based on current day that is selected in calendar view
-    private void reloadData(){
+    private void recreateData(){
         pointsStatus.updateCount(currentUser.getPointsCount());
         onDateChangeListener.onSelectedDayChange(calendar,
                 selectedDate.getYear(), selectedDate.getMonthOfYear()-1, selectedDate.getDayOfMonth());
     }
+
 
     //region UI Related Callbacks
     private OnEventClickedListener onRegisterClicked = new OnEventClickedListener() {
@@ -132,7 +132,6 @@ public class CalendarActivity extends BaseActivity {
             try {
                 EventDataManager.getInstance().registerMember(currentUser, eventClicked);
                 CommonUtils.getInstance().showToast("Registered successfully!");
-                reloadData();
             }
             catch (EventFullException eventFull){
                 Log.e("CalendarActivity", eventFull.toString());
@@ -153,9 +152,8 @@ public class CalendarActivity extends BaseActivity {
     private OnEventClickedListener onUnregisterClicked = new OnEventClickedListener(){
         @Override
         public void onButtonClicked(Event eventClicked) {
-
             EventDataManager.getInstance().unregisterMember(currentUser, eventClicked);
-            reloadData();
+            CommonUtils.getInstance().showToast("Unregistered successfully!");
         }
     };
 
@@ -170,6 +168,7 @@ public class CalendarActivity extends BaseActivity {
     };
 
     //endregion
+
 
     //region Realtime Database callbacks
 
@@ -199,6 +198,7 @@ public class CalendarActivity extends BaseActivity {
             // Code gets to here after we already know if the current user is a manager or not.
             // And also the list of the current user's member already registered events is loaded.
             initEventsList(managerView, list);
+            // Using realtime-events to update recycler view across all devices
         }
     };
 

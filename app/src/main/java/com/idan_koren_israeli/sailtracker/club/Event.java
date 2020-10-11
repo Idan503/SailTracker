@@ -205,7 +205,7 @@ public class Event implements Serializable {
 
         // updating the database
         MemberDataManager.getInstance().storeMember(member);
-        EventDataManager.getInstance().storeEvent(this);
+        //EventDataManager.getInstance().storeEvent(this);
     }
 
     public void unregisterMember(ClubMember member) {

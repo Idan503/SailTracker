@@ -74,4 +74,12 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
         }
     }
 
+    public void setEventAsUnregistered(Event unregisteredEvent){
+        this.registeredEvents.remove(unregisteredEvent);
+    }
+
+    public void setEventAsRegistered(Event unregisteredEvent){
+        this.registeredEvents.remove(unregisteredEvent);
+    }
+
 }
