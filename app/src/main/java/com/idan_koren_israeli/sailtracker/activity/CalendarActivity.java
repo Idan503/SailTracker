@@ -119,9 +119,13 @@ public class CalendarActivity extends BaseActivity {
 
     // Loading data from database based on current day that is selected in calendar view
     private void recreateData(){
-        pointsStatus.updateCount(currentMember.getPointsCount());
+        reloadPointsStatus();
         onDateChangeListener.onSelectedDayChange(calendar,
                 selectedDate.getYear(), selectedDate.getMonthOfYear()-1, selectedDate.getDayOfMonth());
+    }
+
+    private void reloadPointsStatus(){
+        pointsStatus.updateCount(currentMember.getPointsCount());
     }
 
 
@@ -146,6 +150,7 @@ public class CalendarActivity extends BaseActivity {
             try {
                 if(canMemberRegister(eventClicked)) {
                     EventDataManager.getInstance().registerMember(currentMember, eventClicked);
+                    reloadPointsStatus();
                     CommonUtils.getInstance().showToast("Registered successfully!");
                 }
                 else {
@@ -172,6 +177,7 @@ public class CalendarActivity extends BaseActivity {
         @Override
         public void onButtonClicked(Event eventClicked) {
             EventDataManager.getInstance().unregisterMember(currentMember, eventClicked);
+            reloadPointsStatus();
             CommonUtils.getInstance().showToast("Unregistered successfully!");
         }
     };

@@ -314,7 +314,6 @@ public class LoginFragment extends Fragment {
 
         @Override
         public void onVerificationFailed(@NonNull FirebaseException e) {
-            //CommonUtils.getInstance().showToast("Failed!");
              manager.setCurrentState(LoginManager.LoginState.NOT_STARTED);
 
             if(e instanceof FirebaseAuthInvalidCredentialsException){

@@ -119,5 +119,9 @@ public class LoginManager {
     //endregion
 
 
+    public void setCurrentUser(String uid){
+
+    }
+
 
 }
