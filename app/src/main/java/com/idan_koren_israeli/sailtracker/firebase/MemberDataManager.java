@@ -243,7 +243,7 @@ public class MemberDataManager {
         return currentMember;
     }
 
-    public void setCurrentMember(ClubMember currentUserMember) {
+    public void setCurrentMember(@NonNull ClubMember currentUserMember) {
         currentMember = currentUserMember;
         currentMemberIsManager = null;
         isMemberStored(currentMember.getUid(), onCurrentUserSearched);

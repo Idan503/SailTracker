@@ -53,7 +53,6 @@ public class ManagerEventRecyclerAdapter extends RegistrableEventRecyclerAdapter
             case ViewType.EVENT:
                 // managers can delete events, so holder will attach the listener
                 view = inflater.inflate(R.layout.recycler_registrable_event_item, parent, false);
-                Log.i("pttt", "INFRLATE EVENT MANAGER");
                 return new RegistrableEventViewHolder(view,true);
             default:
                 return super.onCreateViewHolder(parent,viewType);

@@ -60,8 +60,10 @@ public class SplashActivity extends AppCompatActivity {
     private OnMemberLoadListener onCurrentMemberLoaded = new OnMemberLoadListener() {
         @Override
         public void onMemberLoad(ClubMember memberLoaded) {
-            MemberDataManager.getInstance().setCurrentMember(memberLoaded);
-            startApp();
+            if(memberLoaded!=null) {
+                MemberDataManager.getInstance().setCurrentMember(memberLoaded);
+            }
+                startApp();
             // User found and set, app can start
         }
     };

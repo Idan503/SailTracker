@@ -2,6 +2,7 @@ package com.idan_koren_israeli.sailtracker.view_holder;
 
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -59,10 +60,16 @@ public class RegistrableEventViewHolder extends EventViewHolder {
 
         if(event.getStartDateTime().getMillis() < DateTime.now().getMillis()){
             // This event is already started, disabling functionality
-            this.registerButton.setOnClickListener(onClickedAfterStarted);
+            registerButton.setOnClickListener(onClickedAfterStarted);
 
             ColorStateList disabledBackground = ContextCompat.getColorStateList(registerButton.getContext(), R.color.lighter_grey);
-            this.registerButton.setBackgroundTintList(disabledBackground);
+            ColorStateList transparent = ContextCompat.getColorStateList(registerButton.getContext(), android.R.color.transparent);
+            registerButton.setBackgroundTintList(disabledBackground);
+
+            //Un-clickable look
+            registerButton.setStrokeWidth(0);
+            registerButton.setRippleColor(transparent);
+
         }
 
     }
