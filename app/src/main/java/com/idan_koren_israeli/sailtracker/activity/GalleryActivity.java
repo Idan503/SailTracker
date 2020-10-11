@@ -295,8 +295,13 @@ public class GalleryActivity extends BaseActivity {
 
     OnSeaDetectedListener onSeaDetectedListener = new OnSeaDetectedListener() {
         @Override
-        public void onSeaDetected(boolean result) {
-
+        public void onSeaDetected(boolean nearSea) {
+            if(nearSea){
+                dispatchTakePictureIntent();
+            }
+            else{
+                CommonUtils.getInstance().showToast("Photos cannot be taken too far from sea");
+            }
         }
     };
 
