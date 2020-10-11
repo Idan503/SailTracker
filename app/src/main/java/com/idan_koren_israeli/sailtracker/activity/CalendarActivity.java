@@ -42,7 +42,7 @@ public class CalendarActivity extends BaseActivity {
     private LocalDate selectedDate = LocalDate.now();
     private ArrayList<Event> eventsToShow = new ArrayList<>();
     private PointsStatusFragment pointsStatus;
-    private ClubMember currentUser;
+    private ClubMember currentMember;
 
     private RecyclerView eventsRecycler;
     private EventRecyclerAdapter eventsAdapter;
@@ -54,7 +54,7 @@ public class CalendarActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
-        currentUser = MemberDataManager.getInstance().getCurrentMember();
+        currentMember = MemberDataManager.getInstance().getCurrentMember();
         findViews();
         initAddedEvent();
 
@@ -119,9 +119,23 @@ public class CalendarActivity extends BaseActivity {
 
     // Loading data from database based on current day that is selected in calendar view
     private void recreateData(){
-        pointsStatus.updateCount(currentUser.getPointsCount());
+        pointsStatus.updateCount(currentMember.getPointsCount());
         onDateChangeListener.onSelectedDayChange(calendar,
                 selectedDate.getYear(), selectedDate.getMonthOfYear()-1, selectedDate.getDayOfMonth());
+    }
+
+
+    // Members can't register to 2 events that has a common shared time
+    // Checking if a given event can be registered by checking time overlap with the others
+    private boolean canMemberRegister(Event registerEvent){
+        for(Event event : eventsToShow){
+            if(registerEvent!=event && event.getRegisteredMembers().contains(currentMember.getUid())){
+                if(registerEvent.getStartTime() < event.getEndTime()  && event.getStartTime() < registerEvent.getEndTime()){
+                    return false; // member is already register to an overlapping event
+                }
+            }
+        }
+        return true;
     }
 
 
@@ -130,8 +144,13 @@ public class CalendarActivity extends BaseActivity {
         @Override
         public void onButtonClicked(Event eventClicked) {
             try {
-                EventDataManager.getInstance().registerMember(currentUser, eventClicked);
-                CommonUtils.getInstance().showToast("Registered successfully!");
+                if(canMemberRegister(eventClicked)) {
+                    EventDataManager.getInstance().registerMember(currentMember, eventClicked);
+                    CommonUtils.getInstance().showToast("Registered successfully!");
+                }
+                else {
+                    CommonUtils.getInstance().showToast("Already registered at the same time");
+                }
             }
             catch (EventFullException eventFull){
                 Log.e("CalendarActivity", eventFull.toString());
@@ -152,7 +171,7 @@ public class CalendarActivity extends BaseActivity {
     private OnEventClickedListener onUnregisterClicked = new OnEventClickedListener(){
         @Override
         public void onButtonClicked(Event eventClicked) {
-            EventDataManager.getInstance().unregisterMember(currentUser, eventClicked);
+            EventDataManager.getInstance().unregisterMember(currentMember, eventClicked);
             CommonUtils.getInstance().showToast("Unregistered successfully!");
         }
     };

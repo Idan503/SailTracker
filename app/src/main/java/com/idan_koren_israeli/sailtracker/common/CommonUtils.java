@@ -12,7 +12,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.Layout;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.AlignmentSpan;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -29,6 +33,8 @@ import com.bumptech.glide.request.target.CustomViewTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.idan_koren_israeli.sailtracker.activity.BaseActivity;
+
+import org.joda.time.DateTime;
 
 import java.io.ByteArrayOutputStream;
 import java.util.InputMismatchException;
@@ -90,7 +96,12 @@ public class CommonUtils {
 
 
     public void showToast(String message){
-        Toast.makeText(context,message, Toast.LENGTH_SHORT).show();
+        Spannable centeredText = new SpannableString(message);
+        centeredText.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+                0, message.length() - 1,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+        Toast.makeText(context, centeredText, Toast.LENGTH_LONG).show();
     }
 
 
@@ -171,4 +182,7 @@ public class CommonUtils {
     }
 
     //endregion
+
+
+
 }

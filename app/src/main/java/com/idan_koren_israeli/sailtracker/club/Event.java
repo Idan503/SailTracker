@@ -167,6 +167,11 @@ public class Event implements Serializable {
         return getStartDateTime().plusMinutes(minutes);
     }
 
+    @Exclude
+    public long getEndTime(){
+        return getEndDateTime().getMillis();
+    }
+
     //endregion
 
     @NonNull
@@ -192,7 +197,6 @@ public class Event implements Serializable {
         member.deductPoints(getPrice());
 
         if(registeredMembers.contains(member.getUid())){
-            Log.i("pttt", registeredMembers.toString());
             throw new AlreadyRegisteredException(ALREADY_REGISTERED);
         }
 
