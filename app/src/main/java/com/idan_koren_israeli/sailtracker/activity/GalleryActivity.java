@@ -1,9 +1,15 @@
 package com.idan_koren_israeli.sailtracker.activity;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -11,6 +17,7 @@ import android.provider.MediaStore;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.exifinterface.media.ExifInterface;
 
@@ -30,6 +37,8 @@ import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListene
 import com.idan_koren_israeli.sailtracker.fragment.ProfileFragment;
 import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
 import com.idan_koren_israeli.sailtracker.fragment.PhotoCollectionFragment;
+import com.idan_koren_israeli.sailtracker.location.OnSeaDetectedListener;
+import com.idan_koren_israeli.sailtracker.location.SeaLocationManager;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -51,8 +60,6 @@ public class GalleryActivity extends BaseActivity {
     private String capturedPhotoPath;
 
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +74,7 @@ public class GalleryActivity extends BaseActivity {
         // Will be shown after we will know if user is currently in event
 
         photosFrag.setMember(dbManager.getCurrentMember());
-        dbManager.loadGallery(dbManager.getCurrentMember().getUid(),photoLoaded);
+        dbManager.loadGallery(dbManager.getCurrentMember().getUid(), photoLoaded);
 
         profileFrag.setMember(dbManager.getCurrentMember());
     }
@@ -82,24 +89,18 @@ public class GalleryActivity extends BaseActivity {
     };
 
 
-    private void findViews(){
+    private void findViews() {
         captureButton = findViewById(R.id.gallery_FAB_add_photo);
         profileFrag = (ProfileFragment) getSupportFragmentManager().findFragmentById(R.id.gallery_FRAG_profile);
         photosFrag = (PhotoCollectionFragment) getSupportFragmentManager().findFragmentById(R.id.gallery_FRAG_photo_collection);
     }
 
 
+    private void setCaptureButtonListener() {
+        captureButton.setOnClickListener(onCaptureClick);
 
-    private void setCaptureButtonListener(){
-        if(currentlyInEvent){
-            captureButton.setOnClickListener(onClickCurrentlyInEvent);
-        }
-        else {
-            captureButton.setOnClickListener(onClickNotInEvent);
-        }
 
     }
-
 
 
     //region Picture Capture & Upload
@@ -144,7 +145,6 @@ public class GalleryActivity extends BaseActivity {
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -152,11 +152,11 @@ public class GalleryActivity extends BaseActivity {
         if (requestCode == 1 && resultCode == RESULT_OK) {
             File image = new File(capturedPhotoPath);
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
+            Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(), bmOptions);
             Bitmap rotatedBitmap = bitmap;
-            try{
-                rotatedBitmap = rotatePhotoBitmap(capturedPhotoPath,bitmap);
-            }catch (IOException exception){
+            try {
+                rotatedBitmap = rotatePhotoBitmap(capturedPhotoPath, bitmap);
+            } catch (IOException exception) {
                 CommonUtils.getInstance().showToast("Problem occurred, could not rotate captured picture.");
             }
             dbManager.storeGalleryPhoto(rotatedBitmap, photoUploadSuccess, photoUploadFailure, photoUploadProgress);
@@ -175,7 +175,7 @@ public class GalleryActivity extends BaseActivity {
                 ExifInterface.ORIENTATION_UNDEFINED);
 
         Bitmap rotatedBitmap = null;
-        switch(orientation) {
+        switch (orientation) {
 
             case ExifInterface.ORIENTATION_ROTATE_90:
                 rotatedBitmap = rotateImage(bitmap, 90);
@@ -230,15 +230,13 @@ public class GalleryActivity extends BaseActivity {
     };
 
 
-
-
     //endregion
 
 
     //region Capture Button
     // Photos can be taken and uploaded only when the user is in a sail/event currently
 
-    private void initCurrentlyInEvent(){
+    private void initCurrentlyInEvent() {
 
         OnListLoadedListener<Event> onTodayEventsLoaded = new OnListLoadedListener<Event>() {
             @Override
@@ -246,21 +244,21 @@ public class GalleryActivity extends BaseActivity {
                 ArrayList<Event> nowEvents = new ArrayList<>(); // All events that are right now
 
 
-                for(Event event : todayEvents){
-                    if(isEventRightNow(event)){
+                for (Event event : todayEvents) {
+                    if (isEventRightNow(event)) {
                         nowEvents.add(event);
                     }
                 }
 
                 // Trying to find current member in members lists of current events
                 boolean found = false;
-                for(Event event : nowEvents){
-                    if(event.getRegisteredMembers().contains(member.getUid())) {
+                for (Event event : nowEvents) {
+                    if (event.getRegisteredMembers().contains(member.getUid())) {
                         currentlyInEvent = true;
                         found = true; // The user was found in one of the current events list
                     }
                 }
-                if(!found)
+                if (!found)
                     currentlyInEvent = false; // Member is not found in the lists
 
                 setCaptureButtonListener();
@@ -268,32 +266,42 @@ public class GalleryActivity extends BaseActivity {
             }
         };
 
-        EventDataManager.getInstance().loadEventsByDate(LocalDate.now(),onTodayEventsLoaded);
+        EventDataManager.getInstance().loadEventsByDate(LocalDate.now(), onTodayEventsLoaded);
     }
 
 
-
-    private boolean isEventRightNow(Event event){
+    private boolean isEventRightNow(Event event) {
         return event.getStartDateTime().getMillis() < DateTime.now().getMillis()
                 && DateTime.now().getMillis() < event.getEndDateTime().getMillis();
         // Event is right now if current time is between start time & end time
     }
 
-    private View.OnClickListener onClickCurrentlyInEvent = new View.OnClickListener() {
+    private View.OnClickListener onCaptureClick = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            dispatchTakePictureIntent();
+            if (currentlyInEvent) {
+                SeaLocationManager.getInstance().checkLocationNearSea(GalleryActivity.this,onSeaDetectedListener);
+            } else
+                CommonUtils.getInstance().showToast("Photos can be taken only while in event");
+
         }
     };
 
-    private View.OnClickListener onClickNotInEvent = new View.OnClickListener() {
+
+    //endregion
+
+
+    //region On Location Detected (sea or not)
+
+    OnSeaDetectedListener onSeaDetectedListener = new OnSeaDetectedListener() {
         @Override
-        public void onClick(View view) {
-            CommonUtils.getInstance().showToast("Photos can be taken only while in event");
+        public void onSeaDetected(boolean result) {
+
         }
     };
 
     //endregion
+
 
 
 }

@@ -1,5 +1,6 @@
 package com.idan_koren_israeli.sailtracker.common;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
@@ -138,6 +140,7 @@ public class CommonUtils {
     //endregion
 
 
+    // region Screen and UI
     public int getScreenWidth(@NonNull Activity activity) {
         return activity.getResources().getDisplayMetrics().widthPixels;
     }
@@ -146,9 +149,9 @@ public class CommonUtils {
         final Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(task, delay);
     }
+    //endregion
 
     //region String Manipulations
-
 
     public String toPhoneString(String input) throws InputMismatchException {
         final int MIN_PHONE_LENGTH = 8;
@@ -183,6 +186,16 @@ public class CommonUtils {
 
     //endregion
 
+    //region Permission Request
+
+    private static final int REQUEST_LOCATION = 123;
+    public void requestLocationPermission(Activity activity){
+        ActivityCompat.requestPermissions(activity,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
+    }
+
+    //endregion
 
 
 }
