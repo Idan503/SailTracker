@@ -229,6 +229,12 @@ public class Event implements Serializable {
         registeredMembers = new ArrayList<>();
     }
 
+    @Exclude
+    public boolean isFull(){
+        initRegisteredList();
+        return registeredMembers.size()==maxMembersCount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

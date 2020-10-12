@@ -1,19 +1,27 @@
 package com.idan_koren_israeli.sailtracker.notification;
 
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.Binder;
 import android.os.IBinder;
-import android.util.Log;
 
-import com.google.firebase.firestore.core.EventManager;
+import com.google.firebase.database.ValueEventListener;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventLoadedListener;
 
-public class EventAvailableService extends Service {
+
+/**
+ * Watching an event meaning listen to changes.
+ * When there is a free space (Event is not full) the watch user will get push notification.
+ *
+ * The push notification will be sent immediately after the other user unregister from the same event.
+ *
+ */
+public class EventWatchService extends Service {
+
+    private ValueEventListener valueListener; // to stop listen after push notification sent
+    private EventDataManager eventData;
+    private Event eventWatching;
 
     public interface KEYS{
         String EVENT_TO_LISTEN = "event_to_listen";
@@ -23,13 +31,12 @@ public class EventAvailableService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Event toListen = (Event) intent.getSerializableExtra(KEYS.EVENT_TO_LISTEN);
-        EventDataManager eventData = EventDataManager.initHelper();
+        eventData = EventDataManager.initHelper();
 
         if(toListen!=null) {
-            eventData.listenToEventChanges(toListen, onEventChanged);
+            eventWatching = toListen;
+            valueListener = eventData.watchEventChanges(toListen, onEventChanged);
         }
-        else
-            showEventAvailableNotification();
 
         return Service.START_STICKY;
     }
@@ -40,6 +47,7 @@ public class EventAvailableService extends Service {
             if(event.getRegisteredMembers().size() < event.getMaxMembersCount()){
                 // There is a free slot in the event
                 showEventAvailableNotification();
+                eventData.unwatchEventChanges(event, valueListener);
                 stopSelf();
             }
         }
@@ -48,6 +56,12 @@ public class EventAvailableService extends Service {
     private void showEventAvailableNotification(){
         EventNotificationManager notification = EventNotificationManager.initHelper(this);
         notification.showNotification();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        eventData.unwatchEventChanges(eventWatching, valueListener);
     }
 
     @Override

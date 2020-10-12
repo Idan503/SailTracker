@@ -99,10 +99,15 @@
 
     <!-- SPECIAL FORMATS -->
     <string name="hour_time_format">%02d:%02d %2s</string>
-    <string name="event_register_price_label">%d Register</string>
-    <string name="event_unregister_price_label">%d Unregister</string>
     <string name="profile_events_history_label">%d Events</string>
     <string name="profile_events_history_single_label">%d Event</string>
+
+    <!-- EVENT HOLDERS PRICE FORMATS -->
+    <string name="event_register_price_label">%d Register</string>
+    <string name="event_unregister_price_label">%d Unregister</string>
+    <string name="event_watch_price_label">%d Watch</string>
+    <string name="event_unwatch_price_label">%d Unwatch</string>
+    <string name="event_full_price_label">%d Full</string>
 
 
 </resources>

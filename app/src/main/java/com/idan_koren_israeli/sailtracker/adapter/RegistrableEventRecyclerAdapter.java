@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.comparator.SortByStartTime;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventLoadedListener;
 import com.idan_koren_israeli.sailtracker.view_holder.listener.OnEventClickedListener;
 import com.idan_koren_israeli.sailtracker.view_holder.RegistrableEventViewHolder;
 
@@ -26,6 +27,7 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
 
     private OnEventClickedListener onRegisterPress;
     private OnEventClickedListener onUnregisterPress;
+    private OnEventClickedListener onWatchClicked, onUnwatchClicked;
 
 
     public RegistrableEventRecyclerAdapter(Context context, List<Event> events, List<Event> registered){
@@ -35,9 +37,12 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
 
     }
 
-    public void setButtonsListeners(OnEventClickedListener register, OnEventClickedListener unregister){
+    public void setButtonsListeners(OnEventClickedListener register, OnEventClickedListener unregister,
+                                    OnEventClickedListener watch, OnEventClickedListener unwatch){
         this.onRegisterPress = register;
         this.onUnregisterPress = unregister;
+        this.onWatchClicked = watch;
+        this.onUnregisterPress = unwatch;
     }
 
 
@@ -62,7 +67,7 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
             if (position < eventsList.size()) {
                 Event event = eventsList.get(position);
                 eventHolder.setEventContent(eventsList.get(position));
-                eventHolder.setButtonListener(onRegisterPress, onUnregisterPress);
+                eventHolder.setButtonListener(onRegisterPress, onUnregisterPress, onWatchClicked, onUnwatchClicked);
 
                 if (registeredEvents.contains(event)) {
                     // member is already registered

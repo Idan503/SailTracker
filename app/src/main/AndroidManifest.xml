@@ -71,7 +71,7 @@
             android:screenOrientation="portrait" />
 
         <service
-            android:name=".notification.EventAvailableService"
+            android:name=".notification.EventWatchService"
             android:enabled="true">
             </service>
 

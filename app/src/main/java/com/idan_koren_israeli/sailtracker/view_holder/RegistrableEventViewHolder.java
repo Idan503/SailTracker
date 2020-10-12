@@ -15,6 +15,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
+import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.view_holder.listener.OnEventClickedListener;
 
@@ -30,6 +31,7 @@ import org.joda.time.DateTime;
 public class RegistrableEventViewHolder extends EventViewHolder {
     private MaterialButton registerButton;
     private boolean registered;
+    private boolean watching;
     private boolean deletable;
     private Button deleteButton;
 
@@ -37,6 +39,7 @@ public class RegistrableEventViewHolder extends EventViewHolder {
         super(itemView);
         registered = false;
         deletable = false;
+        watching = false;
         findViews();
         setDeleteOption();
     }
@@ -44,6 +47,7 @@ public class RegistrableEventViewHolder extends EventViewHolder {
     public RegistrableEventViewHolder(@NonNull View itemView, boolean deletable) {
         super(itemView);
         registered = false;
+        watching = false;
         this.deletable = deletable;
         findViews();
         setDeleteOption();
@@ -57,13 +61,14 @@ public class RegistrableEventViewHolder extends EventViewHolder {
 
     public void setEventContent(Event event){
         super.setEventContent(event);
+        ColorStateList disabledBackground = ContextCompat.getColorStateList(registerButton.getContext(), R.color.lighter_grey);
+        ColorStateList transparent = ContextCompat.getColorStateList(registerButton.getContext(), android.R.color.transparent);
 
         if(event.getStartDateTime().getMillis() < DateTime.now().getMillis()){
             // This event is already started, disabling functionality
             registerButton.setOnClickListener(onClickedAfterStarted);
 
-            ColorStateList disabledBackground = ContextCompat.getColorStateList(registerButton.getContext(), R.color.lighter_grey);
-            ColorStateList transparent = ContextCompat.getColorStateList(registerButton.getContext(), android.R.color.transparent);
+
             registerButton.setBackgroundTintList(disabledBackground);
 
             //Un-clickable look
@@ -72,11 +77,18 @@ public class RegistrableEventViewHolder extends EventViewHolder {
 
         }
 
+        if(event.isFull()){
+            registerButton.setBackgroundTintList(disabledBackground);
+        }
+
+
+
     }
 
 
     //region Register/Unregister Functionality
-    public void setButtonListener(final OnEventClickedListener register, final OnEventClickedListener unregister){
+    public void setButtonListener(final OnEventClickedListener register, final OnEventClickedListener unregister,
+                                  final OnEventClickedListener watch, final OnEventClickedListener unwatch){
         if(event.getStartDateTime().getMillis() < DateTime.now().getMillis())
             return; // event already started, button should not be functional
 
@@ -85,8 +97,19 @@ public class RegistrableEventViewHolder extends EventViewHolder {
             public void onClick(View view) {
                 if(registered)
                     unregister.onButtonClicked(event);
-                else
-                    register.onButtonClicked(event);
+                else{
+                    if(watching)
+                        unwatch.onButtonClicked(event);
+                    else{
+                        if(event.isFull()){
+                            watch.onButtonClicked(event);
+                        }
+                        else
+                            register.onButtonClicked(event);
+                    }
+
+                }
+
             }
         });
     }
@@ -95,22 +118,82 @@ public class RegistrableEventViewHolder extends EventViewHolder {
     public void setIsRegistered(boolean isRegistered){
         this.registered = isRegistered;
         if(event!=null)
-            updateRegisterButton(event.getPrice());
+            updateRegisterButton();
 
     }
 
-    private void updateRegisterButton(int eventPrice){
+    private void updateRegisterButton(){
+        int eventPrice = event.getPrice();
+
         if(!registered){
-            String unregisterLabel = String.format(registerButton.getResources().getString(R.string.event_register_price_label), eventPrice);
-            registerButton.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimaryDark));
-            registerButton.setText(unregisterLabel);
+            if(!event.isFull()) {
+                showUnregisterButton(eventPrice);
+            }
+            else{
+                // Showing Watch/unwatch card
+                SharedPrefsManager sp = SharedPrefsManager.getInstance();
+                String memberWatch = sp.getString(SharedPrefsManager.KEYS.WATCH_EVENT_ID,null);
+                if(memberWatch==null){
+                    // event is full, show watch button
+                    showWatchButton(eventPrice);
+                }
+                else{
+                    if(memberWatch.equals(event.getEid())){
+                        // unwatch
+                        watching = true;
+                        showUnwatchButton(eventPrice);
+                    }
+                    else {
+                        // Can't register, event full, cant watch 2 events
+                        showEventFullButton(eventPrice);
+                    }
+                }
+            }
         }
         else{
-            String registerLabel = String.format(registerButton.getResources().getString(R.string.event_unregister_price_label), eventPrice);
-            registerButton.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimary));
-            registerButton.setText(registerLabel);
+            showRegisterButton(eventPrice);
         }
     }
+
+
+
+    //endregion
+
+
+    //region Buttons UI Show
+
+
+    private void showRegisterButton(int price){
+        String registerLabel = String.format(registerButton.getResources().getString(R.string.event_unregister_price_label), price);
+        registerButton.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimary));
+        registerButton.setText(registerLabel);
+    }
+
+    private void showUnregisterButton(int price){
+        String unregisterLabel = String.format(registerButton.getResources().getString(R.string.event_register_price_label), price);
+        registerButton.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimaryDark));
+        registerButton.setText(unregisterLabel);
+    }
+
+    private void showEventFullButton(int price){
+        String fullLabel = String.format(registerButton.getResources().getString(R.string.event_full_price_label), price);
+        registerButton.setTextColor(ContextCompat.getColor(itemView.getContext(),  R.color.lighter_grey));
+        registerButton.setText(fullLabel);
+    }
+
+    private void showWatchButton(int price){
+        String watchLabel = String.format(registerButton.getResources().getString(R.string.event_watch_price_label), price);
+        registerButton.setTextColor(ContextCompat.getColor(itemView.getContext(),  R.color.colorPrimaryDark));
+        registerButton.setText(watchLabel);
+    }
+
+    private void showUnwatchButton(int price){
+        String unwatchLabel = String.format(registerButton.getResources().getString(R.string.event_unwatch_price_label), price);
+        registerButton.setTextColor(ContextCompat.getColor(itemView.getContext(),  R.color.colorPrimaryDark));
+        registerButton.setText(unwatchLabel);
+    }
+
+
     //endregion
 
 

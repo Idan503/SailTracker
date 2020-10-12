@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.database.Exclude;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.enums.EventType;
@@ -180,5 +181,6 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
                 break;
         }
     }
+
 
 }

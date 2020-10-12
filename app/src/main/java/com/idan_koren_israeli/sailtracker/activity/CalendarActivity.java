@@ -18,13 +18,12 @@ import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.exception.EventFullException;
 import com.idan_koren_israeli.sailtracker.club.exception.NotEnoughPointsException;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
+import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
 import com.idan_koren_israeli.sailtracker.fragment.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.fragment.PointsStatusFragment;
 import com.idan_koren_israeli.sailtracker.adapter.EventRecyclerAdapter;
 import com.idan_koren_israeli.sailtracker.adapter.ManagerEventRecyclerAdapter;
-import com.idan_koren_israeli.sailtracker.notification.EventAvailableService;
-import com.idan_koren_israeli.sailtracker.notification.EventBroadcastReceiver;
-import com.idan_koren_israeli.sailtracker.notification.EventNotificationManager;
+import com.idan_koren_israeli.sailtracker.notification.EventWatchService;
 import com.idan_koren_israeli.sailtracker.view_holder.listener.OnEventClickedListener;
 import com.idan_koren_israeli.sailtracker.adapter.RegistrableEventRecyclerAdapter;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
@@ -49,6 +48,8 @@ public class CalendarActivity extends BaseActivity {
 
     private RecyclerView eventsRecycler;
     private EventRecyclerAdapter eventsAdapter;
+
+    private Intent watchingEventService;
 
     private boolean managerView = false;
     private LoadingFragment loadingFragment;
@@ -102,7 +103,9 @@ public class CalendarActivity extends BaseActivity {
                 // a register recycler view of all of selected day's events
                 eventsAdapter = new RegistrableEventRecyclerAdapter(this, eventsToShow, registered);
             }
-            ((RegistrableEventRecyclerAdapter)eventsAdapter).setButtonsListeners(onRegisterClicked, onUnregisterClicked);
+            ((RegistrableEventRecyclerAdapter)eventsAdapter)
+                    .setButtonsListeners(onRegisterClicked, onUnregisterClicked,
+                                         onWatchClicked, onUnwatchClicked);
         }
 
 
@@ -158,7 +161,7 @@ public class CalendarActivity extends BaseActivity {
 
 
                     // for testing:
-                    initEventAvailableService(eventClicked);
+                    initEventWatchService(eventClicked);
 
                 }
                 else {
@@ -193,23 +196,28 @@ public class CalendarActivity extends BaseActivity {
     private OnEventClickedListener onWatchClicked = new OnEventClickedListener() {
         @Override
         public void onButtonClicked(Event eventClicked) {
+            SharedPrefsManager sp = SharedPrefsManager.getInstance();
+            sp.putString(SharedPrefsManager.KEYS.WATCH_EVENT_ID, eventClicked.getEid());
+            initEventWatchService(eventClicked);
 
-            initAddedEvent();
         }
     };
 
     private OnEventClickedListener onUnwatchClicked = new OnEventClickedListener() {
         @Override
         public void onButtonClicked(Event eventClicked) {
-
+            cancelEventWatchService();
         }
     };
 
-    private void initEventAvailableService(Event listenTo){
-        Intent serviceIntent = new Intent(CalendarActivity.this, EventAvailableService.class);
+    private void initEventWatchService(Event listenTo){
+        watchingEventService = new Intent(CalendarActivity.this, EventWatchService.class);
+        watchingEventService.putExtra(EventWatchService.KEYS.EVENT_TO_LISTEN, listenTo);
+        startService(watchingEventService);
+    }
 
-        serviceIntent.putExtra(EventAvailableService.KEYS.EVENT_TO_LISTEN, listenTo);
-        startService(serviceIntent);
+    private void cancelEventWatchService(){
+        stopService(watchingEventService);
     }
 
     private View.OnClickListener onClickedAddButton = new View.OnClickListener() {

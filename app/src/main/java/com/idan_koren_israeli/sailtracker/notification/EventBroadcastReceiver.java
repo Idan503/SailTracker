@@ -10,7 +10,7 @@ import android.content.Intent;
 public class EventBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent startServiceIntent = new Intent(context, EventBroadcastReceiver.class);
+        Intent startServiceIntent = new Intent(context, EventWatchService.class);
 
         // needs to add here event to listen to as extra from sp
 

@@ -247,7 +247,7 @@ public class EventDataManager {
 
 
     // Listening for a single event all changes
-    public void listenToEventChanges(Event event, final OnEventLoadedListener onEventChanges){
+    public ValueEventListener watchEventChanges(Event event, final OnEventLoadedListener onEventChanges){
 
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
@@ -264,7 +264,14 @@ public class EventDataManager {
 
         dbRealtime.child(KEYS.EVENTS).child(event.getEid()).addValueEventListener(valueEventListener);
 
+        return valueEventListener;
     }
+
+    public void unwatchEventChanges(Event event, final ValueEventListener valueListener){
+        if(valueListener!=null)
+            dbRealtime.child(KEYS.EVENTS).child(event.getEid()).removeEventListener(valueListener);
+    }
+
 
     // Loads all events from a single day
     public void loadEventsByDate(LocalDate day, final OnListLoadedListener<Event> onLoaded){
