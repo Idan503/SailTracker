@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
@@ -30,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
     private static final int CHANGE_TEXT_DELAY = 500; //in ms
 
     private SharedPrefsManager sp;
-    private boolean startAppAsAnimationEnds = false;
+    private boolean startAppOnAnimationEnd = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +45,7 @@ public class SplashActivity extends AppCompatActivity {
             MemberDataManager.getInstance().loadMemberByPhone(loggedPhone,onCurrentMemberLoaded);
         }
         else{
-            startAppAsAnimationEnds = true;
+            startAppOnAnimationEnd = true;
             // Nothing to check w/ db, app can start
         }
 
@@ -108,7 +107,7 @@ public class SplashActivity extends AppCompatActivity {
 
                     @Override
                     public void onAnimationEnd(Animator animator) {
-                        if(startAppAsAnimationEnds)
+                        if(startAppOnAnimationEnd)
                             startApp();
                         else
                         {

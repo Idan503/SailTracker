@@ -3,14 +3,10 @@ package com.idan_koren_israeli.sailtracker.activity;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -19,7 +15,6 @@ import android.widget.ViewFlipper;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.radiobutton.MaterialRadioButton;
-import com.google.api.Distribution;
 import com.google.type.TimeOfDay;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
@@ -30,7 +25,6 @@ import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 /**
@@ -334,10 +328,10 @@ public class AddEventActivity extends BaseActivity {
             maxMemberCount = Integer.parseInt(maxMemberCountString);
 
 
-        EventType type = EventType.FREE_EVENT;
+        EventType type = EventType.EVENING_EVENT;
         switch (eventTypeRadio.getCheckedRadioButtonId()){
             case R.id.add_event_RBTN_free_event:
-                type = EventType.FREE_EVENT;
+                type = EventType.EVENING_EVENT;
                 break;
             case R.id.add_event_RBTN_members_sail:
                 type = EventType.MEMBERS_SAIL;

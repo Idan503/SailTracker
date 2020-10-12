@@ -162,7 +162,7 @@ public class LoginFragment extends Fragment {
                     // First we check if the phone number is already exists in our db
                     MemberDataManager.getInstance().loadMemberByPhone(currentPhone, onMemberLoaded);
 
-                    // verifyUserPhoneNUmber() is called in onNumberChecked callback
+                    // verifyUserPhoneNUmber() is called in onMemberLoaded callback
 
                     break;
             }

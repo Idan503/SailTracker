@@ -89,7 +89,7 @@ public class NextEventFragment extends Fragment {
     private void setBackgroundResource(EventType type){
         CommonUtils common = CommonUtils.getInstance();
         switch (type){
-            case FREE_EVENT:
+            case EVENING_EVENT:
                 common.setImageResource(backgroundImage,R.drawable.img_evening_event);
                 break;
             case GUIDED_SAIL:

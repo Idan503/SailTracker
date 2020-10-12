@@ -207,20 +207,20 @@ public class MemberDataManager {
 
     public void loadMemberByPhone(@NonNull final String phoneNumber,
                                   @Nullable final OnMemberLoadListener onMemberLoaded){
-        if (currentMember !=null && phoneNumber.equals(currentMember.getPhoneNumber())){
+        if (currentMember !=null && phoneNumber.equals(currentMember.getPhoneNumber()) && onMemberLoaded!=null){
             onMemberLoaded.onMemberLoad(currentMember);
             return; // currentuser is already loaded
         }
 
-        //region ClubMember Object Load Listening
-        if(onMemberLoaded!=null)
+
+        if(onMemberLoaded!=null) {
             dbRealtime.child(KEYS.PHONE_TO_MEMBERS).child(phoneNumber).addListenerForSingleValueEvent(
                     new ValueEventListener() {
                         @Override
                         public void onDataChange(@Nullable DataSnapshot snapshot) {
-                            if(snapshot==null || snapshot.getValue()==null)
+                            if (snapshot == null || snapshot.getValue() == null) {
                                 onMemberLoaded.onMemberLoad(null); // Member could not be found
-                            else {
+                            } else {
                                 String memberUid = Objects.requireNonNull(snapshot.getValue()).toString();
                                 loadMember(memberUid, onMemberLoaded); // Load member by the uid we got from rtdb
                             }
@@ -230,12 +230,12 @@ public class MemberDataManager {
                         public void onCancelled(@NonNull DatabaseError error) {
                             onMemberLoaded.onMemberLoad(null);
                             CommonUtils.getInstance().showToast("There was a problem.");
-                            Log.e(TAG,error.getDetails());
+                            Log.e(TAG, error.getDetails());
                         }
                     }
             );
+        }
 
-        //endregion
 
     }
 

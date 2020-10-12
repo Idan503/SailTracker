@@ -169,7 +169,7 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         // setting the image differently for each type
         CommonUtils common = CommonUtils.getInstance();
         switch (type){
-            case FREE_EVENT:
+            case EVENING_EVENT:
                 common.setImageResource(image, IMAGE_ID_KEYS.EVENING_EVENT);
                 break;
             case GUIDED_SAIL:
