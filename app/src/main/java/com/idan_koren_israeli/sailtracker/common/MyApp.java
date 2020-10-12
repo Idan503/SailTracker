@@ -6,6 +6,7 @@ import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.LoginManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.location.SeaLocationManager;
+import com.idan_koren_israeli.sailtracker.notification.EventNotificationManager;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -20,6 +21,7 @@ public class MyApp extends Application {
     CommonUtils.initHelper(this);
     SharedPrefsManager.initHelper(this);
     SeaLocationManager.initHelper(this);
+    EventNotificationManager.initHelper(this);
 
     // Initiating Firebase Managers
     MemberDataManager.initHelper();

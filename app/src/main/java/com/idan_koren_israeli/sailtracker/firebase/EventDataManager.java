@@ -246,6 +246,25 @@ public class EventDataManager {
     }
 
 
+    // Listening for a single event all changes
+    public void listenToEventChanges(Event event, final OnEventLoadedListener onEventChanges){
+
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Event loadedEvent = snapshot.getValue(Event.class);
+                    onEventChanges.onEventLoaded(loadedEvent);
+                }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        dbRealtime.child(KEYS.EVENTS).child(event.getEid()).addValueEventListener(valueEventListener);
+
+    }
 
     // Loads all events from a single day
     public void loadEventsByDate(LocalDate day, final OnListLoadedListener<Event> onLoaded){

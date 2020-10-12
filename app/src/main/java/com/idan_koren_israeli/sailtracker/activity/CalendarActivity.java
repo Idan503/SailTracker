@@ -22,6 +22,9 @@ import com.idan_koren_israeli.sailtracker.fragment.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.fragment.PointsStatusFragment;
 import com.idan_koren_israeli.sailtracker.adapter.EventRecyclerAdapter;
 import com.idan_koren_israeli.sailtracker.adapter.ManagerEventRecyclerAdapter;
+import com.idan_koren_israeli.sailtracker.notification.EventAvailableService;
+import com.idan_koren_israeli.sailtracker.notification.EventBroadcastReceiver;
+import com.idan_koren_israeli.sailtracker.notification.EventNotificationManager;
 import com.idan_koren_israeli.sailtracker.view_holder.listener.OnEventClickedListener;
 import com.idan_koren_israeli.sailtracker.adapter.RegistrableEventRecyclerAdapter;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
@@ -152,6 +155,11 @@ public class CalendarActivity extends BaseActivity {
                     EventDataManager.getInstance().registerMember(currentMember, eventClicked);
                     reloadPointsStatus();
                     CommonUtils.getInstance().showToast("Registered successfully!");
+
+
+                    // for testing:
+                    initEventAvailableService(eventClicked);
+
                 }
                 else {
                     CommonUtils.getInstance().showToast("Already registered at the same time");
@@ -181,6 +189,28 @@ public class CalendarActivity extends BaseActivity {
             CommonUtils.getInstance().showToast("Unregistered successfully!");
         }
     };
+
+    private OnEventClickedListener onWatchClicked = new OnEventClickedListener() {
+        @Override
+        public void onButtonClicked(Event eventClicked) {
+
+            initAddedEvent();
+        }
+    };
+
+    private OnEventClickedListener onUnwatchClicked = new OnEventClickedListener() {
+        @Override
+        public void onButtonClicked(Event eventClicked) {
+
+        }
+    };
+
+    private void initEventAvailableService(Event listenTo){
+        Intent serviceIntent = new Intent(CalendarActivity.this, EventAvailableService.class);
+
+        serviceIntent.putExtra(EventAvailableService.KEYS.EVENT_TO_LISTEN, listenTo);
+        startService(serviceIntent);
+    }
 
     private View.OnClickListener onClickedAddButton = new View.OnClickListener() {
         @Override

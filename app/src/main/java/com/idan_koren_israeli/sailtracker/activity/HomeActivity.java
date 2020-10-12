@@ -25,6 +25,7 @@ import com.idan_koren_israeli.sailtracker.fragment.NavigationBarFragment;
 import com.idan_koren_israeli.sailtracker.fragment.ProfileFragment;
 import com.idan_koren_israeli.sailtracker.fragment.LoginFragment;
 import com.idan_koren_israeli.sailtracker.fragment.NextEventFragment;
+import com.idan_koren_israeli.sailtracker.notification.EventNotificationManager;
 
 import java.io.IOException;
 
@@ -47,6 +48,7 @@ public class HomeActivity extends BaseActivity {
         findViews();
         setListeners();
         loadBannerImage();
+
 
         user = MemberDataManager.getInstance().getCurrentMember();
         if(user!=null) {
