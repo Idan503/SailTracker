@@ -216,13 +216,14 @@ public class Event implements Serializable {
         if(registeredMembers==null)
             initRegisteredList();
 
-        if(registeredMembers.contains(member.getUid())){
+        if(registeredMembers.contains(member.getUid()))
             registeredMembers.remove(member.getUid());
-            member.addPoints(getPrice());
-            member.deductOneEvent();
-            MemberDataManager.getInstance().storeMember(member);
-            EventDataManager.getInstance().storeEvent(this);
-        }
+
+        member.addPoints(getPrice());
+        member.deductOneEvent();
+        MemberDataManager.getInstance().storeMember(member);
+        //EventDataManager.getInstance().storeEvent(this);
+
     }
 
     private void initRegisteredList(){

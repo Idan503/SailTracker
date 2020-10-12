@@ -42,7 +42,7 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
         this.onRegisterPress = register;
         this.onUnregisterPress = unregister;
         this.onWatchClicked = watch;
-        this.onUnregisterPress = unwatch;
+        this.onUnwatchClicked = unwatch;
     }
 
 

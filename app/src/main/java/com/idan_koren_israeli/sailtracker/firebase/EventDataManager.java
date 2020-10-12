@@ -180,8 +180,6 @@ public class EventDataManager {
     public void unregisterMember(final ClubMember member, final Event event){
         event.unregisterMember(member);
 
-
-
         ValueEventListener onMembersEventsListLoaded = new ValueEventListener() {
             @SuppressWarnings("unchecked")
             @Override

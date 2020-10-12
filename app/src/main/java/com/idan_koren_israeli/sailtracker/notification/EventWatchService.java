@@ -6,6 +6,7 @@ import android.os.IBinder;
 
 import com.google.firebase.database.ValueEventListener;
 import com.idan_koren_israeli.sailtracker.club.Event;
+import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventLoadedListener;
 
@@ -22,6 +23,7 @@ public class EventWatchService extends Service {
     private ValueEventListener valueListener; // to stop listen after push notification sent
     private EventDataManager eventData;
     private Event eventWatching;
+    private SharedPrefsManager sp;
 
     public interface KEYS{
         String EVENT_TO_LISTEN = "event_to_listen";
@@ -31,6 +33,7 @@ public class EventWatchService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Event toListen = (Event) intent.getSerializableExtra(KEYS.EVENT_TO_LISTEN);
+        sp = SharedPrefsManager.initHelper(getApplicationContext());
         eventData = EventDataManager.initHelper();
 
         if(toListen!=null) {
@@ -48,6 +51,7 @@ public class EventWatchService extends Service {
                 // There is a free slot in the event
                 showEventAvailableNotification();
                 eventData.unwatchEventChanges(event, valueListener);
+                sp.removeKey(SharedPrefsManager.KEYS.WATCH_EVENT_ID);
                 stopSelf();
             }
         }

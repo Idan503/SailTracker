@@ -77,7 +77,7 @@ public class RegistrableEventViewHolder extends EventViewHolder {
 
         }
 
-        if(event.isFull()){
+        if(event.isFull() && !registered){
             registerButton.setBackgroundTintList(disabledBackground);
         }
 
@@ -98,11 +98,14 @@ public class RegistrableEventViewHolder extends EventViewHolder {
                 if(registered)
                     unregister.onButtonClicked(event);
                 else{
-                    if(watching)
+                    if(watching) {
                         unwatch.onButtonClicked(event);
+                        showWatchButton(event.getPrice());
+                    }
                     else{
                         if(event.isFull()){
                             watch.onButtonClicked(event);
+                            showUnwatchButton(event.getPrice());
                         }
                         else
                             register.onButtonClicked(event);

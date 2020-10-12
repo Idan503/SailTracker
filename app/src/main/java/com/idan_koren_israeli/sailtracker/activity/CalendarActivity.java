@@ -160,9 +160,6 @@ public class CalendarActivity extends BaseActivity {
                     CommonUtils.getInstance().showToast("Registered successfully!");
 
 
-                    // for testing:
-                    initEventWatchService(eventClicked);
-
                 }
                 else {
                     CommonUtils.getInstance().showToast("Already registered at the same time");
@@ -206,6 +203,8 @@ public class CalendarActivity extends BaseActivity {
     private OnEventClickedListener onUnwatchClicked = new OnEventClickedListener() {
         @Override
         public void onButtonClicked(Event eventClicked) {
+            SharedPrefsManager sp = SharedPrefsManager.getInstance();
+            sp.removeKey(SharedPrefsManager.KEYS.WATCH_EVENT_ID);
             cancelEventWatchService();
         }
     };
@@ -217,7 +216,8 @@ public class CalendarActivity extends BaseActivity {
     }
 
     private void cancelEventWatchService(){
-        stopService(watchingEventService);
+        if(watchingEventService!=null)
+            stopService(watchingEventService);
     }
 
     private View.OnClickListener onClickedAddButton = new View.OnClickListener() {
