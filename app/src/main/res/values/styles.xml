@@ -37,7 +37,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:scaleType">centerCrop</item>
         <item name="android:contentDescription">@string/background</item>
-        <item name="android:alpha">0.355</item>
+        <item name="android:alpha">0.455</item>
         <item name="layout_constraintTop_toTopOf">parent</item>
         <item name="layout_constraintBottom_toBottomOf">parent</item>
         <item name="layout_constraintStart_toStartOf">parent</item>

@@ -23,6 +23,7 @@ import com.idan_koren_israeli.sailtracker.fragment.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.fragment.PointsStatusFragment;
 import com.idan_koren_israeli.sailtracker.adapter.EventRecyclerAdapter;
 import com.idan_koren_israeli.sailtracker.adapter.ManagerEventRecyclerAdapter;
+import com.idan_koren_israeli.sailtracker.notification.EventWatchManager;
 import com.idan_koren_israeli.sailtracker.notification.EventWatchService;
 import com.idan_koren_israeli.sailtracker.view_holder.listener.OnEventClickedListener;
 import com.idan_koren_israeli.sailtracker.adapter.RegistrableEventRecyclerAdapter;
@@ -49,7 +50,7 @@ public class CalendarActivity extends BaseActivity {
     private RecyclerView eventsRecycler;
     private EventRecyclerAdapter eventsAdapter;
 
-    private Intent watchingEventService;
+    private EventWatchManager serviceManager;
 
     private boolean managerView = false;
     private LoadingFragment loadingFragment;
@@ -59,6 +60,7 @@ public class CalendarActivity extends BaseActivity {
         setContentView(R.layout.activity_calendar);
 
         currentMember = MemberDataManager.getInstance().getCurrentMember();
+        serviceManager = EventWatchManager.initHelper(this);
         findViews();
         initAddedEvent();
 
@@ -209,16 +211,16 @@ public class CalendarActivity extends BaseActivity {
         }
     };
 
-    private void initEventWatchService(Event listenTo){
-        watchingEventService = new Intent(CalendarActivity.this, EventWatchService.class);
-        watchingEventService.putExtra(EventWatchService.KEYS.EVENT_TO_LISTEN, listenTo);
-        startService(watchingEventService);
+
+    private void initEventWatchService(Event eventToWatch){
+        serviceManager.startWatch(eventToWatch);
     }
 
     private void cancelEventWatchService(){
-        if(watchingEventService!=null)
-            stopService(watchingEventService);
+        serviceManager.stopWatch();
     }
+
+
 
     private View.OnClickListener onClickedAddButton = new View.OnClickListener() {
         @Override
@@ -229,6 +231,12 @@ public class CalendarActivity extends BaseActivity {
             finish();
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        serviceManager.destroyService();
+    }
 
     //endregion
 

@@ -101,11 +101,13 @@ public class RegistrableEventViewHolder extends EventViewHolder {
                     if(watching) {
                         unwatch.onButtonClicked(event);
                         showWatchButton(event.getPrice());
+                        watching = false;
                     }
                     else{
                         if(event.isFull()){
                             watch.onButtonClicked(event);
                             showUnwatchButton(event.getPrice());
+                            watching = true;
                         }
                         else
                             register.onButtonClicked(event);
