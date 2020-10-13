@@ -263,8 +263,6 @@ public class LoginFragment extends Fragment {
 
 
 
-
-
     //region Authentication Callbacks
     private OnMemberLoadListener onMemberLoaded = new OnMemberLoadListener() {
         @Override
@@ -322,7 +320,7 @@ public class LoginFragment extends Fragment {
                 CommonUtils.getInstance().showToast("Too many requests");
             }
             else{
-                CommonUtils.getInstance().showToast("Filed - Please try again later");
+                CommonUtils.getInstance().showToast("Failed - Please try again later");
             }
         }
 

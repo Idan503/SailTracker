@@ -27,6 +27,7 @@
                 android:layout_height="match_parent"
                 android:weightSum="1"
                 android:orientation="horizontal"
+                android:baselineAligned="false"
                 android:padding="10dp"
                 android:animateLayoutChanges="true"
                 android:id="@+id/event_item_LAY_outer_info"

@@ -222,8 +222,6 @@ public class Event implements Serializable {
         member.addPoints(getPrice());
         member.deductOneEvent();
         MemberDataManager.getInstance().storeMember(member);
-        //EventDataManager.getInstance().storeEvent(this);
-
     }
 
     private void initRegisteredList(){

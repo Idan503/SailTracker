@@ -167,7 +167,7 @@
                         android:lines="1"
                         android:id="@+id/event_item_BTN_register"
                         android:textSize="12sp"
-                        android:autoSizeMaxTextSize="14sp"
+                        android:autoSizeMaxTextSize="12sp"
                         android:autoSizeMinTextSize="10sp"
                         android:autoSizeTextType="uniform"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"

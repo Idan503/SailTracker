@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -13,6 +14,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.ViewFlipper;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.radiobutton.MaterialRadioButton;
 import com.google.type.TimeOfDay;
@@ -38,6 +46,8 @@ import java.util.InputMismatchException;
 public class AddEventActivity extends BaseActivity {
 
     private RadioGroup eventTypeRadio;
+    private MaterialRadioButton typeEveningBtn, typeMembersBtn, typeGuidedBtn;
+
     private EditText nameEdit, descriptionEdit;
     private MaterialButton maxParticipantsButton, priceButton;
     private ViewFlipper viewFlipper;
@@ -80,6 +90,11 @@ public class AddEventActivity extends BaseActivity {
         startTimeButton = findViewById(R.id.add_event_BTN_start_time);
         endTimeButton = findViewById(R.id.add_event_BTN_end_time);
         viewFlipper = findViewById(R.id.add_event_LAY_flipper);
+
+        // Radio buttons
+        typeGuidedBtn = findViewById(R.id.add_event_RBTN_guided_sail);
+        typeMembersBtn = findViewById(R.id.add_event_RBTN_members_sail);
+        typeEveningBtn = findViewById(R.id.add_event_RBTN_evening_event);
     }
 
     private void setListeners(){
@@ -103,11 +118,17 @@ public class AddEventActivity extends BaseActivity {
             }
         });
 
+
         startTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int lastHours = 12, lastMinutes = 0; // saving user selection
+                if(startTime!=null){
+                    lastHours = startTime.getHours();
+                    lastMinutes = startTime.getMinutes();
+                }
                 TimePickerDialog picker =
-                        new TimePickerDialog(mContext,onStartTimePicked,12,0,true);
+                        new TimePickerDialog(mContext,onStartTimePicked,lastHours,lastMinutes,true);
 
                 picker.show();
             }
@@ -116,8 +137,13 @@ public class AddEventActivity extends BaseActivity {
         endTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int lastHours = 12, lastMinutes = 0; // saving user selection
+                if(endTime!=null){
+                    lastHours = endTime.getHours();
+                    lastMinutes = endTime.getMinutes();
+                }
                 TimePickerDialog picker =
-                        new TimePickerDialog(mContext,onEndTimePicked,16,0,true);
+                        new TimePickerDialog(mContext,onEndTimePicked,lastHours,lastMinutes,true);
 
                 picker.show();
             }
@@ -176,6 +202,7 @@ public class AddEventActivity extends BaseActivity {
             }
         }
     };
+
 
     //region Number Pickers (Participants Limit & Price)
 
@@ -330,13 +357,13 @@ public class AddEventActivity extends BaseActivity {
 
         EventType type = EventType.EVENING_EVENT;
         switch (eventTypeRadio.getCheckedRadioButtonId()){
-            case R.id.add_event_RBTN_free_event:
+            case R.id.add_event_RBTN_evening_event:
                 type = EventType.EVENING_EVENT;
                 break;
             case R.id.add_event_RBTN_members_sail:
                 type = EventType.MEMBERS_SAIL;
                 break;
-            case R.id.add_event_event_RBTN_guided_sail:
+            case R.id.add_event_RBTN_guided_sail:
                 type = EventType.GUIDED_SAIL;
                 break;
 

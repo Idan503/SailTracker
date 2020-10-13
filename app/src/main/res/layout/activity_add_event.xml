@@ -104,9 +104,10 @@
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:id="@+id/add_event_RBTN_free_event"
+                    android:id="@+id/add_event_RBTN_evening_event"
                     style="@style/FormRadioButton"
                     android:text="@string/evening_event"
+                    android:background="@drawable/img_card_evening_event"
                     />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
@@ -115,14 +116,16 @@
                     android:id="@+id/add_event_RBTN_members_sail"
                     style="@style/FormRadioButton"
                     android:text="@string/members_sail"
+                    android:background="@drawable/img_card_members_sail"
                     />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:id="@+id/add_event_event_RBTN_guided_sail"
+                    android:id="@+id/add_event_RBTN_guided_sail"
                     android:text="@string/guided_sail"
                     style="@style/FormRadioButton"
+                    android:background="@drawable/img_card_guided_sail"
                     />
 
             </RadioGroup>
