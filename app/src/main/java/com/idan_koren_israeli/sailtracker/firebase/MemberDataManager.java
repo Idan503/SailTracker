@@ -302,6 +302,7 @@ public class MemberDataManager {
         StorageReference filePath = profilePhotosHub.child(uid);
 
         filePath.getDownloadUrl().addOnSuccessListener(onSuccess).addOnFailureListener(onFailure);
+
     }
 
     // Each user can upload a profile image to his own unique folder

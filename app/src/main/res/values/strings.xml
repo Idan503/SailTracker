@@ -89,6 +89,7 @@
     <string name="label_future_events">Upcoming Sails and Events</string>
     <string name="label_past_events">Past Sails and Events</string>
     <string name="label_loading_splash_screen">Loading…</string>
+    <string name="label_choose_new_name">Choose a new name…</string>
 
 
     <!-- LOADING MESSAGES -->

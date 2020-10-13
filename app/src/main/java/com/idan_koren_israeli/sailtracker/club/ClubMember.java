@@ -18,7 +18,6 @@ import java.util.ArrayList;
  */
 public class ClubMember implements Serializable {
     private String uid;
-    private String profilePictureUrl;
     private String name;
     private String phoneNumber;
     private int pointsCount;
@@ -31,7 +30,6 @@ public class ClubMember implements Serializable {
 
     public ClubMember(String uid, String pictureURI, String name, String phoneNumber, int pointsCount, int eventCount) {
         this.uid = uid;
-        this.profilePictureUrl = pictureURI;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.pointsCount = pointsCount;
@@ -45,7 +43,6 @@ public class ClubMember implements Serializable {
         this.name = displayName;
         this.uid = uid;
         this.phoneNumber = phoneNumber;
-        this.profilePictureUrl = null;
         this.pointsCount = 0;
         this.eventCount = 0;
         this.galleryPhotos = new ArrayList<>();
@@ -62,13 +59,6 @@ public class ClubMember implements Serializable {
         this.uid = uid;
     }
 
-    public String getProfilePictureUrl() {
-        return profilePictureUrl;
-    }
-
-    public void setProfilePictureUrl(String url) {
-        this.profilePictureUrl = url;
-    }
 
     public String getName() {
         return name;
@@ -152,8 +142,7 @@ public class ClubMember implements Serializable {
                 + "\nName: "+ name
                 + "\nPhone: " +phoneNumber
                 + "\nNumber of Sails: " + eventCount
-                + "\nNumber of Points: " + pointsCount
-                + "\nHave a profile picture: " + (profilePictureUrl!=null);
+                + "\nNumber of Points: " + pointsCount;
     }
 
 }
