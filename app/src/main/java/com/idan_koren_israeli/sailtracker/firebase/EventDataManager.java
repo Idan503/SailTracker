@@ -198,7 +198,7 @@ public class EventDataManager {
                 updateNextEvent(member.getUid(),registeredEvents);
                 //Saving list of event itself and updating
 
-                dbRealtime.child(KEYS.EVENTS).child(generateDateStamp(event.getStartDateTime().toLocalDate())).child(event.getEid())
+                dbRealtime.child(KEYS.EVENTS).child(event.getEid())
                         .child(KEYS.EVENT_MEMBERS_LIST).setValue(event.getRegisteredMembers());
                 // Updating the stored event object
 

@@ -123,12 +123,14 @@ public class ProfileFragment extends Fragment {
         historyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), HistoryActivity.class);
-                intent.putExtra(HistoryActivity.KEYS.MEMBER_TO_SHOW,member);
-                startActivity(intent);
-                // Caller activity is purposefully not finished.
-                // "My sails" activity would be finished and user will get back to the caller activity
+                if(member!=null) {
+                    Intent intent = new Intent(getActivity(), HistoryActivity.class);
+                    intent.putExtra(HistoryActivity.KEYS.MEMBER_TO_SHOW, member);
+                    startActivity(intent);
+                    // Caller activity is purposefully not finished.
+                    // "My sails" activity would be finished and user will get back to the caller activity
                 }
+            }
         });
 
         nameText.setOnClickListener(onNameClick);
@@ -182,10 +184,12 @@ public class ProfileFragment extends Fragment {
     private View.OnClickListener onNameClick = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            if(member==null)
+                return; // no user to change its name to
+
             newNameEditText = new EditText(view.getContext());
             newNameEditText.setHint(view.getContext().getText(R.string.label_choose_new_name));
-            if(member!=null)
-                newNameEditText.setText(member.getName());
+            newNameEditText.setText(member.getName());
 
             new MaterialAlertDialogBuilder(view.getContext())
                     .setTitle("Change Display Name")
