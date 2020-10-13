@@ -207,7 +207,7 @@ public class CalendarActivity extends BaseActivity {
         public void onButtonClicked(Event eventClicked) {
             SharedPrefsManager sp = SharedPrefsManager.getInstance();
             sp.removeKey(SharedPrefsManager.KEYS.WATCH_EVENT_ID);
-            cancelEventWatchService();
+            cancelEventWatchService(eventClicked);
         }
     };
 
@@ -216,8 +216,8 @@ public class CalendarActivity extends BaseActivity {
         serviceManager.startWatch(eventToWatch);
     }
 
-    private void cancelEventWatchService(){
-        serviceManager.stopWatch();
+    private void cancelEventWatchService(Event eventToUnwatch){
+        serviceManager.stopWatch(eventToUnwatch);
     }
 
 

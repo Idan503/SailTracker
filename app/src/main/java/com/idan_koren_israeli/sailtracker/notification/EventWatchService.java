@@ -27,27 +27,23 @@ public class EventWatchService extends Service {
     private ValueEventListener valueListener; // to stop listen after push notification sent
     private EventDataManager eventData;
     private SharedPrefsManager sp;
-    private boolean preventRestart = false;
+    private Event eventWatched;
 
     public interface KEYS{
         String EVENT_TO_LISTEN = "event_to_listen";
-        String IS_RESTART_CALL = "is_restart";
     }
 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent,flags,startId);
-        Log.i("pttt","onStartCommand Service");
-        Event toListen = (Event) intent.getSerializableExtra(KEYS.EVENT_TO_LISTEN);
-        boolean isRestart = intent.getBooleanExtra(KEYS.IS_RESTART_CALL, false);
+        eventWatched = (Event) intent.getSerializableExtra(KEYS.EVENT_TO_LISTEN);
         sp = SharedPrefsManager.initHelper(getApplicationContext());
         eventData = EventDataManager.initHelper();
 
-        if(toListen!=null) {
-            valueListener = eventData.watchEventChanges(toListen, onEventChanged);
+        if(eventWatched!=null) {
+            valueListener = eventData.watchEventChanges(eventWatched, onEventChanged);
         }
-
 
         return Service.START_STICKY;
     }
@@ -55,13 +51,11 @@ public class EventWatchService extends Service {
     private OnEventLoadedListener onEventChanged = new OnEventLoadedListener() {
         @Override
         public void onEventLoaded(Event event) {
-            Log.i("pttt", event.getRegisteredMembers().size() + " | " + event.getMaxMembersCount());
             if(event.getRegisteredMembers().size() < event.getMaxMembersCount()){
                 // There is a free slot in the event
-                showEventAvailableNotification();
-                eventData.unwatchEventChanges(event, valueListener);
-                sp.removeKey(SharedPrefsManager.KEYS.WATCH_EVENT_ID);
-                stopSelf();
+                if(eventWatched!=null)
+                    showEventAvailableNotification();
+                stopWatchingEvent(event);
             }
         }
     };
@@ -71,13 +65,21 @@ public class EventWatchService extends Service {
         notification.showNotification();
     }
 
-
+    public void stopWatchingEvent(Event event){
+        if(eventData!=null)
+            eventData.unwatchEventChanges(event, valueListener);
+        if(sp!=null)
+            sp.removeKey(SharedPrefsManager.KEYS.WATCH_EVENT_ID);
+        eventWatched = null; // User does not watch any event
+    }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        // Code gets to here when application is being killed (inconsistent on some phone)
         Intent broadcastIntent = new Intent(this, EventBroadcastReceiver.class);
         sendBroadcast(broadcastIntent);
+        stopSelf();
     }
 
 

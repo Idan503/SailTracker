@@ -55,8 +55,6 @@ public class EventWatchManager {
 
 
     public void startWatch(Event event){
-        watchService = new EventWatchService();
-
         watchIntent= new Intent(callerActivity, EventWatchService.class);
         watchIntent.putExtra(EventWatchService.KEYS.EVENT_TO_LISTEN, event);
         callerActivity.startService(watchIntent);
@@ -64,15 +62,15 @@ public class EventWatchManager {
 
 
     // No need to event parameter because user can only watch one event at a time
-    public void stopWatch(){
+    public void stopWatch(Event event){
         if(watchIntent !=null)
-            callerActivity.stopService(watchIntent);
+            watchService.stopWatchingEvent(event);
     }
 
 
 
     public void destroyService(){
-        // Stopping the service, while we know it will be restated
+        // Service will restart as it will stop, for future notification
         callerActivity.stopService(watchIntent);
     }
 
