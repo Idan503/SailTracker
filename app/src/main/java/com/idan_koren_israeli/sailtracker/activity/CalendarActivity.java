@@ -23,6 +23,7 @@ import com.idan_koren_israeli.sailtracker.fragment.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.fragment.PointsStatusFragment;
 import com.idan_koren_israeli.sailtracker.adapter.EventRecyclerAdapter;
 import com.idan_koren_israeli.sailtracker.adapter.ManagerEventRecyclerAdapter;
+import com.idan_koren_israeli.sailtracker.notification.EventNotificationManager;
 import com.idan_koren_israeli.sailtracker.notification.EventWatchManager;
 import com.idan_koren_israeli.sailtracker.notification.EventWatchService;
 import com.idan_koren_israeli.sailtracker.view_holder.listener.OnEventClickedListener;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CalendarActivity extends BaseActivity {
+
 
     private CalendarView calendar;
     private TextView dateTitle;
@@ -62,13 +64,18 @@ public class CalendarActivity extends BaseActivity {
         currentMember = MemberDataManager.getInstance().getCurrentMember();
         serviceManager = EventWatchManager.initHelper(this);
         findViews();
+
+        // Gathering input info if exists:
         initAddedEvent();
+        initWatchedEvent();
 
 
         calendar.setOnDateChangeListener(onDateChangeListener);
         recreateData();
     }
 
+
+    //region Receive Information From Other Intent(s)
     // Finds the added event if manager-user gets back from @AddEventActivity
     private void initAddedEvent() {
         Event addedEvent = null;
@@ -86,6 +93,25 @@ public class CalendarActivity extends BaseActivity {
         }
 
     }
+
+    // In case user comes from alert, we will load the calendar into the date of the wathced event
+    private void initWatchedEvent(){
+        SharedPrefsManager spManager = SharedPrefsManager.getInstance();
+        if(spManager.contain(SharedPrefsManager.KEYS.WATCHED_EVENT)) {
+
+            Event watchedEvent = spManager.getObject(SharedPrefsManager.KEYS.WATCHED_EVENT, Event.class);
+            if (watchedEvent != null) {
+                selectedDate = watchedEvent.getStartDateTime().toLocalDate();
+                calendar.setDate(selectedDate.toDateTimeAtStartOfDay().getMillis());
+                // Matching the event watched to the date that will be shown as loaded
+
+                spManager.removeKey(SharedPrefsManager.KEYS.WATCHED_EVENT);
+                // after one load, in the future it will not load to the same watched event date
+            }
+        }
+    }
+
+    //endregion
 
 
     // Loading the events into ui, parameter for manager/normal user view mode
@@ -195,9 +221,7 @@ public class CalendarActivity extends BaseActivity {
     private OnEventClickedListener onWatchClicked = new OnEventClickedListener() {
         @Override
         public void onButtonClicked(Event eventClicked) {
-            SharedPrefsManager sp = SharedPrefsManager.getInstance();
-            sp.putString(SharedPrefsManager.KEYS.WATCH_EVENT_ID, eventClicked.getEid());
-            initEventWatchService(eventClicked);
+            serviceManager.startWatch(eventClicked);
 
         }
     };
@@ -205,21 +229,9 @@ public class CalendarActivity extends BaseActivity {
     private OnEventClickedListener onUnwatchClicked = new OnEventClickedListener() {
         @Override
         public void onButtonClicked(Event eventClicked) {
-            SharedPrefsManager sp = SharedPrefsManager.getInstance();
-            sp.removeKey(SharedPrefsManager.KEYS.WATCH_EVENT_ID);
-            cancelEventWatchService(eventClicked);
+            serviceManager.stopWatch(eventClicked);
         }
     };
-
-
-    private void initEventWatchService(Event eventToWatch){
-        serviceManager.startWatch(eventToWatch);
-    }
-
-    private void cancelEventWatchService(Event eventToUnwatch){
-        serviceManager.stopWatch(eventToUnwatch);
-    }
-
 
 
     private View.OnClickListener onClickedAddButton = new View.OnClickListener() {

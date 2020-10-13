@@ -9,6 +9,7 @@ import android.content.Intent;
 
 import com.idan_koren_israeli.sailtracker.activity.CalendarActivity;
 import com.idan_koren_israeli.sailtracker.club.Event;
+import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
 
 // Event Watch manager is singleton, only one event can be watched at a certain time
 @SuppressLint("StaticFieldLeak")
@@ -17,10 +18,12 @@ public class EventWatchManager {
     private Activity callerActivity;
     private EventWatchService watchService;
     private Intent watchIntent;
+    private SharedPrefsManager spManager;
+
 
     private EventWatchManager(Activity caller){
         callerActivity = caller;
-
+        spManager = SharedPrefsManager.getInstance();
         watchService = new EventWatchService();
         watchIntent = new Intent(caller, watchService.getClass());
         if(!isWatchServiceRunning(watchService.getClass())){
@@ -58,6 +61,8 @@ public class EventWatchManager {
         watchIntent= new Intent(callerActivity, EventWatchService.class);
         watchIntent.putExtra(EventWatchService.KEYS.EVENT_TO_LISTEN, event);
         callerActivity.startService(watchIntent);
+
+        spManager.putObject(SharedPrefsManager.KEYS.WATCHED_EVENT, event);
     }
 
 
@@ -65,7 +70,11 @@ public class EventWatchManager {
     public void stopWatch(Event event){
         if(watchIntent !=null)
             watchService.stopWatchingEvent(event);
+
+        spManager.removeKey(SharedPrefsManager.KEYS.WATCHED_EVENT);
     }
+
+
 
 
 

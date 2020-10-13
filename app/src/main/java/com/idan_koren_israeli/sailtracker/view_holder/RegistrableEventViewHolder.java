@@ -137,7 +137,7 @@ public class RegistrableEventViewHolder extends EventViewHolder {
             else{
                 // Showing Watch/unwatch card
                 SharedPrefsManager sp = SharedPrefsManager.getInstance();
-                String memberWatch = sp.getString(SharedPrefsManager.KEYS.WATCH_EVENT_ID,null);
+                String memberWatch = sp.getString(SharedPrefsManager.KEYS.WATCHED_EVENT,null);
                 if(memberWatch==null){
                     // event is full, show watch button
                     showWatchButton(eventPrice);

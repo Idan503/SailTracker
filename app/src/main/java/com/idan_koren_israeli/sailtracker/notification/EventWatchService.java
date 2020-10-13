@@ -68,8 +68,6 @@ public class EventWatchService extends Service {
     public void stopWatchingEvent(Event event){
         if(eventData!=null)
             eventData.unwatchEventChanges(event, valueListener);
-        if(sp!=null)
-            sp.removeKey(SharedPrefsManager.KEYS.WATCH_EVENT_ID);
         eventWatched = null; // User does not watch any event
     }
 

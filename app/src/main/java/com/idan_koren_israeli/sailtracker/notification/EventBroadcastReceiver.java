@@ -16,7 +16,6 @@ public class EventBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         //Broadcast listen, service try to stop (app is being killed) or phone start up
-        Log.i("pttt"," RESTART");
         context.startService(new Intent(context, EventWatchService.class));
     }
 }

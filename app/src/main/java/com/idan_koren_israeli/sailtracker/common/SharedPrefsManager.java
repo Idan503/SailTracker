@@ -15,7 +15,7 @@ public class SharedPrefsManager {
 
     public interface KEYS {
         String CURRENT_USER_PHONE = "current_user_phone";
-        String WATCH_EVENT_ID = "watch_event_id";
+        String WATCHED_EVENT = "watch_event";
     }
 
 
