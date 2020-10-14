@@ -130,9 +130,9 @@ public class CalendarActivity extends BaseActivity {
 
 
 
-    //region Realtime Database callbacks
+    //region Realtime Database Callbacks
 
-
+    // Those callbacks are calling to each other to gain information from cloud and set relevant event listeners
     private OnEventLoadedListener onEventChanged = new OnEventLoadedListener() {
         @Override
         public void onEventLoaded(Event event) {
@@ -170,13 +170,12 @@ public class CalendarActivity extends BaseActivity {
     };
 
     // New event is changed so we replace the old version of it with the new one
-    private void removeOldEvent(Event toRemove){
+    public void removeOldEvent(Event toRemove){
         Event[] arrToShow = (Event[]) eventsToShow.toArray(new Event[eventsToShow.size()]);
         for(Event event : arrToShow)
             if(event.getEid().equals(toRemove.getEid()))
                 eventsToShow.remove(event);
     }
-
 
 
     //endregion

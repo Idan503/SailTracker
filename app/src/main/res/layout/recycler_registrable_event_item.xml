@@ -31,7 +31,7 @@
                 android:layout_marginStart="15dp"
                 android:background="@drawable/ic_delete"
                 android:id="@+id/register_event_item_BTN_delete"
-                app:backgroundTint="@android:color/black"
+                app:backgroundTint="@android:color/darker_gray"
                 />
 
 

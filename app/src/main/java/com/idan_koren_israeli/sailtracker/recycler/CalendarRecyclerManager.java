@@ -27,7 +27,6 @@ import com.idan_koren_israeli.sailtracker.recycler.listener.OnEventClickedListen
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -100,14 +99,12 @@ public class CalendarRecyclerManager {
             if (isMemberManager) {
                 if(type!=EventRecyclerType.MANAGER)
                 {
-                    Log.i("pttt", "register evets size NEW " + registeredEvents.size());
                     adapter = initManagerViewAdapter(allEvents,registeredEvents);
                     type = EventRecyclerType.MANAGER;
                 }
                 else
                 {
                     adapter.setEventsData(allEvents);
-                    Log.i("pttt", "register evets size " + registeredEvents.size());
                     ((RegistrableEventRecyclerAdapter)adapter).setRegisteredEvents(registeredEvents);
                     adapter.notifyDataSetChanged();
 
@@ -135,14 +132,12 @@ public class CalendarRecyclerManager {
     //region Creation of Adapter Types
     private EventRecyclerAdapter initPastViewAdapter(List<Event> events)
     {
-        Log.i("pttt", events.size() + "Past Init");
         adapter = new EventRecyclerAdapter(activity, events,false);
         return adapter;
     }
 
     private RegistrableEventRecyclerAdapter initRegisterViewAdapter(List<Event> events, List<Event> alreadyRegistered)
     {
-        //Log.i("pttt", events.size() + "Register Init");
 
         RegistrableEventRecyclerAdapter adapter = new RegistrableEventRecyclerAdapter(activity, events,alreadyRegistered);
         adapter
@@ -154,7 +149,6 @@ public class CalendarRecyclerManager {
 
     private ManagerEventRecyclerAdapter initManagerViewAdapter(List<Event> events, List<Event> alreadyRegistered)
     {
-        //Log.i("pttt", events.size() + "Manager Init");
         ManagerEventRecyclerAdapter adapter =  new ManagerEventRecyclerAdapter(activity, events,alreadyRegistered);
         adapter.setButtonsListeners(onRegisterClicked, onUnregisterClicked,
                 onWatchClicked, onUnwatchClicked);
@@ -237,6 +231,10 @@ public class CalendarRecyclerManager {
 
     //endregion
 
+    public void deleteEventItem(Event event)
+    {
+        activity.removeOldEvent(event);
+    }
 
     // Members can't register to 2 events that has a common shared time
     // Checking if a given event can be registered by checking time overlap with the others

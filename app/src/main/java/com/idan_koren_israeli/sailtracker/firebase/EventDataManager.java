@@ -76,7 +76,6 @@ public class EventDataManager {
             public void onListLoaded(List<ClubMember> list) {
                 for(ClubMember registeredMember : list){
                     unregisterMember(registeredMember, event);
-
                 }
 
                 // Now we can delete event itself safely

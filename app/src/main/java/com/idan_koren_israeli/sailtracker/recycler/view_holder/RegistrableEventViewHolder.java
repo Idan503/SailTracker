@@ -15,6 +15,7 @@ import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
+import com.idan_koren_israeli.sailtracker.recycler.CalendarRecyclerManager;
 import com.idan_koren_israeli.sailtracker.recycler.listener.OnEventClickedListener;
 
 import org.joda.time.DateTime;
@@ -196,8 +197,8 @@ public class RegistrableEventViewHolder extends EventViewHolder {
         registerButton.setText(unwatchLabel);
     }
 
-
     //endregion
+
 
 
     //region Delete Event
@@ -225,6 +226,7 @@ public class RegistrableEventViewHolder extends EventViewHolder {
     private DialogInterface.OnClickListener onDeleteConfirmed = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialogInterface, int i) {
+            CalendarRecyclerManager.getInstance().deleteEventItem(event);
             EventDataManager.getInstance().deleteEvent(event);
         }
     };
