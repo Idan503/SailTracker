@@ -56,9 +56,11 @@
     <!-- SEARCH SCREEN -->
     <string name="searchbar_title">Club member phone num.</string>
     <string name="label_search_screen">Search for club members\nand take a look at their photos.</string>
+    <string name="search_title">Gallery Explorer</string>
 
     <!-- GALLERY SCREEN -->
     <string name="take_photo">Take a Photo</string>
+    <string name="gallery_title">My Gallery</string>
 
     <!-- HISTORY SCREEN -->
     <string name="history_title">My Sails and Events</string>

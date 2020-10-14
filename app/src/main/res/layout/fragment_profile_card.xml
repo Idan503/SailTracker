@@ -11,29 +11,60 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
         app:layout_constraintWidth_percent="0.2"
         app:layout_constraintDimensionRatio="1:1"
-        android:layout_marginStart="10dp"
         app:layout_constraintStart_toStartOf="parent"
         android:id="@+id/profile_LAY_image"
         >
 
+        <!-- INV. VIEWS TO MAKE PHOTO MARGIN BY % AND NOT DP-->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintWidth_percent="0.15"
+            android:id="@+id/profile_INV_picture_start"
+            app:layout_constraintStart_toStartOf="parent"
+            />
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintWidth_percent="0.15"
+            android:id="@+id/profile_INV_picture_end"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.15"
+            android:id="@+id/profile_INV_picture_top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.15"
+            android:id="@+id/profile_INV_picture_bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toEndOf="@id/profile_INV_picture_start"
+            app:layout_constraintEnd_toStartOf="@id/profile_INV_picture_end"
+            app:layout_constraintTop_toBottomOf="@id/profile_INV_picture_top"
+            app:layout_constraintBottom_toTopOf="@id/profile_INV_picture_bottom"
             android:id="@+id/profile_IMG_picture"
             android:background="@color/light_grey"
             app:strokeWidth="2dp"
             app:strokeColor="@color/profile_photo_stroke"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.ProfilePictureCorners"
             android:scaleType="centerCrop"
-            android:padding="10dp"
+            android:elevation="3dp"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -44,13 +75,14 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toEndOf="@id/profile_LAY_image"
-        app:layout_constraintTop_toTopOf="@id/profile_LAY_image"
-        app:layout_constraintBottom_toBottomOf="@id/profile_LAY_image"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/profile_LAY_info"
-        android:layout_marginStart="10dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingEnd="15dp"
+        android:paddingStart="2dp"
         >
 
         <TextView
@@ -61,9 +93,10 @@
             android:autoSizeMinTextSize="14sp"
             android:autoSizeMaxTextSize="35sp"
             android:autoSizeTextType="uniform"
-            android:gravity="start|center_vertical"
+            android:gravity="start|center"
             android:id="@+id/profile_LBL_name"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/profile_FRAG_points_status"
             />
 
        <fragment
@@ -71,6 +104,7 @@
            android:layout_height="35dp"
            app:layout_constraintStart_toStartOf="parent"
            app:layout_constraintTop_toBottomOf="@id/profile_LBL_name"
+           app:layout_constraintBottom_toTopOf="@id/profile_BTN_history"
            android:layout_marginTop="4dp"
            android:name="com.idan_koren_israeli.sailtracker.fragment.PointsStatusFragment"
            tools:layout="@layout/fragment_points_status"
@@ -81,7 +115,7 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:id="@+id/profile_BTN_my_sails"
+            android:id="@+id/profile_BTN_history"
             android:autoSizeMaxTextSize="22sp"
             android:autoSizeTextType="uniform"
             android:text="@string/profile_events_history"

@@ -120,7 +120,6 @@ public class PhotoInspectActivity extends BaseActivity {
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             loadingFragment.hide();
-            deleteFAB.setVisibility(View.VISIBLE);
             setDisplayedPhotoInfo();
 
 
@@ -132,6 +131,7 @@ public class PhotoInspectActivity extends BaseActivity {
 
             // Photos can be deleted via inspect activity iff member owns this collection (current user)
             if(photoMember == MemberDataManager.getInstance().getCurrentMember()){
+                deleteFAB.setVisibility(View.VISIBLE);
                 deleteFAB.setAlpha(0f);
                 deleteFAB.animate()
                         .alphaBy(1)
@@ -157,7 +157,7 @@ public class PhotoInspectActivity extends BaseActivity {
 
 
         String label = "";
-        label += "Was taken by " + photoMember.getName();
+        label += "Captured by " + photoMember.getName();
         label += " on " + (new DateTime(0)).plusSeconds(createdTimestamp).toString("dd.MM.YYYY");
 
         imageInfoText.setText(label);

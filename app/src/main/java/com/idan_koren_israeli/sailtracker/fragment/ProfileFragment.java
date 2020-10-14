@@ -1,6 +1,5 @@
 package com.idan_koren_israeli.sailtracker.fragment;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -25,7 +23,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.dialog.MaterialDialogs;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
@@ -95,7 +92,7 @@ public class ProfileFragment extends Fragment {
     private void findViews(View parent){
         profilePhoto = parent.findViewById(R.id.profile_IMG_picture);
         nameText = parent.findViewById(R.id.profile_LBL_name);
-        historyButton = parent.findViewById(R.id.profile_BTN_my_sails);
+        historyButton = parent.findViewById(R.id.profile_BTN_history);
         pointsStatus= (PointsStatusFragment) getChildFragmentManager().findFragmentById(R.id.profile_FRAG_points_status);
     }
 

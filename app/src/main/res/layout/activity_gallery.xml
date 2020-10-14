@@ -24,12 +24,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             />
 
-        <View
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.15"
             app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/gallery_INV_1"
-            app:layout_constraintHeight_percent="0.03"
+            android:text="@string/gallery_title"
+            android:gravity="center"
+            android:autoSizeMaxTextSize="32sp"
+            android:autoSizeMinTextSize="14sp"
+            android:autoSizeTextType="uniform"
+            android:id="@+id/gallery_LBL_title"
             />
 
         <fragment
@@ -37,10 +42,12 @@
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.2"
             android:name="com.idan_koren_israeli.sailtracker.fragment.ProfileFragment"
-            app:layout_constraintTop_toBottomOf="@id/gallery_INV_1"
+            app:layout_constraintTop_toBottomOf="@id/gallery_LBL_title"
             tools:layout="@layout/fragment_profile_card"
             app:show_history_button="false"
             android:id="@+id/gallery_FRAG_profile"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
             />
 
 
