@@ -1,5 +1,6 @@
 package com.idan_koren_israeli.sailtracker.adapter;
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.comparator.SortByStartTime;
-import com.idan_koren_israeli.sailtracker.view_holder.AddEventViewHolder;
-import com.idan_koren_israeli.sailtracker.view_holder.EventViewHolder;
-import com.idan_koren_israeli.sailtracker.view_holder.MessageViewHolder;
+import com.idan_koren_israeli.sailtracker.recycler.view_holder.AddEventViewHolder;
+import com.idan_koren_israeli.sailtracker.recycler.view_holder.EventViewHolder;
+import com.idan_koren_israeli.sailtracker.recycler.view_holder.MessageViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -44,10 +46,11 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     public EventRecyclerAdapter(Context context, List<Event> events, boolean showDate){
         this.context = context;
         this.inflater = LayoutInflater.from(context);
-        this.eventsList = events;
         this.showDate = showDate;
-        events.sort(new SortByStartTime());
-        noEvents = (events.size()==0);
+        this.eventsList = new ArrayList<>(events);
+        eventsList.sort(new SortByStartTime());
+        noEvents = (events.size() == 0);
+
     }
 
 
@@ -113,4 +116,15 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             return ViewType.TITLE;
         return ViewType.EVENT;
     }
+
+
+    public void setEventsData(List<Event> data)
+    {
+        eventsList.clear();
+        eventsList.addAll(data);
+        eventsList.sort(new SortByStartTime());
+        noEvents = (eventsList.size()==0);
+    }
+
+
 }

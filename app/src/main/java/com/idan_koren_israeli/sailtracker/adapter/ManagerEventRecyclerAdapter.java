@@ -2,7 +2,6 @@ package com.idan_koren_israeli.sailtracker.adapter;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -11,9 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
-import com.idan_koren_israeli.sailtracker.view_holder.AddEventViewHolder;
-import com.idan_koren_israeli.sailtracker.view_holder.EventViewHolder;
-import com.idan_koren_israeli.sailtracker.view_holder.RegistrableEventViewHolder;
+import com.idan_koren_israeli.sailtracker.recycler.view_holder.AddEventViewHolder;
+import com.idan_koren_israeli.sailtracker.recycler.view_holder.RegistrableEventViewHolder;
 
 import java.util.List;
 

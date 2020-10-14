@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,7 @@ import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.activity.PhotoInspectActivity;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
-import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
-import com.idan_koren_israeli.sailtracker.view_holder.listener.OnPhotoClickedListener;
+import com.idan_koren_israeli.sailtracker.recycler.listener.OnPhotoClickedListener;
 import com.idan_koren_israeli.sailtracker.adapter.PhotoCollectionAdapter;
 import com.idan_koren_israeli.sailtracker.club.comparator.SortByCreationTime;
 

@@ -1,9 +1,7 @@
-package com.idan_koren_israeli.sailtracker.view_holder;
+package com.idan_koren_israeli.sailtracker.recycler.view_holder;
 
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -17,7 +15,7 @@ import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
-import com.idan_koren_israeli.sailtracker.view_holder.listener.OnEventClickedListener;
+import com.idan_koren_israeli.sailtracker.recycler.listener.OnEventClickedListener;
 
 import org.joda.time.DateTime;
 

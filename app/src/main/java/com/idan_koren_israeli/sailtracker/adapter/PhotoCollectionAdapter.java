@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
-import com.idan_koren_israeli.sailtracker.view_holder.listener.OnPhotoClickedListener;
-import com.idan_koren_israeli.sailtracker.view_holder.PhotoViewHolder;
+import com.idan_koren_israeli.sailtracker.recycler.listener.OnPhotoClickedListener;
+import com.idan_koren_israeli.sailtracker.recycler.view_holder.PhotoViewHolder;
 
 import java.util.ArrayList;
 

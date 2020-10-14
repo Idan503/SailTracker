@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
-import com.idan_koren_israeli.sailtracker.view_holder.MessageViewHolder;
+import com.idan_koren_israeli.sailtracker.recycler.view_holder.MessageViewHolder;
 
 import org.joda.time.DateTime;
 

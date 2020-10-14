@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker.view_holder.listener;
+package com.idan_koren_israeli.sailtracker.recycler.listener;
 
 import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
 

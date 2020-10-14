@@ -1,5 +1,6 @@
 package com.idan_koren_israeli.sailtracker.adapter;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -8,11 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
-import com.idan_koren_israeli.sailtracker.club.comparator.SortByStartTime;
-import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventLoadedListener;
-import com.idan_koren_israeli.sailtracker.view_holder.listener.OnEventClickedListener;
-import com.idan_koren_israeli.sailtracker.view_holder.RegistrableEventViewHolder;
+import com.idan_koren_israeli.sailtracker.recycler.listener.OnEventClickedListener;
+import com.idan_koren_israeli.sailtracker.recycler.view_holder.RegistrableEventViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -33,8 +33,6 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
     public RegistrableEventRecyclerAdapter(Context context, List<Event> events, List<Event> registered){
         super(context,events,false); // register type recyclerviews not showing dates
         this.registeredEvents = registered;
-        eventsList.sort(new SortByStartTime());
-
     }
 
     public void setButtonsListeners(OnEventClickedListener register, OnEventClickedListener unregister,
@@ -63,6 +61,8 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
             super.onBindViewHolder(holder, position);
         }
         else {
+            //Log.i("pttt", "EVENTS BIND: ");
+            //Log.i("pttt", "Binding event named " + eventsList.get(position).getName() + " With " + eventsList.get(position).getRegisteredMembersNonNull().size());
             RegistrableEventViewHolder eventHolder = (RegistrableEventViewHolder) holder;
             if (position < eventsList.size()) {
                 Event event = eventsList.get(position);
@@ -87,4 +87,8 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
         this.registeredEvents.remove(unregisteredEvent);
     }
 
+    public void setRegisteredEvents(List<Event> registered){
+        registeredEvents.clear();
+        registeredEvents.addAll(registered);
+    }
 }

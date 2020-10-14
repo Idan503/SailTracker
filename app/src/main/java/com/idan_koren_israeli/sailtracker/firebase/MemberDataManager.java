@@ -412,8 +412,10 @@ public class MemberDataManager {
     }
 
     public void isManagerMember(final OnCheckFinishedListener onFinish){
-        if(currentMemberIsManager != null) // answer is already known
+        if(currentMemberIsManager != null) { // answer is already known
             onFinish.onCheckFinished(currentMemberIsManager); // prevent multiple db calls
+            return;
+        }
         isManagerMember(currentMember,onFinish);
     }
 

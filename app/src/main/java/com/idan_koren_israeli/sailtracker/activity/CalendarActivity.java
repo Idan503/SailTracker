@@ -3,7 +3,6 @@ package com.idan_koren_israeli.sailtracker.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.CalendarView;
 import android.widget.TextView;
 
@@ -11,27 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.api.Distribution;
 import com.idan_koren_israeli.sailtracker.R;
-import com.idan_koren_israeli.sailtracker.club.exception.AlreadyRegisteredException;
+import com.idan_koren_israeli.sailtracker.adapter.ManagerEventRecyclerAdapter;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
-import com.idan_koren_israeli.sailtracker.club.exception.EventFullException;
-import com.idan_koren_israeli.sailtracker.club.exception.NotEnoughPointsException;
-import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
 import com.idan_koren_israeli.sailtracker.fragment.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.fragment.PointsStatusFragment;
 import com.idan_koren_israeli.sailtracker.adapter.EventRecyclerAdapter;
-import com.idan_koren_israeli.sailtracker.adapter.ManagerEventRecyclerAdapter;
-import com.idan_koren_israeli.sailtracker.notification.EventNotificationManager;
 import com.idan_koren_israeli.sailtracker.notification.EventWatchManager;
-import com.idan_koren_israeli.sailtracker.notification.EventWatchService;
-import com.idan_koren_israeli.sailtracker.view_holder.listener.OnEventClickedListener;
-import com.idan_koren_israeli.sailtracker.adapter.RegistrableEventRecyclerAdapter;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinishedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
+import com.idan_koren_israeli.sailtracker.notification.EventWatchService;
+import com.idan_koren_israeli.sailtracker.recycler.CalendarRecyclerManager;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -46,15 +40,15 @@ public class CalendarActivity extends BaseActivity {
     private TextView dateTitle;
     private LocalDate selectedDate = LocalDate.now();
     private ArrayList<Event> eventsToShow = new ArrayList<>();
-    private PointsStatusFragment pointsStatus;
-    private ClubMember currentMember;
 
     private RecyclerView eventsRecycler;
-    private EventRecyclerAdapter eventsAdapter;
+    private CalendarRecyclerManager recyclerManager;
+    private ClubMember currentMember;
+    private boolean managerView = false;
 
     private EventWatchManager serviceManager;
 
-    private boolean managerView = false;
+    private PointsStatusFragment pointsStatus;
     private LoadingFragment loadingFragment;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,12 +57,15 @@ public class CalendarActivity extends BaseActivity {
 
         currentMember = MemberDataManager.getInstance().getCurrentMember();
         serviceManager = EventWatchManager.initHelper(this);
+
         findViews();
+        eventsRecycler.setLayoutManager(new LinearLayoutManager(this));
 
         // Gathering input info if exists:
         initAddedEvent();
         initWatchedEvent();
 
+        recyclerManager = CalendarRecyclerManager.initHelper(this);
 
         calendar.setOnDateChangeListener(onDateChangeListener);
         recreateData();
@@ -114,34 +111,6 @@ public class CalendarActivity extends BaseActivity {
     //endregion
 
 
-    // Loading the events into ui, parameter for manager/normal user view mode
-    private void initEventsList(boolean isCurrentUserManager, List<Event> registered) {
-        eventsRecycler.setLayoutManager(new LinearLayoutManager(this));
-
-
-        if (selectedDate.toDateTimeAtStartOfDay().plusDays(1).getMillis() < DateTime.now().getMillis()) {
-            // Selected date is in the past, so there should not be an option to add/register to events
-            eventsAdapter = new EventRecyclerAdapter(this, eventsToShow,false);
-        } else {
-            if (isCurrentUserManager) {
-                // manager layout - with "add" button as last view
-                eventsAdapter = new ManagerEventRecyclerAdapter(this, eventsToShow, registered);
-                ((ManagerEventRecyclerAdapter) eventsAdapter).setAddClickedListener(onClickedAddButton);
-            } else {
-                // a register recycler view of all of selected day's events
-                eventsAdapter = new RegistrableEventRecyclerAdapter(this, eventsToShow, registered);
-            }
-            ((RegistrableEventRecyclerAdapter)eventsAdapter)
-                    .setButtonsListeners(onRegisterClicked, onUnregisterClicked,
-                                         onWatchClicked, onUnwatchClicked);
-        }
-
-
-
-        eventsRecycler.setAdapter(eventsAdapter);
-        loadingFragment.hide();
-    }
-
     private void findViews(){
         eventsRecycler = findViewById(R.id.calendar_RCY_daily_events);
         calendar = findViewById(R.id.calendar_CALENDAR);
@@ -158,99 +127,10 @@ public class CalendarActivity extends BaseActivity {
                 selectedDate.getYear(), selectedDate.getMonthOfYear()-1, selectedDate.getDayOfMonth());
     }
 
-    private void reloadPointsStatus(){
+    public void reloadPointsStatus(){
         pointsStatus.updateCount(currentMember.getPointsCount());
     }
 
-
-    // Members can't register to 2 events that has a common shared time
-    // Checking if a given event can be registered by checking time overlap with the others
-    private boolean canMemberRegister(Event registerEvent){
-        for(Event event : eventsToShow){
-            if(registerEvent!=event && event.getRegisteredMembers().contains(currentMember.getUid())){
-                if(registerEvent.getStartTime() < event.getEndTime()  && event.getStartTime() < registerEvent.getEndTime()){
-                    return false; // member is already register to an overlapping event
-                }
-            }
-        }
-        return true;
-    }
-
-
-    //region UI Related Callbacks
-    private OnEventClickedListener onRegisterClicked = new OnEventClickedListener() {
-        @Override
-        public void onButtonClicked(Event eventClicked) {
-            try {
-                if(canMemberRegister(eventClicked)) {
-                    EventDataManager.getInstance().registerMember(currentMember, eventClicked);
-                    reloadPointsStatus();
-                    CommonUtils.getInstance().showToast("Registered successfully!");
-
-
-                }
-                else {
-                    CommonUtils.getInstance().showToast("Already registered at the same time");
-                }
-            }
-            catch (EventFullException eventFull){
-                Log.e("CalendarActivity", eventFull.toString());
-                CommonUtils.getInstance().showToast("Register Failed - Event is full.");
-            }
-            catch (NotEnoughPointsException notEnoughPoints){
-                Log.e("CalendarActivity", notEnoughPoints.toString());
-                CommonUtils.getInstance().showToast("Register Failed - Not enough points.");
-            }
-            catch (AlreadyRegisteredException alreadyRegistered){
-                Log.e("CalendarActivity", alreadyRegistered.toString());
-                CommonUtils.getInstance().showToast("Member is already registered.");
-            }
-
-        }
-    };
-
-    private OnEventClickedListener onUnregisterClicked = new OnEventClickedListener(){
-        @Override
-        public void onButtonClicked(Event eventClicked) {
-            EventDataManager.getInstance().unregisterMember(currentMember, eventClicked);
-            reloadPointsStatus();
-            CommonUtils.getInstance().showToast("Unregistered successfully!");
-        }
-    };
-
-    private OnEventClickedListener onWatchClicked = new OnEventClickedListener() {
-        @Override
-        public void onButtonClicked(Event eventClicked) {
-            serviceManager.startWatch(eventClicked);
-
-        }
-    };
-
-    private OnEventClickedListener onUnwatchClicked = new OnEventClickedListener() {
-        @Override
-        public void onButtonClicked(Event eventClicked) {
-            serviceManager.stopWatch(eventClicked);
-        }
-    };
-
-
-    private View.OnClickListener onClickedAddButton = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(CalendarActivity.this, AddEventActivity.class);
-            intent.putExtra(AddEventActivity.KEYS.EVENT_DATE, selectedDate);
-            startActivity(intent);
-            finish();
-        }
-    };
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        serviceManager.destroyService();
-    }
-
-    //endregion
 
 
     //region Realtime Database callbacks
@@ -261,6 +141,7 @@ public class CalendarActivity extends BaseActivity {
         public void onListLoaded(List<Event> eventsLoaded) {
             eventsToShow.clear();
             eventsToShow.addAll(eventsLoaded);
+
             MemberDataManager.getInstance().isManagerMember(onCheckedManager);
         }
     };
@@ -277,10 +158,11 @@ public class CalendarActivity extends BaseActivity {
 
     private OnListLoadedListener<Event> onListLoadedListener = new OnListLoadedListener<Event>() {
         @Override
-        public void onListLoaded(List<Event> list) {
+        public void onListLoaded(List<Event> registeredEvents) {
             // Code gets to here after we already know if the current user is a manager or not.
             // And also the list of the current user's member already registered events is loaded.
-            initEventsList(managerView, list);
+            recyclerManager.updateEventsList(managerView,eventsToShow,registeredEvents);
+            loadingFragment.hide();
             // Using realtime-events to update recycler view across all devices
         }
     };
@@ -304,4 +186,38 @@ public class CalendarActivity extends BaseActivity {
 
 
     //endregion
+
+
+    //region Getters & Setters
+    // For communication with @CalendarRecyclerManager
+    public EventWatchManager getWatchManager()
+    {
+        return serviceManager;
+    }
+
+    public LocalDate getSelectedDate()
+    {
+        return selectedDate;
+    }
+
+    public List<Event> getEventsToShow()
+    {
+        return eventsToShow;
+    }
+
+    public void setRecyclerAdapter(EventRecyclerAdapter adapter)
+    {
+        eventsRecycler.setAdapter(adapter);
+    }
+
+    //endregion
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        serviceManager.destroyService();
+    }
+
 }

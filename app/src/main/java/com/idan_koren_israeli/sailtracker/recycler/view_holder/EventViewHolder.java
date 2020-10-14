@@ -1,6 +1,7 @@
-package com.idan_koren_israeli.sailtracker.view_holder;
+package com.idan_koren_israeli.sailtracker.recycler.view_holder;
 
 import android.animation.LayoutTransition;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -11,7 +12,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.database.Exclude;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.enums.EventType;
@@ -151,6 +151,9 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
     }
 
     private String generateRegisterStatusString(Event event) {
+        Log.i("pttt", "EVENT INSIDE HOLDER: ");
+        Log.i("pttt","Event " + event.getName() + " Has " + event.getRegisteredMembersNonNull().size() + " Registered");
+
         if(event.getMaxMembersCount() == -1){
             return event.getRegisteredMembers().size() + " Registered"; //Unlimited
         }

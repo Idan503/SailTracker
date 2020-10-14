@@ -125,8 +125,6 @@ public class Event implements Serializable {
     }
 
     public ArrayList<String> getRegisteredMembers() {
-        if(registeredMembers==null)
-            initRegisteredList();
         return registeredMembers;
     }
 
@@ -232,6 +230,14 @@ public class Event implements Serializable {
     public boolean isFull(){
         initRegisteredList();
         return registeredMembers.size()==maxMembersCount;
+    }
+
+    @Exclude
+    public ArrayList<String> getRegisteredMembersNonNull()
+    {
+        if(registeredMembers==null)
+            initRegisteredList();
+        return registeredMembers;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.idan_koren_israeli.sailtracker.view_holder;
+package com.idan_koren_israeli.sailtracker.recycler.view_holder;
 
 import android.view.View;
 import android.widget.TextView;
@@ -6,7 +6,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButton;
 import com.idan_koren_israeli.sailtracker.R;
 
 public class MessageViewHolder extends RecyclerView.ViewHolder {
