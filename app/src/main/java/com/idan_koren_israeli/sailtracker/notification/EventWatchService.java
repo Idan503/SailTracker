@@ -42,7 +42,7 @@ public class EventWatchService extends Service {
         eventData = EventDataManager.initHelper();
 
         if(eventWatched!=null) {
-            valueListener = eventData.watchEventChanges(eventWatched, onEventChanged);
+            eventData.watchEventChanges(eventWatched, onEventChanged);
         }
 
         return Service.START_STICKY;
@@ -51,7 +51,7 @@ public class EventWatchService extends Service {
     private OnEventLoadedListener onEventChanged = new OnEventLoadedListener() {
         @Override
         public void onEventLoaded(Event event) {
-            if(event.getRegisteredMembers().size() < event.getMaxMembersCount()){
+            if(event.getRegisteredMembersNonNull().size() < event.getMaxMembersCount()){
                 // There is a free slot in the event
                 if(eventWatched!=null)
                     showEventAvailableNotification();
@@ -67,7 +67,7 @@ public class EventWatchService extends Service {
 
     public void stopWatchingEvent(Event event){
         if(eventData!=null)
-            eventData.unwatchEventChanges(event, valueListener);
+            eventData.unwatchEventChanges(event);
         eventWatched = null; // User does not watch any event
     }
 

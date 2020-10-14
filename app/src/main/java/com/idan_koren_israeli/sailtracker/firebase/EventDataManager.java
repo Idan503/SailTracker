@@ -1,7 +1,5 @@
 package com.idan_koren_israeli.sailtracker.firebase;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -34,8 +32,6 @@ public class EventDataManager {
 
     private DatabaseReference dbRealtime;
 
-
-
     interface KEYS {
         String EVENTS = "events";
         String DATE_TO_EVENTS = "date_to_events";
@@ -60,6 +56,8 @@ public class EventDataManager {
         return single_instance;
     }
 
+
+    //region Load, Store, Delete
 
     // Adds an event to the db
     public void storeEvent(Event event){
@@ -90,20 +88,109 @@ public class EventDataManager {
                 dbRealtime.child(KEYS.DATE_TO_EVENTS).child(eventTimeStamp).child(event.getEid()).removeValue();
             }
         };
-        MemberDataManager.getInstance().loadMembersList(event.getRegisteredMembers(), onRegisterListLoaded);
+        MemberDataManager.getInstance().loadMembersList(event.getRegisteredMembersNonNull(), onRegisterListLoaded);
+    }
 
 
+    public void loadEvent(final String eventId, final OnEventLoadedListener listener){
+        ValueEventListener onDataLoaded = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Event loadedEvent;
+                for(DataSnapshot child : snapshot.getChildren()){
+                    if(eventId.equals(child.getKey())) {
+                        loadedEvent = child.getValue(Event.class);
+                        if(listener!=null)
+                            listener.onEventLoaded(loadedEvent); //found
+                        return;
+                    }
+                }
+                // code gets to here when event id not found
+                listener.onEventLoaded(null);
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        dbRealtime.child(KEYS.EVENTS).addListenerForSingleValueEvent(onDataLoaded);
+    }
+
+    //endregion
+
+    //region Member's Unique Next Event
+
+    private void storeNextEvent(final String memberUid, Event newNextEvent){
+        dbRealtime.child(KEYS.MEMBER_TO_NEXT_EVENT).child(memberUid).setValue(newNextEvent.getEid());
+    }
+    private void removeNextEvent(String memberUid) {
+        dbRealtime.child(KEYS.MEMBER_TO_NEXT_EVENT).child(memberUid).removeValue();
+    }
+
+    // "Next event" is the future event with the closest time to now
+    private void updateNextEvent(final String memberUid, ArrayList<String> usersEventsIds){
+
+        OnListLoadedListener<Event> onEventsLoaded = new OnListLoadedListener<Event>() {
+            @Override
+            public void onListLoaded(List<Event> list) {
+                Event nextEvent = null;
+                long nextEventTime = Long.MAX_VALUE;
+                for(Event event : list){
+                    //iterating on the list to find the next event that is closest to current time
+                    if(event.getStartDateTime().getMillis() > DateTime.now().getMillis()
+                            && event.getStartDateTime().getMillis() < nextEventTime){
+                        // a new "next event" was found"
+                        nextEvent = event;
+                        nextEventTime = event.getStartTime();
+                    }
+                }
+                if(nextEvent!=null)
+                    storeNextEvent(memberUid,nextEvent);
+                else
+                    removeNextEvent(memberUid);
+            }
+        };
+
+        loadEventsList(usersEventsIds,onEventsLoaded);
 
     }
 
+
+
+
+    public void loadNextEvent(final ClubMember member, final OnEventLoadedListener onLoaded){
+
+        ValueEventListener onValueLoaded = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String nextEventId = snapshot.getValue(String.class);
+                if(nextEventId!=null)
+                    loadEvent(nextEventId, onLoaded);
+                else
+                    onLoaded.onEventLoaded(null);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        dbRealtime.child(KEYS.MEMBER_TO_NEXT_EVENT).child(member.getUid()).addListenerForSingleValueEvent(onValueLoaded);
+    }
+
+    //endregion
+
+    //region Register/Unregister Member
     // Adds a member to its event by uid
     public void registerMember(final ClubMember member, final Event event) throws EventFullException, NotEnoughPointsException, AlreadyRegisteredException {
         event.registerMember(member);
 
         // Updating the stored event object with the new member registered in the list
         dbRealtime.child(KEYS.EVENTS).child(event.getEid())
-                .child(KEYS.EVENT_MEMBERS_LIST).setValue(event.getRegisteredMembers());
+                .child(KEYS.EVENT_MEMBERS_LIST).setValue(event.getRegisteredMembersNonNull());
 
 
         //region Add Event to Member's List
@@ -138,13 +225,43 @@ public class EventDataManager {
         //endregion
     }
 
+    // Removes a member from an event that he was registered to
+    public void unregisterMember(final ClubMember member, final Event event){
+        event.unregisterMember(member);
 
-    private void storeNextEvent(final String memberUid, Event newNextEvent){
-        dbRealtime.child(KEYS.MEMBER_TO_NEXT_EVENT).child(memberUid).setValue(newNextEvent.getEid());
-    }
+        ValueEventListener onMembersEventsListLoaded = new ValueEventListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> registeredEvents = new ArrayList<>();
+                if(snapshot.getValue()!=null) {
+                    for(DataSnapshot child : snapshot.getChildren()){
+                        registeredEvents.add(child.getKey());
+                    }
+                }
+                else
+                    return; // Member isn't signed to anything yet
+                registeredEvents.remove(event.getEid());
 
-    private void removeNextEvent(String memberUid) {
-        dbRealtime.child(KEYS.MEMBER_TO_NEXT_EVENT).child(memberUid).removeValue();
+                removeEventFromMemberList(member, event);
+                updateNextEvent(member.getUid(),registeredEvents);
+                //Saving list of event itself and updating
+
+                dbRealtime.child(KEYS.EVENTS).child(event.getEid())
+                        .child(KEYS.EVENT_MEMBERS_LIST).setValue(event.getRegisteredMembersNonNull());
+                // Updating the stored event object
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onMembersEventsListLoaded);
+
+
     }
 
     private void storeMemberRegisteredEventsList(ClubMember member, ArrayList<String> list){
@@ -178,78 +295,14 @@ public class EventDataManager {
         // not using single because we want the screen to refresh on all users
     }
 
-    // Removes a member from an event that he was registered to
-    public void unregisterMember(final ClubMember member, final Event event){
-        event.unregisterMember(member);
+    //endregion
 
-        ValueEventListener onMembersEventsListLoaded = new ValueEventListener() {
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<String> registeredEvents = new ArrayList<>();
-                if(snapshot.getValue()!=null) {
-                    for(DataSnapshot child : snapshot.getChildren()){
-                        registeredEvents.add(child.getKey());
-                    }
-                }
-                else
-                    return; // Member isn't signed to anything yet
-                registeredEvents.remove(event.getEid());
-
-                removeEventFromMemberList(member, event);
-                updateNextEvent(member.getUid(),registeredEvents);
-                //Saving list of event itself and updating
-
-                dbRealtime.child(KEYS.EVENTS).child(event.getEid())
-                        .child(KEYS.EVENT_MEMBERS_LIST).setValue(event.getRegisteredMembers());
-                // Updating the stored event object
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-
-        dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onMembersEventsListLoaded);
-
-
-    }
-
-    // "Next event" is the future event with the closest time to now
-    private void updateNextEvent(final String memberUid, ArrayList<String> usersEventsIds){
-
-        OnListLoadedListener<Event> onEventsLoaded = new OnListLoadedListener<Event>() {
-            @Override
-            public void onListLoaded(List<Event> list) {
-                Event nextEvent = null;
-                long nextEventTime = Long.MAX_VALUE;
-                for(Event event : list){
-                    //iterating on the list to find the next event that is closest to current time
-                    if(event.getStartDateTime().getMillis() > DateTime.now().getMillis()
-                        && event.getStartDateTime().getMillis() < nextEventTime){
-                        // a new "next event" was found"
-                        nextEvent = event;
-                        nextEventTime = event.getStartTime();
-                    }
-                }
-                if(nextEvent!=null)
-                    storeNextEvent(memberUid,nextEvent);
-                else
-                    removeNextEvent(memberUid);
-            }
-        };
-
-        loadEventsList(usersEventsIds,onEventsLoaded);
-
-    }
-
-
+    //region Watch Event (Listener That Calls Back Every Time Event Changes)
     // Listening for a single event all changes
-    public ValueEventListener watchEventChanges(Event event, final OnEventLoadedListener onEventChanges){
+    private ValueEventListener watchEventListener; // Temp value of the current listener, to be removed when stop listening
+    public void watchEventChanges(Event event, final OnEventLoadedListener onEventChanges){
 
-        ValueEventListener valueEventListener = new ValueEventListener() {
+        watchEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Event loadedEvent = snapshot.getValue(Event.class);
@@ -262,19 +315,18 @@ public class EventDataManager {
             }
         };
 
-        dbRealtime.child(KEYS.EVENTS).child(event.getEid()).addValueEventListener(valueEventListener);
+        dbRealtime.child(KEYS.EVENTS).child(event.getEid()).addValueEventListener(watchEventListener);
         // Needs to listen to event event after load (because of watching in the bg), this is why we didn't use single value event
-
-        return valueEventListener;
     }
 
-    public void unwatchEventChanges(Event event, final ValueEventListener valueListener){
-        if(valueListener!=null)
-            dbRealtime.child(KEYS.EVENTS).child(event.getEid()).removeEventListener(valueListener);
+    public void unwatchEventChanges(Event event){
+        if(watchEventListener!=null)
+            dbRealtime.child(KEYS.EVENTS).child(event.getEid()).removeEventListener(watchEventListener);
     }
 
+    //endregion
 
-
+    //region Load Multiple Events
 
     // Loads all events from a single day
     public void loadEventsByDate(LocalDate day, final OnListLoadedListener<Event> onLoaded){
@@ -307,39 +359,6 @@ public class EventDataManager {
         );
     }
 
-    // Like load but with a listener not just for a single value change event
-    public void listenToEventsByDate(LocalDate day, final OnListLoadedListener<Event> onLoaded){
-
-        final OnListLoadedListener<String> onIdsLoaded = new OnListLoadedListener<String>() {
-            @Override
-            public void onListLoaded(List<String> list) {
-                loadEventsList(list, onLoaded);
-            }
-        };
-
-
-        // Listening to events by adding a non single change listener (keeps calling callback after load)
-        dbRealtime.child(KEYS.DATE_TO_EVENTS).child(generateDateStamp(day)).addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        ArrayList<String> events = new ArrayList<>();
-                        for(DataSnapshot child : snapshot.getChildren()){
-                            events.add(child.getKey());
-                        }
-                        onIdsLoaded.onListLoaded(events);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        System.out.println(error.getMessage());
-
-                    }
-                }
-        );
-    }
-
-
     public void loadEventsList(final List<String> eventsIdsToLoad, final OnListLoadedListener<Event> listener){
         ValueEventListener onDataLoaded = new ValueEventListener() {
             @Override
@@ -361,43 +380,55 @@ public class EventDataManager {
         dbRealtime.child(KEYS.EVENTS).addListenerForSingleValueEvent(onDataLoaded);
     }
 
+    //endregion
 
-    public void loadEvent(final String eventId, final OnEventLoadedListener listener){
-        ValueEventListener onDataLoaded = new ValueEventListener() {
+    //region Listen to Multiple Events
+
+    private ValueEventListener listenerToListOfEvents; // Temp value of the current listener, to be removed when stop listening
+    // Like load but with a listener not just for a single value change event
+    public void listenToEventsByDate(LocalDate day, final OnEventLoadedListener onSingleEventChange){
+
+        final OnListLoadedListener<String> onIdsLoaded = new OnListLoadedListener<String>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Event loadedEvent;
-                for(DataSnapshot child : snapshot.getChildren()){
-                    if(eventId.equals(child.getKey())) {
-                        loadedEvent = child.getValue(Event.class);
-                        if(listener!=null)
-                            listener.onEventLoaded(loadedEvent); //found
-                        return;
+            public void onListLoaded(List<String> list) {
+                listenToEventsList(list, onSingleEventChange);
+            }
+        };
+
+
+        // Getting ids of events and then listening to this list
+        dbRealtime.child(KEYS.DATE_TO_EVENTS).child(generateDateStamp(day)).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ArrayList<String> events = new ArrayList<>();
+                        for(DataSnapshot child : snapshot.getChildren()){
+                            events.add(child.getKey());
+                        }
+                        onIdsLoaded.onListLoaded(events);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        System.out.println(error.getMessage());
+
                     }
                 }
-                // code gets to here when event id not found
-                listener.onEventLoaded(null);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-
-        dbRealtime.child(KEYS.EVENTS).addListenerForSingleValueEvent(onDataLoaded);
+        );
     }
 
-    public void loadNextEvent(final ClubMember member, final OnEventLoadedListener onLoaded){
 
-        ValueEventListener onValueLoaded = new ValueEventListener() {
+    public void listenToEventsList(final List<String> eventsIdsToListen, final OnEventLoadedListener onEventChange){
+        if(eventsIdsToListen.size()==0) {
+            onEventChange.onEventLoaded(null);
+            return; //Nothing to listen to
+        }
+
+        listenerToListOfEvents = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String nextEventId = snapshot.getValue(String.class);
-                if(nextEventId!=null)
-                    loadEvent(nextEventId, onLoaded);
-                else
-                    onLoaded.onEventLoaded(null);
+                Event eventChanged = snapshot.getValue(Event.class);
+                onEventChange.onEventLoaded(eventChanged);
             }
 
             @Override
@@ -406,8 +437,22 @@ public class EventDataManager {
             }
         };
 
-        dbRealtime.child(KEYS.MEMBER_TO_NEXT_EVENT).child(member.getUid()).addListenerForSingleValueEvent(onValueLoaded);
+        // This will callback each time something is changed in the list (listening to each event)
+        for(String eventId : eventsIdsToListen)
+            dbRealtime.child(KEYS.EVENTS).child(eventId).addValueEventListener(listenerToListOfEvents);
     }
+
+
+    public void stopListenToEventsList(final List<String> eventIds)
+    {
+        if(listenerToListOfEvents!=null) {
+            for (String id : eventIds)
+                dbRealtime.child(KEYS.EVENTS).child(id).removeEventListener(listenerToListOfEvents);
+        }
+    }
+
+    //endregion
+
 
     private String generateDateStamp(LocalDate time){
         return time.toString("dd_MM_YYYY");

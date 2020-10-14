@@ -61,7 +61,6 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
             super.onBindViewHolder(holder, position);
         }
         else {
-            Log.i("pttt", "Binding event " + eventsList.get(position).getName() + " With " + eventsList.get(position).getRegisteredMembersNonNull().size());
             RegistrableEventViewHolder eventHolder = (RegistrableEventViewHolder) holder;
             if (position < eventsList.size()) {
                 Event event = eventsList.get(position);
@@ -78,13 +77,6 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
         }
     }
 
-    public void setEventAsUnregistered(Event unregisteredEvent){
-        this.registeredEvents.remove(unregisteredEvent);
-    }
-
-    public void setEventAsRegistered(Event unregisteredEvent){
-        this.registeredEvents.remove(unregisteredEvent);
-    }
 
     public void setRegisteredEvents(List<Event> registered){
         registeredEvents.clear();

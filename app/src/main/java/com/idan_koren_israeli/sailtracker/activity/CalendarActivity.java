@@ -10,12 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.api.Distribution;
 import com.idan_koren_israeli.sailtracker.R;
-import com.idan_koren_israeli.sailtracker.adapter.ManagerEventRecyclerAdapter;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
+import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventLoadedListener;
 import com.idan_koren_israeli.sailtracker.fragment.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.fragment.PointsStatusFragment;
 import com.idan_koren_israeli.sailtracker.adapter.EventRecyclerAdapter;
@@ -24,10 +23,8 @@ import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinishedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
-import com.idan_koren_israeli.sailtracker.notification.EventWatchService;
 import com.idan_koren_israeli.sailtracker.recycler.CalendarRecyclerManager;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
@@ -136,12 +133,17 @@ public class CalendarActivity extends BaseActivity {
     //region Realtime Database callbacks
 
 
-    private OnListLoadedListener<Event> onEventsLoaded = new OnListLoadedListener<Event>() {
+    private OnEventLoadedListener onEventChanged = new OnEventLoadedListener() {
         @Override
-        public void onListLoaded(List<Event> eventsLoaded) {
-            eventsToShow.clear();
-            eventsToShow.addAll(eventsLoaded);
-
+        public void onEventLoaded(Event event) {
+            if(event==null)
+            {
+                // No events loaded
+                MemberDataManager.getInstance().isManagerMember(onCheckedManager);
+                return; //Nothing to add
+            }
+            removeOldEvent(event);
+            eventsToShow.add(event);
             MemberDataManager.getInstance().isManagerMember(onCheckedManager);
         }
     };
@@ -161,12 +163,19 @@ public class CalendarActivity extends BaseActivity {
         public void onListLoaded(List<Event> registeredEvents) {
             // Code gets to here after we already know if the current user is a manager or not.
             // And also the list of the current user's member already registered events is loaded.
-            Log.i("pttt","LOADED!" + registeredEvents.size());
             recyclerManager.updateEventsList(managerView,eventsToShow,registeredEvents);
             loadingFragment.hide();
             // Using realtime-events to update recycler view across all devices
         }
     };
+
+    // New event is changed so we replace the old version of it with the new one
+    private void removeOldEvent(Event toRemove){
+        Event[] arrToShow = (Event[]) eventsToShow.toArray(new Event[eventsToShow.size()]);
+        for(Event event : arrToShow)
+            if(event.getEid().equals(toRemove.getEid()))
+                eventsToShow.remove(event);
+    }
 
 
 
@@ -178,12 +187,30 @@ public class CalendarActivity extends BaseActivity {
         @Override
         public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
             loadingFragment.show();
+            stopListenToShownEvents();
+
             LocalDate dateSelected = new LocalDate(i,i1+1,i2);
-            dateTitle.setText(dateSelected.toString("dd.MM.YYYY"));
             selectedDate = dateSelected;
-            EventDataManager.getInstance().loadEventsByDate(dateSelected, onEventsLoaded);
+
+            dateTitle.setText(dateSelected.toString("dd.MM.YYYY"));
+            EventDataManager.getInstance().listenToEventsByDate(dateSelected, onEventChanged);
+            eventsToShow.clear();
         }
     };
+
+    private void stopListenToShownEvents()
+    {
+        ArrayList<String> eventsShownIds = getEventsShownIds();
+        EventDataManager.getInstance().stopListenToEventsList(eventsShownIds);
+    }
+
+    private ArrayList<String> getEventsShownIds()
+    {
+        ArrayList<String> eventsShown = new ArrayList<>();
+        for(Event e : eventsToShow)
+            eventsShown.add(e.getEid());
+        return eventsShown;
+    }
 
 
     //endregion
@@ -213,7 +240,14 @@ public class CalendarActivity extends BaseActivity {
 
     //endregion
 
+    public void showLoading()
+    {
+        loadingFragment.show();
+    }
 
+    public void hideLoading(){
+        loadingFragment.hide();
+    }
 
     @Override
     protected void onDestroy() {

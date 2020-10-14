@@ -252,7 +252,7 @@ public class GalleryActivity extends BaseActivity {
                 // Trying to find current member in members lists of current events
                 boolean found = false;
                 for (Event event : nowEvents) {
-                    if (event.getRegisteredMembers().contains(member.getUid())) {
+                    if (event.getRegisteredMembersNonNull().contains(member.getUid())) {
                         currentlyInEvent = true;
                         found = true; // The user was found in one of the current events list
                     }

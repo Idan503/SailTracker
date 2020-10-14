@@ -50,7 +50,6 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         this.eventsList = new ArrayList<>(events);
         eventsList.sort(new SortByStartTime());
         noEvents = (events.size() == 0);
-
     }
 
 

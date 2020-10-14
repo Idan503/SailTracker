@@ -46,6 +46,9 @@ public class CalendarRecyclerManager {
 
     private EventRecyclerType type = EventRecyclerType.REGISTER;
 
+    private Event lastRegisterEvent = null; // Show "unregister" button after server register is complete.
+                                            // This is to prevent to wait that the server will also insert the event id to user's list.
+
     private CalendarRecyclerManager(CalendarActivity caller)
     {
         this.activity = caller;
@@ -67,12 +70,15 @@ public class CalendarRecyclerManager {
 
     // Changes data on recycler and notifies the adapter
     public void updateEventsList(boolean isMemberManager, ArrayList<Event> allEvents, List<Event> registeredEvents){
-
-        //Log.i("pttt", "UPDATE: allEvents:" + allEvents.size() + " | Register : " + registeredEvents.size());
         if(adapter==null)
         {
             adapter = new RegistrableEventRecyclerAdapter(activity,allEvents, registeredEvents);
             // Default adapter as start
+        }
+
+        if(lastRegisterEvent!=null)
+        {
+            registeredEvents.add(lastRegisterEvent);
         }
 
         if(viewingPast())
@@ -94,12 +100,14 @@ public class CalendarRecyclerManager {
             if (isMemberManager) {
                 if(type!=EventRecyclerType.MANAGER)
                 {
+                    Log.i("pttt", "register evets size NEW " + registeredEvents.size());
                     adapter = initManagerViewAdapter(allEvents,registeredEvents);
                     type = EventRecyclerType.MANAGER;
                 }
                 else
                 {
                     adapter.setEventsData(allEvents);
+                    Log.i("pttt", "register evets size " + registeredEvents.size());
                     ((RegistrableEventRecyclerAdapter)adapter).setRegisteredEvents(registeredEvents);
                     adapter.notifyDataSetChanged();
 
@@ -166,10 +174,9 @@ public class CalendarRecyclerManager {
             try {
                 if(canMemberRegister(eventClicked)) {
                     EventDataManager.getInstance().registerMember(currentMember, eventClicked);
+                    activity.showLoading();
                     activity.reloadPointsStatus();
-                    CommonUtils.getInstance().showToast("Registered successfully!");
-
-
+                    lastRegisterEvent = eventClicked;
                 }
                 else {
                     CommonUtils.getInstance().showToast("Already registered at the same time");
@@ -194,9 +201,10 @@ public class CalendarRecyclerManager {
     private OnEventClickedListener onUnregisterClicked = new OnEventClickedListener(){
         @Override
         public void onButtonClicked(Event eventClicked) {
+            activity.showLoading();
             EventDataManager.getInstance().unregisterMember(currentMember, eventClicked);
             activity.reloadPointsStatus();
-            CommonUtils.getInstance().showToast("Unregistered successfully!");
+            lastRegisterEvent = null;
         }
     };
 
@@ -234,7 +242,7 @@ public class CalendarRecyclerManager {
     // Checking if a given event can be registered by checking time overlap with the others
     private boolean canMemberRegister(Event registerEvent){
         for(Event event : activity.getEventsToShow()){
-            if(registerEvent!=event && event.getRegisteredMembers().contains(currentMember.getUid())){
+            if(registerEvent!=event && event.getRegisteredMembersNonNull().contains(currentMember.getUid())){
                 if(registerEvent.getStartTime() < event.getEndTime()  && event.getStartTime() < registerEvent.getEndTime()){
                     return false; // member is already register to an overlapping event
                 }

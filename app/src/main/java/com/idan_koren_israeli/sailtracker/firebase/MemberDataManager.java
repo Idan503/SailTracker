@@ -262,7 +262,7 @@ public class MemberDataManager {
 
 
     // Checks if a given member is saved as a club manager in the db
-    private void isManagerMember(final ClubMember member, final OnCheckFinishedListener onFinish) {
+    public void isManagerMember(final ClubMember member, final OnCheckFinishedListener onFinish) {
         DocumentReference docRef = dbFirestore.collection(KEYS.LISTS).document(KEYS.MANAGERS);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override

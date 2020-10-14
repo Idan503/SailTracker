@@ -214,8 +214,7 @@ public class Event implements Serializable {
         if(registeredMembers==null)
             initRegisteredList();
 
-        if(registeredMembers.contains(member.getUid()))
-            registeredMembers.remove(member.getUid());
+        registeredMembers.remove(member.getUid());
 
         member.addPoints(getPrice());
         member.deductOneEvent();
@@ -232,6 +231,8 @@ public class Event implements Serializable {
         return registeredMembers.size()==maxMembersCount;
     }
 
+    // Method that is for local use, firestore uses the default getter
+    // so we will use this one to prevent crash null pointer exception
     @Exclude
     public ArrayList<String> getRegisteredMembersNonNull()
     {
