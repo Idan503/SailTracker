@@ -61,8 +61,7 @@ public class RegistrableEventRecyclerAdapter extends EventRecyclerAdapter {
             super.onBindViewHolder(holder, position);
         }
         else {
-            //Log.i("pttt", "EVENTS BIND: ");
-            //Log.i("pttt", "Binding event named " + eventsList.get(position).getName() + " With " + eventsList.get(position).getRegisteredMembersNonNull().size());
+            Log.i("pttt", "Binding event " + eventsList.get(position).getName() + " With " + eventsList.get(position).getRegisteredMembersNonNull().size());
             RegistrableEventViewHolder eventHolder = (RegistrableEventViewHolder) holder;
             if (position < eventsList.size()) {
                 Event event = eventsList.get(position);

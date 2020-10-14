@@ -161,6 +161,7 @@ public class CalendarActivity extends BaseActivity {
         public void onListLoaded(List<Event> registeredEvents) {
             // Code gets to here after we already know if the current user is a manager or not.
             // And also the list of the current user's member already registered events is loaded.
+            Log.i("pttt","LOADED!" + registeredEvents.size());
             recyclerManager.updateEventsList(managerView,eventsToShow,registeredEvents);
             loadingFragment.hide();
             // Using realtime-events to update recycler view across all devices

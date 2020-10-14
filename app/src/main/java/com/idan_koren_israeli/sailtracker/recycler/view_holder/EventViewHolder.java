@@ -151,8 +151,6 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
     }
 
     private String generateRegisterStatusString(Event event) {
-        Log.i("pttt", "EVENT INSIDE HOLDER: ");
-        Log.i("pttt","Event " + event.getName() + " Has " + event.getRegisteredMembersNonNull().size() + " Registered");
 
         if(event.getMaxMembersCount() == -1){
             return event.getRegisteredMembers().size() + " Registered"; //Unlimited

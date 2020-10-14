@@ -67,6 +67,7 @@ public class CalendarRecyclerManager {
 
     // Changes data on recycler and notifies the adapter
     public void updateEventsList(boolean isMemberManager, ArrayList<Event> allEvents, List<Event> registeredEvents){
+
         //Log.i("pttt", "UPDATE: allEvents:" + allEvents.size() + " | Register : " + registeredEvents.size());
         if(adapter==null)
         {
@@ -84,7 +85,6 @@ public class CalendarRecyclerManager {
             else
             {
                 //No need to re-init adapter
-                Log.i("pttt", allEvents.size() + "Past Notify");
                 adapter.setEventsData(allEvents);
                 adapter.notifyDataSetChanged();
             }

@@ -1,5 +1,7 @@
 package com.idan_koren_israeli.sailtracker.firebase;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -172,7 +174,7 @@ public class EventDataManager {
             }
         };
 
-        dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addValueEventListener(onDataLoaded);
+        dbRealtime.child(KEYS.MEMBER_TO_EVENTS).child(member.getUid()).addListenerForSingleValueEvent(onDataLoaded);
         // not using single because we want the screen to refresh on all users
     }
 
@@ -261,6 +263,7 @@ public class EventDataManager {
         };
 
         dbRealtime.child(KEYS.EVENTS).child(event.getEid()).addValueEventListener(valueEventListener);
+        // Needs to listen to event event after load (because of watching in the bg), this is why we didn't use single value event
 
         return valueEventListener;
     }
@@ -269,6 +272,8 @@ public class EventDataManager {
         if(valueListener!=null)
             dbRealtime.child(KEYS.EVENTS).child(event.getEid()).removeEventListener(valueListener);
     }
+
+
 
 
     // Loads all events from a single day
@@ -302,6 +307,39 @@ public class EventDataManager {
         );
     }
 
+    // Like load but with a listener not just for a single value change event
+    public void listenToEventsByDate(LocalDate day, final OnListLoadedListener<Event> onLoaded){
+
+        final OnListLoadedListener<String> onIdsLoaded = new OnListLoadedListener<String>() {
+            @Override
+            public void onListLoaded(List<String> list) {
+                loadEventsList(list, onLoaded);
+            }
+        };
+
+
+        // Listening to events by adding a non single change listener (keeps calling callback after load)
+        dbRealtime.child(KEYS.DATE_TO_EVENTS).child(generateDateStamp(day)).addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ArrayList<String> events = new ArrayList<>();
+                        for(DataSnapshot child : snapshot.getChildren()){
+                            events.add(child.getKey());
+                        }
+                        onIdsLoaded.onListLoaded(events);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        System.out.println(error.getMessage());
+
+                    }
+                }
+        );
+    }
+
+
     public void loadEventsList(final List<String> eventsIdsToLoad, final OnListLoadedListener<Event> listener){
         ValueEventListener onDataLoaded = new ValueEventListener() {
             @Override
@@ -320,8 +358,7 @@ public class EventDataManager {
             }
         };
 
-        dbRealtime.child(KEYS.EVENTS).addValueEventListener(onDataLoaded);
-        // Needs to load every time there is an update - registration is shared realtime among all users
+        dbRealtime.child(KEYS.EVENTS).addListenerForSingleValueEvent(onDataLoaded);
     }
 
 
@@ -348,8 +385,7 @@ public class EventDataManager {
             }
         };
 
-        dbRealtime.child(KEYS.EVENTS).addValueEventListener(onDataLoaded);
-        // Needs to load every time there is an update - registration is shared realtime among all users
+        dbRealtime.child(KEYS.EVENTS).addListenerForSingleValueEvent(onDataLoaded);
     }
 
     public void loadNextEvent(final ClubMember member, final OnEventLoadedListener onLoaded){
