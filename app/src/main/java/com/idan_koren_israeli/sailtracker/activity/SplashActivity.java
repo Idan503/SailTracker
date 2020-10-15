@@ -28,7 +28,6 @@ public class SplashActivity extends AppCompatActivity {
     private static final int ANIMATION_DURATION = 1500; //in ms
     private static final int CHANGE_TEXT_DELAY = 500; //in ms
 
-    private SharedPrefsManager sp;
     private boolean startAppOnAnimationEnd = false;
 
     @Override
@@ -36,7 +35,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        sp = SharedPrefsManager.getInstance();
+
+        SharedPrefsManager sp = SharedPrefsManager.getInstance();
 
         // Loading already authenticated user (if exists) into local data while splashscreen is showing
         String loggedPhone = sp.getString(SharedPrefsManager.KEYS.CURRENT_USER_PHONE,null);
@@ -48,6 +48,8 @@ public class SplashActivity extends AppCompatActivity {
             startAppOnAnimationEnd = true;
             // Nothing to check w/ db, app can start
         }
+
+
 
 
         findViews();

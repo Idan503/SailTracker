@@ -32,7 +32,7 @@
             android:id="@+id/calendar_CALENDAR"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.4"
+            app:layout_constraintHeight_percent="@dimen/calendar_height"
             app:layout_constraintTop_toTopOf="parent"
             android:theme="@style/CalenderViewCustom"
             android:dateTextAppearance="@style/CalenderViewDateCustomText"

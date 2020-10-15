@@ -129,14 +129,19 @@ public class PhotoInspectActivity extends BaseActivity {
                     .setDuration(FADE_IN_DURATION)
                     .start();
 
-            // Photos can be deleted via inspect activity iff member owns this collection (current user)
-            if(photoMember == MemberDataManager.getInstance().getCurrentMember()){
+            if(photoMember.getUid().matches(MemberDataManager.getInstance().getCurrentMember().getUid()))
+            {
+                // Current user is the one who viewing his own photo, so he can delete it.
                 deleteFAB.setVisibility(View.VISIBLE);
                 deleteFAB.setAlpha(0f);
                 deleteFAB.animate()
                         .alphaBy(1)
                         .setDuration(FADE_IN_DURATION)
                         .start();
+            }
+            else
+            {
+                Log.i("pttt", photoMember.getName() + " | " + MemberDataManager.getInstance().getCurrentMember().getName());
             }
 
         }
@@ -182,7 +187,6 @@ public class PhotoInspectActivity extends BaseActivity {
     private DialogInterface.OnClickListener onDeleteConfirmed = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialogInterface, int i) {
-            //Log.i("pttt","photo: " + photoMember.getUid() + " | " + )
             if(!photoMember.getUid().equals(MemberDataManager.getInstance().getCurrentMember().getUid()))
                 return; //For extra safety - a given member can only delete his own photos
             MemberDataManager.getInstance().deleteGalleryPhoto(photoMember.getUid(),displayedPhoto,photoDeleteSuccess, photoDeleteFail);
