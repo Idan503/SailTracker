@@ -248,6 +248,14 @@ public class CalendarActivity extends BaseActivity {
         loadingFragment.hide();
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventDataManager.getInstance().stopListenToEventsList(getEventsShownIds());
+        // Event is stopped, so we also stop the listener of the events that are showing on calendar
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
