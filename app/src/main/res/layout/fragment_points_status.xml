@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="35dp"
+    android:layout_height="30dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
@@ -9,8 +9,8 @@
     tools:context=".fragment.PointsStatusFragment">
 
     <ImageView
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@drawable/ic_points_wheel"
         android:id="@+id/points_status_IMG_points_logo"
         android:contentDescription="@string/points"
@@ -32,8 +32,8 @@
         />
 
     <com.google.android.material.button.MaterialButton
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         app:layout_constraintStart_toEndOf="@id/points_status_LBL_points_count"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

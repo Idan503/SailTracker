@@ -60,7 +60,6 @@ public class HomeActivity extends BaseActivity {
         }
         else{
             // User is not logged in, activity will wait for LoginFragment to finish
-            Log.i("pttt", "NULL");
             loginFragment.setOnCompleteListener(onLoginFinished);
             navigationBarFragment.setClickable(false);
         }

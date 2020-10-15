@@ -57,7 +57,6 @@ public class LoginManager {
 
 
     public void verifyPhoneNumber(String number, PhoneAuthProvider.OnVerificationStateChangedCallbacks onStateChange){
-        Log.i("pttt", "Verifying " + number);
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 number,        // Phone number to verify
                 60,                 // Timeout duration

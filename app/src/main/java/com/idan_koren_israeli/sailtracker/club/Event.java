@@ -227,7 +227,8 @@ public class Event implements Serializable {
 
     @Exclude
     public boolean isFull(){
-        initRegisteredList();
+        if(registeredMembers==null)
+            initRegisteredList();
         return registeredMembers.size()==maxMembersCount;
     }
 

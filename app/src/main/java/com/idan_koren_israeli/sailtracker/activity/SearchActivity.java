@@ -76,7 +76,6 @@ public class SearchActivity extends BaseActivity {
                 MemberDataManager.getInstance().loadMemberByPhone(formattedPhone, onMemberLoad);
             }
             catch ( InputMismatchException exception){
-                Log.i(getClass().getSimpleName(), exception.toString());
                 CommonUtils.getInstance().showToast("Phone number is invalid");
             }
             return false;

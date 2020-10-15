@@ -466,7 +466,7 @@ public class EventDataManager {
     }
 
     private void showErrorMessage(String message){
-        Log.i(getClass().getSimpleName(), message);
+        Log.e(getClass().getSimpleName(), message);
         CommonUtils.getInstance().showToast("An error occurred, please try again later");
     }
 

@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.idan_koren_israeli.sailtracker.activity.CalendarActivity;
 import com.idan_koren_israeli.sailtracker.club.Event;

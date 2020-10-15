@@ -142,7 +142,6 @@ public class CalendarActivity extends BaseActivity {
                 MemberDataManager.getInstance().isManagerMember(onCheckedManager);
                 return; //Nothing to add
             }
-            Log.i("pttt", event.toString());
             removeOldEvent(event);
             eventsToShow.add(event);
             MemberDataManager.getInstance().isManagerMember(onCheckedManager);

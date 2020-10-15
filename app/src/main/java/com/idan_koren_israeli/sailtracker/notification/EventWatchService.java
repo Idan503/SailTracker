@@ -71,10 +71,24 @@ public class EventWatchService extends Service {
         eventWatched = null; // User does not watch any event
     }
 
+
+    //region Destroy Service to Restart (For when app is being killed)
+
+    // Some phones sent to onTaskRemove (chinese brands), while other send to onDestroy...
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
-        // Code gets to here when application is being killed (inconsistent on some phone)
+        // Code gets to here when application is being killed (inconsistent on some devices)
+        Intent broadcastIntent = new Intent(this, EventBroadcastReceiver.class);
+        sendBroadcast(broadcastIntent);
+        stopSelf();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Code gets to here when application is being killed (inconsistent on some devices)
         Intent broadcastIntent = new Intent(this, EventBroadcastReceiver.class);
         sendBroadcast(broadcastIntent);
         stopSelf();

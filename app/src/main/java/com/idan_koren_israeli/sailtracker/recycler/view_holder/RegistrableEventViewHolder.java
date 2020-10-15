@@ -2,6 +2,7 @@ package com.idan_koren_israeli.sailtracker.recycler.view_holder;
 
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -88,8 +89,10 @@ public class RegistrableEventViewHolder extends EventViewHolder {
     //region Register/Unregister Functionality
     public void setButtonListener(final OnEventClickedListener register, final OnEventClickedListener unregister,
                                   final OnEventClickedListener watch, final OnEventClickedListener unwatch){
-        if(event.getStartDateTime().getMillis() < DateTime.now().getMillis())
+        if(event.getStartDateTime().getMillis() < DateTime.now().getMillis()) {
             return; // event already started, button should not be functional
+        }
+
 
         this.registerButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,6 +1,7 @@
 package com.idan_koren_israeli.sailtracker.recycler;
 
 public enum EventRecyclerType {
+    NONE,
     DEFAULT, // showing info only (base adapter)
     SEPARATED, // used for history
     REGISTER, // default calendar recycler for regular user

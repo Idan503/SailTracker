@@ -1,6 +1,5 @@
 package com.idan_koren_israeli.sailtracker.adapter;
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,7 +55,6 @@ public class SeparatedEventRecyclerAdapter extends EventRecyclerAdapter {
         events.sort(new SortByStartTime());
         for (Event event : events) {
             if (event.getStartTime() > now) {
-                Log.i("pttt", event.getName() + event.getStartTime() +"is more than " + now);
                 break;
             }
             futureTitlePosition++; // current event is part of the past

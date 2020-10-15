@@ -46,7 +46,7 @@ public class EventNotificationManager {
     public void showNotification(){
         Intent intent=new Intent(context.getApplicationContext(), CalendarActivity.class);
 
-        NotificationChannel notificationChannel=new NotificationChannel(KEYS.CHANNEL_ID,KEYS.NAME_WATCHED_AVAILABLE, NotificationManager.IMPORTANCE_LOW);
+        NotificationChannel notificationChannel=new NotificationChannel(KEYS.CHANNEL_ID,KEYS.NAME_WATCHED_AVAILABLE, NotificationManager.IMPORTANCE_HIGH);
         PendingIntent pendingIntent=PendingIntent.getActivity(context.getApplicationContext(),1,intent,0);
 
         Notification notification=new Notification.Builder(context.getApplicationContext(),KEYS.CHANNEL_ID)

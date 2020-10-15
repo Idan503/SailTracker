@@ -43,7 +43,7 @@ public class CalendarRecyclerManager {
     private ClubMember currentMember;
     private EventWatchManager watchManager;
 
-    private EventRecyclerType type = EventRecyclerType.REGISTER;
+    private EventRecyclerType type = EventRecyclerType.NONE;
 
     private Event lastRegisterEvent = null; // Show "unregister" button after server register is complete.
                                             // This is to prevent to wait that the server will also insert the event id to user's list.
@@ -138,7 +138,6 @@ public class CalendarRecyclerManager {
 
     private RegistrableEventRecyclerAdapter initRegisterViewAdapter(List<Event> events, List<Event> alreadyRegistered)
     {
-
         RegistrableEventRecyclerAdapter adapter = new RegistrableEventRecyclerAdapter(activity, events,alreadyRegistered);
         adapter
                 .setButtonsListeners(onRegisterClicked, onUnregisterClicked,
@@ -195,7 +194,6 @@ public class CalendarRecyclerManager {
     private OnEventClickedListener onUnregisterClicked = new OnEventClickedListener(){
         @Override
         public void onButtonClicked(Event eventClicked) {
-            activity.showLoading();
             EventDataManager.getInstance().unregisterMember(currentMember, eventClicked);
             activity.reloadPointsStatus();
             lastRegisterEvent = null;

@@ -127,7 +127,6 @@ public class SharedPrefsManager {
 
     public <T> void putArray(String KEY, ArrayList<T> array) {
         String json = new Gson().toJson(array);
-        Log.i("pttt", json);
         prefs.edit().putString(KEY, json).apply();
     }
 
