@@ -251,7 +251,7 @@ public class CalendarRecyclerManager {
     private boolean viewingPast()
     {
         final long millisOfOneDay = 86400000;
-        return activity.getSelectedDate().toDateTimeAtStartOfDay().getMillis() + millisOfOneDay< DateTime.now().getMillis();
+        return activity.getSelectedDate().toDateTimeAtStartOfDay().getMillis() + millisOfOneDay< CommonUtils.getInstance().getIsraelTimeNowMillis();
     }
 
 

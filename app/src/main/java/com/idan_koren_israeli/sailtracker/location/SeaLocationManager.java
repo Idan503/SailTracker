@@ -54,7 +54,7 @@ public class SeaLocationManager {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             CommonUtils.getInstance().requestLocationPermission(callerActivity);
-            CommonUtils.getInstance().showToast("Please grant location and try again");
+            CommonUtils.getInstance().showToast("Please grant location permission and try again");
             return;
         }
         // Code gets to here when permission granted

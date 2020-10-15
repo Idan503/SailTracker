@@ -142,7 +142,7 @@ public class EventDataManager {
                 long nextEventTime = Long.MAX_VALUE;
                 for(Event event : list){
                     //iterating on the list to find the next event that is closest to current time
-                    if(event.getStartDateTime().getMillis() > DateTime.now().getMillis()
+                    if(event.getStartDateTime().getMillis() > CommonUtils.getInstance().getIsraelTimeNowMillis()
                             && event.getStartDateTime().getMillis() < nextEventTime){
                         // a new "next event" was found"
                         nextEvent = event;

@@ -131,7 +131,7 @@ public class GalleryActivity extends BaseActivity {
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = Long.toString(DateTime.now().getMillis());
+        String timeStamp = Long.toString(CommonUtils.getInstance().getIsraelTimeNowMillis());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -272,8 +272,8 @@ public class GalleryActivity extends BaseActivity {
 
 
     private boolean isEventRightNow(Event event) {
-        return event.getStartDateTime().getMillis() < DateTime.now().getMillis()
-                && DateTime.now().getMillis() < event.getEndDateTime().getMillis();
+        return event.getStartDateTime().getMillis() < CommonUtils.getInstance().getIsraelTimeNowMillis()
+                && CommonUtils.getInstance().getIsraelTimeNowMillis() < event.getEndDateTime().getMillis();
         // Event is right now if current time is between start time & end time
     }
 
@@ -283,7 +283,7 @@ public class GalleryActivity extends BaseActivity {
             if (currentlyInEvent) {
                 SeaLocationManager.getInstance().checkLocationNearSea(GalleryActivity.this,onSeaDetectedListener);
             } else
-                CommonUtils.getInstance().showToast("Photos can be taken only while in event");
+                CommonUtils.getInstance().showToast("Photos can be captured only while in event");
 
         }
     };
@@ -298,6 +298,7 @@ public class GalleryActivity extends BaseActivity {
         @Override
         public void onSeaDetected(boolean nearSea) {
             if(nearSea){
+                CommonUtils.getInstance().showToast("Please capture a photo");
                 dispatchTakePictureIntent();
             }
             else{

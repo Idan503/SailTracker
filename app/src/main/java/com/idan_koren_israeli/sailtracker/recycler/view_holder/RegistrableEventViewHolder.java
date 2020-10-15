@@ -64,7 +64,7 @@ public class RegistrableEventViewHolder extends EventViewHolder {
         ColorStateList disabledBackground = ContextCompat.getColorStateList(registerButton.getContext(), R.color.lighter_grey);
         ColorStateList transparent = ContextCompat.getColorStateList(registerButton.getContext(), android.R.color.transparent);
 
-        if(event.getStartDateTime().getMillis() < DateTime.now().getMillis()){
+        if(event.getStartDateTime().getMillis() < CommonUtils.getInstance().getIsraelTimeNowMillis()){
             // This event is already started, disabling functionality
             registerButton.setOnClickListener(onClickedAfterStarted);
 
@@ -89,7 +89,7 @@ public class RegistrableEventViewHolder extends EventViewHolder {
     //region Register/Unregister Functionality
     public void setButtonListener(final OnEventClickedListener register, final OnEventClickedListener unregister,
                                   final OnEventClickedListener watch, final OnEventClickedListener unwatch){
-        if(event.getStartDateTime().getMillis() < DateTime.now().getMillis()) {
+        if(event.getStartDateTime().getMillis() < CommonUtils.getInstance().getIsraelTimeNowMillis()) {
             return; // event already started, button should not be functional
         }
 

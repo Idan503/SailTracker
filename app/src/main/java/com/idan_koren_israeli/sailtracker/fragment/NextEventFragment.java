@@ -55,7 +55,7 @@ public class NextEventFragment extends Fragment {
     private OnEventLoadedListener onNextEventLoaded = new OnEventLoadedListener() {
         @Override
         public void onEventLoaded(Event sail) {
-            if(sail!=null && sail.getStartDateTime().getMillis() > DateTime.now().getMillis())
+            if(sail!=null && sail.getStartDateTime().getMillis() > CommonUtils.getInstance().getIsraelTimeNowMillis())
                 setEvent(sail);
             else
                 setNoEvent();

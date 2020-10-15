@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.comparator.SortByStartTime;
+import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.recycler.view_holder.MessageViewHolder;
 
 import org.joda.time.DateTime;
@@ -51,7 +52,7 @@ public class SeparatedEventRecyclerAdapter extends EventRecyclerAdapter {
     private void calculateFutureLabelPosition(List<Event> events) {
         futureTitlePosition = 1; // "past" title is 0
 
-        long now = DateTime.now().getMillis();
+        long now = CommonUtils.getInstance().getIsraelTimeNowMillis();
         events.sort(new SortByStartTime());
         for (Event event : events) {
             if (event.getStartTime() > now) {

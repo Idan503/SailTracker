@@ -37,6 +37,9 @@ import com.bumptech.glide.request.target.Target;
 import com.idan_koren_israeli.sailtracker.activity.BaseActivity;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.io.ByteArrayOutputStream;
 import java.util.InputMismatchException;
@@ -220,6 +223,14 @@ public class CommonUtils {
 
     //endregion
 
-    //region
+    //region Time & Date (Using JodaTime)
+
+    public long getIsraelTimeNowMillis()
+    {
+        DateTime currentIsrael = new DateTime(DateTimeZone.forID("Israel"));
+        return currentIsrael.getMillis();
+    }
+
+    //endregion
 
 }
