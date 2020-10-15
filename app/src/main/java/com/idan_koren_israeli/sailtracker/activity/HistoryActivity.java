@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AnticipateOvershootInterpolator;
 
@@ -49,6 +50,8 @@ public class HistoryActivity extends BaseActivity {
         findViews();
         setListeners();
         initMemberToShow();
+
+        loadingFragment.show();
 
         EventDataManager.getInstance().loadRegisteredEvents(member,onEventsLoaded);
 

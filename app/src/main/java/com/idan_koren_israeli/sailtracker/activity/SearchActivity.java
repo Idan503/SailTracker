@@ -12,11 +12,14 @@ import com.idan_koren_israeli.sailtracker.fragment.PhotoCollectionFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentManager;
+
+import java.util.InputMismatchException;
 
 public class SearchActivity extends BaseActivity {
 
@@ -25,6 +28,7 @@ public class SearchActivity extends BaseActivity {
     private PhotoCollectionFragment resultPhotos;
     private ClubMember resultMember;
     private TextView searchLabel;
+    private String searchedPhone;
 
 
     @Override
@@ -66,8 +70,15 @@ public class SearchActivity extends BaseActivity {
     private SearchView.OnQueryTextListener onSearchPerformed = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String input) {
-            String phoneNumber = CommonUtils.getInstance().toPhoneString(input);
-            MemberDataManager.getInstance().loadMemberByPhone(phoneNumber, onMemberLoad);
+            try {
+                searchedPhone = input;
+                String formattedPhone = CommonUtils.getInstance().toPhoneString(searchedPhone);
+                MemberDataManager.getInstance().loadMemberByPhone(formattedPhone, onMemberLoad);
+            }
+            catch ( InputMismatchException exception){
+                Log.i(getClass().getSimpleName(), exception.toString());
+                CommonUtils.getInstance().showToast("Phone number is invalid");
+            }
             return false;
         }
 
@@ -81,8 +92,8 @@ public class SearchActivity extends BaseActivity {
         @Override
         public void onMemberLoad(ClubMember memberLoaded) {
             resultMember = memberLoaded;
-            if(resultMember==null) {
-                CommonUtils.getInstance().showToast("User could not be found");
+            if(resultMember==null&& searchedPhone !=null) {
+                searchLabel.setText(getString(R.string.search_label_phone_not_found, searchedPhone));
                 return;
             }
             if(memberLoaded!= MemberDataManager.getInstance().getCurrentMember()) {

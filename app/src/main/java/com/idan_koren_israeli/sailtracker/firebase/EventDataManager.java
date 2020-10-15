@@ -1,7 +1,10 @@
 package com.idan_koren_israeli.sailtracker.firebase;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.common.internal.service.Common;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -12,6 +15,7 @@ import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.Event;
 import com.idan_koren_israeli.sailtracker.club.exception.EventFullException;
 import com.idan_koren_israeli.sailtracker.club.exception.NotEnoughPointsException;
+import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventLoadedListener;
 
@@ -110,7 +114,7 @@ public class EventDataManager {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                showErrorMessage(error.getMessage());
             }
         };
 
@@ -216,7 +220,7 @@ public class EventDataManager {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                showErrorMessage(error.getMessage());
             }
         };
 
@@ -254,7 +258,7 @@ public class EventDataManager {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                showErrorMessage(error.getMessage());
             }
         };
 
@@ -286,7 +290,7 @@ public class EventDataManager {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                showErrorMessage(error.getMessage());
             }
         };
 
@@ -310,7 +314,7 @@ public class EventDataManager {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                showErrorMessage(error.getMessage());
             }
         };
 
@@ -372,7 +376,7 @@ public class EventDataManager {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                showErrorMessage(error.getMessage());
             }
         };
 
@@ -409,8 +413,7 @@ public class EventDataManager {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        System.out.println(error.getMessage());
-
+                        showErrorMessage(error.getMessage());
                     }
                 }
         );
@@ -432,7 +435,7 @@ public class EventDataManager {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                showErrorMessage(error.getMessage());
             }
         };
 
@@ -460,6 +463,11 @@ public class EventDataManager {
     // Overloading - no member parameter applies to the current user's ClubMember
     public void loadRegisteredEvents(final OnListLoadedListener<Event> listener){
         loadRegisteredEvents(MemberDataManager.getInstance().getCurrentMember(), listener);
+    }
+
+    private void showErrorMessage(String message){
+        Log.i(getClass().getSimpleName(), message);
+        CommonUtils.getInstance().showToast("An error occurred, please try again later");
     }
 
 }

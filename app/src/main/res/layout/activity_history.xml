@@ -56,8 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.idan_koren_israeli.sailtracker.fragment.LoadingFragment"
-        android:layout_below="@id/my_sails_LBL_title"
-        android:layout_marginTop="20dp"
+        app:message="@string/history_loading_message"
         android:id="@+id/my_sails_FRAG_loading"
         tools:layout="@layout/fragment_loading"
         />

@@ -59,9 +59,10 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         timeOfDayText.setText(generateTimeString(event));
         descriptionText.setText(event.getDescription());
         registerStatusText.setText(generateRegisterStatusString(event));
-        if(showDateText)
+        if (showDateText)
             dateText.setText(generateDateString(event));
         setPicture(event.getType());
+
     }
 
     private void findViews(){

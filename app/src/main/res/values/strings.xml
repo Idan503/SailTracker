@@ -57,6 +57,7 @@
     <string name="searchbar_title">Club member phone num.</string>
     <string name="label_search_screen">Search for club members\nand take a look at their photos.</string>
     <string name="search_title">Gallery Explorer</string>
+    <string name="search_label_phone_not_found">Phone number %s \nisn\'t registered to the sailing club.</string>
 
     <!-- GALLERY SCREEN -->
     <string name="take_photo">Take a Photo</string>
@@ -64,6 +65,7 @@
 
     <!-- HISTORY SCREEN -->
     <string name="history_title">My Sails and Events</string>
+    <string name="history_loading_message">Loading\nSail &amp; Events…</string>
 
     <!-- LOGIN SCREEN -->
     <string name="login_phone">Enter your phone number to log-in</string>

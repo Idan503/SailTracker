@@ -1,11 +1,13 @@
 package com.idan_koren_israeli.sailtracker.adapter;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.Event;
+import com.idan_koren_israeli.sailtracker.club.comparator.SortByStartTime;
 import com.idan_koren_israeli.sailtracker.recycler.view_holder.MessageViewHolder;
 
 import org.joda.time.DateTime;
@@ -51,9 +53,12 @@ public class SeparatedEventRecyclerAdapter extends EventRecyclerAdapter {
         futureTitlePosition = 1; // "past" title is 0
 
         long now = DateTime.now().getMillis();
+        events.sort(new SortByStartTime());
         for (Event event : events) {
-            if (event.getStartTime() > now)
+            if (event.getStartTime() > now) {
+                Log.i("pttt", event.getName() + event.getStartTime() +"is more than " + now);
                 break;
+            }
             futureTitlePosition++; // current event is part of the past
         }
     }
@@ -64,9 +69,9 @@ public class SeparatedEventRecyclerAdapter extends EventRecyclerAdapter {
         return super.getItemCount() + 2; // 2 titles (separates the ryc)
     }
 
-    // de-converting from position of separated to position in the list
+    // de-converting from position of 'separated' to position in the events list
     private int convertToListPosition(int position){
-        int listPosition = position-1; //past title
+        int listPosition = position-1; //past title is always above
         if(position > futureTitlePosition)
             listPosition-=1;
         return listPosition;
