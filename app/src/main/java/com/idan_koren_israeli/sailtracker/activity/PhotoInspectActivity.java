@@ -2,7 +2,9 @@ package com.idan_koren_israeli.sailtracker.activity;
 
 import androidx.annotation.NonNull;
 
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,6 +40,7 @@ public class PhotoInspectActivity extends BaseActivity {
     public interface KEYS{
         String MEMBER_TOOK = "member_took";
         String PHOTO_OBJ = "photo_obj";
+        String DELETED_PHOTO  ="deleted_photo";
     }
 
 
@@ -139,10 +142,7 @@ public class PhotoInspectActivity extends BaseActivity {
                         .setDuration(FADE_IN_DURATION)
                         .start();
             }
-            else
-            {
-                Log.i("pttt", photoMember.getName() + " | " + MemberDataManager.getInstance().getCurrentMember().getName());
-            }
+
 
         }
 
@@ -192,6 +192,9 @@ public class PhotoInspectActivity extends BaseActivity {
             MemberDataManager.getInstance().deleteGalleryPhoto(photoMember.getUid(),displayedPhoto,photoDeleteSuccess, photoDeleteFail);
             photoMember.removeGalleryPhoto(displayedPhoto);
             MemberDataManager.getInstance().storeMember(photoMember);
+            Intent intent=new Intent();
+            intent.putExtra(KEYS.DELETED_PHOTO,displayedPhoto);
+            setResult(Activity.RESULT_OK, intent);
             finish();
         }
     };

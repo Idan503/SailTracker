@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -58,6 +59,7 @@ public class GalleryActivity extends BaseActivity {
     private boolean currentlyInEvent;
 
     private String capturedPhotoPath;
+
 
 
     @Override

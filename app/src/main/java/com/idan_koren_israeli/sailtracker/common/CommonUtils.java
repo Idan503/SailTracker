@@ -5,7 +5,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -17,6 +19,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AlignmentSpan;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -137,10 +140,33 @@ public class CommonUtils {
     //endregion
 
 
-    // region Screen and UI
-    public int getScreenWidth(@NonNull Activity activity) {
+    // region Screen Dimensions
+    public int getScreenWidthPixels(@NonNull Activity activity) {
         return activity.getResources().getDisplayMetrics().widthPixels;
     }
+
+    public int getScreenHeightPixels(@NonNull Activity activity) {
+        return activity.getResources().getDisplayMetrics().heightPixels;
+    }
+
+    public float getScreenWidthDp(@NonNull Activity activity){
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics ();
+        display.getMetrics(outMetrics);
+        float density = activity.getResources().getDisplayMetrics().density;
+        return outMetrics.widthPixels / density;
+    }
+
+    public float getScreenHeightDp(@NonNull Activity activity){
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics ();
+        display.getMetrics(outMetrics);
+        float density = activity.getResources().getDisplayMetrics().density;
+        return outMetrics.heightPixels / density;
+    }
+    //endregion
+
+    // region Concurrency
 
     public void delayedTask(Runnable task, int delay){
         final Handler handler = new Handler(Looper.getMainLooper());

@@ -16,6 +16,7 @@ import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.activity.PhotoInspectActivity;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
+import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.recycler.listener.OnPhotoClickedListener;
 import com.idan_koren_israeli.sailtracker.adapter.PhotoCollectionAdapter;
 import com.idan_koren_israeli.sailtracker.club.comparator.SortByCreationTime;
@@ -50,7 +51,7 @@ public class PhotoCollectionFragment extends Fragment {
 
     public void setMember(ClubMember member){
         this.member = member;
-        updateUI();
+        updateUI(member);
     }
 
     @Override
@@ -78,10 +79,12 @@ public class PhotoCollectionFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        updateUI();
+        updateUI(member);
     }
 
-    private void updateUI(){
+
+    public void updateUI(ClubMember member){
+        this.member = member;
         if(getContext()!=null)
             adapter = new PhotoCollectionAdapter(getContext(),getMemberPhotos());
         adapter.setPhotoClickListener(onPhotoClicked);
@@ -126,7 +129,13 @@ public class PhotoCollectionFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==INSPECTOR_OPENED) {
-            updateUI();
+            // We check if there is a deleted photo, if so, we delete it and update ui
+            if(data!=null) {
+                GalleryPhoto deletedPhoto = (GalleryPhoto) data.getSerializableExtra(PhotoInspectActivity.KEYS.DELETED_PHOTO);
+                member.getGalleryPhotos().remove(deletedPhoto);
+                // Removing the deleted photo from member's photo that is shown in this collection
+            }
+            updateUI(member);
         }
 
     }
