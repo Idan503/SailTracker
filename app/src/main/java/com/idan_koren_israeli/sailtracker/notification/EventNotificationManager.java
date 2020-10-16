@@ -1,5 +1,6 @@
 package com.idan_koren_israeli.sailtracker.notification;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -7,14 +8,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Icon;
-import android.util.Log;
 
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.activity.CalendarActivity;
-import com.idan_koren_israeli.sailtracker.club.Event;
-import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
 
 public class EventNotificationManager {
+    @SuppressLint("StaticFieldLeak") // singleton class that use application context only
     private static EventNotificationManager single_instance = null;
     private Context context;
 

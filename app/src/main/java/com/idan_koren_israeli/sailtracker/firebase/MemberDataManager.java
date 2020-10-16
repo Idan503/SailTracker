@@ -276,7 +276,7 @@ public class MemberDataManager {
                             String[] allManagersUid = allManagersUidString.split(KEYS.ALL_MANAGERS_REGEX);
                             boolean result = Arrays.asList(allManagersUid).contains(member.getUid());
 
-                            if(member == currentMember)
+                            if(member.getUid().equals(currentMember.getUid()))
                                 currentMemberIsManager = result;
                             if(onFinish!=null)
                                 onFinish.onCheckFinished(result);

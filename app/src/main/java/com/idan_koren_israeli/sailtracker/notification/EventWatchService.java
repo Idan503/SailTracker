@@ -26,8 +26,10 @@ public class EventWatchService extends Service {
 
     private ValueEventListener valueListener; // to stop listen after push notification sent
     private EventDataManager eventData;
-    private SharedPrefsManager sp;
     private Event eventWatched;
+
+    private boolean calledRestart = false;
+
 
     public interface KEYS{
         String EVENT_TO_LISTEN = "event_to_listen";
@@ -38,14 +40,20 @@ public class EventWatchService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent,flags,startId);
         eventWatched = (Event) intent.getSerializableExtra(KEYS.EVENT_TO_LISTEN);
-        sp = SharedPrefsManager.initHelper(getApplicationContext());
         eventData = EventDataManager.initHelper();
 
+        SharedPrefsManager sp = SharedPrefsManager.initHelper(getApplicationContext());
+        if(eventWatched==null){
+            // eventWatched was not in intent's data, so we check if its saved as sp (when device startup)
+            eventWatched = (Event) sp.getObject(SharedPrefsManager.KEYS.WATCHED_EVENT, Event.class);
+        }
+
         if(eventWatched!=null) {
+            // Initiating the listening itself iff user is listened
             eventData.watchEventChanges(eventWatched, onEventChanged);
         }
 
-        return Service.START_STICKY;
+        return Service.START_STICKY; // To prevent the service get killed
     }
 
     private OnEventLoadedListener onEventChanged = new OnEventLoadedListener() {
@@ -75,23 +83,30 @@ public class EventWatchService extends Service {
     //region Destroy Service to Restart (For when app is being killed)
 
     // Some phones sent to onTaskRemove (chinese brands), while other send to onDestroy...
+    // Therefore the boolean calledRestart will prevent both calls.
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
-        // Code gets to here when application is being killed (inconsistent on some devices)
-        Intent broadcastIntent = new Intent(this, EventBroadcastReceiver.class);
-        sendBroadcast(broadcastIntent);
-        stopSelf();
+        if(!calledRestart) {
+            // Code gets to here when application is being killed (inconsistent on some devices)
+            Intent broadcastIntent = new Intent(this, EventBroadcastReceiver.class);
+            sendBroadcast(broadcastIntent);
+            stopSelf();
+            calledRestart = true;
+        }
     }
 
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // Code gets to here when application is being killed (inconsistent on some devices)
-        Intent broadcastIntent = new Intent(this, EventBroadcastReceiver.class);
-        sendBroadcast(broadcastIntent);
-        stopSelf();
+        if(!calledRestart) {
+            // Code gets to here when application is being killed (inconsistent on some devices)
+            Intent broadcastIntent = new Intent(this, EventBroadcastReceiver.class);
+            sendBroadcast(broadcastIntent);
+            stopSelf();
+            calledRestart = true;
+        }
     }
 
 

@@ -15,7 +15,10 @@ public class EventBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        //Broadcast listen, service try to stop (app is being killed) or phone start up
+        // This receiver will get call both from EventWatchService.java
+        // And "BOOT_COMPLETED" call for when the phone starts app.
+
+        // Then, the service will start and listen to the event iff user is watching it
         context.startService(new Intent(context, EventWatchService.class));
     }
 }
