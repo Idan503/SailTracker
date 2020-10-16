@@ -7,17 +7,12 @@
     android:background="@android:color/black"
     tools:context=".activity.PhotoInspectActivity">
 
-    <ImageView
-        style="@style/BackgroundImageView"
-        android:id="@+id/base_IMG_background"
-        android:contentDescription="@string/background"
-        />
 
     <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:id="@+id/photo_inspect_IMG_photo"
+        android:background="@android:color/black"
         android:contentDescription="@string/photo"
         />
 

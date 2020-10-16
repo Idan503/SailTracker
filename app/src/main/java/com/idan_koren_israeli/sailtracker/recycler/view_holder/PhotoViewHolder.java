@@ -1,6 +1,8 @@
 package com.idan_koren_israeli.sailtracker.recycler.view_holder;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -8,8 +10,13 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
@@ -19,32 +26,17 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
     private ImageView innerImage;
     private ImageView loadingImage;
-    private RotateAnimation loadingAnimation;
     private GalleryPhoto photo;
-
-    private final static int LOADING_ANIMATION_DURATION = 3000;
 
     public PhotoViewHolder(@NonNull View itemView) {
         super(itemView);
         findView(itemView);
-        initLoadingAnimation();
+        loadingImage.setVisibility(View.VISIBLE); // start as loading
     }
 
     private void findView(View parent){
         innerImage = parent.findViewById(R.id.photo_item_IMG_inner_image);
         loadingImage = parent.findViewById(R.id.photo_item_IMG_loading);
-
-    }
-
-    private void initLoadingAnimation(){
-        CommonUtils.getInstance().setImageResource(loadingImage, R.drawable.ic_loading);
-        RotateAnimation loadingAnimation = new RotateAnimation(0, 360,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        loadingAnimation.setDuration(LOADING_ANIMATION_DURATION);
-        loadingAnimation.setRepeatCount(Animation.INFINITE);
-        loadingAnimation.setInterpolator(new LinearInterpolator());
-        loadingImage.setAnimation(loadingAnimation);
-        loadingAnimation.start();
     }
 
 
@@ -59,7 +51,21 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
     public void setPhoto(GalleryPhoto photo){
         this.photo = photo;
-        CommonUtils.getInstance().setImageResource(innerImage, Uri.parse(photo.getUrl()));
+        CommonUtils.getInstance().setImageResource(innerImage, Uri.parse(photo.getUrl()), new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                if(e!=null)
+                    Log.e(getClass().getSimpleName(), e.getMessage());
+                CommonUtils.getInstance().showToast("Problem occurred loading gallery photo");
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                loadingImage.setVisibility(View.GONE);
+                return false;
+            }
+        });
     }
 
 

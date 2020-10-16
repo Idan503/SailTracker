@@ -16,7 +16,6 @@ import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.activity.PhotoInspectActivity;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
-import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.recycler.listener.OnPhotoClickedListener;
 import com.idan_koren_israeli.sailtracker.adapter.PhotoCollectionAdapter;
 import com.idan_koren_israeli.sailtracker.club.comparator.SortByCreationTime;
@@ -66,7 +65,6 @@ public class PhotoCollectionFragment extends Fragment {
         View parent = inflater.inflate(R.layout.fragment_photo_collection, container, false);
         findViews(parent);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), NUM_OF_COLUMNS));
-        adapter = new PhotoCollectionAdapter(getContext());
         return parent;
     }
 
@@ -85,10 +83,16 @@ public class PhotoCollectionFragment extends Fragment {
 
     public void updateUI(ClubMember member){
         this.member = member;
-        if(getContext()!=null)
-            adapter = new PhotoCollectionAdapter(getContext(),getMemberPhotos());
-        adapter.setPhotoClickListener(onPhotoClicked);
-        recyclerView.setAdapter(adapter);
+        if(adapter==null) {
+            if (getContext() != null)
+                adapter = new PhotoCollectionAdapter(getContext(), getMemberPhotos());
+            adapter.setPhotoClickListener(onPhotoClicked);
+            recyclerView.setAdapter(adapter);
+        }
+        else
+        {
+            adapter.setMemberPhotos(member);
+        }
     }
 
     private OnPhotoClickedListener onPhotoClicked = new OnPhotoClickedListener() {

@@ -9,7 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.idan_koren_israeli.sailtracker.R;
+import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.club.GalleryPhoto;
+import com.idan_koren_israeli.sailtracker.club.comparator.SortByCreationTime;
+import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.recycler.listener.OnPhotoClickedListener;
 import com.idan_koren_israeli.sailtracker.recycler.view_holder.PhotoViewHolder;
 
@@ -69,4 +72,10 @@ public class PhotoCollectionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
 
+    public void setMemberPhotos(ClubMember member){
+        photos.clear();
+        photos.addAll(member.getGalleryPhotos());
+        photos.sort(new SortByCreationTime());
+        notifyDataSetChanged();
+    }
 }
