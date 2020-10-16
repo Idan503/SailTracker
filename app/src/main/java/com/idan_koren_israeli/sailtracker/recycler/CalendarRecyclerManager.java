@@ -1,6 +1,7 @@
 package com.idan_koren_israeli.sailtracker.recycler;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.view.View;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.activity.AddEventActivity;
 import com.idan_koren_israeli.sailtracker.activity.CalendarActivity;
 import com.idan_koren_israeli.sailtracker.adapter.EventRecyclerAdapter;
@@ -19,6 +22,7 @@ import com.idan_koren_israeli.sailtracker.club.exception.AlreadyRegisteredExcept
 import com.idan_koren_israeli.sailtracker.club.exception.EventFullException;
 import com.idan_koren_israeli.sailtracker.club.exception.NotEnoughPointsException;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
+import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.notification.EventWatchManager;
@@ -202,11 +206,11 @@ public class CalendarRecyclerManager {
 
     private OnEventClickedListener onWatchClicked = new OnEventClickedListener() {
         @Override
-        public void onButtonClicked(Event eventClicked) {
+        public void onButtonClicked(final Event eventClicked) {
             watchManager.startWatch(eventClicked);
-
         }
     };
+
 
     private OnEventClickedListener onUnwatchClicked = new OnEventClickedListener() {
         @Override

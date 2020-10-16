@@ -11,6 +11,8 @@ import android.graphics.drawable.Icon;
 
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.activity.CalendarActivity;
+import com.idan_koren_israeli.sailtracker.club.Event;
+import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
 
 public class EventNotificationManager {
     @SuppressLint("StaticFieldLeak") // singleton class that use application context only
@@ -20,6 +22,7 @@ public class EventNotificationManager {
     public interface KEYS{
         String CHANNEL_ID ="SAIL_NOTIFICATION_CHANNEL";
         String NAME_WATCHED_AVAILABLE = "WatchedAvailable";
+        String EVENT_WATCHED_INTENT = "EVENT_WATCH_NOTIFICATION";
     }
 
     private interface STRINGS{
@@ -44,6 +47,8 @@ public class EventNotificationManager {
 
     public void showNotification(){
         Intent intent=new Intent(context.getApplicationContext(), CalendarActivity.class);
+        Event eventWatched =  SharedPrefsManager.getInstance().getObject(SharedPrefsManager.KEYS.WATCHED_EVENT,Event.class);
+        intent.putExtra(KEYS.EVENT_WATCHED_INTENT,eventWatched);
 
         NotificationChannel notificationChannel=new NotificationChannel(KEYS.CHANNEL_ID,KEYS.NAME_WATCHED_AVAILABLE, NotificationManager.IMPORTANCE_HIGH);
         PendingIntent pendingIntent=PendingIntent.getActivity(context.getApplicationContext(),1,intent,0);

@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.idan_koren_israeli.sailtracker.activity.CalendarActivity;
 import com.idan_koren_israeli.sailtracker.club.Event;
+import com.idan_koren_israeli.sailtracker.common.CommonUtils;
 import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
 
 // Event Watch manager is singleton, only one event can be watched at a certain time
@@ -59,6 +60,16 @@ public class EventWatchManager {
 
 
     public void startWatch(Event event){
+        Event currentlyWatch = spManager.getObject(SharedPrefsManager.KEYS.WATCHED_EVENT,Event.class);
+        if(currentlyWatch!=null){
+            if(currentlyWatch.getStartTime() > CommonUtils.getInstance().getIsraelTimeNowMillis()) {
+                // Event already watched is in the future, so user can't watch 2 events at the same time
+                CommonUtils.getInstance().showToast("You can only watch one event at a time");
+                return;
+            }
+        }
+
+
         watchIntent= new Intent(callerActivity, EventWatchService.class);
         watchIntent.putExtra(EventWatchService.KEYS.EVENT_TO_LISTEN, event);
         callerActivity.startService(watchIntent);
@@ -74,6 +85,8 @@ public class EventWatchManager {
 
         spManager.removeKey(SharedPrefsManager.KEYS.WATCHED_EVENT);
     }
+
+
 
 
 

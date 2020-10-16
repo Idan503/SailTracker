@@ -59,7 +59,7 @@ public class EventWatchService extends Service {
     private OnEventLoadedListener onEventChanged = new OnEventLoadedListener() {
         @Override
         public void onEventLoaded(Event event) {
-            if(event.getRegisteredMembersNonNull().size() < event.getMaxMembersCount()){
+            if(event!=null && event.getRegisteredMembersNonNull().size() < event.getMaxMembersCount()){
                 // There is a free slot in the event
                 if(eventWatched!=null)
                     showEventAvailableNotification();

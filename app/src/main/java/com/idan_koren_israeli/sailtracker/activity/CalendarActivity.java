@@ -18,11 +18,13 @@ import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventLoadedListen
 import com.idan_koren_israeli.sailtracker.fragment.LoadingFragment;
 import com.idan_koren_israeli.sailtracker.fragment.PointsStatusFragment;
 import com.idan_koren_israeli.sailtracker.adapter.EventRecyclerAdapter;
+import com.idan_koren_israeli.sailtracker.notification.EventNotificationManager;
 import com.idan_koren_israeli.sailtracker.notification.EventWatchManager;
 import com.idan_koren_israeli.sailtracker.firebase.EventDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.MemberDataManager;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnCheckFinishedListener;
 import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnListLoadedListener;
+import com.idan_koren_israeli.sailtracker.notification.EventWatchService;
 import com.idan_koren_israeli.sailtracker.recycler.CalendarRecyclerManager;
 
 import org.joda.time.LocalDate;
@@ -90,9 +92,13 @@ public class CalendarActivity extends BaseActivity {
 
     // In case user comes from alert, we will load the calendar into the date of the wathced event
     private void initWatchedEvent(){
-        SharedPrefsManager spManager = SharedPrefsManager.getInstance();
-        if(spManager.contain(SharedPrefsManager.KEYS.WATCHED_EVENT)) {
+        if(!getIntent().hasExtra(EventNotificationManager.KEYS.EVENT_WATCHED_INTENT)) {
+            return; // user didn't come from notification
+        }
 
+        Event eventClickedOnNotification =(Event) getIntent().getSerializableExtra(EventNotificationManager.KEYS.EVENT_WATCHED_INTENT);
+        if(eventClickedOnNotification!=null) {
+            SharedPrefsManager spManager = SharedPrefsManager.getInstance();
             Event watchedEvent = spManager.getObject(SharedPrefsManager.KEYS.WATCHED_EVENT, Event.class);
             if (watchedEvent != null) {
                 selectedDate = watchedEvent.getStartDateTime().toLocalDate();

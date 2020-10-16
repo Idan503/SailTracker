@@ -137,21 +137,22 @@ public class RegistrableEventViewHolder extends EventViewHolder {
                 showUnregisterButton(eventPrice);
             }
             else{
-                // Showing Watch/unwatch card
+                // event is full, showing "watch", "unwatch", or "full" buttons
                 SharedPrefsManager sp = SharedPrefsManager.getInstance();
-                String memberWatch = sp.getString(SharedPrefsManager.KEYS.WATCHED_EVENT,null);
-                if(memberWatch==null){
-                    // event is full, show watch button
+                Event watched = sp.getObject(SharedPrefsManager.KEYS.WATCHED_EVENT,Event.class);
+
+                if(watched==null){
+                    // user is not watching any event, so he ca watch this one
                     showWatchButton(eventPrice);
                 }
-                else{
-                    if(memberWatch.equals(event.getEid())){
-                        // unwatch
+                else {
+                    if (watched.getEid().equals(event.getEid())) {
+                        // User is currently watching this specific event
                         watching = true;
                         showUnwatchButton(eventPrice);
-                    }
-                    else {
-                        // Can't register, event full, cant watch 2 events
+                    } else {
+                        // User is already watching other event
+                        watching = false;
                         showEventFullButton(eventPrice);
                     }
                 }
@@ -184,7 +185,7 @@ public class RegistrableEventViewHolder extends EventViewHolder {
 
     private void showEventFullButton(int price){
         String fullLabel = String.format(registerButton.getResources().getString(R.string.event_full_price_label), price);
-        registerButton.setTextColor(ContextCompat.getColor(itemView.getContext(),  R.color.lighter_grey));
+        registerButton.setTextColor(ContextCompat.getColor(itemView.getContext(),  R.color.colorPrimaryDark));
         registerButton.setText(fullLabel);
     }
 
