@@ -46,6 +46,7 @@
                 android:layout_marginTop="30dp"
                 android:autoSizeTextType="uniform"
                 android:id="@+id/login_EDT_phone_box"
+                android:imeOptions="actionDone"
                 android:inputType="phone"
                 android:hint="@string/example_phone"
                 android:layout_marginEnd="30dp"

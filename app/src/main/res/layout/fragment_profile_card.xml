@@ -51,6 +51,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             />
 
+
+
+
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -65,9 +68,28 @@
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.ProfilePictureCorners"
             android:scaleType="centerCrop"
             android:elevation="3dp"
+            android:translationZ="-4dp"
             />
 
+        <fragment
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="@id/profile_IMG_picture"
+            app:layout_constraintBottom_toBottomOf="@id/profile_IMG_picture"
+            app:layout_constraintStart_toStartOf="@id/profile_IMG_picture"
+            app:layout_constraintEnd_toEndOf="@id/profile_IMG_picture"
+            android:name="com.idan_koren_israeli.sailtracker.fragment.LoadingFragment"
+            tools:layout="@layout/fragment_loading"
+            app:show_message="false"
+            app:show_app_icon="false"
+            android:id="@+id/profile_FRAG_loading"
+            android:elevation="10dp"
+            />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
     <!-- info layout will be linked to the image, therefore its in an other constraint layout -->

@@ -41,6 +41,7 @@ public class ProfileFragment extends Fragment {
     private MaterialButton historyButton;
     private ClubMember member;
     private PointsStatusFragment pointsStatus;
+    private LoadingFragment loadingFragment;
 
     private CommonUtils common;
 
@@ -84,6 +85,7 @@ public class ProfileFragment extends Fragment {
         View parent = inflater.inflate(R.layout.fragment_profile_card, container, false);
         // Inflate the layout for this fragment
         findViews(parent);
+        loadingFragment.show();
         hideViews();
         setListeners();
         return parent;
@@ -94,6 +96,7 @@ public class ProfileFragment extends Fragment {
         nameText = parent.findViewById(R.id.profile_LBL_name);
         historyButton = parent.findViewById(R.id.profile_BTN_history);
         pointsStatus= (PointsStatusFragment) getChildFragmentManager().findFragmentById(R.id.profile_FRAG_points_status);
+        loadingFragment = (LoadingFragment) getChildFragmentManager().findFragmentById(R.id.profile_FRAG_loading);
     }
 
     //Hides views based on attrs from xml (determent in onInflate)
@@ -163,6 +166,7 @@ public class ProfileFragment extends Fragment {
         @Override
         public void onSuccess(Uri uri) {
             common.setImageResource(profilePhoto, uri);
+            loadingFragment.hide();
         }
     };
 
@@ -171,6 +175,7 @@ public class ProfileFragment extends Fragment {
         public void onFailure(@NonNull Exception e) {
             common.setImageResource(profilePhoto, R.drawable.img_blank_profile);
             // 404 error, user not set a photo, showing default blank profile photo
+            loadingFragment.hide();
         }
     };
 
