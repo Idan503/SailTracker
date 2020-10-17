@@ -82,7 +82,6 @@ public class RegistrableEventViewHolder extends EventViewHolder {
         }
 
 
-
     }
 
 
@@ -193,12 +192,16 @@ public class RegistrableEventViewHolder extends EventViewHolder {
         String watchLabel = String.format(registerButton.getResources().getString(R.string.event_watch_price_label), price);
         registerButton.setTextColor(ContextCompat.getColor(itemView.getContext(),  R.color.colorPrimaryDark));
         registerButton.setText(watchLabel);
+        ColorStateList background = ContextCompat.getColorStateList(registerButton.getContext(), R.color.event_card_watch_bg);
+        registerButton.setBackgroundTintList(background);
     }
 
     private void showUnwatchButton(int price){
         String unwatchLabel = String.format(registerButton.getResources().getString(R.string.event_unwatch_price_label), price);
         registerButton.setTextColor(ContextCompat.getColor(itemView.getContext(),  R.color.colorPrimaryDark));
         registerButton.setText(unwatchLabel);
+        ColorStateList background = ContextCompat.getColorStateList(registerButton.getContext(), R.color.event_card_watch_bg);
+        registerButton.setBackgroundTintList(background);
     }
 
     //endregion

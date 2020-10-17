@@ -24,11 +24,12 @@ import com.idan_koren_israeli.sailtracker.firebase.callbacks.OnEventLoadedListen
  */
 public class EventWatchService extends Service {
 
-    private ValueEventListener valueListener; // to stop listen after push notification sent
     private EventDataManager eventData;
     private Event eventWatched;
 
     private boolean calledRestart = false;
+    SharedPrefsManager sp;
+
 
 
     public interface KEYS{
@@ -42,7 +43,7 @@ public class EventWatchService extends Service {
         eventWatched = (Event) intent.getSerializableExtra(KEYS.EVENT_TO_LISTEN);
         eventData = EventDataManager.initHelper();
 
-        SharedPrefsManager sp = SharedPrefsManager.initHelper(getApplicationContext());
+        sp = SharedPrefsManager.initHelper(getApplicationContext());
         if(eventWatched==null){
             // eventWatched was not in intent's data, so we check if its saved as sp (when device startup)
             eventWatched = (Event) sp.getObject(SharedPrefsManager.KEYS.WATCHED_EVENT, Event.class);
@@ -68,8 +69,11 @@ public class EventWatchService extends Service {
     };
 
     private void showEventAvailableNotification(){
-        EventNotificationManager notification = EventNotificationManager.initHelper(this);
-        notification.showNotification();
+        if(sp.contain(SharedPrefsManager.KEYS.WATCHED_EVENT)) {
+            // Notify when user is listening to an event, which someone unregistered now
+            EventNotificationManager notification = EventNotificationManager.initHelper(this);
+            notification.showNotification();
+        }
     }
 
     public void stopWatchingEvent(Event event){

@@ -40,5 +40,6 @@
     <color name="light_grey">#cccccc</color>
 
     <color name="profile_photo_stroke">#1E01579B</color>
+    <color name="event_card_watch_bg">#D8CAED</color>
 
 </resources>

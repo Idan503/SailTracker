@@ -7,6 +7,7 @@ import android.os.Build;
 import android.util.Log;
 
 import com.idan_koren_israeli.sailtracker.club.Event;
+import com.idan_koren_israeli.sailtracker.common.SharedPrefsManager;
 
 /**
  * Will launch our notification service when phone is starting,

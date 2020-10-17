@@ -80,8 +80,10 @@ public class EventWatchManager {
 
     // No need to event parameter because user can only watch one event at a time
     public void stopWatch(Event event){
-        if(watchIntent !=null)
+        if(watchIntent !=null) {
             watchService.stopWatchingEvent(event);
+            Log.i("pttt", "Stop watching " + event.getEid());
+        }
 
         spManager.removeKey(SharedPrefsManager.KEYS.WATCHED_EVENT);
     }
