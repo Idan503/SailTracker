@@ -1,12 +1,22 @@
 # SailTracker
-Sailing club membership manager and tracker application.
-Each club member is able to sign in with his phone number, and enjoy a realtime registration system to the available events of the sailing club.
+Sailing club membership manager and tracker application.  
+Club members can sign in using their phone numbers,  
+and view the realtime-updating sailing club schedule, which is shared among all users.  
+Members can register for events, stay tuned for new events, and upload photos from sails.  
+  
+On the other hand, by using SailTracker,  
+the sailing club managers will be able to readily add new events to the schedule,  
+or delete existing events in the app itself, instead of sending emails/sms to all the club members.  
 
-# Screenshots
-![Alt text](/screenshots/home.jpg?raw=true "Home Screen")
-![Alt text](/screenshots/calendar.jpg?raw=true "Calendar Screen")
-![Alt text](/screenshots/gallery.jpg?raw=true "Gallery Screen")
-![Alt text](/screenshots/explore.jpg?raw=true "Explore Screen")
+
+# App Screenshots
+<p float="left" align="middle" padding="5">
+  <img src="/screenshots/home.jpg?raw=true" width="150" />
+  <img src="/screenshots/calendar.jpg?raw=true" width="150" /> 
+  <img src="/screenshots/gallery.jpg?raw=true" width="150" />
+  <img src="/screenshots/explore.jpg?raw=true" width="150" />
+</p>
+
 
 # References & Attributes
 Drawables:   
@@ -21,3 +31,4 @@ Drawables:
 
 
 # Presentation Video
+--TBD--
