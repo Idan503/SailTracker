@@ -71,6 +71,7 @@ public class SearchActivity extends BaseActivity {
         @Override
         public boolean onQueryTextSubmit(String input) {
             try {
+                resultPhotos.clear();
                 searchedPhone = input;
                 String formattedPhone = CommonUtils.getInstance().toPhoneString(searchedPhone);
                 MemberDataManager.getInstance().loadMemberByPhone(formattedPhone, onMemberLoad);

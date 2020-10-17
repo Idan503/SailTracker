@@ -143,4 +143,9 @@ public class PhotoCollectionFragment extends Fragment {
         }
 
     }
+
+    public void clear()
+    {
+        adapter.clear();
+    }
 }

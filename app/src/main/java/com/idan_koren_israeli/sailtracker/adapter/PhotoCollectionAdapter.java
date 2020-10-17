@@ -78,4 +78,9 @@ public class PhotoCollectionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         photos.sort(new SortByCreationTime());
         notifyDataSetChanged();
     }
+
+    public void clear(){
+        photos.clear();
+        notifyDataSetChanged();
+    }
 }
