@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="calendar_height">0.4</dimen>
+    <dimen name="calendar_height">0.45</dimen>
 </resources>

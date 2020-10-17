@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
@@ -71,17 +71,6 @@ public class LoginFragment extends Fragment {
     }
 
 
-
-    private OnMemberLoadListener memberLoadFinished = new OnMemberLoadListener() {
-        @Override
-        public void onMemberLoad(ClubMember memberLoaded) {
-
-            if(memberLoaded!=null){
-                finishedListener.onLoginFinished(memberLoaded); // already saved in db
-            }
-            loadingFragment.hide();
-        }
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -150,19 +139,17 @@ public class LoginFragment extends Fragment {
                 case CODE_SENT: // Code Screen
                     // Code user entered the code, we will check if it is correct
                     checkUserCode();
+                    backButton.setVisibility(View.GONE);
                     break;
                 case CODE_APPROVED: // Display Name Screen
                     // User type his profile name, setting it to the current logged profile
                     generateMember();
+                    backButton.setVisibility(View.GONE);
                     break;
                 case NOT_STARTED: // Phone number screen
                     currentPhone = CommonUtils.getInstance().toPhoneString(phoneEditText.getText().toString());
-
+                    verifyUserPhoneNumber();
                     loadingFragment.show();
-                    // First we check if the phone number is already exists in our db
-                    MemberDataManager.getInstance().loadMemberByPhone(currentPhone, onMemberLoaded);
-
-                    // verifyUserPhoneNUmber() is called in onMemberLoaded callback
 
                     break;
             }
@@ -180,7 +167,7 @@ public class LoginFragment extends Fragment {
 
     //region Authentication Steps Methods
     // Using input number to connect to firebase auth server
-    private void verifyUserPhoneNUmber(){
+    private void verifyUserPhoneNumber(){
         if(!phoneEditText.getText().toString().matches("")) {
             try {
                 manager.verifyPhoneNumber(currentPhone, onVerificationStateChanged);
@@ -215,6 +202,7 @@ public class LoginFragment extends Fragment {
             if(!nameEditText.getText().toString().matches("")) {
                 // Creating the new member based on information from inside the fragment
                 ClubMember loggedMember = new ClubMember(manager.getAuthenticatedId(), nameEditText.getText().toString(), currentPhone);
+
                 manager.setCurrentState(LoginManager.LoginState.COMPLETED);
                 CommonUtils.getInstance().showToast("Logged in successfully");
 
@@ -246,6 +234,10 @@ public class LoginFragment extends Fragment {
         viewFlipper.setInAnimation(getContext(), android.R.anim.slide_in_left);
         viewFlipper.setOutAnimation(getContext(), android.R.anim.slide_out_right);
         viewFlipper.showPrevious();
+        if(viewFlipper.getDisplayedChild()==0)
+            backButton.setVisibility(View.GONE);
+        else
+            backButton.setVisibility(View.VISIBLE);
         manager.setCurrentState(LoginManager.LoginState.NOT_STARTED); // back to the start
     }
 
@@ -268,11 +260,11 @@ public class LoginFragment extends Fragment {
         @Override
         public void onMemberLoad(ClubMember memberLoaded) {
             loadingFragment.hide();
-            if(memberLoaded==null)
-                verifyUserPhoneNUmber(); // New member -> new auth verify
+            if(memberLoaded==null) {
+                verifyUserPhoneNumber(); // New member -> new auth verify
+            }
             else {
-                // Member is already exists in db
-                sp.putString(SharedPrefsManager.KEYS.CURRENT_USER_PHONE, currentPhone); // storing for next login
+
                 finishedListener.onLoginFinished(memberLoaded);
             }
 
@@ -295,6 +287,7 @@ public class LoginFragment extends Fragment {
                 if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                     CommonUtils.getInstance().showToast("Invalid code, please try again");
                     backButton.setEnabled(true);
+                    backButton.setVisibility(View.VISIBLE);
                     // The verification code entered was invalid
                 }
             }
@@ -307,17 +300,20 @@ public class LoginFragment extends Fragment {
         public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
             CommonUtils.getInstance().showToast("Complete!");
             manager.signInWithPhoneAuthCredential(phoneAuthCredential,onSignInCompleted);
+            loadingFragment.hide();
 
         }
 
         @Override
         public void onVerificationFailed(@NonNull FirebaseException e) {
              manager.setCurrentState(LoginManager.LoginState.NOT_STARTED);
-
+             if(e.getMessage()!=null)
+                Log.e(getClass().getSimpleName(), e.getMessage());
             if(e instanceof FirebaseAuthInvalidCredentialsException){
                 CommonUtils.getInstance().showToast("Error - Invalid request");
             } else if(e instanceof FirebaseTooManyRequestsException){
                 CommonUtils.getInstance().showToast("Too many requests");
+
             }
             else{
                 CommonUtils.getInstance().showToast("Failed - Please try again later");
@@ -330,6 +326,7 @@ public class LoginFragment extends Fragment {
             CommonUtils.getInstance().showToast("Code Sent!");
             manager.setVerificationId(verificationId);
             manager.setCurrentState(LoginManager.LoginState.CODE_SENT);
+            loadingFragment.hide();
 
             showNextLayout();
         }

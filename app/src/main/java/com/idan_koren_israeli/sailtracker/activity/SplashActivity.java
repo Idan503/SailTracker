@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.idan_koren_israeli.sailtracker.R;
 import com.idan_koren_israeli.sailtracker.club.ClubMember;
 import com.idan_koren_israeli.sailtracker.common.CommonUtils;
@@ -36,13 +38,12 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        SharedPrefsManager sp = SharedPrefsManager.getInstance();
 
         // Loading already authenticated user (if exists) into local data while splashscreen is showing
-        String loggedPhone = sp.getString(SharedPrefsManager.KEYS.CURRENT_USER_PHONE,null);
-        if(loggedPhone !=null){
-            MemberDataManager.getInstance().isMemberStoredByPhone(loggedPhone, onCurrentMemberFound);
-            MemberDataManager.getInstance().loadMemberByPhone(loggedPhone,onCurrentMemberLoaded);
+        FirebaseUser loggedUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(loggedUser !=null){
+            MemberDataManager.getInstance().loadMember(loggedUser.getUid(),onCurrentMemberLoaded);
+            MemberDataManager.getInstance().isMemberStored(loggedUser.getUid(),onCurrentMemberFound);
         }
         else{
             startAppOnAnimationEnd = true;

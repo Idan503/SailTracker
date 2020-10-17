@@ -52,7 +52,6 @@ public class EventWatchService extends Service {
             // Initiating the listening itself iff user is listened
             eventData.watchEventChanges(eventWatched, onEventChanged);
         }
-
         return Service.START_STICKY; // To prevent the service get killed
     }
 

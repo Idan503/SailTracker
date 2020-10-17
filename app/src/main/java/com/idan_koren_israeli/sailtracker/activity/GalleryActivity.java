@@ -118,12 +118,18 @@ public class GalleryActivity extends BaseActivity {
             Log.e(GalleryActivity.class.getSimpleName(),"Error occurred while setting an image file");
         }
         // Continue only if the File was successfully created
-        if (photoFile != null) {
-            Uri photoURI = FileProvider.getUriForFile(this,
-                    "com.idan_koren_israeli.sailtracker.fileprovider",
-                    photoFile);
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-            startActivityForResult(takePictureIntent, 1);
+        try {
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.idan_koren_israeli.sailtracker.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, 1);
+            }
+        }
+        catch(Exception e) {
+            if(e.getMessage()!=null)
+                Log.e(getClass().getSimpleName(), e.getMessage());
         }
     }
 
