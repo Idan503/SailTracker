@@ -28,7 +28,3 @@ Drawables:
 	- Members Sail: https://pixabay.com/photos/sailing-boats-lake-boat-sail-tour-5585745/  
 	- Evening Event: https://pixabay.com/photos/sky-dusk-darkness-evening-waters-3054732/  
 	
-
-
-# Presentation Video
---TBD--
